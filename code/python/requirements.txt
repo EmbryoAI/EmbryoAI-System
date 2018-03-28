@@ -1,0 +1,12 @@
+flask>=0.12.0
+sqlalchemy>=1.2.0
+flask_sqlalchemy>=2.3.0
+sqlalchemy_serializer>=0.9
+pymysql>=0.8.0
+opencv>=1.0.0
+opencv-python>=3.3.0
+numpy>=1.14.0
+Pillow>=4.2.0
+requests>=2.18.0
+numba>=0.37.0
+pyyaml>=3.12
