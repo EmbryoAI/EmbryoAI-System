@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from yaml import load
 from traceback import print_exc
 from common import getdefault
+from logging import Formatter, DEBUG
 
 def read_yml_config(filename='configuration.yml'):
     '''从yaml文件中读取配置'''
@@ -40,18 +41,31 @@ def init_logger(logname):
             logname = 'embryoai.log'
     from logging.handlers import RotatingFileHandler
     handler = RotatingFileHandler(logname, maxBytes=1024*1024*200, backupCount=5)
-    from logging import Formatter, DEBUG
-    fmt = Formatter('%(asctime)s %(levelname)s: %(message)s '
-        '[in %(pathname)s:%(lineno)d]')
+    fmt = Formatter('%(asctime)s [%(filename)s (%(funcName)s) '
+        ': Line %(lineno)d] %(levelname)s: %(message)s')
     handler.setFormatter(fmt)
     logger.addHandler(handler)
     logger.setLevel(DEBUG)
 
 def add_all_controller():
     ''' 在此方法中将所有controller蓝图注册到app中。
-    例如：from controller.user_controller import user_controller
-         app.register_blueprint(user_controller, url_prefix='/user')''' 
-    pass
+        controller中定义的Blueprint的变量名称必须与文件名称相同，
+        可以定义url_prefix变量设置controller的url前缀''' 
+    from importlib import import_module
+    import os
+    for root, dirs, files in os.walk('controller'):
+        for f in filter(lambda x: x.endswith('.py') 
+            and not x.startswith('__init__'), files):
+            f = f[:-3]
+            path = list(filter(lambda x: x!='', os.path.split(root)))
+            path.append(f)
+            modulename = '.'.join(path)
+            controller_module = import_module(modulename)
+            controller_variable = getattr(controller_module, f)
+            prefix_variable = getattr(controller_module, 'url_prefix', '/')
+            app.register_blueprint(controller_variable, url_prefix=prefix_variable)
+            logger.info('控制器 %s 蓝图注册成功，绑定地址前缀 %s' %(
+                controller_variable.name, prefix_variable))
 
 if __name__=='__main__':
     init_logger(getdefault(conf, 'LOGGER_FILE', 'embryoai.log'))
@@ -59,5 +73,5 @@ if __name__=='__main__':
     debug = getdefault(conf, 'DEBUG', False) # 是否开启debug模式
     threaded = getdefault(conf, 'THREADED', True) # 是否开启多线程模式
     add_all_controller()
+    logger.info('服务器启动成功，侦听端口：%d' %port)
     app.run(port=port, debug=debug, threaded=threaded) #启动app
-
