@@ -1,5 +1,6 @@
-SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:@localhost/embryoai_system?charset=utf8
+SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:@localhost/embryoai_system?charset=utf8"
 PORT: 5001
 DEBUG: true
 THREADED: false
-LOGGER_FILE: f:/logs/embryoai.log
+LOGGER_FILE: "f:/logs/embryoai.log"
+SECRET_KEY: "123456"

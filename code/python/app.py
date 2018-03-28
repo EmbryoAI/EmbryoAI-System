@@ -1,9 +1,10 @@
 #!/bin/env python
 # -*- coding: utf8 -*-
 
-from flask import Flask, url_for
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from yaml import load
+from traceback import print_exc
 
 def read_yml_config(filename='configuration.yml'):
     '''从yaml文件中读取配置'''
@@ -18,6 +19,7 @@ def init_config(conf):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     # 返回的JSON数据保持原编码方式
     app.config['JSON_AS_ASCII'] = False
+    app.config['SECRET_KEY'] = conf['SECRET_KEY'] if 'SECRET_KEY' in conf else '123456'
 
 app = Flask(__name__) # EmbryoAI系统Flask APP
 conf = read_yml_config()
@@ -30,7 +32,11 @@ def init_logger(logname):
     import os
     path, name = os.path.split(logname)
     if not os.path.exists(path):
-        os.mkdir(path)
+        try:
+            os.mkdir(path)
+        except Exception as e:
+            print_exc()
+            logname = 'embryoai.log'
     from logging.handlers import RotatingFileHandler
     handler = RotatingFileHandler(logname, maxBytes=1024*1024*200, backupCount=5)
     from logging import Formatter, DEBUG
@@ -52,3 +58,4 @@ if __name__=='__main__':
     debug = conf['DEBUG'] if 'DEBUG' in conf else False # 是否开启debug模式
     threaded = conf['THREADED'] if 'THREADED' in conf else True # 是否开启多线程模式
     app.run(port=port, debug=debug, threaded=threaded) #启动app
+
