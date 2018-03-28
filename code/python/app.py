@@ -5,6 +5,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from yaml import load
 from traceback import print_exc
+from common import getdefault
 
 def read_yml_config(filename='configuration.yml'):
     '''从yaml文件中读取配置'''
@@ -14,12 +15,12 @@ def read_yml_config(filename='configuration.yml'):
 def init_config(conf):
     '''初始化app的基本配置'''
     # 数据库连接字符串
-    app.config['SQLALCHEMY_DATABASE_URI'] = conf['SQLALCHEMY_DATABASE_URI'] if \
-        'SQLALCHEMY_DATABASE_URI' in conf else 'mysql+pymysql://root:@localhost/embryoai_system?charset=utf8'
+    app.config['SQLALCHEMY_DATABASE_URI'] = getdefault(conf, 'SQLALCHEMY_DATABASE_URI', 
+        'mysql+pymysql://root:@localhost/embryoai_system?charset=utf8')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     # 返回的JSON数据保持原编码方式
     app.config['JSON_AS_ASCII'] = False
-    app.config['SECRET_KEY'] = conf['SECRET_KEY'] if 'SECRET_KEY' in conf else '123456'
+    app.config['SECRET_KEY'] = getdefault(conf, 'SECRET_KEY', '123456')
 
 app = Flask(__name__) # EmbryoAI系统Flask APP
 conf = read_yml_config()
@@ -53,10 +54,10 @@ def add_all_controller():
     pass
 
 if __name__=='__main__':
-    init_logger(conf['LOGGER_FILE'] if 'LOGGER_FILE' in conf else 'embryoai.log')
-    port = conf['PORT'] if 'PORT' in conf else 5001 # app启动侦听的端口号
-    debug = conf['DEBUG'] if 'DEBUG' in conf else False # 是否开启debug模式
-    threaded = conf['THREADED'] if 'THREADED' in conf else True # 是否开启多线程模式
+    init_logger(getdefault(conf, 'LOGGER_FILE', 'embryoai.log'))
+    port = getdefault(conf, 'PORT', 5001) # app启动侦听的端口号
+    debug = getdefault(conf, 'DEBUG', False) # 是否开启debug模式
+    threaded = getdefault(conf, 'THREADED', True) # 是否开启多线程模式
     add_all_controller()
     app.run(port=port, debug=debug, threaded=threaded) #启动app
 

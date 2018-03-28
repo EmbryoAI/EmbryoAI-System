@@ -18,3 +18,9 @@ def cross_domain(func):
         rst.headers['Access-Control-Allow-Headers'] = 'Referer,Accept,Origin,User-Agent'
         return response
     return allow_origin
+
+def getdefault(d, key, defaultValue=None):
+    from collections import namedtuple
+    if not isinstance(d, dict) and not isinstance(d, namedtuple):
+        raise TypeError('参数 %s 不是一个key-value对象' %d)
+    return d[key] if key in d else defaultValue
