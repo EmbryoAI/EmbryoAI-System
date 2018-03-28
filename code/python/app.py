@@ -10,6 +10,7 @@ def read_yml_config(filename='configuration.yml'):
     '''从yaml文件中读取配置'''
     with open(filename, 'r') as fn:
         return load(fn.read())
+        
 
 def init_config(conf):
     '''初始化app的基本配置'''
