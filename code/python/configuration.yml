@@ -1,0 +1,4 @@
+SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:@localhost/embryoai_system?charset=utf8
+PORT: 5001
+DEBUG: true
+THREADED: false
