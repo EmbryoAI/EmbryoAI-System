@@ -8,6 +8,7 @@ from traceback import print_exc
 from common import getdefault
 from logging import Formatter, DEBUG
 
+
 def read_yml_config(filename='configuration.yml'):
     '''从yaml文件中读取配置'''
     with open(filename, 'r') as fn:
