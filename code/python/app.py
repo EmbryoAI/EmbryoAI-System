@@ -25,10 +25,14 @@ init_config(conf)
 db = SQLAlchemy(app) # 此APP要用到的数据库连接，由ORM框架SQLAlchemy管理
 logger = app.logger # 日志对象
 
-def init_logger():
+def init_logger(logname):
     '''初始化日志的基本配置'''
+    import os
+    path, name = os.path.split(logname)
+    if not os.path.exists(path):
+        os.mkdir(path)
     from logging.handlers import RotatingFileHandler
-    handler = RotatingFileHandler('flasksql.log', maxBytes=1024*1024*200, backupCount=5)
+    handler = RotatingFileHandler(logname, maxBytes=1024*1024*200, backupCount=5)
     from logging import Formatter, DEBUG
     fmt = Formatter('%(asctime)s %(levelname)s: %(message)s '
         '[in %(pathname)s:%(lineno)d]')
@@ -43,7 +47,7 @@ def add_all_controller():
     pass
 
 if __name__=='__main__':
-    init_logger()
+    init_logger(conf['LOGGER_FILE'] if 'LOGGER_FILE' in conf else 'embryoai.log')
     port = conf['PORT'] if 'PORT' in conf else 5001 # app启动侦听的端口号
     debug = conf['DEBUG'] if 'DEBUG' in conf else False # 是否开启debug模式
     threaded = conf['THREADED'] if 'THREADED' in conf else True # 是否开启多线程模式

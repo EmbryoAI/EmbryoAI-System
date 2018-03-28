@@ -2,3 +2,4 @@ SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:@localhost/embryoai_system?charset
 PORT: 5001
 DEBUG: true
 THREADED: false
+LOGGER_FILE: f:/logs/embryoai.log
