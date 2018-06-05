@@ -1,0 +1,6 @@
+2018-06-05 14:32:26,315 [app.py (add_all_controller) : Line 69] INFO: 控制器 test_controller 蓝图注册成功，绑定地址前缀 /test
+2018-06-05 14:32:26,317 [app.py (add_all_controller) : Line 69] INFO: 控制器 test1_controller 蓝图注册成功，绑定地址前缀 /test/test
+2018-06-05 14:32:26,317 [app.py (<module>) : Line 77] INFO: 服务器启动成功，侦听端口：5001
+2018-06-05 14:32:26,657 [app.py (add_all_controller) : Line 69] INFO: 控制器 test_controller 蓝图注册成功，绑定地址前缀 /test
+2018-06-05 14:32:26,658 [app.py (add_all_controller) : Line 69] INFO: 控制器 test1_controller 蓝图注册成功，绑定地址前缀 /test/test
+2018-06-05 14:32:26,658 [app.py (<module>) : Line 77] INFO: 服务器启动成功，侦听端口：5001
