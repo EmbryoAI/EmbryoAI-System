@@ -11,7 +11,7 @@
  Target Server Version : 50640
  File Encoding         : 65001
 
- Date: 08/06/2018 22:54:24
+ Date: 09/06/2018 21:26:43
 */
 
 SET NAMES utf8mb4;
@@ -3634,6 +3634,7 @@ CREATE TABLE `t_embryo` (
   `procedure_id` varchar(32) DEFAULT NULL COMMENT '周期ID -> t_procedure.id',
   `cell_id` varchar(32) DEFAULT NULL COMMENT '孔ID -> sys_cell.id',
   `embryo_score` double(255,0) DEFAULT NULL COMMENT '胚胎得分',
+  `embryo_fate_id` varchar(32) DEFAULT NULL COMMENT '胚胎结局字典值ID -> sys_dict.id，字典值类型为embryo_fate，可能取值包括：1：移植；2：冷冻；3：丢弃；4：待定',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='周期胚胎表';
 
@@ -3678,8 +3679,9 @@ CREATE TABLE `t_milestone_data` (
   `milestone_stage` int(11) DEFAULT NULL COMMENT '里程碑时间点距离授精时间的间隔，单位分钟',
   `pn_id` varchar(32) DEFAULT NULL COMMENT 'PN数量字典值ID -> sys_dict.id，字典值类型为pn，可能取值：0：0PN；1：1PN；2：2PN；3：>=3PN',
   `cell_count` int(11) DEFAULT NULL COMMENT '细胞数',
-  `is_even` varchar(32) DEFAULT NULL COMMENT '细胞是否均匀字典值ID -> sys_dict.id，字典值类型为even，可能取值：0：均匀；1：不均匀',
-  `fragment` varchar(255) DEFAULT NULL COMMENT '碎片比例字典值ID -> sys_dict.id，字典值类型fragment，可能取值：1：<5%；2：5%-10%；3：10%-20%；4：>=20%',
+  `even_id` varchar(32) DEFAULT NULL COMMENT '细胞是否均匀字典值ID -> sys_dict.id，字典值类型为even，可能取值：0：均匀；1：不均匀',
+  `fragment_id` varchar(255) DEFAULT NULL COMMENT '碎片比例字典值ID -> sys_dict.id，字典值类型fragment，可能取值：1：<5%；2：5%-10%；3：10%-20%；4：>=20%',
+  `grade_id` varchar(255) DEFAULT NULL COMMENT '胚胎评级字典值ID -> sys_dict.id，字典值类别为grade，可能取值包括：1：I级；2：II级；3：III级',
   `diameter` int(11) DEFAULT NULL COMMENT '胚胎直径，单位um',
   `area` int(11) DEFAULT NULL COMMENT '胚胎面积，单位平方um',
   `thickness` int(11) DEFAULT NULL COMMENT '透明带厚度，单位um',
@@ -3696,7 +3698,7 @@ DROP TABLE IF EXISTS `t_patient`;
 CREATE TABLE `t_patient` (
   `id` varchar(32) NOT NULL COMMENT '病人ID',
   `idcard_no` varchar(20) DEFAULT NULL COMMENT '证件号码',
-  `idcard_type` int(11) DEFAULT NULL COMMENT '证件类型（0-其他；1-身份证；2-社保；3-驾驶证；4-护照；5-港澳台通行证；6-回乡证）',
+  `idcard_type_id` varchar(32) DEFAULT NULL COMMENT '证件类型字典值ID -> sys_dict.id，字典值类别为idcard_type，可能取值包括（0-其他；1-身份证；2-社保；3-驾驶证；4-护照；5-港澳台通行证；6-回乡证）',
   `patient_name` varchar(50) DEFAULT NULL COMMENT '病人姓名',
   `birthdate` datetime DEFAULT NULL COMMENT '出生日期',
   `country` varchar(50) DEFAULT NULL COMMENT '国家地区（中国大陆地区；非中国大陆地区）',
@@ -3708,7 +3710,7 @@ CREATE TABLE `t_patient` (
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
   `del_flag` int(255) DEFAULT '0' COMMENT '逻辑删除标志（非0代表已删除）',
   PRIMARY KEY (`id`),
-  KEY `t_patient_index` (`idcard_no`,`idcard_type`,`patient_name`) USING BTREE
+  KEY `t_patient_index` (`idcard_no`,`idcard_type_id`,`patient_name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='病人表';
 
 -- ----------------------------
@@ -3775,7 +3777,7 @@ CREATE TABLE `t_rule_criteria` (
   `rule_id` varchar(32) DEFAULT NULL COMMENT '评分规则ID -> t_rule.id',
   `milestone_id` varchar(32) DEFAULT NULL COMMENT '里程碑时间点字典值ID -> sys_dict.id',
   `criteria_type_id` varchar(32) DEFAULT NULL COMMENT '评分标准类型字典值ID -> sys_dict.id，类别名称为criteria_type，可能取值包括：1：时间；2：PN；3：细胞数；4：细胞形态；5：碎片率',
-  `criteria_field_id` varchar(32) DEFAULT NULL COMMENT '评分标准字段名称字典值ID -> sys_dict.id，类别名称为criteria_field，可能取值包括：1：t_milestone_data.milestone_stage；2：t_milestone_data.pn；3：t_milestone_data.cell_count；4：t_milestone_data.is_even；5：t_milestone_data.fragment',
+  `criteria_field_id` varchar(32) DEFAULT NULL COMMENT '评分标准字段名称字典值ID -> sys_dict.id，类别名称为criteria_field，可能取值包括：时间阶段：t_milestone_data.milestone_stage；PN：t_milestone_data.pn_id；细胞数：t_milestone_data.cell_count；形态均匀度：t_milestone_data.even_id；碎片率：t_milestone_data.fragment_id；胚胎分级：t_milestone_data.grade_id',
   `criteria_op_id` varchar(32) DEFAULT NULL COMMENT '评分标准计算条件字典值ID -> sys_dict.id，类别名称为criteria_op，可能取值包括：1：等于；2：小于；3：小于等于；4：大于；5：大于等于',
   `criteria_value` varchar(32) DEFAULT NULL COMMENT '评分标准判定值，如criteria_type为时间，此字段为分钟数；如criteria_type为PN，此字段为pn字典值ID；如criteria_type为细胞数，此字段为细胞个数；如criteria_type为细胞形态；此字段为even字典值ID；如criteria_type为碎片率，此字段为fragment字典值',
   `criteria_order` int(11) DEFAULT NULL COMMENT '评分标准顺序，0位第一个标准，以此类推；每个criteria_type仅做一次标准评定，计算order最小的第一个符合条件的分值即可',
