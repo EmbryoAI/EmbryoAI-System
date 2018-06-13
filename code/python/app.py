@@ -7,9 +7,13 @@ from yaml import load
 from traceback import print_exc
 from common import getdefault
 from logging import Formatter, DEBUG
+import os
+
+from flask_apscheduler import APScheduler
 
 
-def read_yml_config(filename='configuration.yml'):
+def read_yml_config(filename=os.path.split(os.path.realpath(__file__))[0] \
+        +'/configuration.yml'):
     '''从yaml文件中读取配置'''
     with open(filename, 'r') as fn:
         return load(fn.read())        
@@ -18,8 +22,10 @@ def init_config(conf):
     '''初始化app的基本配置'''
     # 数据库连接字符串
     app.config['SQLALCHEMY_DATABASE_URI'] = getdefault(conf, 'SQLALCHEMY_DATABASE_URI', 
-        'mysql+pymysql://root:@localhost/embryoai_system?charset=utf8')
+        'mysql+pymysql://root:123456@localhost/embryoai_system?charset=utf8')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SCHEDULER_API_ENABLED'] = getdefault(conf, 'SCHEDULER_API_ENABLED', True)
+    app.config['JOBS'] = getdefault(conf, 'JOBS')
     # 返回的JSON数据保持原编码方式
     app.config['JSON_AS_ASCII'] = False
     app.config['SECRET_KEY'] = getdefault(conf, 'SECRET_KEY', '123456')
@@ -32,12 +38,12 @@ logger = app.logger # 日志对象
 
 def init_logger(logname):
     '''初始化日志的基本配置'''
-    import os
-    path, name = os.path.split(logname)
+    global logger
+    path, _ = os.path.split(logname)
     if not os.path.exists(path):
         try:
             os.mkdir(path)
-        except Exception as e:
+        except Exception:
             print_exc()
             logname = 'embryoai.log'
     from logging.handlers import RotatingFileHandler
@@ -74,5 +80,8 @@ if __name__=='__main__':
     debug = getdefault(conf, 'DEBUG', False) # 是否开启debug模式
     threaded = getdefault(conf, 'THREADED', True) # 是否开启多线程模式
     add_all_controller()
+    scheduler = APScheduler()
+    scheduler.init_app(app)
+    scheduler.start()
     logger.info('服务器启动成功，侦听端口：%d' %port)
-    app.run(port=port, debug=debug, threaded=threaded) #启动app
+    app.run(port=port, debug=debug, threaded=threaded, use_reloader=False) #启动app
