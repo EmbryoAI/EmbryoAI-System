@@ -11,9 +11,9 @@ import os
 
 from flask_apscheduler import APScheduler
 
+app_root = os.path.split(os.path.realpath(__file__))[0] + os.path.sep
 
-def read_yml_config(filename=os.path.split(os.path.realpath(__file__))[0] \
-        +'/configuration.yml'):
+def read_yml_config( filename=app_root + 'configuration.yml'):
     '''从yaml文件中读取配置'''
     with open(filename, 'r') as fn:
         return load(fn.read())        
@@ -59,12 +59,13 @@ def add_all_controller():
         controller中定义的Blueprint的变量名称必须与文件名称相同，
         可以定义url_prefix变量设置controller的url前缀''' 
     from importlib import import_module
-    import os
-    for root, dirs, files in os.walk('controller'):
+    global app_root
+    for root, _, files in os.walk(app_root + 'controller'):
         for f in filter(lambda x: x.endswith('.py') 
             and not x.startswith('__init__'), files):
             f = f[:-3]
-            path = list(filter(lambda x: x!='', os.path.split(root)))
+            root = root[len(app_root):]
+            path = list(filter(lambda x: x!='', root.split(os.path.sep)))
             path.append(f)
             modulename = '.'.join(path)
             controller_module = import_module(modulename)
