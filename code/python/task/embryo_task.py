@@ -3,4 +3,5 @@
 from app import logger
 
 def run():
-    logger.info('test job...')
+    # logger.info('test job...')
+    pass

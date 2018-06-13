@@ -70,6 +70,7 @@ def add_all_controller():
             controller_module = import_module(modulename)
             controller_variable = getattr(controller_module, f)
             prefix_variable = getattr(controller_module, 'url_prefix', '/')
+            # setattr(controller_variable, 'template_folder', 'templates')
             app.register_blueprint(controller_variable, url_prefix=prefix_variable)
             logger.info('控制器 %s 蓝图注册成功，绑定地址前缀 %s' %(
                 controller_variable.name, prefix_variable))

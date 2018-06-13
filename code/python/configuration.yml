@@ -10,3 +10,4 @@ JOBS:
     trigger: "interval"
     seconds: 10
 SCHEDULER_API_ENABLED: true
+EMBRYOAI_IMAGE_ROOT: "/Users/wangying/git/repos/EmbryoAI-System/models/demo0"
