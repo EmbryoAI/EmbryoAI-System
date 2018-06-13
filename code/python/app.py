@@ -64,8 +64,8 @@ def add_all_controller():
         for f in filter(lambda x: x.endswith('.py') 
             and not x.startswith('__init__'), files):
             f = f[:-3]
-            root = root[len(app_root):]
-            path = list(filter(lambda x: x!='', root.split(os.path.sep)))
+            root_dir = root[len(app_root):]
+            path = list(filter(lambda x: x!='', root_dir.split(os.path.sep)))
             path.append(f)
             modulename = '.'.join(path)
             controller_module = import_module(modulename)
