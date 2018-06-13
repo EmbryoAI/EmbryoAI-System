@@ -9,7 +9,6 @@ def test():
     logger().info('进入test1_controller.test函数')
     return render_template('admin/main.html')
 
-@admin_index_controller.route('/2', methods=['GET'])
-def test2():
-    logger().info('进入test1_controller.test函数')
-    return render_template('admin/test.html')
+
+
+

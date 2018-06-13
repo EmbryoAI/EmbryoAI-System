@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<body class="gray-bg">
+	<div class="wrapper wrapper-content ">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+						<input id="id" name="id" th:value="${reportTemplate.id}"  type="hidden">
+							<div class="form-group">	
+								<label class="col-sm-3 control-label">医院ID：</label>
+								<div class="col-sm-8">
+									<input id="hospitalId" name="hospitalId" th:value="${reportTemplate.hospitalId}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">医院名称：</label>
+								<div class="col-sm-8">
+									<input id="hospitalName" name="hospitalName" th:value="${reportTemplate.hospitalName}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">科室ID：</label>
+								<div class="col-sm-8">
+									<input id="deptId" name="deptId" th:value="${reportTemplate.deptId}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">科室名称：</label>
+								<div class="col-sm-8">
+									<input id="deptName" name="deptName" th:value="${reportTemplate.deptName}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">取字典表report_type：</label>
+								<div class="col-sm-8">
+									<input id="reportType" name="reportType" th:value="${reportTemplate.reportType}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">模版内容：</label>
+								<div class="col-sm-8">
+									<input id="reportContent" name="reportContent" th:value="${reportTemplate.reportContent}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">创建时间：</label>
+								<div class="col-sm-8">
+									<input id="createTime" name="createTime" th:value="${reportTemplate.createTime}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">修改时间：</label>
+								<div class="col-sm-8">
+									<input id="updateTime" name="updateTime" th:value="${reportTemplate.updateTime}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">创建人：</label>
+								<div class="col-sm-8">
+									<input id="createUserName" name="createUserName" th:value="${reportTemplate.createUserName}" class="form-control" type="text">
+								</div>
+							</div>
+														<div class="form-group">	
+								<label class="col-sm-3 control-label">修改人：</label>
+								<div class="col-sm-8">
+									<input id="updateUserName" name="updateUserName" th:value="${reportTemplate.updateUserName}" class="form-control" type="text">
+								</div>
+							</div>
+																					<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="/js/appjs/system/reportTemplate/edit.js">
+	</script>
+</body>
+</html>
+
+</html>
