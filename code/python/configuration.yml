@@ -1,5 +1,5 @@
-SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@localhost/embryoai_system_db?charset=utf8"
-PORT: 5001
+SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:lw@123@122.13.2.38:8002/embryoai_system_db?charset=utf8"
+PORT: 6001
 DEBUG: true
 THREADED: true
 LOGGER_FILE: "./embryoai.log"
@@ -10,4 +10,5 @@ JOBS:
     trigger: "interval"
     seconds: 10
 SCHEDULER_API_ENABLED: true
+
 EMBRYOAI_IMAGE_ROOT: "/Users/wangying/git/repos/EmbryoAI-System/models/demo0"
