@@ -24,3 +24,13 @@ def insertUser(id, username, password, email, mobile, truename, title, is_admin,
 
 def findUserById(id):
     return user_mapper.findUserById(id)
+
+def findAllUsers():
+    return user_mapper.findAllUsers()
+
+def deleteUser(user):
+    try:
+        user_mapper.deleteUser(user)
+    except:
+        return 400, {'msg': '删除用户时发生错误'}
+    return 204, None

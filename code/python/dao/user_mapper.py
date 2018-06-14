@@ -28,3 +28,15 @@ def insertUser(user):
 
 def findUserById(id):
     return db.session.query(User).filter(User.id == id).one_or_none()
+
+def findAllUsers():
+    return db.session.query(User).all()
+
+def deleteUser(user):
+    try:
+        db.session.delete(user)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('删除用户数据时发生错误', e.message, e)
