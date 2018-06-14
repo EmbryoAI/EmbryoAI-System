@@ -7,6 +7,7 @@ from yaml import load
 from traceback import print_exc
 from common import getdefault
 from logging import Formatter, DEBUG
+import logging
 import os
 
 from flask_apscheduler import APScheduler
@@ -34,7 +35,7 @@ app = Flask(__name__) # EmbryoAI系统Flask APP
 conf = read_yml_config()
 init_config(conf)
 db = SQLAlchemy(app) # 此APP要用到的数据库连接，由ORM框架SQLAlchemy管理
-logger = app.logger # 日志对象
+logger = app.logger
 
 def init_logger(logname):
     '''初始化日志的基本配置'''
