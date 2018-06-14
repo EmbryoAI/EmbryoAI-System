@@ -50,7 +50,7 @@ def addUser():
 def getUserById(id):
     user = user_service.findUserById(id)
     if not user:
-        abort(404)
+        return make_response(jsonify("当前用户不存在"), 404)
     return jsonify(user.to_dict())
 
 #查询所有用户
