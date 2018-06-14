@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from app import logger
+from common import logger
 
 def run():
     # logger.info('test job...')
