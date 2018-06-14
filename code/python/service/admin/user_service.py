@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 
 from entity.User import User
-import dao.user_mapper as user_mapper
+import dao.admin.user_mapper as user_mapper
 
 def updateUser(username, password):
     try:
