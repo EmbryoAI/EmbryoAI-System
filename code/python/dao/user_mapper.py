@@ -16,3 +16,12 @@ def updateUser(params):
         db.session.rollback()
         print_exc()
         raise DatabaseError('插入用户数据时发生错误', e.message, e)
+
+def insertUser(user):
+    try :
+        db.session.add(user)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('插入用户数据时发生错误', e.message, e)
