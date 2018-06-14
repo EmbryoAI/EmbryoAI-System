@@ -25,3 +25,6 @@ def insertUser(user):
         db.session.rollback()
         print_exc()
         raise DatabaseError('插入用户数据时发生错误', e.message, e)
+
+def findUserById(id):
+    return db.session.query(User).filter(User.id == id).one_or_none()

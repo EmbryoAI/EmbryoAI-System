@@ -4,6 +4,7 @@ from flask import Blueprint, jsonify,render_template,request, make_response, abo
 from common import logger
 from app import db
 import service.user_service as user_service
+from entity.User import User
 import time
 from common import uuid
 
@@ -43,3 +44,9 @@ def addUser():
     code, user = user_service.insertUser(id, username, password, email, mobile, truename, title, 
         is_admin, is_private, create_time, update_time, last_login_time)
     return make_response(jsonify(user), code)
+
+#根据用户id查询用户信息
+@user_controller.route('/<string:id>', methods=['GET'])
+def getUserById(id):
+    user = user_service.findUserById(id)
+    return jsonify(user.to_dict())

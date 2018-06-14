@@ -21,3 +21,6 @@ def insertUser(id, username, password, email, mobile, truename, title, is_admin,
     except:
         return 400, {'msg': '新增用户时发生错误'}
     return 201, user.to_dict()
+
+def findUserById(id):
+    return user_mapper.findUserById(id)
