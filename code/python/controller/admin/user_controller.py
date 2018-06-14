@@ -23,7 +23,7 @@ def password():
     return make_response(jsonify(msg), code)
 
 #新增用户
-@user_controller.route('/addUser', methods=['POST'])
+@user_controller.route('', methods=['POST'])
 def addUser():
     if not request.json:
         abort(403)
@@ -46,19 +46,19 @@ def addUser():
     return make_response(jsonify(user), code)
 
 #根据用户id查询用户信息
-@user_controller.route('/getUser/<string:id>', methods=['GET'])
+@user_controller.route('/<string:id>', methods=['GET'])
 def getUserById(id):
     user = user_service.findUserById(id)
     return jsonify(user.to_dict())
 
 #查询所有用户
-@user_controller.route('/getAllUsers', methods=['GET'])
+@user_controller.route('', methods=['GET'])
 def getAllUsers():
     users = list(map(lambda x: x.to_dict(), user_service.findAllUsers()))
     return jsonify(users)
 
 #根据id删除用户
-@user_controller.route('/deleteUser/<string:id>', methods=['DELETE'])
+@user_controller.route('/<string:id>', methods=['DELETE'])
 def deleteUser(id):
     user = user_service.findUserById(id)
     if not user:
