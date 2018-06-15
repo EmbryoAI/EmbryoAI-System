@@ -40,19 +40,22 @@ layui.use('table', function(){
 	    } else if(layEvent === 'edit'){
 	    	layer.open({
 	    		type : 2,
-	    		title : '增加',
+	    		title : '编辑',
 	    		maxmin : true,
 	    		shadeClose : false, // 点击遮罩关闭层
 	    		area : [ '800px', '520px' ],
-	    		content:'/add' // iframe的url
+	    		content:'/admin/demo/toSave/',
+	    	    end:function(index,layero){
+	    	    	 table.reload('testReload');//刷新当前页面.
+	    	    }
 	    	});
 	    }
 	  });
 	  
+ 
 	  var $ = layui.$, active = {
 	    reload: function(){
 	      var demoReload = $('#demoReload');
-	      
 	      //执行重载
 	      table.reload('testReload', {
 	        page: {
@@ -64,7 +67,20 @@ layui.use('table', function(){
 	          }
 	        }
 	      });
-	    }
+	    },getCheckData: function(){ //获取选中数据
+		      var checkStatus = table.checkStatus('testReload')
+		      ,data = checkStatus.data;
+		      layer.alert(JSON.stringify(data));
+		    }
+		    ,getCheckLength: function(){ //获取选中数目
+		      var checkStatus = table.checkStatus('testReload')
+		      ,data = checkStatus.data;
+		      layer.msg('选中了：'+ data.length + ' 个');
+		    }
+		    ,isAll: function(){ //验证是否全选
+		      var checkStatus = table.checkStatus('testReload');
+		      layer.msg(checkStatus.isAll ? '全选': '未全选')
+		    }
 	  };
 	  
 	  $('.demoTable .layui-btn').on('click', function(){
