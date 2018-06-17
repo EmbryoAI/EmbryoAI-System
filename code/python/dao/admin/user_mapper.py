@@ -40,3 +40,19 @@ def deleteUser(user):
         db.session.rollback()
         print_exc()
         raise DatabaseError('删除用户数据时发生错误', e.message, e)
+
+
+def findUserByNameAndPwd(username,password):
+    return db.session.query(User).filter(User.username == username,User.password == password).one_or_none()
+
+def updateUserLoginTime(params):
+    try:
+        sql = text("update sys_user set last_login_time = :lastLoginTime where id = :id")
+        print(sql)
+        print(params['lastLoginTime'])
+        db.session.execute(sql,params)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError("修改用户登录时间发生错误",e.message,e)

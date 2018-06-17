@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
-from flask import Blueprint, jsonify,render_template,request, make_response, abort
+from flask import Blueprint, jsonify,render_template,request, make_response, abort,session
+from flask_restful import reqparse
 from common import logger
 from app import db
 import service.admin.user_service as user_service
@@ -67,3 +68,35 @@ def deleteUser(id):
         abort(404)
     code, msg = user_service.deleteUser(user)
     return make_response(jsonify(msg), code)
+
+'''根据用户名、密码登录'''
+parser = reqparse.RequestParser()
+parser.add_argument('username', type=str)
+parser.add_argument('password', type=str)
+parser.add_argument('isLoginAdmin', type=str)
+@user_controller.route('/login',methods=['POST'])
+def login():
+    args = parser.parse_args()
+    if not args or args is None :
+        return render_template('/login.html',msg="参数不能为空")
+    username = args["username"]
+    password = args["password"]
+    isLoginAdmin = args["isLoginAdmin"]
+    if username is None or password is None :
+        logger().info("")
+        return render_template('/login.html',msg="用户名、密码不能为空")
+    user = user_service.findUserByNameAndPwd(username,password)
+    if not user :
+        return render_template('/login.html',msg="此用户不存在")
+    lastLoginTime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time()))
+    user_service.updateUserLoginTime(user.id,lastLoginTime)
+    session["user"] = user.to_dict()
+    if user.isAdmin != 0 :
+        if isLoginAdmin == "1":
+            return render_template('/admin/main.html',user=user)
+        else:
+            return render_template('/home.html',user=user)
+    else:
+        return render_template('/home.html',user=user)
+    
+

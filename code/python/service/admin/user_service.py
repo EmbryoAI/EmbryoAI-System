@@ -34,3 +34,14 @@ def deleteUser(user):
     except:
         return 400, {'msg': '删除用户时发生错误'}
     return 204, None
+
+def updateUserLoginTime(id,lastLoginTime):
+    try:
+        params = {'id': id, 'lastLoginTime': lastLoginTime}
+        user_mapper.updateUserLoginTime(params)
+    except:
+        return 400, {'msg': '修改用户登录实践时发生错误'}
+    return 202, {'msg': '修改成功'}
+
+def findUserByNameAndPwd(username,password):
+    return user_mapper.findUserByNameAndPwd(username,password)
