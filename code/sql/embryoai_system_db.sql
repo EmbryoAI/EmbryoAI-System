@@ -3614,6 +3614,8 @@ CREATE TABLE `sys_user` (
   `email` varchar(200) DEFAULT NULL COMMENT '电子邮件',
   `mobile` varchar(30) DEFAULT NULL COMMENT '手机号码',
   `truename` varchar(50) DEFAULT NULL COMMENT '真实姓名',
+  `birthday` datetime DEFAULT NULL COMMENT '出生日期',
+  `sex` int(11) DEFAULT NULL COMMENT '性别0:女,1:男',
   `title` varchar(50) DEFAULT NULL COMMENT '职称',
   `is_admin` int(11) DEFAULT '0' COMMENT '是否管理员（非0代表管理员）',
   `is_private` int(11) DEFAULT '0' COMMENT '是否只允许查看修改自己的病历（非0代表只允许查看修改自己创建的病历）',

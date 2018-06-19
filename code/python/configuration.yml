@@ -1,4 +1,4 @@
-SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:lw@123@122.13.2.38:8002/embryoai_system_db?charset=utf8"
+SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@39.104.173.18:3306/embryoai_system_db?charset=utf8"
 PORT: 6001
 DEBUG: true
 THREADED: true

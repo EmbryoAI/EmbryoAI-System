@@ -1,4 +1,4 @@
-function save() {
+function add() {
 	$.ajax({
 		cache : false,
 		type : "post",
