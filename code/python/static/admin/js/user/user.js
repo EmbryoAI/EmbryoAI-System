@@ -4,19 +4,23 @@ layui.use('table', function(){
     //方法级渲染
     table.render({
       elem: '#user'
-      ,url: '/admin/user/list/'
+      ,url: '/api/v1/user'
       ,cols: [[
         {checkbox: true, fixed: true}
-        ,{field:'id', title: 'ID', width:80, sort: true, fixed: true}
-        ,{field:'username', title: '用户名', width:80}
-        ,{field:'sex', title: '性别', width:80, sort: true}
-        ,{field:'city', title: '城市', width:80}
-        ,{field:'sign', title: '签名'}
-        ,{field:'experience', title: '积分', sort: true, width:80}
-        ,{field:'score', title: '评分', sort: true, width:80}
-        ,{field:'classify', title: '职业', width:80}
-        ,{field:'wealth', title: '财富', sort: true, width:135}
-        ,{field:'right', title: '操作', width:188,toolbar:"#barDemo"}
+        ,{field:'username', title: '用户名', width:130}
+        ,{field:'email', title: '电子邮箱', width:180}
+        ,{field:'mobile', title: '手机号码', width:130}
+        ,{field:'truename', title: '真实姓名', width:90}
+        ,{field:'title', title: '职称', width:80}
+        ,{field:'lastLoginTime', title: '最后登录时间', width:160}
+        ,{field:'delFlag', title: '删除状态', width:90, templet: function(d){
+            if(d.delFlag == 0){
+              return '正常使用'
+            }else{
+              return '已删除'
+            }
+          }}
+        ,{field:'right', title: '操作', width:175,toolbar:"#barDemo"}
       ]]
       ,id: 'testReload'
       ,page: true
@@ -30,7 +34,17 @@ layui.use('table', function(){
       ,layEvent = obj.event; //获得 lay-event 对应的值
       
       if(layEvent === 'detail'){
-        layer.msg('查看操作');
+        layer.open({
+          type : 2,
+          title : '用户详情',
+          maxmin : true,
+          shadeClose : false, // 点击遮罩关闭层
+          area : [ '800px', '520px' ],
+          content:'/admin/user/detail/' + data.id,
+          end:function(index,layero){
+               table.reload('testReload');//刷新当前页面.
+          }
+        });
       } else if(layEvent === 'del'){
         layer.confirm('真的删除行么', function(index){
           obj.del(); //删除对应行（tr）的DOM结构
@@ -44,10 +58,7 @@ layui.use('table', function(){
               maxmin : true,
               shadeClose : false, // 点击遮罩关闭层
               area : [ '800px', '520px' ],
-              content:'/admin/user/toAdd/',
-              end:function(index,layero){
-                   table.reload('testReload');//刷新当前页面.
-              }
+              content:'/admin/user/toAdd/'
           });
       }
     });
@@ -67,31 +78,14 @@ layui.use('table', function(){
             }
           }
         });
-      },getCheckData: function(){ //获取选中数据
-            var checkStatus = table.checkStatus('testReload')
-            ,data = checkStatus.data;
-            layer.alert(JSON.stringify(data));
-          }
-          ,getCheckLength: function(){ //获取选中数目
-            var checkStatus = table.checkStatus('testReload')
-            ,data = checkStatus.data;
-            layer.msg('选中了：'+ data.length + ' 个');
-          }
-          ,isAll: function(){ //验证是否全选
-            var checkStatus = table.checkStatus('testReload');
-            layer.msg(checkStatus.isAll ? '全选': '未全选')
-          }
-          ,toAdd: function(){ //去新增用户页面
+      },toAdd: function(){ //去新增用户页面
             layer.open({
                 type : 2,
                 title : '用户新增',
                 maxmin : true,
                 shadeClose : false, // 点击遮罩关闭层
                 area : [ '800px', '520px' ],
-                content:'/admin/user/toAdd/',
-                end:function(index,layero){
-                     table.reload('testReload');//刷新当前页面.
-                }
+                content:'/admin/user/toAdd/'
             });
           }
     };

@@ -1,10 +1,13 @@
 # -*- coding: utf8 -*-
 
 from entity.User import User
+from entity.RestResult import RestResult
 import dao.admin.user_mapper as user_mapper
-from flask import request
+from flask import request, jsonify
 from common import uuid
 import time
+import hashlib
+import json
 
 def updateUser(username, password):
     try:
@@ -41,15 +44,22 @@ def insertUser(request):
     is_private = request.form.get('isPrivate')
     if is_private == "":
         return 400, '病历权限不能为空!'
+    birthday = request.form.get('birthday')
+    sex = request.form.get('sex')
 
     create_time = update_time = last_login_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 
 
     user = user_mapper.findUserByUserName(username)
     if user:
-        return 401, '用户名已存在!!'
+        return 401, '用户名已存在!'
+
+    md5 = hashlib.md5()
+    md5.update(password.encode(encoding='utf-8'))
+    password = md5.hexdigest()
 
     user = User(id=id, username=username, password=password, email=email, mobile=mobile, truename=truename, 
-        title=title, isAdmin=is_admin, isPrivate=is_private, createTime=create_time, updateTime=update_time, 
+        title=title, isAdmin=is_admin, isPrivate=is_private, sex=sex, birthday=birthday, createTime=create_time, 
+        updateTime=update_time, 
         lastLoginTime=last_login_time)
     try:
         user_mapper.insertUser(user)
@@ -61,7 +71,12 @@ def findUserById(id):
     return user_mapper.findUserById(id)
 
 def findAllUsers():
-    return user_mapper.findAllUsers()
+    try:
+        users = list(map(lambda x: x.to_dict(), user_mapper.findAllUsers()))
+    except:
+        return 400, '查询用户列表时发生错误!'
+    restResult = RestResult(0, "OK", len(users), users)
+    return jsonify(restResult.__dict__)
 
 def deleteUser(user):
     try:

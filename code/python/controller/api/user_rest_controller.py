@@ -41,8 +41,7 @@ def getUserById(id):
 #查询所有用户
 @user_rest_controller.route('', methods=['GET'])
 def getAllUsers():
-    users = list(map(lambda x: x.to_dict(), user_service.findAllUsers()))
-    return jsonify(users)
+    return user_service.findAllUsers()
 
 #根据id删除用户
 @user_rest_controller.route('/<string:id>', methods=['DELETE'])
