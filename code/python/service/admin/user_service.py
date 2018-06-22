@@ -9,10 +9,10 @@ import time
 import hashlib
 import json
 
-def updateUser(username, password):
+def updatePassword(username, password):
     try:
         params = {'username': username, 'password': password}
-        user_mapper.updateUser(params)
+        user_mapper.updatePassword(params)
     except:
         return 400, {'msg': '修改用户密码时发生错误'}
     return 202, {'msg': '修改成功'}
@@ -27,11 +27,9 @@ def insertUser(request):
     if password == "":
         return 400, '密码不能为空!'
     email = request.form.get('email')
-    if email == "":
-        return 400, '电子邮箱不能为空!'
     mobile = request.form.get('mobile')
-    if mobile == "":
-        return 400, '手机号码不能为空!'
+    if email == "" and mobile == "":
+        return 400, '手机号码和电子邮箱必须填写一项!!'
     truename = request.form.get('truename')
     if truename == "":
         return 400, '真实姓名不能为空!'
@@ -70,20 +68,56 @@ def insertUser(request):
 def findUserById(id):
     return user_mapper.findUserById(id)
 
-def findAllUsers():
+def updateUser(request):
+    user_id = request.form.get('id')
+    if user_id == "":
+        return 400, {'获取不到该用户信息!'}
+    email = request.form.get('email')
+    mobile = request.form.get('mobile')
+    if mobile == "" and email == "":
+        return 400, {'手机号码和邮箱必须填写一项!'}
+    truename = request.form.get('truename')
+    if truename == "":
+        return 400, {'真实姓名不能为空!'}
+    title = request.form.get('title')
+    if title == "":
+        return 400, {'职称不能为空!'}
+    isAdmin = request.form.get('isAdmin')
+    if isAdmin == "":
+        return 400, {'是否管理员不能为空!'}
+    birthday = request.form.get('birthday')
+    if birthday == "":
+        birthday = None
+    usersex = request.form.get('sex')
+
+    updateTime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 
+
+    params = {'id': user_id, 'birthday':birthday, 'email': email, 'mobile': mobile, 'truename': truename, 'title': title, 'is_admin': isAdmin, 'sex': usersex, 'update_time': updateTime}
+
     try:
-        users = list(map(lambda x: x.to_dict(), user_mapper.findAllUsers()))
+        user_mapper.updateUser(params)
+    except:
+        return 500, '修改用户数据时发生错误!'
+    return 200, '修改用户数据成功!'
+
+def findAllUsers(request):
+    page_number = request.args.to_dict().get('page')
+    page_size = request.args.to_dict().get('limit')
+    try:
+        count = user_mapper.count()
+        users = list(map(lambda x: x.to_dict(), user_mapper.findAllUsers(page_number, page_size)))
     except:
         return 400, '查询用户列表时发生错误!'
-    restResult = RestResult(0, "OK", len(users), users)
+    restResult = RestResult(0, "OK", count, users)
     return jsonify(restResult.__dict__)
 
-def deleteUser(user):
+def deleteUser(id):
     try:
-        user_mapper.deleteUser(user)
+        params = {'id':id}
+        user_mapper.deleteUser(params)
     except:
-        return 400, {'msg': '删除用户时发生错误'}
-    return 204, None
+        return 500, '删除用户时发生错误'
+    return 200, '删除用户成功'
 
 def updateUserLoginTime(id,lastLoginTime):
     try:

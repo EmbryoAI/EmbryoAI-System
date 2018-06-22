@@ -50,16 +50,34 @@ layui.use('table', function(){
           obj.del(); //删除对应行（tr）的DOM结构
           layer.close(index);
           //向服务端发送删除指令
+          $.ajax({
+            cache : false,
+            type : "DELETE",
+            url : "/api/v1/user/" + data.id,
+            data : "",
+            async : false,
+            error : function(request) {
+              parent.layer.alert(request.responseText);
+            },
+            success : function(data) {
+              parent.layer.alert("用户删除成功!");
+              var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+              parent.layer.close(index);
+            }
+          });
         });
       } else if(layEvent === 'edit'){
-          layer.open({
-              type : 2,
-              title : '编辑',
-              maxmin : true,
-              shadeClose : false, // 点击遮罩关闭层
-              area : [ '800px', '520px' ],
-              content:'/admin/user/toAdd/'
-          });
+        layer.open({
+          type : 2,
+          title : '用户详情',
+          maxmin : true,
+          shadeClose : false, // 点击遮罩关闭层
+          area : [ '800px', '520px' ],
+          content:'/admin/user/edit/' + data.id,
+          end:function(index,layero){
+               table.reload('testReload');//刷新当前页面.
+          }
+        });
       }
     });
     
@@ -85,7 +103,10 @@ layui.use('table', function(){
                 maxmin : true,
                 shadeClose : false, // 点击遮罩关闭层
                 area : [ '800px', '520px' ],
-                content:'/admin/user/toAdd/'
+                content:'/admin/user/toAdd/',
+                end:function(index,layero){
+                  table.reload('testReload');//刷新当前页面.
+                }
             });
           }
     };

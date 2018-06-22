@@ -6,7 +6,7 @@ from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
 from traceback import print_exc
 
-def updateUser(params):
+def updatePassword(params):
     try :
         sql = text('update sys_user set password = :password where username = :username')
         print(sql)
@@ -15,7 +15,18 @@ def updateUser(params):
     except Exception as e:
         db.session.rollback()
         print_exc()
-        raise DatabaseError('插入用户数据时发生错误', e.message, e)
+        raise DatabaseError('修改用户密码时发生错误', e.message, e)
+
+def updateUser(params):
+    try :
+        sql = text('update sys_user set birthday = :birthday, email = :email, is_admin = :is_admin, mobile = :mobile, sex = :sex, title = :title, truename = :truename, update_time = :update_time WHERE id = :id')
+        print(sql)
+        db.session.execute(sql, params)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('修改用户数据时发生错误', e.message, e)
 
 def insertUser(user):
     try :
@@ -29,12 +40,17 @@ def insertUser(user):
 def findUserById(id):
     return db.session.query(User).filter(User.id == id).one_or_none()
 
-def findAllUsers():
-    return db.session.query(User).all()
+def findAllUsers(page_number, page_size):
+    return db.session.query(User).filter(User.delFlag == '0').limit(int(page_size)).offset((int(page_number)-1)*int(page_size))
 
-def deleteUser(user):
+def count():
+    return db.session.query(User).count()
+
+def deleteUser(params):
     try:
-        db.session.delete(user)
+        sql = text('update sys_user set del_flag = 1 where id = :id')
+        print(sql)
+        db.session.execute(sql, params)
         db.session.commit()
     except Exception as e:
         db.session.rollback()

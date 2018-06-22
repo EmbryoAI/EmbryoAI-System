@@ -17,9 +17,9 @@ def main():
 def toAdd():
     return render_template('admin/user/add.html')
 
-''' 跳转到用户详情页面 '''
-@user_controller.route('/detail/<string:id>', methods=['GET'])
-def detail(id):
+''' 跳转到用户编辑页面 '''
+@user_controller.route('/edit/<string:id>', methods=['GET'])
+def edit(id):
     user = user_service.findUserById(id)
-    return render_template('admin/user/detail.html', user=user)
+    return render_template('admin/user/edit.html', user=user)
 
