@@ -24,6 +24,9 @@ def init_config(conf):
     # 数据库连接字符串
     app.config['SQLALCHEMY_DATABASE_URI'] = getdefault(conf, 'SQLALCHEMY_DATABASE_URI', 
         'mysql+pymysql://root:123456@localhost/embryoai_system?charset=utf8')
+    app.config['SQLALCHEMY_POOL_RECYCLE'] = getdefault(conf, 'SQLALCHEMY_POOL_RECYCLE', 300)
+    app.config['SQLALCHEMY_POOL_SIZE'] = getdefault(conf, 'SQLALCHEMY_POOL_SIZE', 300)
+    app.config['SQLALCHEMY_POOL_TIMEOUT'] = getdefault(conf, 'SQLALCHEMY_POOL_TIMEOUT', 3)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SCHEDULER_API_ENABLED'] = getdefault(conf, 'SCHEDULER_API_ENABLED', True)
     app.config['JOBS'] = getdefault(conf, 'JOBS')
