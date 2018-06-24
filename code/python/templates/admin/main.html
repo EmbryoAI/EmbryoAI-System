@@ -49,17 +49,14 @@
 			<div class="layui-side-scroll">
 				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 				<ul class="layui-nav layui-nav-tree" lay-filter="test">
-					<li class="layui-nav-item layui-nav-itemed"><a class=""
-						href="javascript:;">菜单</a>
-						<dl class="layui-nav-child">
+					<li class="layui-nav-item layui-nav-itemed">
+						<a class="" href="javascript:;">菜单>></a>
+						<dl>
 							<dd>
-								<a href="javascript:;">用户管理</a>
+								<a href="/admin/user/"  {% if htmlType == 'user' %} style="background: #009688" {% endif %} >用户管理</a>
 							</dd>
 							<dd>
-								<a href="javascript:;">培养箱管理</a>
-							</dd>
-							<dd>
-								<a href="javascript:;">test</a>
+								<a href="/admin/incubator/" {% if htmlType == 'incubator' %} style="background: #009688" {% endif %} >培养箱管理</a>
 							</dd>
 						</dl></li>
 				</ul>

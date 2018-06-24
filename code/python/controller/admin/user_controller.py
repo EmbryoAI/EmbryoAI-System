@@ -9,7 +9,7 @@ url_prefix = '/admin/user'
 
 @user_controller.route('/', methods=['GET'])
 def main():
-    return render_template('admin/user/user_manage.html')
+    return render_template('admin/user/user_manage.html',htmlType='user')
 
 
 ''' 跳转到添加页面 '''
