@@ -21,6 +21,10 @@ def updateIncubator (username, password):
 def insertIncubator(request):
 
     id = uuid()
+    
+    incubatorCode = request.form.get('incubatorCode')
+    if incubatorCode == "":
+       return 400, '培养箱编码不能为空!'
     incubatorBrand = request.form.get('incubatorBrand')
     if incubatorBrand == "":
         return 400, '培养箱品牌不能为空!'
@@ -30,18 +34,16 @@ def insertIncubator(request):
     incubatorDescription = request.form.get('incubatorDescription')
     if incubatorDescription == "":
         return 400, '培养箱描述不能为空!'
-
-    nowTime=time.strftime("%Y%m%d%H%M%S");#生成当前时间  
-    randomNum=random.randint(0,100);#生成的随机整数n，其中0<=n<=100  
-    if randomNum<=10:  
-        randomNum=str(0)+str(randomNum);  
-    incubatorCode=str(nowTime)+str(randomNum);
-
+    
     create_time = update_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 
     delFlag = 0;
     incubator = Incubator(id=id, incubatorCode=incubatorCode,incubatorBrand=incubatorBrand,incubatorType=incubatorType,incubatorDescription=incubatorDescription,delFlag=delFlag,createTime=create_time, 
         updateTime=update_time)
     try:
+        incubatorOld = incubator_mapper.findIncubatorByCode(incubatorCode);
+        if incubatorOld!=None:
+            return 400, '当前培养箱编码已存在，请您使用其他编码!'
+        
         incubator_mapper.insertIncubator(incubator)
     except:
         return 400, '新增培养箱异常!'
@@ -49,6 +51,9 @@ def insertIncubator(request):
 
 def updateIncubator(request):
     id = request.form.get('id')
+    incubatorCode = request.form.get('incubatorCode')
+    if incubatorCode == "":
+       return 400, '培养箱编码不能为空!'
     incubatorBrand = request.form.get('incubatorBrand')
     if incubatorBrand == "":
         return 400, '培养箱品牌不能为空!'
@@ -60,8 +65,14 @@ def updateIncubator(request):
         return 400, '培养箱描述不能为空!'
     updateTime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 
     delFlag = 0;
-    params = {'id': id, 'incubatorBrand': incubatorBrand, 'incubatorType': incubatorType, 'incubatorDescription': incubatorDescription, 'updateTime': updateTime}
+    params = {'id': id, 'incubatorCode': incubatorCode,'incubatorBrand': incubatorBrand, 'incubatorType': incubatorType, 'incubatorDescription': incubatorDescription, 'updateTime': updateTime}
     try:
+        incubatorOld = incubator_mapper.findIncubatorByCode(incubatorCode);
+        if incubatorOld!=None:
+             incubatorbenshen = incubator_mapper.findIncubatorById(id);
+             if incubatorOld.incubatorCode!=incubatorbenshen.incubatorCode:
+                  return 400, '当前培养箱编码已存在，请您使用其他编码!'
+              
         incubator_mapper.updateIncubator(params)
     except:
         return 400, '新增培养箱异常!'

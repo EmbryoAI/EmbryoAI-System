@@ -18,6 +18,10 @@ def insertIncubator(incubator):
 def findIncubatorById(id):
     return db.session.query(Incubator).filter(Incubator.id == id).one_or_none()
 
+def findIncubatorByCode(incubatorCode):
+    return db.session.query(Incubator).filter(Incubator.incubatorCode == incubatorCode).one_or_none()
+
+
 def queryIncubatorList(page,limit,filters):
     pagination = Incubator.query.filter_by(**filters).order_by(Incubator.createTime.desc()).paginate(page,per_page=limit,error_out=False)
     return pagination
@@ -25,7 +29,7 @@ def queryIncubatorList(page,limit,filters):
 
 def updateIncubator(params):
     try :
-        sql = text('update sys_incubator set incubator_brand=:incubatorBrand, incubator_type=:incubatorType'
+        sql = text('update sys_incubator set incubator_code=:incubatorCode,incubator_brand=:incubatorBrand, incubator_type=:incubatorType'
         ', incubator_description=:incubatorDescription '
         ', update_time=:updateTime '
             'where id=:id')
