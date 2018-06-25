@@ -5,6 +5,7 @@ from flask_restful import reqparse
 import service.admin.user_service as user_service
 from entity.User import User
 import time
+import hashlib
 from common import logger
 from app import login_manager,login_user, logout_user, login_required 
 
@@ -36,6 +37,9 @@ def login():
     if username is None or password is None :
         logger().info("用户名、密码不能为空")
         return render_template('/login.html',msg="用户名、密码不能为空")
+    md5 = hashlib.md5()
+    md5.update(password.encode(encoding='utf-8'))
+    password = md5.hexdigest()
     user = user_service.findUserByNameAndPwd(username,password)
     if not user :
         logger().info("此用户不存在或用户名、密码错误")
