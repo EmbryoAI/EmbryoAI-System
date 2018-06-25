@@ -45,6 +45,12 @@ login_manager.session_protection = 'strong'
 login_manager.login_view = 'admin_index_controller.index'
 logger = app.logger
 
+
+@login_manager.user_loader
+def load_user(user_id):
+    import service.admin.user_service as user_service
+    return user_service.findUserById(user_id)
+
 def init_logger(logname):
     '''初始化日志的基本配置'''
     global logger
