@@ -12,7 +12,7 @@
     <body class="login-body body">
 
       <div class="login-box">
-          <form id="loginForm" class="layui-form layui-form-pane" method="post" action="http://localhost:6001/api/v1/user/login">
+          <form id="loginForm" class="layui-form layui-form-pane" method="post" action="http://localhost:6001/api/v1/login/login">
               <div class="layui-form-item">
                   <h3>EmbryoAI系统登录</h3>
               </div>
@@ -20,19 +20,19 @@
                   <label class="layui-form-label">账号：</label>
 
                   <div class="layui-input-inline">
-                      <input type="text" name="username" class="layui-input" lay-verify="username" placeholder="账号" autocomplete="on" maxlength="20"/>
+                      <input type="text" id="username" name="username" class="layui-input" lay-verify="username" placeholder="账号" {% if username %} value="{{ username }}" {% endif %} autocomplete="on" maxlength="20"/>
                   </div>
               </div>
               <div class="layui-form-item">
                   <label class="layui-form-label">密码：</label>
 
                   <div class="layui-input-inline">
-                      <input type="password" name="password" class="layui-input" lay-verify="password" placeholder="密码" maxlength="20"/>
+                      <input type="password" id="password" name="password" class="layui-input" lay-verify="password" placeholder="密码" {% if password %} value="{{ password }}" {% endif %} maxlength="20"/>
                   </div>
               </div>
               <div class="layui-form-item">
                 <div class="layui-input-inline">
-                  <input type="checkbox" name="isLoginAdmin" title="进入后台系统" value="1" lay-skin="primary" checked>
+                  <input type="checkbox" id="isLoginAdmin" name="isLoginAdmin" title="进入后台系统" value="1" lay-skin="primary" checked>
                 </div>
               </div>
               <div class="layui-form-item">
