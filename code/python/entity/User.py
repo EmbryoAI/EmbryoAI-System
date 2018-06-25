@@ -17,6 +17,8 @@ class User(UserMixin,db.Model,mixin):
     title = db.Column("title", db.String(50))
     isAdmin = db.Column("is_admin", db.Integer, default=0)
     isPrivate = db.Column("is_private", db.Integer, default=0)
+    sex = db.Column("sex", db.String(30))
+    birthday = db.Column("birthday", db.Integer)
     createTime = db.Column("create_time", db.DateTime)
     updateTime = db.Column("update_time", db.DateTime)
     lastLoginTime = db.Column("last_login_time", db.DateTime)

@@ -41,6 +41,9 @@ def deleteUser(user):
         print_exc()
         raise DatabaseError('删除用户数据时发生错误', e.message, e)
 
+def findUserByUserName(username):
+    return db.session.query(User).filter(User.username == username).one_or_none()
+
 
 def findUserByNameAndPwd(username,password):
     return db.session.query(User).filter(User.username == username,User.password == password).one_or_none()
