@@ -1,3 +1,7 @@
+layui.use('form', function(){
+
+});
+
 function edit() {
 	$.ajax({
 		cache : false,
@@ -15,3 +19,5 @@ function edit() {
 		}
 	});
 }
+$("#incubatorBrand").val($("#incubatorBrandHide").val());
+$("#incubatorType").val($("#incubatorTypeHide").val());

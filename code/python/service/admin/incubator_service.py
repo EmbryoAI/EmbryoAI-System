@@ -94,7 +94,7 @@ def queryIncubatorList(request):
         #动态组装查询条件
         incubatorCode = request.args.get('incubatorCode');
         filters = {};
-        if incubatorCode!=None:
+        if incubatorCode!=None and incubatorCode!="":
             filters['incubatorCode']=incubatorCode
             
         #查詢列表

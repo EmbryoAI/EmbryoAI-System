@@ -1,3 +1,7 @@
+layui.use('form', function(){
+	
+});
+
 function add() {
 	$.ajax({
 		cache : false,

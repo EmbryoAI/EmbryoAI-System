@@ -23,13 +23,19 @@
     <div class="layui-inline">
       <label class="layui-form-label">培养箱品牌</label>
       <div class="layui-input-inline">
-        <input type="tel" name="incubatorBrand" id="incubatorBrand"  placeholder="请输入培养箱品牌" lay-verify="phone" autocomplete="off" class="layui-input">
+        <select name="incubatorBrand" id="incubatorBrand"   class="layui-input">
+        	<option value="">==请选择==</option>
+        	<option value="ASTEC">ASTEC</option>
+        </select>
       </div>
     </div>
     <div class="layui-inline">
       <label class="layui-form-label">培养箱型号</label>
       <div class="layui-input-inline">
-        <input type="text" name="incubatorType" id="incubatorType"  placeholder="请输入培养箱型号" lay-verify="email" autocomplete="on" class="layui-input">
+        <select name="incubatorType" id="incubatorType"   class="layui-input">
+        	<option value="">==请选择==</option>
+        	<option value="iBIS">iBIS</option>
+        </select>
       </div>
     </div>
   </div>
@@ -46,6 +52,6 @@
   </div>
 <script src="/static/admin/common/jquery.min.js" charset="utf-8"></script>
 <script src="/static/admin/layui/layui.js" charset="utf-8"></script>
-<script type="text/javascript" src="/static/admin/js/incubator/add.js"></script>
+<script src="{{ url_for('static',filename='admin/js/incubator/add.js') }}"></script>
 </body>
 </html>
