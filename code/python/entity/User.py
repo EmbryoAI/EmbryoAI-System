@@ -1,10 +1,11 @@
 # -*- coding: utf8 -*-
 
 from sqlalchemy_serializer import SerializerMixin as mixin
-from app import db
+from app import db,login_manager
+from flask_login import UserMixin
 
 
-class User(db.Model, mixin):
+class User(UserMixin,db.Model,mixin):
     __tablename__ = "sys_user"
 
     id = db.Column("id", db.String(32), primary_key=True, nullable=False)
@@ -23,3 +24,11 @@ class User(db.Model, mixin):
     lastLoginTime = db.Column("last_login_time", db.DateTime)
     delFlag = db.Column("del_flag", db.Integer, default=0)
 
+@login_manager.user_loader
+def load_user(user_id):
+    if user_id is None:
+        return None
+    user = db.session.query(User).filter(User.id == id).one_or_none()
+    if not user :
+        return None
+    return user

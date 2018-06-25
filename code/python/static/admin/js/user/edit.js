@@ -1,5 +1,7 @@
 layui.use('form', function(){
-	
+	laydate.render({
+		elem: '#birthday'
+	  });
 });
 
 $(function(){

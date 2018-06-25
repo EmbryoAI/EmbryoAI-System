@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/static/admin/layui/css/layui.css">
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+   
+<form class="layui-form" action="" id="incubatorForm">
+  <div class="layui-form-item" style="margin-top: 20px;">
+    <label class="layui-form-label">培养箱编号</label>
+    <div class="layui-input-block">
+      <input type="text"    id="incubatorCode" name="incubatorCode" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item" >
+    <div class="layui-inline">
+      <label class="layui-form-label">培养箱品牌</label>
+      <div class="layui-input-inline">
+        <select name="incubatorBrand" id="incubatorBrand"   class="layui-input">
+        	<option value="">==请选择==</option>
+        	<option value="ASTEC">ASTEC</option>
+        </select>
+      </div> 
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">培养箱型号</label>
+      <div class="layui-input-inline">
+        <select name="incubatorType" id="incubatorType"   class="layui-input">
+        	<option value="">==请选择==</option>
+        	<option value="iBIS">iBIS</option>
+        </select>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="layui-form-item">
+    <label class="layui-form-label">培养箱描述</label>
+    <div class="layui-input-block">
+        <textarea name="incubatorDescription" id="incubatorDescription" placeholder="请输入培养箱描述" class="layui-textarea"></textarea>
+    </div>
+  </div>
+</form>
+  <div class="layui-form-item" align="center">
+    <button class="layui-btn" onclick="add();">提交</button>
+  </div>
+<script src="/static/admin/common/jquery.min.js" charset="utf-8"></script>
+<script src="/static/admin/layui/layui.js" charset="utf-8"></script>
+<script src="{{ url_for('static',filename='admin/js/incubator/add.js') }}"></script>
+</body>
+</html>

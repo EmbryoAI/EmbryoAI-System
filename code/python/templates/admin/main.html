@@ -32,7 +32,7 @@
 <!-- 					</dl></li> -->
 <!-- 			</ul> -->
 			<ul class="layui-nav layui-layout-right">
-				<li class="layui-nav-item"><a href="javascript:;"> <img src="http://t.cn/RCzsdCq" class="layui-nav-img">{{userName}}好!
+				<li class="layui-nav-item"><a href="javascript:;"> <img src="http://t.cn/RCzsdCq" class="layui-nav-img">{{username}} 好!
 				</a>
 					<dl class="layui-nav-child">
 						<dd>
@@ -42,24 +42,21 @@
 							<a href="">安全设置</a>
 						</dd>
 					</dl></li>
-				<li class="layui-nav-item"><a href="">退出</a></li>
+				<li class="layui-nav-item"><a href="http://localhost:6001/api/v1/login/logout">退出</a></li>
 			</ul>
 		</div>
 		<div class="layui-side layui-bg-black">
 			<div class="layui-side-scroll">
 				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 				<ul class="layui-nav layui-nav-tree" lay-filter="test">
-					<li class="layui-nav-item layui-nav-itemed"><a class=""
-						href="javascript:;">菜单</a>
-						<dl class="layui-nav-child">
+					<li class="layui-nav-item layui-nav-itemed">
+						<a class="" href="javascript:;">菜单>></a>
+						<dl>
 							<dd>
-								<a href="javascript:;">用户管理</a>
+								<a href="/admin/user/"  {% if htmlType == 'user' %} style="background: #009688" {% endif %} >用户管理</a>
 							</dd>
 							<dd>
-								<a href="javascript:;">培养箱管理</a>
-							</dd>
-							<dd>
-								<a href="javascript:;">test</a>
+								<a href="/admin/incubator/" {% if htmlType == 'incubator' %} style="background: #009688" {% endif %} >培养箱管理</a>
 							</dd>
 						</dl></li>
 				</ul>
