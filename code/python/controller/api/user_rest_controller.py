@@ -41,15 +41,18 @@ def getUserById(id):
 #查询所有用户
 @user_rest_controller.route('', methods=['GET'])
 def getAllUsers():
-    return user_service.findAllUsers()
+    return user_service.findAllUsers(request)
 
+#修改用户数据
+@user_rest_controller.route('/userInfo', methods=['POST'])
+def updateUser():
+    code, msg = user_service.updateUser(request)
+    return make_response(msg, code)
+    
 #根据id删除用户
 @user_rest_controller.route('/<string:id>', methods=['DELETE'])
 def deleteUser(id):
-    user = user_service.findUserById(id)
-    if not user:
-        abort(404)
-    code, msg = user_service.deleteUser(user)
+    code, msg = user_service.deleteUser(id)
     return make_response(jsonify(msg), code)
 
 '''根据用户名、密码登录'''
