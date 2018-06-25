@@ -3,6 +3,7 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager,login_user, logout_user, login_required 
 from yaml import load
 from traceback import print_exc
 from common import getdefault
@@ -35,6 +36,10 @@ app = Flask(__name__) # EmbryoAI系统Flask APP
 conf = read_yml_config()
 init_config(conf)
 db = SQLAlchemy(app) # 此APP要用到的数据库连接，由ORM框架SQLAlchemy管理
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.session_protection = 'strong'
+login_manager.login_view = 'admin_index_controller.index'
 logger = app.logger
 
 def init_logger(logname):
