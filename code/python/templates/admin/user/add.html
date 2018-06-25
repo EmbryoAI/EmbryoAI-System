@@ -58,8 +58,14 @@
     </div>
     <div class="layui-inline">
       <label class="layui-form-label">职称</label>
-      <div class="layui-input-inline">
-        <input type="text" name="title" id="title" placeholder="请输入职称" class="layui-input">
+      <div class="layui-input-block  layui-form" lay-filter="selFilter">
+        <select name="title" id="title" lay-verify="required" >
+               <option value="">请选择</option>
+                <option value="主任医师">主任医师</option>
+                <option value="副主任医师">副主任医师</option>
+                <option value="主治医师">主治医师</option>
+                <option value="住院医师">住院医师</option>
+        </select>
       </div>
     </div>
   </div>

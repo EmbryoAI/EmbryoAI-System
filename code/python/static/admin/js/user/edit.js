@@ -22,7 +22,9 @@ $(function(){
         $("#privateno").attr("checked","checked");
     }else{
         $("#privateyes").attr("checked","checked");
-    }
+	}
+	var title = $("#title").val();
+	$("#titleSelect").val(title);
 })
 
 
