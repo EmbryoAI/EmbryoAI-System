@@ -40,8 +40,8 @@ def insertUser(user):
 def findUserById(id):
     return db.session.query(User).filter(User.id == id).one_or_none()
 
-def findAllUsers(page_number, page_size):
-    return db.session.query(User).filter(User.delFlag == '0').limit(int(page_size)).offset((int(page_number)-1)*int(page_size))
+def findAllUsers(page_number, page_size, filters):
+    return db.session.query(User).filter_by(**filters).limit(int(page_size)).offset((int(page_number)-1)*int(page_size))
 
 def count():
     return db.session.query(User).count()
@@ -58,7 +58,7 @@ def deleteUser(params):
         raise DatabaseError('删除用户数据时发生错误', e.message, e)
 
 def findUserByUserName(username):
-    return db.session.query(User).filter(User.username == username).one_or_none()
+    return db.session.query(User).filter(User.username == username, User.delFlag == '0').one_or_none()
 
 
 def findUserByNameAndPwd(username,password):

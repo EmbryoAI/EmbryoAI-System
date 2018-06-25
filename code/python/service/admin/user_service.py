@@ -101,11 +101,18 @@ def updateUser(request):
     return 200, '修改用户数据成功!'
 
 def findAllUsers(request):
+    username = request.args.to_dict().get('username')
     page_number = request.args.to_dict().get('page')
     page_size = request.args.to_dict().get('limit')
+    
+    filters = {}
+    filters['delFlag'] = '0'
+    if username != None and username != "":
+        filters['username'] = username
+
     try:
         count = user_mapper.count()
-        users = list(map(lambda x: x.to_dict(), user_mapper.findAllUsers(page_number, page_size)))
+        users = list(map(lambda x: x.to_dict(), user_mapper.findAllUsers(page_number, page_size, filters)))
     except:
         return 400, '查询用户列表时发生错误!'
     restResult = RestResult(0, "OK", count, users)

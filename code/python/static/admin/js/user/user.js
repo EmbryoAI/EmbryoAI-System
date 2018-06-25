@@ -91,9 +91,7 @@ layui.use('table', function(){
             curr: 1 //重新从第 1 页开始
           }
           ,where: {
-            key: {
-              id: demoReload.val()
-            }
+             username : $("#username").val()
           }
         });
       },toAdd: function(){ //去新增用户页面

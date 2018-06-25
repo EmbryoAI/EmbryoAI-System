@@ -1,8 +1,9 @@
 #!/bin/env python
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager,login_user, logout_user, login_required 
 from yaml import load
 from traceback import print_exc
 from common import getdefault
@@ -24,6 +25,9 @@ def init_config(conf):
     # 数据库连接字符串
     app.config['SQLALCHEMY_DATABASE_URI'] = getdefault(conf, 'SQLALCHEMY_DATABASE_URI', 
         'mysql+pymysql://root:123456@localhost/embryoai_system?charset=utf8')
+    app.config['SQLALCHEMY_POOL_RECYCLE'] = getdefault(conf, 'SQLALCHEMY_POOL_RECYCLE', 300)
+    app.config['SQLALCHEMY_POOL_SIZE'] = getdefault(conf, 'SQLALCHEMY_POOL_SIZE', 300)
+    app.config['SQLALCHEMY_POOL_TIMEOUT'] = getdefault(conf, 'SQLALCHEMY_POOL_TIMEOUT', 3)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SCHEDULER_API_ENABLED'] = getdefault(conf, 'SCHEDULER_API_ENABLED', True)
     app.config['JOBS'] = getdefault(conf, 'JOBS')
@@ -35,6 +39,10 @@ app = Flask(__name__) # EmbryoAI系统Flask APP
 conf = read_yml_config()
 init_config(conf)
 db = SQLAlchemy(app) # 此APP要用到的数据库连接，由ORM框架SQLAlchemy管理
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.session_protection = 'strong'
+login_manager.login_view = 'admin_index_controller.index'
 logger = app.logger
 
 def init_logger(logname):

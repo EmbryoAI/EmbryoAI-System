@@ -1,4 +1,3 @@
-
 layui.use(['form', 'layer'], function () {
 	var $ = layui.jquery,form =layui.form,layer = layui.layer;
 	// 验证
@@ -18,5 +17,10 @@ layui.use(['form', 'layer'], function () {
 })
 
 $("#loginSubmit").click(function(){  
-	$("#loginForm").submit();
+	var username = $("#username").val();
+	var password = $("#password").val();
+	if (username != "" && password != "") {
+		$("#loginForm").submit();
+	}
+	
 });
