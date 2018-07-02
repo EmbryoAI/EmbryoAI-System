@@ -26,34 +26,46 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
         cols: [
             [
                 {
-                    field: 'id',
-                    title: '病历号'
+                    field: 'medical_record_no',
+                    title: '病历号',
+                    templet: '#details-id'
                 }, {
-                    field: 'name',
+                    field: 'patient_name',
                     title: '姓名'
                 }, {
-                    field: 'patientAge',
+                    field: 'patient_age',
                     title: '年龄',
                 }, {
-                    field: 'embryo',
+                    field: 'pts',
                     title: '胚胎数'
                 }, {
-                    field: 'insemiTime',
+                    field: 'insemi_time',
                     title: '授精时间', 
 					sort: true
                 }, {
-                    field: 'way',
+                    field: 'sjfs',
                     title: '授精方式',
                 }, {
-                    field: 'phases',
+                    field: 'zzjd',
                     title: '最终阶段',
                 }, {
                     field: 'state',
                     title: '状态',
                 }, {
-                    field: 'view',
-                    title: '视图',
-                    templet: '#view',
+                    field: 'xst',
+                    title: '视图'
+                    , templet: function(d){
+                    	if(d.xst!=null && d.xst!='') {
+                    		var arr = d.xst.split(",");
+                    		var url = "";
+                    		for(var i=0;i<arr.length;i++) {
+                    			url += "<a href='' class='layui-table-link view' >皿"+(i+1)+"</a> ";
+                    		}
+                    		return url;
+                    	}else {
+                    		return "无";
+                    	}
+        	        }
                 }, {
                     field: 'operation',
                     title: '操作',
@@ -63,40 +75,20 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             ]
         ]
     });
-	
-	// 弹窗详情
-	 $('.details').on('click', function(){
-    layer.open({
-		title:"病历详情",
-      type: 1,
-      area: ['1020px', '560px'],
-      shadeClose: true,
-      content:$('.details-box')
+    
+    table.on('tool(case-table)', function(obj){
+        var event = obj.event;
+        if(event === 'details'){
+            layer.open({
+              title:"病历详情",
+              type: 2,
+              area: ['1020px', '560px'],
+              maxmin : true,
+              shadeClose: false,
+              content: '/front/procedure/123'
+            });
+        }
     });
-  });
-  // 删除确认
-  $('.del').on('click', function(){
-	 layer.confirm('确认要删除此条病历吗？', {
-	  btn: ['确认','取消'] 
-	}, function(){
-	  layer.msg('删除成功', {
-		  time:1500,
-		  icon: 1});
-	}, function(){
-	  // layer.msg('取消');
-	});
-  });
-  
-  // 弹窗回访
-  $('.return').on('click', function(){
-  layer.open({
-  	title:"回访",
-  	type: 1,
-  	area: ['320px', '290px'],
-  	shadeClose: true,
-  	content:$('.return-box')
-	});
-  });
-  
+	
 
 })

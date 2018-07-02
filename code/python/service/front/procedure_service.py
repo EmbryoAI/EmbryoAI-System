@@ -26,14 +26,23 @@ def queryProcedureList(request):
             filters['incubatorCode']=incubatorCode
             
         #查詢列表
-        pagination = procedure_mapper.queryProcedureList(int(page),int(limit),filters);
-        paginationList = pagination.items
-        paginationList = list(map(lambda x: x.to_dict(),paginationList))
+        result = procedure_mapper.queryProcedureList(int(page),int(limit),filters);
+        
+        procedureList = list(map(dict, result))
+#         procedureList = list(map(lambda x: x.to_dict(),result))
         
         #查询总数
-        count = pagination.total;
+        count = procedure_mapper.queryProcedureCount(filters);
         
     except:
         return 400, '查询培养箱列表时发生错误!'
-    restResult = RestResult(0, "OK", count, paginationList)
+    restResult = RestResult(0, "OK", count, procedureList)
     return jsonify(restResult.__dict__)
+
+def getProcedureDetail(id):
+    try:
+        result = procedure_mapper.getProcedureById(id)
+        restResult = RestResult(0, "OK", 1, list(map(dict, result)))
+        return jsonify(restResult.__dict__)
+    except:
+        return 400, '查询病历详情时发生错误!'

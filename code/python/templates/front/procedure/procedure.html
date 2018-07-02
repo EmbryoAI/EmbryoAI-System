@@ -71,7 +71,7 @@
 					</div>
 				</div>
 			</form>	
-			<table id="case-table" lay-filter="" class="case-table"></table>
+			<table id="case-table" lay-filter="case-table" class="case-table"></table>
 			<!--弹窗--病历详情-->
 			<div class="details-box">
 				<h1 class="details-title">基本信息</h1>
@@ -97,6 +97,9 @@
 					<tr><th>胚胎编号</th><th>培养箱编号</th><th>培养皿位置</th><th>孔位置</th></tr>
 					<tr><td>1</td><td>1</td><td>1</td><td>1</td></tr>
 				</table>
+				<div class="layui-form-item btn-box">
+					<button class="layui-btn layui-bg-blue">修改</button>
+				</div>
 			</div>
 			<!--弹窗--回访信息-->
 			<div class="return-box">
@@ -127,6 +130,9 @@
 			</div>
 		</div>
   </div>
+  <script type="text/html" id="details-id">
+	<a class="layui-table-link details" lay-event="details">22</a>
+</script>
  
   <script type="text/html" id="operation">
 		<a href=""  target="_blank" class="layui-table-link report">报告</a>	
