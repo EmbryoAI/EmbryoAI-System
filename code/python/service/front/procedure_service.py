@@ -48,7 +48,9 @@ def queryProcedureList(request):
 def getProcedureDetail(id):
     try: 
         result = procedure_mapper.getProcedureById(id)
-        restResult = RestResult(0, "OK", 1, list(map(dict, result)))
+        restResult = RestResult(0, "404", 0, None)
+        if result is not None:
+            restResult = RestResult(0, "OK", 1, dict(result))
         return jsonify(restResult.__dict__)
     except:
         return 400, '查询病历详情时发生错误!'
