@@ -1,0 +1,82 @@
+.layui-table td, .layui-table th, .layui-table-fixed-r, .layui-table-header, .layui-table-page, .layui-table-tips-main, .layui-table-tool, .layui-table-view, .layui-table[lay-skin=line], .layui-table[lay-skin=row]{
+	border-color: transparent;
+}
+.layui-table-cell{
+	height: 48px;
+	line-height: 48px;
+}
+.layui-table tbody tr:hover, .layui-table thead tr, .layui-table-click, .layui-table-header, .layui-table-hover, .layui-table-mend, .layui-table-patch, .layui-table-tool, .layui-table[lay-even] tr:nth-child(even){
+	background-color: #fff;
+}
+.layui-table-cell .layui-table-link{
+	color: #3c83f7;
+}
+.layui-table th .layui-table-cell span{
+	color: #47494b;
+}
+.layui-table-cell{
+	color: #757b80;
+}
+.view{
+	margin-right: 8px;
+}
+.report,.return,.del{
+	display: inline-block;
+	padding-left: 24px;
+	margin-right: 8px;
+	background: url(../img/table-icon2.png)no-repeat left center;
+}
+.return{
+	background: url(../img/table-icon3.png)no-repeat left center;
+}
+.del{
+	background: url(../img/table-icon1.png)no-repeat left center;
+}
+/*弹窗详情*/
+.details-box{
+	padding: 10px;
+	width: 1000px;
+	/*height: 520px;*/
+	background-color: #fff;
+	display: none;
+}
+.details-box h1{
+	margin: 0;
+	/*margin-left: 20px;*/
+	margin-top: 20px;
+}
+.details-box  strong,.details-box span{
+	display: inline-block;
+	width: 80px;
+	text-align: right;
+	vertical-align: text-top;
+	color: #53575a;
+	margin-top: 12px;
+}
+.details-box  span{
+	width: 250px;
+	text-align: left;	
+}
+.details-box table{
+	margin-top: 20px;
+	width: 100%;
+	border: 1px solid #ced2d5;
+	line-height: 32px;
+	text-align: center;
+}
+.details-box table tr th{
+	background-color: #f3f4f8;
+	font-weight: normal;
+	border: 1px solid #ced2d5;
+}
+.details-box table tr td{
+	border: 1px solid #ced2d5;
+}
+.return-box{
+	padding: 20px;
+	display: none;
+}
+.return-box .btn-box button{
+	width: 190px;
+	margin-left: 38px;
+}
