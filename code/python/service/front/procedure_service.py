@@ -18,21 +18,34 @@ def queryProcedureList(request):
         limit = request.args.get('limit');
         if limit==None:
             limit=10
-        
+
         #动态组装查询条件
-     
         sqlCondition = " where 1=1 ";#动态sql
         filters = {};#动态参数
         userName = request.args.get('userName');#用户名字
         if userName!=None and userName!="":
             filters['userName']=userName
             sqlCondition = " and pa.patient_name=%s "
-        
+
         medicalRecordNo = request.args.get('medicalRecordNo');#病历号
         if medicalRecordNo!=None and medicalRecordNo!="":
             filters['medicalRecordNo']=medicalRecordNo
             sqlCondition = " and pr.medical_record_no=%s "
-        
+
+        state = request.args.get('state');#状态
+        if state!=None and state!="":
+            filters['state']=state
+            sqlCondition = " and  d2.dict_value=%s "
+
+#         state = request.args.get('state');#状态
+#         if state!=None and state!="":
+#             filters['state']=state
+#             sqlCondition = " and  d2.dict_value=%s "
+#             
+#         state = request.args.get('state');#状态
+#         if state!=None and state!="":
+#             filters['state']=state
+#             sqlCondition = " and  d2.dict_value=%s "
             
         #查詢列表
         result = procedure_mapper.queryProcedureList(int(page),int(limit),filters);
@@ -46,7 +59,7 @@ def queryProcedureList(request):
     return jsonify(restResult.__dict__)
 
 def getProcedureDetail(id):
-    try:
+    try: 
         result = procedure_mapper.getProcedureById(id)
         restResult = RestResult(0, "OK", 1, list(map(dict, result)))
         return jsonify(restResult.__dict__)
