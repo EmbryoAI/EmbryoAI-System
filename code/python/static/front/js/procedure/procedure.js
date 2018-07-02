@@ -27,7 +27,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             [
                 {
                     field: 'id',
-                    title: '病历号'
+                    title: '病历号',
+                    templet: '#details-id'
                 }, {
                     field: 'name',
                     title: '姓名'
@@ -63,40 +64,20 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             ]
         ]
     });
-	
-	// 弹窗详情
-	 $('.details').on('click', function(){
-    layer.open({
-		title:"病历详情",
-      type: 1,
-      area: ['1020px', '560px'],
-      shadeClose: true,
-      content:$('.details-box')
+    
+    table.on('tool(case-table)', function(obj){
+        var event = obj.event;
+        if(event === 'details'){
+            layer.open({
+              title:"病历详情",
+              type: 2,
+              area: ['1020px', '560px'],
+              maxmin : true,
+              shadeClose: false,
+              content: '/front/procedure/123'
+            });
+        }
     });
-  });
-  // 删除确认
-  $('.del').on('click', function(){
-	 layer.confirm('确认要删除此条病历吗？', {
-	  btn: ['确认','取消'] 
-	}, function(){
-	  layer.msg('删除成功', {
-		  time:1500,
-		  icon: 1});
-	}, function(){
-	  // layer.msg('取消');
-	});
-  });
-  
-  // 弹窗回访
-  $('.return').on('click', function(){
-  layer.open({
-  	title:"回访",
-  	type: 1,
-  	area: ['320px', '290px'],
-  	shadeClose: true,
-  	content:$('.return-box')
-	});
-  });
-  
+	
 
 })

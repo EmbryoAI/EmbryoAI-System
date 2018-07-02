@@ -16,3 +16,9 @@ url_prefix = '/api/v1/procedure'
 def queryProcedureList():
     logger().info('进入procedure_controller.procedure查询病历列表')
     return procedure_service.queryProcedureList(request)
+
+#查询病历详情
+@procedure_rest_controller.route('/<string:id>', methods=['GET'])
+def procedureDetail(id):
+    logger().info('进入procedure_controller.procedure查询病历详情')
+    return procedure_service.getProcedureDetail(id)

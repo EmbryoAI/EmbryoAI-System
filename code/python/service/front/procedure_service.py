@@ -37,3 +37,11 @@ def queryProcedureList(request):
         return 400, '查询培养箱列表时发生错误!'
     restResult = RestResult(0, "OK", count, paginationList)
     return jsonify(restResult.__dict__)
+
+def getProcedureDetail(id):
+    try:
+        result = procedure_mapper.getProcedureById(id)
+        restResult = RestResult(0, "OK", 1, list(map(dict, result)))
+        return jsonify(restResult.__dict__)
+    except:
+        return 400, '查询病历详情时发生错误!'

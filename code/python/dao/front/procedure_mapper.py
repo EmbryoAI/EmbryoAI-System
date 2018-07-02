@@ -34,3 +34,19 @@ def queryProcedureList(page,limit,filters):
 
 
     return pagination
+
+def getProcedureById(procedureID):
+    try :
+        sql = text("SELECT pro.`id`,pat.`patient_name`, pat.`idcard_no`,pat.`birthdate`,"
+        "pat.`email`, pat.`mobile`,pat.`address`,pat.`is_smoking`,pat.`is_drinking`, "
+        "pro.`patient_age`, pro.`patient_height`,pro.`patient_weight`,pro.`ec_time`, "
+        "pro.`insemi_time`,pro.`memo`,COUNT(DISTINCT e.id) AS embryoNum,d.dict_value AS insemi_type "
+        "FROM t_patient pat LEFT JOIN t_procedure pro ON pat.`id` = pro.`patient_id` LEFT JOIN "
+        "t_embryo e ON pro.id=e.procedure_id LEFT JOIN sys_dict d ON pro.insemi_type_id=d.dict_key "
+        "AND d.dict_class='insemi_type' WHERE pro.`id` = :procedureID")
+        print(sql)
+        return db.session.execute(sql, {'procedureID':procedureID})
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('查询病历详情数据时发生错误', e.message, e)
