@@ -46,7 +46,7 @@ def queryProcedureList(request):
     return jsonify(restResult.__dict__)
 
 def getProcedureDetail(id):
-    try:
+    try: 
         result = procedure_mapper.getProcedureById(id)
         restResult = RestResult(0, "OK", 1, list(map(dict, result)))
         return jsonify(restResult.__dict__)
