@@ -20,27 +20,33 @@ def queryProcedureList(request):
             limit=10
         
         #动态组装查询条件
-        incubatorCode = request.args.get('incubatorCode');
-        filters = {};
-        if incubatorCode!=None and incubatorCode!="":
-            filters['incubatorCode']=incubatorCode
+     
+        sqlCondition = " where 1=1 ";#动态sql
+        filters = {};#动态参数
+        userName = request.args.get('userName');#用户名字
+        if userName!=None and userName!="":
+            filters['userName']=userName
+            sqlCondition = " and pa.patient_name=%s "
+        
+        medicalRecordNo = request.args.get('medicalRecordNo');#病历号
+        if medicalRecordNo!=None and medicalRecordNo!="":
+            filters['medicalRecordNo']=medicalRecordNo
+            sqlCondition = " and pr.medical_record_no=%s "
+        
             
         #查詢列表
         result = procedure_mapper.queryProcedureList(int(page),int(limit),filters);
-        
         procedureList = list(map(dict, result))
-#         procedureList = list(map(lambda x: x.to_dict(),result))
-        
         #查询总数
         count = procedure_mapper.queryProcedureCount(filters);
         
     except:
         return 400, '查询培养箱列表时发生错误!'
-    restResult = RestResult(0, "OK", count, paginationList)
+    restResult = RestResult(0, "OK", count, procedureList)
     return jsonify(restResult.__dict__)
 
 def getProcedureDetail(id):
-    try:
+    try: 
         result = procedure_mapper.getProcedureById(id)
         restResult = RestResult(0, "OK", 1, list(map(dict, result)))
         return jsonify(restResult.__dict__)
