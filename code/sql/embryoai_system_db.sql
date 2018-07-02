@@ -3711,6 +3711,8 @@ CREATE TABLE `t_patient` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
   `del_flag` int(255) DEFAULT '0' COMMENT '逻辑删除标志（非0代表已删除）',
+  `is_drinking` int(11) DEFAULT NULL COMMENT '是否酗酒',
+  `is_smoking` int(11) DEFAULT NULL COMMENT '是否抽烟',
   PRIMARY KEY (`id`),
   KEY `t_patient_index` (`idcard_no`,`idcard_type_id`,`patient_name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='病人表';
@@ -3728,18 +3730,19 @@ CREATE TABLE `t_procedure` (
   `patient_weight` double DEFAULT NULL COMMENT '病人体重',
   `patient_height_unit` varchar(10) DEFAULT 'cm' COMMENT '身高单位',
   `patient_weight_unit` varchar(10) DEFAULT 'kg' COMMENT '体重单位',
-  `cycle_type` varchar(50) DEFAULT '新鲜周期' COMMENT '周期类型（新鲜周期、冷冻周期）',
+  `cycle_type_id` varchar(32) DEFAULT NULL COMMENT '周期类型对应字典表cycle_type',
   `fresh_cycle_count` int(11) DEFAULT '1' COMMENT '新鲜周期次数',
   `ec_time` datetime DEFAULT NULL COMMENT '取卵时间',
   `ec_count` varchar(255) DEFAULT NULL COMMENT '获卵数',
   `insemi_time` datetime DEFAULT NULL COMMENT '授精时间',
-  `insemi_type` varchar(50) DEFAULT 'IVF' COMMENT '授精方式（IVF、ICSI、IVF+ICSI）',
+  `insemi_type_id` varchar(32) DEFAULT NULL COMMENT '受精方式对应字典表insemi_type',
   `cap_start_time` datetime DEFAULT NULL COMMENT '采集开始时间',
   `cap_end_time` datetime DEFAULT NULL COMMENT '采集结束时间',
   `z_count` int(255) DEFAULT NULL COMMENT 'Z轴图像数',
   `z_slice` int(255) DEFAULT NULL COMMENT 'Z轴每层间距，单位um',
-  `state` varchar(255) DEFAULT NULL COMMENT '周期状态字典值ID -> sys_dict.id，字典值类型为state，可能取值有开始采集：1；病历已登记完善：2；结束采集：3；已回访：4',
+  `state` varchar(32) DEFAULT NULL COMMENT '周期状态字典值ID -> sys_dict.id，字典值类型为state，可能取值有开始采集：1；病历已登记完善：2；结束采集：3；已回访：4',
   `memo` varchar(500) DEFAULT NULL COMMENT '备注',
+  `medical_record_no` varchar(50) DEFAULT NULL COMMENT '病历号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='治疗周期表';
 

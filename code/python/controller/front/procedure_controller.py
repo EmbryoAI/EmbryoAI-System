@@ -10,3 +10,8 @@ url_prefix = '/front/procedure'
 def main():
     logger().info('进入procedure_controller.procedure病历页面')
     return render_template('front/procedure/procedure.html',htmlType="incubator")
+
+@procedure_controller.route('/<string:id>', methods=['GET'])
+def detail(id):
+    logger().info('进入procedure_controller.procedure病历详情页面')
+    return render_template('front/procedure/detail.html')
