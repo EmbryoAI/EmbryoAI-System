@@ -26,46 +26,35 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
         cols: [
             [
                 {
-                    field: 'medical_record_no',
+                    field: 'id',
                     title: '病历号',
                     templet: '#details-id'
                 }, {
-                    field: 'patient_name',
+                    field: 'name',
                     title: '姓名'
                 }, {
-                    field: 'patient_age',
+                    field: 'patientAge',
                     title: '年龄',
                 }, {
-                    field: 'pts',
+                    field: 'embryo',
                     title: '胚胎数'
                 }, {
-                    field: 'insemi_time',
+                    field: 'insemiTime',
                     title: '授精时间', 
 					sort: true
                 }, {
-                    field: 'sjfs',
+                    field: 'way',
                     title: '授精方式',
                 }, {
-                    field: 'zzjd',
+                    field: 'phases',
                     title: '最终阶段',
                 }, {
                     field: 'state',
                     title: '状态',
                 }, {
-                    field: 'xst',
-                    title: '视图'
-                    , templet: function(d){
-                    	if(d.xst!=null && d.xst!='') {
-                    		var arr = d.xst.split(",");
-                    		var url = "";
-                    		for(var i=0;i<arr.length;i++) {
-                    			url += "<a href='' class='layui-table-link view' >皿"+(i+1)+"</a> ";
-                    		}
-                    		return url;
-                    	}else {
-                    		return "无";
-                    	}
-        	        }
+                    field: 'view',
+                    title: '视图',
+                    templet: '#view',
                 }, {
                     field: 'operation',
                     title: '操作',

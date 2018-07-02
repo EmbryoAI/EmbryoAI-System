@@ -29,8 +29,9 @@ def queryProcedureList(page,limit,filters):
     # 执行sql得出结果
     result = db.session.execute(sql) 
     sql_result = result.fetchall()
-    print(sql_result[0])
+  
     return sql_result
+
 
 
 def queryProcedureCount(filters):

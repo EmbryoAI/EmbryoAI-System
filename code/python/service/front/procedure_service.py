@@ -36,7 +36,7 @@ def queryProcedureList(request):
         
     except:
         return 400, '查询培养箱列表时发生错误!'
-    restResult = RestResult(0, "OK", count, procedureList)
+    restResult = RestResult(0, "OK", count, paginationList)
     return jsonify(restResult.__dict__)
 
 def getProcedureDetail(id):
