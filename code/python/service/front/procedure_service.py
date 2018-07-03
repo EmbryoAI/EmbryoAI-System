@@ -3,6 +3,7 @@
 from entity.Procedure import Procedure
 from entity.RestResult import RestResult
 import dao.front.procedure_mapper as procedure_mapper
+import dao.front.patient_mapper as patient_mapper
 from flask import request, jsonify
 from common import uuid
 import time
@@ -61,7 +62,8 @@ def updateProcedure(request):
     email = request.form.get('email')
     memo = request.form.get('memo')
     try:
-        procedure_mapper.update(id, mobile, email)
+        procedure_mapper.update(id, memo)
+        patient_mapper.update(id, mobile, email)
     except:
         return 500, '修改病历详情时发生错误!'
     return 200, '修改病历详情成功!'

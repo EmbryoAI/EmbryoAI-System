@@ -72,11 +72,11 @@ def getProcedureById(procedureID):
     print(sql)
     return db.session.execute(sql, {'procedureID':procedureID}).fetchone()
 
-def update(id, mobile, email):
+def update(id, memo):
     try:
-        sql = text("UPDATE `t_patient` SET mobile = :mobile, email = :email WHERE id = :id")
+        sql = text("UPDATE `t_procedure` SET memo = :memo WHERE id = :id")
         print(sql)
-        db.session.execute(sql,{'id':id, 'mobile':mobile, 'email':email})
+        db.session.execute(sql,{'id':id, 'memo':memo})
         db.session.commit()
     except Exception as e:
         db.session.rollback()
