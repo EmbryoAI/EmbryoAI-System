@@ -7,23 +7,24 @@ from traceback import print_exc
 def queryProcedureList(page,limit,filters):
 #     pagination = Procedure.query.filter_by(**filters).order_by(Procedure.insemiTime.desc()).paginate(page,per_page=limit,error_out=False)
 #     pagination = Procedure.query.filter_by(**filters).paginate(page,per_page=limit,error_out=False)
-    sql = text("SELECT pr.id as id,medical_record_no AS medical_record_no,pa.patient_name AS patient_name,"
-        "pr.patient_age AS patient_age,COUNT(DISTINCT e.id) AS pts,"
-        "CONCAT(pr.insemi_time) AS insemi_time,d.dict_value AS sjfs, CONCAT('D',DATEDIFF(NOW(),pr.insemi_time)) AS zzjd,d2.dict_value AS state,"
-        " GROUP_CONCAT(DISTINCT po.dish_id) xst "
-        " FROM t_procedure pr "
-        " LEFT JOIN  t_patient pa "
-        " ON pr.patient_id=pa.id "
-        " LEFT JOIN t_embryo e "
-        " ON pr.id=e.procedure_id "
-        " LEFT JOIN t_procedure_dish po "
-        " ON pr.id=po.procedure_id "
-        " LEFT JOIN sys_dict d "
-        " ON pr.insemi_type_id=d.dict_key AND d.dict_class='insemi_type' "
-        " LEFT JOIN sys_dict d2 "
-        " ON pr.state=d2.dict_key AND d2.dict_class='state' " 
-        " GROUP BY pr.id "
-        )
+    sql = text("""
+        SELECT pr.id as id,medical_record_no AS medical_record_no,pa.patient_name AS patient_name,
+        pr.patient_age AS patient_age,COUNT(DISTINCT e.id) AS pts,
+        CONCAT(pr.insemi_time) AS insemi_time,d.dict_value AS sjfs, CONCAT('D',DATEDIFF(NOW(),pr.insemi_time)) AS zzjd,d2.dict_value AS state,
+        GROUP_CONCAT(DISTINCT po.dish_id) xst 
+        FROM t_procedure pr 
+        LEFT JOIN  t_patient pa 
+        ON pr.patient_id=pa.id 
+        LEFT JOIN t_embryo e 
+        ON pr.id=e.procedure_id 
+        LEFT JOIN t_procedure_dish po 
+        ON pr.id=po.procedure_id 
+        LEFT JOIN sys_dict d 
+        ON pr.insemi_type_id=d.dict_key AND d.dict_class='insemi_type' 
+        LEFT JOIN sys_dict d2 
+        ON pr.state=d2.dict_key AND d2.dict_class='state'  
+        GROUP BY pr.id 
+        """)
     print(sql)
     
     # 执行sql得出结果
@@ -37,18 +38,20 @@ def queryProcedureList(page,limit,filters):
 def queryProcedureCount(filters):
 #     pagination = Procedure.query.filter_by(**filters).order_by(Procedure.insemiTime.desc()).paginate(page,per_page=limit,error_out=False)
 #     pagination = Procedure.query.filter_by(**filters).paginate(page,per_page=limit,error_out=False)
-    count_sql = text("SELECT  COUNT(DISTINCT pr.id) as count "
-        " FROM t_procedure pr "
-        " LEFT JOIN  t_patient pa "
-        " ON pr.patient_id=pa.id "
-        " LEFT JOIN t_embryo e "
-        " ON pr.id=e.procedure_id "
-        " LEFT JOIN t_procedure_dish po "
-        " ON pr.id=po.procedure_id "
-        " LEFT JOIN sys_dict d "
-        " ON pr.insemi_type_id=d.dict_key AND d.dict_class='insemi_type' "
-        " LEFT JOIN sys_dict d2 "
-        " ON pr.state=d2.dict_key AND d2.dict_class='state' " )
+    count_sql = text("""
+        SELECT  COUNT(DISTINCT pr.id) as count 
+        FROM t_procedure pr 
+        LEFT JOIN  t_patient pa 
+        ON pr.patient_id=pa.id 
+        LEFT JOIN t_embryo e 
+        ON pr.id=e.procedure_id 
+        LEFT JOIN t_procedure_dish po 
+        ON pr.id=po.procedure_id 
+        LEFT JOIN sys_dict d 
+        ON pr.insemi_type_id=d.dict_key AND d.dict_class='insemi_type' 
+        LEFT JOIN sys_dict d2 
+        ON pr.state=d2.dict_key AND d2.dict_class='state'
+        """)
     print(count_sql)
     # 计算总条数
     count_result = db.session.execute(count_sql)
@@ -57,17 +60,14 @@ def queryProcedureCount(filters):
     return total_size
 
 def getProcedureById(procedureID):
-    try :
-        sql = text("SELECT pro.`id`,pat.`patient_name`, pat.`idcard_no`,pat.`birthdate`,"
-        "pat.`email`, pat.`mobile`,pat.`address`,pat.`is_smoking`,pat.`is_drinking`, "
-        "pro.`patient_age`, pro.`patient_height`,pro.`patient_weight`,pro.`ec_time`, "
-        "pro.`insemi_time`,pro.`memo`,COUNT(DISTINCT e.id) AS embryoNum,d.dict_value AS insemi_type "
-        "FROM t_patient pat LEFT JOIN t_procedure pro ON pat.`id` = pro.`patient_id` LEFT JOIN "
-        "t_embryo e ON pro.id=e.procedure_id LEFT JOIN sys_dict d ON pro.insemi_type_id=d.dict_key "
-        "AND d.dict_class='insemi_type' WHERE pro.`id` = :procedureID")
-        print(sql)
-        return db.session.execute(sql, {'procedureID':procedureID})
-    except Exception as e:
-        db.session.rollback()
-        print_exc()
-        raise DatabaseError('查询病历详情数据时发生错误', e.message, e)
+    sql = text("""
+        SELECT pro.`id`,pat.`patient_name`, pat.`idcard_no`,pat.`birthdate`,
+        pat.`email`, pat.`mobile`,pat.`address`,pat.`is_smoking`,pat.`is_drinking`, 
+        pro.`patient_age`, pro.`patient_height`,pro.`patient_weight`,pro.`ec_time`, 
+        pro.`insemi_time`,pro.`memo`,COUNT(DISTINCT e.id) AS embryoNum,d.dict_value AS insemi_type 
+        FROM t_patient pat LEFT JOIN t_procedure pro ON pat.`id` = pro.`patient_id` LEFT JOIN 
+        t_embryo e ON pro.id=e.procedure_id LEFT JOIN sys_dict d ON pro.insemi_type_id=d.dict_key 
+        AND d.dict_class='insemi_type' WHERE pro.`id` = :procedureID GROUP BY pro.id
+        """)
+    print(sql)
+    return db.session.execute(sql, {'procedureID':procedureID}).fetchone()
