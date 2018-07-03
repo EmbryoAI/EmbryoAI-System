@@ -1,21 +1,40 @@
+
+$.ajax({
+    type:"get",
+    url:"/api/v1/dict/list/state",
+    datatype: "json", 
+    success:function(data){
+    	if(data.code==0){
+    		for(var i=0;i<data.data.length;i++) {
+    			$("#state").append("<option value='"+data.data[i].dictValue+"'>"+data.data[i].dictValue+"</option>");
+        		}
+        	}else {
+        		parent.layer.alert(data.msg);
+        	}
+        },
+        error : function(request) {
+            parent.layer.alert(request.responseText);
+        }
+});
+var table = null;
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     var form = layui.form;
     var $ = layui.jquery;
     var laydate = layui.laydate;
-    var table = layui.table;
+    table = layui.table;
     var layer = layui.layer;
 
     // 日期插件配置
     laydate.render({
-        elem: '#pull',
+        elem: '#ecTime',
         range: '~',
-        format: 'yyyy/MM/dd ',
+        format: 'yyyy-MM-dd ',
         max: 0
     });
     laydate.render({
-        elem: '#insmt',
+        elem: '#insemiTime',
         range: '~',
-        format: 'yyyy/MM/dd ',
+        format: 'yyyy-MM-dd ',
         max: 0
     });
 // 表格配置
@@ -68,6 +87,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     table.on('tool(case-table)', function(obj){
         var event = obj.event;
         var id = obj.data.id;
+        
         if(event === 'details'){
             layer.open({
               title:"病历详情",
@@ -78,7 +98,39 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
               content: '/front/procedure/' + id
             });
         }
+ 
     });
 	
 
+
 })
+
+	  function reload(){
+		      //执行重载
+		      table.reload('case-table', {
+		        page: {
+		          curr: 1 //重新从第 1 页开始
+		        }
+		        ,where: {
+		        	userName: $("#userName").val(),
+		        	medicalRecordNo: $("#medicalRecordNo").val(),
+		        	ecTime: $("#ecTime").val(),
+		        	insemiTime: $("#insemiTime").val(),
+		        	state: $("#state").val()
+		        }
+		      });
+		    }
+    
+    function reset(){
+	        	$("#userName").val("");
+	        	$("#medicalRecordNo").val("");
+	        	$("#ecTime").val("");
+	        	$("#insemiTime").val("");
+	        	$("#state").val("");
+			      //执行重载
+			      table.reload('case-table', {
+			        page: {
+			          curr: 1 //重新从第 1 页开始
+			        }
+			      });
+			}
