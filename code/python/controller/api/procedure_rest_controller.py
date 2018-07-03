@@ -20,5 +20,12 @@ def queryProcedureList():
 #查询病历详情
 @procedure_rest_controller.route('/<string:id>', methods=['GET'])
 def procedureDetail(id):
+    logger().info(id)
     logger().info('进入procedure_controller.procedure查询病历详情')
     return procedure_service.getProcedureDetail(id)
+
+#修改病历信息(仅限修改电话,邮箱,地址,周期备注)
+@procedure_rest_controller.route('/info', methods=['POST'])
+def updateProcedure():
+    code, msg = procedure_service.updateProcedure(request)
+    return make_response(msg, code)

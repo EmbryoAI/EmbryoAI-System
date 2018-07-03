@@ -54,3 +54,14 @@ def getProcedureDetail(id):
         return jsonify(restResult.__dict__)
     except:
         return 400, '查询病历详情时发生错误!'
+
+def updateProcedure(request):
+    id = request.form.get('id')
+    mobile = request.form.get('mobile')
+    email = request.form.get('email')
+    memo = request.form.get('memo')
+    try:
+        procedure_mapper.update(id, mobile, email)
+    except:
+        return 500, '修改病历详情时发生错误!'
+    return 200, '修改病历详情成功!'
