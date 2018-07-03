@@ -66,7 +66,20 @@ def queryProcedureList(request):
 def getProcedureDetail(id):
     try: 
         result = procedure_mapper.getProcedureById(id)
-        restResult = RestResult(0, "OK", 1, list(map(dict, result)))
+        restResult = RestResult(0, "404", 0, None)
+        if result is not None:
+            restResult = RestResult(0, "OK", 1, dict(result))
         return jsonify(restResult.__dict__)
     except:
         return 400, '查询病历详情时发生错误!'
+
+def updateProcedure(request):
+    id = request.form.get('id')
+    mobile = request.form.get('mobile')
+    email = request.form.get('email')
+    memo = request.form.get('memo')
+    try:
+        procedure_mapper.update(id, mobile, email)
+    except:
+        return 500, '修改病历详情时发生错误!'
+    return 200, '修改病历详情成功!'

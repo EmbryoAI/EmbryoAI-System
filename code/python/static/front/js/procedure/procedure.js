@@ -85,6 +85,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     
     table.on('tool(case-table)', function(obj){
         var event = obj.event;
+        var id = obj.data.id;
         if(event === 'details'){
             layer.open({
               title:"病历详情",
@@ -92,7 +93,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
               area: ['1020px', '560px'],
               maxmin : true,
               shadeClose: false,
-              content: '/front/procedure/123'
+              content: '/front/procedure/' + id
             });
         }
     });

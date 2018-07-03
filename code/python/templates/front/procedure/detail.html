@@ -17,138 +17,41 @@
 	<link rel="stylesheet" type="text/css" href="/static/front/css/case.css"/>
 </head>
 <body>
-	<form class="layui-form" action="" id="userEdit">
+	<form action="" id="procedureEdit">
+	<div class="details-box" style="display: block;">
+		<input type="hidden" name="id" value="{{id}}" id="id"/>
 		<h1 class="details-title">基本信息</h1>
-		<input type="hidden" name="id" value="">
-		<div class="layui-form-item">
-			<div class="layui-inline">
-				<label class="layui-form-label">姓名:</label>
-				<div class="layui-input-inline">
-					
-				</div>
-			</div>
-			<div class="layui-inline">
-				<label class="layui-form-label">身份证:</label>
-				<div class="layui-input-inline">
-					
-				</div>
-			</div>
-			<div class="layui-inline">
-				<label class="layui-form-label">出生日期:</label>
-				<div class="layui-input-inline">
-					
-				</div>
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<div class="layui-inline">
-				<label class="layui-form-label">邮箱:</label>
-				<div class="layui-input-inline">
-						<input type="text" value="" name="email" id="email" class="layui-input">
-				</div>
-			</div>
-			<div class="layui-inline">
-				<label class="layui-form-label">电话:</label>
-				<div class="layui-input-inline">
-					<input type="text" value="" name="mobile" id="mobile" class="layui-input">
-				</div>
-			</div>
-			<div class="layui-inline">
-				<label class="layui-form-label">住址:</label>
-				<div class="layui-input-inline">
-						<input type="text" value="" name="address" id="address" class="layui-input">
-				</div>
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<div class="layui-inline">
-				<label class="layui-form-label">吸烟史:</label>
-				<div class="layui-input-inline">
-					
-				</div>
-			</div>
-			<div class="layui-inline">
-				<label class="layui-form-label">酗酒史:</label>
-				<div class="layui-input-inline">
-					
-				</div>
-			</div>
-		</div>
-		
+		<strong>姓名：</strong><span id="patient_name"></span>
+		<strong>身份证：</strong><span id="idcard_no"></span>
+		<strong>电话：</strong><span id="mobile"><input name="mobile" id="new_mobile"/></span>
+		<strong>邮箱：</strong><span id="email"><input name="email" id="new_email"/></span>
+		<strong>出生日期：</strong><span id="birthdate"></span>
+		<strong>住址：</strong><span id="address"><input name="address" id="new_address"/></span>
+		<strong>吸烟史：</strong><span id="is_smoking"></span>
+		<strong>酗酒史：</strong><span id="is_drinking"></span>
 		<h1 class="details-title">周期资料</h1>
-		
-		<div class="layui-form-item">
-			<div class="layui-inline">
-				<label class="layui-form-label">年龄:</label>
-				<div class="layui-input-inline">
-					
-				</div>
-			</div>
-			<div class="layui-inline">
-				<label class="layui-form-label">身高:</label>
-				<div class="layui-input-inline">
-					
-				</div>
-			</div>
-			<div class="layui-inline">
-				<label class="layui-form-label">体重:</label>
-				<div class="layui-input-inline">
-					
-				</div>
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<div class="layui-inline">
-				<label class="layui-form-label">取卵日期:</label>
-				<div class="layui-input-inline">
-					
-				</div>
-			</div>
-			<div class="layui-inline">
-				<label class="layui-form-label">授精方式:</label>
-				<div class="layui-input-inline">
-					
-				</div>
-			</div>
-			<div class="layui-inline">
-				<label class="layui-form-label">授精时间:</label>
-				<div class="layui-input-inline">
-					
-				</div>
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<div class="layui-inline">
-				<label class="layui-form-label">胚胎个数:</label>
-				<div class="layui-input-inline">
-					
-				</div>
-			</div>
-			<div class="layui-inline">
-				<label class="layui-form-label">评分标准:</label>
-				<div class="layui-input-inline">
-					
-				</div>
-			</div>
-		</div>
-		<div class="layui-form-item">
-			<div class="layui-form-item layui-form-text">
-				<label class="layui-form-label">备注:</label>
-				<div class="layui-input-block">
-					<textarea placeholder="请输入内容" class="layui-textarea"></textarea>
-				</div>
-			</div>	
-		</div>
+		<strong>年龄：</strong><span id="patient_age"></span>
+		<strong>身高：</strong><span id="patient_height"></span>
+		<strong>体重：</strong><span id="patient_weight"></span>
+		<strong>取卵日期：</strong><span id="ec_time"></span>
+		<strong>授精方式：</strong><span id="insemi_type"></span>
+		<strong>授精时间：</strong><span id="insemi_time"></span>
+		<strong>胚胎个数：</strong><span id="embryo_num"></span>
+		<strong>评分标准：</strong><span id=""></span>
+		<strong>备注：</strong><span><input name="memo" id="new_memo"/></span>
+		<h1 class="details-title">胚胎位置</h1>
+		<table id="embryo_table">
+			<tr><th>胚胎编号</th><th>培养箱编号</th><th>培养皿位置</th><th>孔位置</th></tr>
+		</table>
+	</div>
 
-		
-		<div class="layui-form-item" align="center">
-			<button class="layui-btn"    onclick="edit();">修改</button>
+</form>
+		<div class="col-sm-8 col-sm-offset-3" align="center">
+			<button type="submit" class="btn btn-primary" onclick="update()">修改</button>
 		</div>
-	</form>
-
-	
 	<!--公共js引入-->
 	<script src="/static/admin/layui/layui.js"></script>
-
+	<script src="/static/admin/common/jquery.min.js" charset="utf-8"></script>
+	<script src="/static/front/js/procedure/detail.js"></script>
 </body>
 </html>
