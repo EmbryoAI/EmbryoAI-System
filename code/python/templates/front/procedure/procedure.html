@@ -27,50 +27,46 @@
 				<h1>查询病历</h1>
 				<h6>Case History</h6>
 			</div>
-			<form class="layui-form" action="">
-				<div class="layui-form-item">
-					<div class="layui-inline">
-						<label class="layui-form-label">姓名</label>
-						<div class="layui-input-inline">
-							<input type="text" name="name" class="layui-input">
-						</div>
-					</div>
-					<div class="layui-inline">
-						<label class="layui-form-label">病历号</label>
-						<div class="layui-input-inline">
-							<input type="text" name="caseNumber" class="layui-input">
-						</div>
-					</div>
-					<div class="layui-inline">
-						<label class="layui-form-label">取卵日期</label>
-						<div class="layui-input-inline">
-							<input type="text" class="layui-input" id="pull" placeholder=" - ">
-						</div>
-					</div>
-					<div class="layui-inline">
-						<label class="layui-form-label">授精日期</label>
-						<div class="layui-input-inline">
-							<input type="text" class="layui-input" id="insmt" placeholder=" - ">
-						</div>
-					</div>
-					<div class="layui-inline">
-						<label class="layui-form-label">状态</label>
-						<div class="layui-input-block">
-							<select name="interest" lay-filter="">
-								<option value="">请选择</option>
-								<option value="0">冷冻</option>
-								<option value="1">抛弃</option>
-								<option value="2">移植</option>
-								<option value="3">待定</option>
-							</select>
-						</div>
-					</div>
-					<div class="layui-inline btn-box">
-						<button class="layui-btn layui-bg-blue">查询</button>
-						<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">姓名</label>
+					<div class="layui-input-inline">
+						<input type="text" id="userName" name="userName" class="layui-input">
 					</div>
 				</div>
-			</form>	
+				<div class="layui-inline">
+					<label class="layui-form-label">病历号</label>
+					<div class="layui-input-inline">
+						<input type="text" id="medicalRecordNo" name="medicalRecordNo" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">取卵日期</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="ecTime" id="pull" placeholder=" - ">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">授精日期</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="insemiTime" id="insmt" placeholder=" - ">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">状态</label>
+					<div class="layui-input-block">
+						<select name="state" id="state" >
+							<option value="">请选择</option>
+						</select>
+					</div>
+				</div>
+				<div class="layui-inline btn-box">
+					<button class="layui-btn layui-bg-blue">查询</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		 
 			<table id="case-table" lay-filter="case-table" class="case-table"></table>
 			<!--弹窗--病历详情-->
 			<div class="details-box">
@@ -143,6 +139,7 @@
 	<!--公共js引入-->
 	<script src="/static/admin/layui/layui.js"></script>
 	<!--case页js-->
+	<script src="/static/admin/common/jquery.min.js" charset="utf-8"></script>
 	<script src="/static/front/js/procedure/procedure.js"></script>
 
 </body>

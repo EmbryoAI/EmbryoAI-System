@@ -36,7 +36,12 @@ def queryProcedureList(request):
         if state!=None and state!="":
             filters['state']=state
             sqlCondition = " and  d2.dict_value=%s "
-
+            
+        ecTime = request.args.get('ecTime');#取卵日期
+        insemiTime = request.args.get('insemiTime');#受精日期
+        
+        print (ecTime)
+        print (insemiTime)
 #         state = request.args.get('state');#状态
 #         if state!=None and state!="":
 #             filters['state']=state
