@@ -1,3 +1,21 @@
+
+$.ajax({
+    type:"get",
+    url:"/api/v1/dict/list/state",
+    datatype: "json", 
+    success:function(data){
+    	if(data.code==0){
+    		for(var i=0;i<data.data.length;i++) {
+    			$("#state").append("<option value='"+data.data[i].dictValue+"'>"+data.data[i].dictValue+"</option>");
+        		}
+        	}else {
+        		parent.layer.alert(data.msg);
+        	}
+        },
+        error : function(request) {
+            parent.layer.alert(request.responseText);
+        }
+});
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     var form = layui.form;
     var $ = layui.jquery;
@@ -80,5 +98,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
         }
     });
 	
+
 
 })
