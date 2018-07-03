@@ -61,10 +61,11 @@ def queryProcedureCount(filters):
 
 def getProcedureById(procedureID):
     sql = text("""
-        SELECT pro.`id`,pat.`patient_name`, pat.`idcard_no`,pat.`birthdate`,
+        SELECT pro.`id`,pat.`patient_name`, pat.`idcard_no`,CONCAT(pat.`birthdate`) as birthdate,
         pat.`email`, pat.`mobile`,pat.`address`,pat.`is_smoking`,pat.`is_drinking`, 
-        pro.`patient_age`, pro.`patient_height`,pro.`patient_weight`,pro.`ec_time`, 
-        pro.`insemi_time`,pro.`memo`,COUNT(DISTINCT e.id) AS embryo_num,d.dict_value AS insemi_type 
+        pro.`patient_age`, pro.`patient_height`,pro.`patient_weight`,CONCAT(pro.`ec_time`) as ec_time, 
+        CONCAT(pro.`insemi_time`) as insemi_time,pro.`memo`,COUNT(DISTINCT e.id) AS embryo_num,
+        d.dict_value AS insemi_type 
         FROM t_patient pat LEFT JOIN t_procedure pro ON pat.`id` = pro.`patient_id` LEFT JOIN 
         t_embryo e ON pro.id=e.procedure_id LEFT JOIN sys_dict d ON pro.insemi_type_id=d.dict_key 
         AND d.dict_class='insemi_type' WHERE pro.`id` = :procedureID GROUP BY pro.id
