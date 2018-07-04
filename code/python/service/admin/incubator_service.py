@@ -8,14 +8,14 @@ from common import uuid
 import time
 import hashlib
 import json
-import random;
+import random
 
 def updateIncubator (username, password):
     try:
         params = {'username': username, 'password': password}
         incubator_mapper.updateIncubator(params)
     except:
-        return 400, {'msg': '修改培养箱密码时发生错误'}
+        return 400, {'msg': '修改培养箱时发生错误'}
     return 202, {'msg': '修改成功'}
 
 def insertIncubator(request):
@@ -36,11 +36,11 @@ def insertIncubator(request):
         return 400, '培养箱描述不能为空!'
     
     create_time = update_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 
-    delFlag = 0;
+    delFlag = 0
     incubator = Incubator(id=id, incubatorCode=incubatorCode,incubatorBrand=incubatorBrand,incubatorType=incubatorType,incubatorDescription=incubatorDescription,delFlag=delFlag,createTime=create_time, 
         updateTime=update_time)
     try:
-        incubatorOld = incubator_mapper.findIncubatorByCode(incubatorCode);
+        incubatorOld = incubator_mapper.findIncubatorByCode(incubatorCode)
         if incubatorOld!=None:
             return 400, '当前培养箱编码已存在，请您使用其他编码!'
         
@@ -64,12 +64,12 @@ def updateIncubator(request):
     if incubatorDescription == "":
         return 400, '培养箱描述不能为空!'
     updateTime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 
-    delFlag = 0;
+    delFlag = 0
     params = {'id': id, 'incubatorCode': incubatorCode,'incubatorBrand': incubatorBrand, 'incubatorType': incubatorType, 'incubatorDescription': incubatorDescription, 'updateTime': updateTime}
     try:
-        incubatorOld = incubator_mapper.findIncubatorByCode(incubatorCode);
+        incubatorOld = incubator_mapper.findIncubatorByCode(incubatorCode)
         if incubatorOld!=None:
-             incubatorbenshen = incubator_mapper.findIncubatorById(id);
+             incubatorbenshen = incubator_mapper.findIncubatorById(id)
              if incubatorOld.incubatorCode!=incubatorbenshen.incubatorCode:
                   return 400, '当前培养箱编码已存在，请您使用其他编码!'
               
@@ -84,26 +84,26 @@ def findIncubatorById(id):
 
 def queryIncubatorList(request):
     try:
-        page = request.args.get('page');
+        page = request.args.get('page')
         if page==None:
            page=1
-        limit = request.args.get('limit');
+        limit = request.args.get('limit')
         if limit==None:
             limit=10
         
         #动态组装查询条件
-        incubatorCode = request.args.get('incubatorCode');
-        filters = {};
+        incubatorCode = request.args.get('incubatorCode')
+        filters = {}
         if incubatorCode!=None and incubatorCode!="":
             filters['incubatorCode']=incubatorCode
             
         #查詢列表
-        pagination = incubator_mapper.queryIncubatorList(int(page),int(limit),filters);
+        pagination = incubator_mapper.queryIncubatorList(int(page),int(limit),filters)
         incubatorList = pagination.items
         incubatorList = list(map(lambda x: x.to_dict(),incubatorList))
         
         #查询总数
-        count = pagination.total;
+        count = pagination.total
         
     except:
         return 400, '查询培养箱列表时发生错误!'

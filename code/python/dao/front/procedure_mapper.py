@@ -4,7 +4,7 @@ from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
 from traceback import print_exc
 
-def queryProcedureList(page,limit,filters):
+def queryProcedureList(page,limit,sqlCondition,filters):
 #     pagination = Procedure.query.filter_by(**filters).order_by(Procedure.insemiTime.desc()).paginate(page,per_page=limit,error_out=False)
 #     pagination = Procedure.query.filter_by(**filters).paginate(page,per_page=limit,error_out=False)
     sql = text("""
@@ -23,19 +23,20 @@ def queryProcedureList(page,limit,filters):
         ON pr.insemi_type_id=d.dict_key AND d.dict_class='insemi_type' 
         LEFT JOIN sys_dict d2 
         ON pr.state=d2.dict_key AND d2.dict_class='state'  
+        """+sqlCondition+"""
         GROUP BY pr.id 
         """)
     print(sql)
     
     # 执行sql得出结果
-    result = db.session.execute(sql) 
+    result = db.session.execute(sql,filters) 
     sql_result = result.fetchall()
   
     return sql_result
 
 
 
-def queryProcedureCount(filters):
+def queryProcedureCount(sqlCondition,filters):
 #     pagination = Procedure.query.filter_by(**filters).order_by(Procedure.insemiTime.desc()).paginate(page,per_page=limit,error_out=False)
 #     pagination = Procedure.query.filter_by(**filters).paginate(page,per_page=limit,error_out=False)
     count_sql = text("""
@@ -51,23 +52,36 @@ def queryProcedureCount(filters):
         ON pr.insemi_type_id=d.dict_key AND d.dict_class='insemi_type' 
         LEFT JOIN sys_dict d2 
         ON pr.state=d2.dict_key AND d2.dict_class='state'
+        """+sqlCondition+"""
         """)
     print(count_sql)
     # 计算总条数
-    count_result = db.session.execute(count_sql)
+    count_result = db.session.execute(count_sql,filters)
     total_size = count_result.fetchone()[0]
  
     return total_size
 
 def getProcedureById(procedureID):
     sql = text("""
-        SELECT pro.`id`,pat.`patient_name`, pat.`idcard_no`,pat.`birthdate`,
+        SELECT pro.`id`,pat.`patient_name`, pat.`idcard_no`,CONCAT(pat.`birthdate`) as birthdate,
         pat.`email`, pat.`mobile`,pat.`address`,pat.`is_smoking`,pat.`is_drinking`, 
-        pro.`patient_age`, pro.`patient_height`,pro.`patient_weight`,pro.`ec_time`, 
-        pro.`insemi_time`,pro.`memo`,COUNT(DISTINCT e.id) AS embryoNum,d.dict_value AS insemi_type 
+        pro.`patient_age`, pro.`patient_height`,pro.`patient_weight`,CONCAT(pro.`ec_time`) as ec_time, 
+        CONCAT(pro.`insemi_time`) as insemi_time,pro.`memo`,COUNT(DISTINCT e.id) AS embryo_num,
+        d.dict_value AS insemi_type 
         FROM t_patient pat LEFT JOIN t_procedure pro ON pat.`id` = pro.`patient_id` LEFT JOIN 
         t_embryo e ON pro.id=e.procedure_id LEFT JOIN sys_dict d ON pro.insemi_type_id=d.dict_key 
         AND d.dict_class='insemi_type' WHERE pro.`id` = :procedureID GROUP BY pro.id
         """)
     print(sql)
     return db.session.execute(sql, {'procedureID':procedureID}).fetchone()
+
+def update(id, memo):
+    try:
+        sql = text("UPDATE `t_procedure` SET memo = :memo WHERE id = :id")
+        print(sql)
+        db.session.execute(sql,{'id':id, 'memo':memo})
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError("修改病历信息时发生错误",e.message,e)
