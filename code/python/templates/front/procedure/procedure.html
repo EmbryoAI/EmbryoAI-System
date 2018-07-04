@@ -44,13 +44,13 @@
 				<div class="layui-inline">
 					<label class="layui-form-label">取卵日期</label>
 					<div class="layui-input-inline">
-						<input type="text" class="layui-input" name="ecTime" id="pull" placeholder=" - ">
+						<input type="text" readonly="readonly" class="layui-input" name="ecTime" id="ecTime" placeholder="-">
 					</div>
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label">授精日期</label>
 					<div class="layui-input-inline">
-						<input type="text" class="layui-input" name="insemiTime" id="insmt" placeholder=" - ">
+						<input type="text" readonly="readonly" class="layui-input" name="insemiTime" id="insemiTime" placeholder="-">
 					</div>
 				</div>
 				<div class="layui-inline">
@@ -62,8 +62,8 @@
 					</div>
 				</div>
 				<div class="layui-inline btn-box">
-					<button class="layui-btn layui-bg-blue">查询</button>
-					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+					<button class="layui-btn layui-bg-blue" onclick="reload();" >查询</button>
+					<button  onclick="reset();" class="layui-btn layui-btn-primary">重置</button>
 				</div>
 			</div>
 		 
