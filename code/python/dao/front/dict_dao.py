@@ -5,4 +5,4 @@ from sqlalchemy import text
 from traceback import print_exc
 
 def queryDictListByClass(dictClass):
-    return db.session.query(Dict).filter(Dict.dictClass == dictClass);
+    return db.session.query(Dict).filter(Dict.dictClass == dictClass).all()
