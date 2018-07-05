@@ -1,0 +1,82 @@
+.choice{
+	font-size: 14px;
+	font-weight: bold;
+	margin-left: 14px;
+	line-height: 28px;
+	margin-bottom: 20px;
+}
+.choice strong{
+	margin-right: 20px;
+}
+.incubator span{
+	margin-right: 30px;
+	display: inline-block;
+	width: 56px;
+	line-height: 28px;
+	height: 28px;
+	background-color: #ffffff;
+	border: solid 3px #d7dae0;
+	text-align: center;
+	color: #7a7e80;
+	font-size: 14px;
+	cursor:pointer;
+	transition: all 0.5s;
+}
+.choice span:hover{
+	box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.2);
+}
+.choice .active{
+	background-color: #1c7eff;
+	color: #fff;
+	border: solid 3px #1c7eff;
+	box-shadow: 0px 2px 10px 0px rgba(28, 126, 255, 0.26);
+	animation:activemove 1s;
+	-webkit-animation:activemove 1s;
+}
+.dish span{
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	text-align: center;
+	line-height: 24px;
+	background-color: #ffffff;
+	border: solid 3px #d7dae0;
+	margin-right: 20px;
+	border-radius: 24px;
+	color: #7a7e80;
+	font-size: 14px;
+	cursor:pointer;
+	transition: all 0.5s;
+}
+.dish i{
+	font-size: 12px;
+	color: #ec3135;
+}
+.layui-form-label i{
+	color: #ec3135;
+	font-style: normal;
+	font-size: 14px;
+	margin-right: 2px;
+}
+.layui-form-item .layui-input-inline{
+	width: 160px;
+}
+.layui-form-item .layui-inline{
+	margin-bottom: 22px;
+}
+
+
+
+
+@keyframes activemove
+{
+	from {	background-color: #ffffff;	border: solid 3px #d7dae0;}
+	to {	background-color: #1c7eff;	border: solid 3px #1c7eff;}
+}
+
+@-webkit-keyframes activemove
+{
+	from {	background-color: #ffffff;	border: solid 3px #d7dae0;}}
+	to {	background-color: #1c7eff;	border: solid 3px #1c7eff;}
+}
+

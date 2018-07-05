@@ -6,12 +6,16 @@ body {
     position: relative;
 	background-color: #f3f4f8;
 	color: #47494b;
-	/*font-family: "微软雅黑";*/
 }
 .container {
     min-height: 100%;
 }
-
+.layui-bg-blue{
+	background-color: #467cdc !important;
+}
+.layui-bg-blue{
+	box-shadow: 0px 7px 20px rgba(70, 124, 220, 0.1);
+}
 /*页头*/
 .header {
     background-color: #3c64f7;
