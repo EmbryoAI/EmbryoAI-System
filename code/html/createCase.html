@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ASTEC Embryo Ai</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="lib/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/createCase.css" />
+</head>
+
+<body>
+    <!--主体内容都放在这个div里-->
+    <div class="main">
+        <div class="title">
+            <h1>新建简历</h1>
+            <h6>New Cases</h6>
+        </div>
+        <form class="layui-form" action="">
+            <!--选择皿-->
+            <div class="choice incubator">
+                <strong>培养箱选择：</strong>
+                <span class="active">001</span><span>002</span><span>003</span>
+            </div>
+            <div class="choice dish">
+                <strong>培养皿选择：</strong>
+                <span class="active">1</span><span>2</span><span>3</span><span>4</span><i>* 最多只能选择2个皿</i>
+            </div>
+            <!--基本信息-->
+            <h1 class="details-title">基本信息</h1>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><i>*</i>姓名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="" required lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><i>*</i>身份证号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="" required lay-verify="card" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><i>*</i>出生日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="birth" required lay-verify="required">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label"><i>*</i>移动电话</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="" required lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">电子邮箱</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name=""  class="layui-input">
+                    </div>
+                </div>
+				
+                <div class="layui-inline">
+                    <label class="layui-form-label">住址</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="" class="layui-input">
+                    </div>
+                </div>
+				<div class="layui-inline" style="margin-top: -8px; margin-left: 36px;">
+					<input type="checkbox" name="" title="吸烟史" lay-skin="primary">
+					<input type="checkbox" name="" title="酗酒史" lay-skin="primary"> 
+				</div>
+            </div>
+            <!--基本信息-->
+            <h1 class="details-title">周期信息</h1>
+            <div class="layui-form-item">
+				<div class="layui-inline">
+                    <label class="layui-form-label"><i>*</i>年龄</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="" required lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+				<div class="layui-inline">
+					<label class="layui-form-label">身高(cm)</label>
+					<div class="layui-input-inline">
+						<input type="number" name=""  class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">体重(kg)</label>
+					<div class="layui-input-inline">
+						<input type="number" name=""  class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">取卵时间</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" id="get" required lay-verify="required">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label">取卵个数</label>
+					<div class="layui-input-inline">
+						<input type="number" name=""  class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label"><i>*</i>授精方式</label>
+					<div class="layui-input-inline">
+						<input type="radio" name="aid" value="IVF" title="IVF">
+						<input type="radio" name="aid" value="ICSI" title="ICSI">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label"><i>*</i>授精时间</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" id="iui" required lay-verify="required">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label"><i>*</i>胚胎个数</label>
+					<div class="layui-input-inline">
+						<input type="number" name="" required lay-verify="required"   class="layui-input">
+					</div>
+				</div>
+				<div class="layui-inline">
+					<label class="layui-form-label"><i>*</i>评分标准</label>
+					<div class="layui-input-inline">
+						<select name="city" required lay-verify="required">
+							<option value="">请选择一个城市</option>
+							<option value="010">北京</option>
+							<option value="021">上海</option>
+							<option value="0571">杭州</option>
+						</select>   
+					</div>
+				</div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-bg-blue" lay-submit lay-filter="">创建简历</button>
+				</div>
+            </div>
+        </form>
+    </div>
+
+    <script src="lib/layui/layui.js"></script>
+    <script src="js/createCase.js"></script>
+</body>
+
+</html>
