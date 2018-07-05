@@ -15,3 +15,14 @@ def update(id, mobile, email):
         db.session.rollback()
         print_exc()
         raise DatabaseError("修改patient信息时发生错误",e.message,e)
+    
+def queryPatientNameList(sqlCondition,filters):
+        sql = text("""
+           SELECT patient_name AS 'value',patient_name AS label FROM  t_patient
+        """+sqlCondition)
+        print(sql)
+    
+        # 执行sql得出结果
+        result = db.session.execute(sql,filters) 
+        sql_result = result.fetchall()
+        return sql_result

@@ -84,3 +84,14 @@ def update(id, memo):
         db.session.rollback()
         print_exc()
         raise DatabaseError("修改病历信息时发生错误",e.message,e)
+    
+def queryMedicalRecordNoList(sqlCondition,filters):
+        sql = text("""
+           SELECT medical_record_no AS 'value',medical_record_no AS label FROM  t_procedure
+        """+sqlCondition)
+        print(sql)
+    
+        # 执行sql得出结果
+        result = db.session.execute(sql,filters) 
+        sql_result = result.fetchall()
+        return sql_result

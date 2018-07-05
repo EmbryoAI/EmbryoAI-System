@@ -1,21 +1,3 @@
-
-$.ajax({
-    type:"get",
-    url:"/api/v1/dict/list/state",
-    datatype: "json", 
-    success:function(data){
-    	if(data.code==0){
-    		for(var i=0;i<data.data.length;i++) {
-    			$("#state").append("<option value='"+data.data[i].dictValue+"'>"+data.data[i].dictValue+"</option>");
-        		}
-        	}else {
-        		parent.layer.alert(data.msg);
-        	}
-        },
-        error : function(request) {
-            parent.layer.alert(request.responseText);
-        }
-});
 var table = null;
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     var form = layui.form;
@@ -118,32 +100,69 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 
 })
 
-	  function reload(){
-		      //执行重载
-		      table.reload('case-table', {
-		        page: {
-		          curr: 1 //重新从第 1 页开始
-		        }
-		        ,where: {
-		        	userName: $("#userName").val(),
-		        	medicalRecordNo: $("#medicalRecordNo").val(),
-		        	ecTime: $("#ecTime").val(),
-		        	insemiTime: $("#insemiTime").val(),
-		        	state: $("#state").val()
-		        }
-		      });
-		    }
+//查询
+function reload(){
+      //执行重载
+      table.reload('case-table', {
+        page: {
+          curr: 1 //重新从第 1 页开始
+        }
+        ,where: {
+        	userName: $("#userName").val(),
+        	medicalRecordNo: $("#medicalRecordNo").val(),
+        	ecTime: $("#ecTime").val(),
+        	insemiTime: $("#insemiTime").val(),
+        	state: $("#state").val()
+        }
+      });
+}
+
+//重置
+function reset(){
+	$("#userName").val("");
+	$("#medicalRecordNo").val("");
+	$("#ecTime").val("");
+	$("#insemiTime").val("");
+	$("#state").val("");
+      //执行重载
+      table.reload('case-table', {
+        page: {
+          curr: 1 //重新从第 1 页开始
+        }
+      });
+}
+
+$(function () {
+	//获取状态字典值
+	$.ajax({
+	    type:"get",
+	    url:"/api/v1/dict/list/state",
+	    datatype: "json", 
+	    success:function(data){
+	    	if(data.code==0){
+	    		for(var i=0;i<data.data.length;i++) {
+	    			$("#state").append("<option value='"+data.data[i].dictValue+"'>"+data.data[i].dictValue+"</option>");
+	        		}
+	        	}else {
+	        		parent.layer.alert(data.msg);
+	        	}
+	        },
+	        error : function(request) {
+	            parent.layer.alert(request.responseText);
+	        }
+	});
+	
+    $('#medicalRecordNo').autocompleter({
+    	highlightMatches: true,
+    	minLength:3,
+    	source:'/api/v1/procedure/no/list',
+    	cache: false
+    	
+    });
     
-    function reset(){
-	        	$("#userName").val("");
-	        	$("#medicalRecordNo").val("");
-	        	$("#ecTime").val("");
-	        	$("#insemiTime").val("");
-	        	$("#state").val("");
-			      //执行重载
-			      table.reload('case-table', {
-			        page: {
-			          curr: 1 //重新从第 1 页开始
-			        }
-			      });
-			}
+    $('#userName').autocompleter({
+    	highlightMatches: true,
+    	source:'/api/v1/patient/name/list',
+    	cache: false
+    });
+});

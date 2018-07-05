@@ -29,3 +29,9 @@ def procedureDetail(id):
 def updateProcedure():
     code, msg = procedure_service.updateProcedure(request)
     return make_response(msg, code)
+
+#查询根据输入值补全病历号
+@procedure_rest_controller.route('/no/list', methods=['GET'])
+def queryMedicalRecordNoList():
+    logger().info('进入procedure_controller.queryMedicalRecordNoList')
+    return procedure_service.queryMedicalRecordNoList(request)

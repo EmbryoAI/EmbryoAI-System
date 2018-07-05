@@ -83,3 +83,18 @@ def updateProcedure(request):
     except:
         return 500, '修改病历详情时发生错误!'
     return 200, '修改病历详情成功!'
+
+def queryMedicalRecordNoList(request):
+        #动态组装查询条件
+       sqlCondition = " where 1=1 " #动态sql
+       filters = {}#动态参数
+       limit = request.args.get('limit')#查询多少条
+       query = request.args.get('query')#当前输入值
+       if query!=None and query!="":
+           filters['query']="%"+query+"%"
+           sqlCondition += " and medical_record_no like :query "
+           
+       sqlCondition += " limit "+limit
+       result = procedure_mapper.queryMedicalRecordNoList(sqlCondition,filters)
+       procedureList = list(map(dict, result))
+       return jsonify(procedureList)
