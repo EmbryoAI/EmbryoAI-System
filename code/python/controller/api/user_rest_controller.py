@@ -7,6 +7,7 @@ from app import db
 import service.admin.user_service as user_service
 from entity.User import User
 import time
+from app import login_required 
 
 
 user_rest_controller = Blueprint('user_rest_controller', __name__)
@@ -15,6 +16,7 @@ url_prefix = '/api/v1/user'
 
 #用户修改密码
 @user_rest_controller.route('/password', methods=['PUT'])
+@login_required
 def password():
     logger().info('进入user_controller.modifyPassword')
     username = request.json.get("username")
@@ -26,12 +28,14 @@ def password():
 
 #新增用户
 @user_rest_controller.route('', methods=['POST'])
+@login_required
 def addUser():   
     code, user = user_service.insertUser(request)
     return make_response(jsonify(user), code)
 
 #根据用户id查询用户信息
 @user_rest_controller.route('/<string:id>', methods=['GET'])
+@login_required
 def getUserById(id):
     user = user_service.findUserById(id)
     if not user:
@@ -40,17 +44,20 @@ def getUserById(id):
 
 #查询所有用户
 @user_rest_controller.route('', methods=['GET'])
+@login_required
 def getAllUsers():
     return user_service.findAllUsers(request)
 
 #修改用户数据
 @user_rest_controller.route('/userInfo', methods=['POST'])
+@login_required
 def updateUser():
     code, msg = user_service.updateUser(request)
     return make_response(msg, code)
     
 #根据id删除用户
 @user_rest_controller.route('/<string:id>', methods=['DELETE'])
+@login_required
 def deleteUser(id):
     code, msg = user_service.deleteUser(id)
     return make_response(jsonify(msg), code)
