@@ -24,11 +24,3 @@ class User(UserMixin,db.Model,mixin):
     lastLoginTime = db.Column("last_login_time", db.DateTime)
     delFlag = db.Column("del_flag", db.Integer, default=0)
 
-@login_manager.user_loader
-def load_user(user_id):
-    if user_id is None:
-        return None
-    user = db.session.query(User).filter(User.id == id).one_or_none()
-    if not user :
-        return None
-    return user

@@ -8,6 +8,7 @@ from common import uuid
 import time
 import hashlib
 import json
+from app import login_manager,login_user, logout_user, login_required,current_user
 
 def updatePassword(username, password):
     try:
@@ -134,5 +135,19 @@ def updateUserLoginTime(id,lastLoginTime):
         return 400, {'msg': '修改用户登录实践时发生错误'}
     return 202, {'msg': '修改成功'}
 
-def findUserByNameAndPwd(username,password):
-    return user_mapper.findUserByNameAndPwd(username,password)
+def userLogin(username,password):
+    if username is None or password is None :
+        restResult = RestResult(500, "用户名、密码不能为空", 0, None)
+        return jsonify(restResult.__dict__)
+    md5 = hashlib.md5()
+    md5.update(password.encode(encoding='utf-8'))
+    password = md5.hexdigest()
+    restResult = RestResult(404, "用户不存在或密码错误", 0, None)
+    try:
+        user = user_mapper.findUserByNameAndPwd(username,password)
+        if user is not None :
+            login_user(user,True)
+            restResult = RestResult(200, "用户登录成功", 1, user.to_dict())
+    except:
+        restResult = RestResult(404, "用户登录时发生错误", 0, None)
+    return jsonify(restResult.__dict__)

@@ -3,7 +3,7 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager,login_user, logout_user, login_required 
+from flask_login import LoginManager,login_user, logout_user, login_required,current_user
 from yaml import load
 from traceback import print_exc
 from common import getdefault
@@ -42,7 +42,7 @@ db = SQLAlchemy(app) # 此APP要用到的数据库连接，由ORM框架SQLAlchem
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.session_protection = 'strong'
-login_manager.login_view = 'admin_index_controller.index'
+login_manager.login_view = 'login_controller.index'
 logger = app.logger
 
 

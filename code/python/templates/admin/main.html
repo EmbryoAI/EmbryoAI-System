@@ -32,7 +32,10 @@
 <!-- 					</dl></li> -->
 <!-- 			</ul> -->
 			<ul class="layui-nav layui-layout-right">
-				<li class="layui-nav-item"><a href="javascript:;"> <img src="http://t.cn/RCzsdCq" class="layui-nav-img">{{username}} 好!
+				{% if current_user.is_authenticated %}
+				<li class="layui-nav-item"><a href="javascript:;"> <img src="http://t.cn/RCzsdCq" class="layui-nav-img">{{ current_user.username }} 好!
+				{% endif %}
+				
 				</a>
 					<dl class="layui-nav-child">
 						<dd>
@@ -42,7 +45,7 @@
 							<a href="">安全设置</a>
 						</dd>
 					</dl></li>
-				<li class="layui-nav-item"><a href="http://localhost:6001/api/v1/login/logout">退出</a></li>
+				<li class="layui-nav-item"><a href="/login/logout">退出</a></li>
 			</ul>
 		</div>
 		<div class="layui-side layui-bg-black">
