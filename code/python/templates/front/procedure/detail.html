@@ -11,10 +11,20 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="format-detection" content="telephone=no">
 	<link rel="icon" href="/static/favicon.ico">
-
 	<link rel="stylesheet" href="/static/admin/layui/css/layui.css"/>
 	<link rel="stylesheet" type="text/css" href="/static/front/css/main.css"/>
 	<link rel="stylesheet" type="text/css" href="/static/front/css/case.css"/>
+	<style type="text/css">
+		body{
+			background-color: #fff;
+		}
+		.layui-table-link{
+			color: #007DDB;
+		}
+		.layui-table-link:hover{
+			color: #01AAED;
+		}
+	</style>
 </head>
 <body>
 	<form action="" id="procedureEdit">
@@ -46,11 +56,9 @@
 	</div>
 
 </form>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-					<button type="submit" class="layui-btn layui-bg-blue" onclick="update()">修改</button>
-				</div>
-            </div>
+  <div class="layui-form-item btn-box" style="text-align: center;margin: 15px 0 0 0;">
+		<button type="submit" class="layui-btn layui-bg-blue" onclick="update()" style="margin: 0;padding: 0 100px;">修改</button>
+  </div>
 	<!--公共js引入-->
 	<script src="/static/admin/layui/layui.js"></script>
 	<script src="/static/admin/common/jquery.min.js" charset="utf-8"></script>
