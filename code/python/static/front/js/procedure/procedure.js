@@ -55,6 +55,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     field: 'state',
                     title: '状态',
                 }, {
+										width:120,
                     field: 'xst',
                     title: '视图'
                     , templet: function(d){
@@ -87,7 +88,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             layer.open({
               title:"病历详情",
               type: 2,
-              area: ['1020px', '560px'],
+              area: ['1020px', '580px'],
               maxmin : true,
               shadeClose: false,
               content: '/front/procedure/' + id
