@@ -11,10 +11,20 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="format-detection" content="telephone=no">
 	<link rel="icon" href="/static/favicon.ico">
-
 	<link rel="stylesheet" href="/static/admin/layui/css/layui.css"/>
 	<link rel="stylesheet" type="text/css" href="/static/front/css/main.css"/>
 	<link rel="stylesheet" type="text/css" href="/static/front/css/case.css"/>
+	<style type="text/css">
+		body{
+			background-color: #fff;
+		}
+		.layui-table-link{
+			color: #007DDB;
+		}
+		.layui-table-link:hover{
+			color: #01AAED;
+		}
+	</style>
 </head>
 <body>
 	<form action="" id="procedureEdit">
@@ -23,10 +33,10 @@
 		<h1 class="details-title">基本信息</h1>
 		<strong>姓名：</strong><span id="patient_name"></span>
 		<strong>身份证：</strong><span id="idcard_no"></span>
-		<strong>电话：</strong><span id="mobile"><input name="mobile" id="new_mobile"/></span>
-		<strong>邮箱：</strong><span id="email"><input name="email" id="new_email"/></span>
+		<strong>电话：</strong><span id="mobile"><input type="tel" name="mobile" id="new_mobile"  autocomplete="off" class="layui-input"/></span>
+		<strong>邮箱：</strong><span id="email"><input type="email" name="email" id="new_email" autocomplete="off" class="layui-input"/></span>
 		<strong>出生日期：</strong><span id="birthdate"></span>
-		<strong>住址：</strong><span id="address"><input name="address" id="new_address"/></span>
+		<strong>住址：</strong><span id="address"><input type="text" name="address" id="new_address"  autocomplete="off" class="layui-input"/></span>
 		<strong>吸烟史：</strong><span id="is_smoking"></span>
 		<strong>酗酒史：</strong><span id="is_drinking"></span>
 		<h1 class="details-title">周期资料</h1>
@@ -38,7 +48,7 @@
 		<strong>授精时间：</strong><span id="insemi_time"></span>
 		<strong>胚胎个数：</strong><span id="embryo_num"></span>
 		<strong>评分标准：</strong><span id=""></span>
-		<strong>备注：</strong><span><input name="memo" id="new_memo"/></span>
+		<strong>备注：</strong><span><input type="text" name="memo" id="new_memo"  autocomplete="off" class="layui-input"/></span>
 		<h1 class="details-title">胚胎位置</h1>
 		<table id="embryo_table">
 			<tr><th>胚胎编号</th><th>培养箱编号</th><th>培养皿位置</th><th>孔位置</th></tr>
@@ -46,9 +56,9 @@
 	</div>
 
 </form>
-		<div class="col-sm-8 col-sm-offset-3" align="center">
-			<button type="submit" class="btn btn-primary" onclick="update()">修改</button>
-		</div>
+  <div class="layui-form-item btn-box" style="text-align: center;margin: 15px 0 0 0;">
+		<button type="submit" class="layui-btn layui-bg-blue" onclick="update()" style="margin: 0;padding: 0 100px;">修改</button>
+  </div>
 	<!--公共js引入-->
 	<script src="/static/admin/layui/layui.js"></script>
 	<script src="/static/admin/common/jquery.min.js" charset="utf-8"></script>
