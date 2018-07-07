@@ -100,12 +100,28 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
         }
  
     });
-	
+    
+    $("#reloadButton").on("click", function (event) {
+         //执行重载
+        table.reload('case-table', {
+            page: {
+            curr: 1  //重新从第 1 页开始
+            }
+            ,where: {
+                userName       : $("#userName").val(),
+                medicalRecordNo: $("#medicalRecordNo").val(),
+                ecTime         : $("#ecTime").val(),
+                insemiTime     : $("#insemiTime").val(),
+                state          : $("#state").val()
+            }
+        });
+
+    });
 
 
 })
 
-//查询
+// 查询
 function reload(){
       //执行重载
       table.reload('case-table', {
