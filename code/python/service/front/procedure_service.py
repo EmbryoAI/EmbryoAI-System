@@ -18,7 +18,7 @@ def queryProcedureList(request):
             limit=10
 
         #动态组装查询条件
-        sqlCondition = " where 1=1 "#动态sql
+        sqlCondition = " where pr.del_flag=0 "#动态sql
         filters = {}#动态参数
         userName = request.args.get('userName')#用户名字
         if userName!=None and userName!="":
@@ -98,3 +98,12 @@ def queryMedicalRecordNoList(request):
        result = procedure_mapper.queryMedicalRecordNoList(sqlCondition,filters)
        procedureList = list(map(dict, result))
        return jsonify(procedureList)
+   
+#删除病历
+def deleteProcedure(id):
+    try:
+        params = {'id': id, 'delFlag': 1}
+        procedure_mapper.deleteProcedure(params)
+    except:
+        return 400, {'msg': '删除病历时发生错误'}
+    return 204, None

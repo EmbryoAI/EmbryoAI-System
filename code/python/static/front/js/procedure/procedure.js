@@ -102,7 +102,12 @@ layui
 											field : 'operation',
 											title : '操作',
 											width : 240,
-											templet : '#operation',
+											templet : function(d) {
+												var a="<a style='cursor: pointer;' class='layui-table-link report'>报告</a>";
+												var b="<a style='cursor: pointer;' class='layui-table-link return'>回访</a>";
+												var c="<a style='cursor: pointer;' onclick='deleteProcedure(\""+d.id+"\");' class='layui-table-link del'>删除</a>";
+												return a+b+c;
+											}
 										} ] ]
 							});
 
@@ -137,6 +142,29 @@ function showDetail(id) {
 		content : '/front/procedure/' + id
 	});
 }
+
+//刪除病例
+function deleteProcedure(id) {
+    layer.confirm('真的删除该病历么？', function(index){
+//        obj.del(); //删除对应行（tr）的DOM结构
+//        layer.close(index);
+        //向服务端发送删除指令
+    	$.ajax({
+    		cache : false,
+    		type : "get",
+    		url : "/api/v1/procedure/delete/" + id,
+    		async : false,
+    		error : function(request) {
+    			parent.layer.alert(request.responseText);
+    		},
+    		success : function(data) {
+    			parent.layer.alert("删除病例成功!");
+    			reload();//刷新当前页面.
+    		}
+    	});
+    	
+   });
+} 
 
 // 查询
 function reload() {
