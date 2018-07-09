@@ -68,4 +68,21 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
             }
         });
     });
+
+    //搜索框监听回车事件
+    $('#caseIdOrName').bind('keypress',function(event){
+        if(event.keyCode == "13"){  
+            var caseIdOrName = $("#caseIdOrName").val();
+            // $("#userName").val(caseIdOrName);
+            //执行重载
+            table.reload('case-table', {
+                page: {
+                curr: 1  //重新从第 1 页开始
+                }
+                ,where: {
+                    userName: caseIdOrName
+                }
+            });
+        }
+    });
 })
