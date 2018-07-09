@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
 from itertools import islice
+from common import getdefault
 
 class TimeSeries(object):
     def __init__(self):
@@ -20,6 +21,28 @@ class TimeSeries(object):
     def move_to(self, index):
         self.nf = self.next_frame_time()
         next(islice(self.nf, index-1, index))
+    
+    def range(self, *kargs, **kwargs):
+        begin = getdefault(kwargs, 'begin', '0000000')
+        end = getdefault(kwargs, 'end', '0000000')
+        step = getdefault(kwargs, 'step', 15)
+        if len(kargs) == 1:
+            end = kargs[0]
+        if len(kargs) == 2:
+            begin = kargs[0]
+            end = kargs[1]
+        if len(kargs) == 3:
+            begin = kargs[0]
+            end = kargs[1]
+            step = kargs[2]
+        if len(begin)!=7 or len(end)!=7 or step%15!=0:
+            raise ValueError('Wrong begin, end or step param. Begin, end should '
+                'be 7 digits string. Step should be multiple of 15 integer')
+        tominute = lambda x: int(x[0])*24*60 + int(x[1:3])*60 + int(x[3:5])
+        bindex = tominute(begin)//15
+        eindex = tominute(end)//15
+        k = step//15
+        return self.__getitem__(slice(bindex, eindex, k))
 
     def next_frame_time(self):
         d = 0
@@ -93,6 +116,11 @@ class TsTest(unittest.TestCase):
         self.assertEqual(minute_to_serie_index(1500), 100)
         self.assertEqual(time_to_serie(25, 0), '1010000')
         self.assertEqual(minute_to_serie(1515), '1011500')
+        self.assertEqual(len(ts.range('0010000')), 4)
+        self.assertEqual(len(ts.range('0100000', '0123000')), 10)
+        self.assertEqual(len(ts.range('1000000', '2000000', 60)), 24)
+        self.assertEqual(len(ts.range(begin='0011500', end='1013000')), 97)
+        self.assertEqual(len(ts.range(begin='0000000', end='4184500', step=120)), 58)
 
 if __name__ == '__main__':
     unittest.main()

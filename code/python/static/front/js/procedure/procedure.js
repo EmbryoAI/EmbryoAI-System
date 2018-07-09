@@ -85,7 +85,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     table.on('tool(case-table)', function(obj){
         var event = obj.event;
         var id    = obj.data.id;
-        alert(id);
         if(event === 'details'){
             layer.open({
 

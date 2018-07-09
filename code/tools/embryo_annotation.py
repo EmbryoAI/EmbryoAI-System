@@ -31,7 +31,7 @@ if __name__=='__main__':
     parser.add_argument('-a', '--annotation', help='标注文件路径及文件名', required=True)
     conf = parser.parse_args()
     print(TAG_MESSAGE)
-    img_files = list(filter(lambda x: x.endswith('.jpg'), os.listdir(conf.images)))
+    img_files = list(sorted(filter(lambda x: x.endswith('.jpg'), os.listdir(conf.images))))
     if not img_files or not len(img_files):
         print('图像目录不存在或不包含任何图像文件')
     end = False
@@ -44,7 +44,9 @@ if __name__=='__main__':
             tag = ''
             window = cv2.namedWindow('Embryo stage annotation')
             img = cv2.imread(conf.images + os.path.sep + f, cv2.IMREAD_GRAYSCALE)
-            print(f)
+            if not img or img.shape != (600, 600):
+                img_files.remove(f)
+                continue
             cv2.imshow('Embryo stage annotation', img)
             while True:
                 key = cv2.waitKey(100) & 0xff

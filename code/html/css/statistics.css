@@ -3,3 +3,23 @@
 	height: 30px;
 	line-height: 30px;
 }
+.echart{
+	width: 98%;
+	margin: auto;
+	height: 400px;
+}
+.state2{
+	width: 98%;
+	margin: auto;
+	height: 400px;
+}
+.state2 .milestone{
+	width: 50%;
+	float: left;
+	height: 400px;
+}
+.state2 .gestation{
+	width: 50%;
+	float: left;
+	height: 400px;
+}
