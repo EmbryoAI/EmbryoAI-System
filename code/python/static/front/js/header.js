@@ -69,7 +69,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
         });
     });
 
-    $('#caseIdOrName').bind('keypress',function(event){//监听sim卡回车事件
+    //搜索框监听回车事件
+    $('#caseIdOrName').bind('keypress',function(event){
         if(event.keyCode == "13"){  
             var caseIdOrName = $("#caseIdOrName").val();
             // $("#userName").val(caseIdOrName);
