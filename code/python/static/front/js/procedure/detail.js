@@ -1,3 +1,7 @@
+layui.use('form', function(){
+	var layer = layui.layer;
+});
+
 $(function(){
     var procedureId = $("#id").val();
     $.ajax({
@@ -70,35 +74,33 @@ function showIncubator(){
 }
 
 function update(){
-    var cf = confirm("是否确定修改已变更的内容?");
-    if(cf){
-        var mobile = $("#new_mobile").val();
-        var email = $("#new_email").val();
-        if(mobile == "" && email == ""){
-            parent.layer.alert("手机号码跟邮箱不能同时为空!");
-            return;
-        }
+    var mobile = $("#new_mobile").val();
+    var email = $("#new_email").val();
+    if(mobile == "" && email == ""){
+        parent.layer.alert("手机号码跟邮箱不能同时为空!");
+        return;
+    }
 
-        if(mobile != ""){
-            //手机号正则  
-            var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;  
-            //电话  
-            var phone = $.trim(mobile);  
-            if (!phoneReg.test(phone)) {  
-                parent.layer.alert('请输入有效的手机号码！'); 
-                return false;  
-            }  
-        }
-    
-        if(email != ""){
-            var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$"); 
-            var emailStr = $.trim(email);  
-            if (!reg.test(emailStr)) {  
-                parent.layer.alert('请输入有效的电子邮箱！');  
-                return false;  
-            }  
-        }
+    if(mobile != ""){
+        //手机号正则  
+        var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;  
+        //电话  
+        var phone = $.trim(mobile);  
+        if (!phoneReg.test(phone)) {  
+            parent.layer.alert('请输入有效的手机号码！'); 
+            return false;  
+        }  
+    }
 
+    if(email != ""){
+        var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$"); 
+        var emailStr = $.trim(email);  
+        if (!reg.test(emailStr)) {  
+            parent.layer.alert('请输入有效的电子邮箱！');  
+            return false;  
+        }  
+    }
+    layer.confirm('是否确定修改已变更的内容？', function(index){
         $.ajax({
             cache : false,
             type : "POST",
@@ -110,7 +112,9 @@ function update(){
             },
             success : function(data) {
                 parent.layer.alert(data);
+                var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+			    parent.layer.close(index);
             }
         });
-    }
+    });
 }

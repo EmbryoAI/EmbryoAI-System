@@ -1,3 +1,52 @@
+// 加载数据
+function loadLogin(username,password){
+    var defer = $.Deferred(); 
+    $.ajax({
+        cache : false,
+        type : "POST",
+        url : "/api/v1/login/nameAndPwd",
+        data : {"username":username,"password":password},
+        async : false,
+        error : function(request) {
+            alert(request.responseText);
+        },
+        success : function(data) {
+            defer.resolve(data);
+        }
+    });
+    return defer.promise();
+}
+
+//登录到前台页面
+function loginToFront(){
+    $("#uAccount,#uPasswd").blur();
+    var uAccount = $('#uAccount').val().toString();
+    var uPasswd = $('#uPasswd').val().toString();
+		
+    if (checkAccountPasswd(uAccount,uPasswd)) {
+        var data = loadLogin(uAccount,uPasswd);
+        data.done(function(result){
+            $(".verify").html(result.msg);
+            $(".verify").animate({right:'20px'});
+            if(result.code == 200){
+                location = "/front/procedure";
+            }
+        });
+    }
+}
+
+//检测账号密码是否输入
+function checkAccountPasswd(uAccount,uPasswd){
+    var falg = true;
+    if (uAccount == "" || uPasswd == ""  ) {
+        falg = false;
+        $(".verify").html("*账号或密码不能为空");
+		$(".verify").animate({right:'20px'});
+    }
+    return falg;
+}
+
+
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function () {
     var form = layui.form;
     var $ = layui.jquery;
@@ -17,79 +66,42 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
   	//用户密码登录前台	
     $("#loginButton").on("click", function (event) {
         event.preventDefault();
-		console.log('sss')
-        $("#uAccount,#uPasswd").blur();
-        var uAccount = $('#uAccount').val().toString();
-        var uPasswd = $('#uPasswd').val().toString();
-		
-        if (uAccount == "" || uPasswd == ""  ) {
-            $(".verify").html("*账号或密码不能为空");
-			$(".verify").animate({right:'20px'});
-        }  else {
-            $.ajax({
-                cache : false,
-                type : "POST",
-                url : "/api/v1/login/nameAndPwd",
-                data : {"username":uAccount,"password":uPasswd},
-                async : false,
-                error : function(request) {
-                    parent.layer.alert(request.responseText);
-                },
-                success : function(data) {
-                    $(".verify").html(data.msg);
-			        $(".verify").animate({right:'20px'});
-                    if(data.code == 200){
-                        location = "/front/procedure";
-                    }
-                }
-            });
-
-        }
-
+        loginToFront();
     });
 
     //用户密码登录后台
     $("#adminLogin").on("click", function (event) {
         event.preventDefault();
-		console.log('sss')
         $("#uAccount,#uPasswd").blur();
         var uAccount = $('#uAccount').val().toString();
         var uPasswd = $('#uPasswd').val().toString();
-		
-        if (uAccount == "" || uPasswd == ""  ) {
-            $(".verify").html("*账号或密码不能为空");
-			$(".verify").animate({right:'20px'})
-        }  else {
-            $.ajax({
-                cache : false,
-                type : "POST",
-                url : "/api/v1/login/nameAndPwd",
-                data : {"username":uAccount,"password":uPasswd},// 你的formid
-                async : false,
-                error : function(request) {
-                    parent.layer.alert(request.responseText);
-                },
-                success : function(data) {
-                    var msg = data.msg;
-                    if(data.code == 200){
-                        if(data.data.isAdmin != 0 ){
-                            location = "/login/main";
-                        } else {
-                            msg = "您不是管理员用户！";
-                        }
+        if (checkAccountPasswd(uAccount,uPasswd)) {
+            var data = loadLogin(uAccount,uPasswd);
+            data.done(function(result){
+                var msg = result.msg;
+                if(result.code == 200){
+                    if(result.data.isAdmin != 0 ){
+                        location = "/login/main";
+                    } else {
+                        msg = "您不是管理员用户！";
                     }
-                    $(".verify").html(msg);
-			        $(".verify").animate({right:'20px'})
-
                 }
+                $(".verify").html(msg);
+                $(".verify").animate({right:'20px'})
             });
         }
-
     });
 
     $("#uAccount,#uPasswd").focus(function () {
 		$(".verify").animate({right:'-200px'});
         // $(".verify").html(" ");
     });
-	
+
+    //密码框监听回车事件
+    $('#uPasswd').bind('keypress',function(event){
+        if(event.keyCode == "13"){  
+            loginToFront();
+        }
+    });
 })
+
