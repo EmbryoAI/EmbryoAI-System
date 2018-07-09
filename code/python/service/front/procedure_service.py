@@ -22,13 +22,13 @@ def queryProcedureList(request):
         filters = {}#动态参数
         userName = request.args.get('userName')#用户名字
         if userName!=None and userName!="":
-            filters['userName']=userName
-            sqlCondition += " and pa.patient_name=:userName "
+            filters['userName']="%"+userName+"%"
+            sqlCondition += " and pa.patient_name like :userName "
 
         medicalRecordNo = request.args.get('medicalRecordNo')#病历号
         if medicalRecordNo!=None and medicalRecordNo!="":
-            filters['medicalRecordNo']=medicalRecordNo
-            sqlCondition += " and pr.medical_record_no=:medicalRecordNo "
+            filters['medicalRecordNo']="%"+medicalRecordNo+"%"
+            sqlCondition += " and pr.medical_record_no like :medicalRecordNo "
 
         state = request.args.get('state')#状态
         if state!=None and state!="":
