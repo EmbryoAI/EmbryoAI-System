@@ -29,7 +29,14 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 {
                     field  : 'medical_record_no',
                     title  : '病历号',
-                    templet: '#details-id'
+                    templet: function(d){
+
+                    	if(d.medical_record_no!=null && d.medical_record_no!='') {
+                    		return "<a href='javascript:void()' onclick='showDetail(" + d.id + ")' class='layui-table-link view' >"+d.medical_record_no+"</a> ";
+                    	}else {
+                    		return "无";
+                    	}
+        	        }
                 }, {
                     field: 'patient_name',
                     title: '姓名'
@@ -119,6 +126,19 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 
 
 })
+
+function showDetail(id){
+    layer.open({
+
+        title     : "病历详情",
+        type      : 2,
+        area      : ['1020px', '610px'],
+        maxmin    : true,
+
+        shadeClose: false,
+        content   : '/front/procedure/' + id
+      });
+}
 
 // 查询
 function reload(){
