@@ -48,11 +48,11 @@ function queryEmbryo(procedureId){
 			for(var i=0;i<data.data.length;i++){
                 table.append("<tr><td>"
                  + data.data[i].embryo_index + 
-                 "</td><td><a href=\"#\" onclick=\"showIncubator()\" class=\"layui-table-link report\">"
+                 "</td><td><a href=\"#\" onclick=\"showIncubator()\" class=\"layui-table-link\">"
                   + data.data[i].incubator_code +
-                 "</a></td><td><a href=\"#\" onclick=\"showDish()\" class=\"layui-table-link report\">"
+                 "</a></td><td><a href=\"#\" onclick=\"showDish()\" class=\"layui-table-link\">"
                   + data.data[i].dish_code 
-                  + "</a></td><td><a href=\"#\" onclick=\"showEmbryo()\" class=\"layui-table-link report\">"
+                  + "</a></td><td><a href=\"#\" onclick=\"showEmbryo()\" class=\"layui-table-link\">"
                    + data.data[i].cell_code + "</a></td></tr>")
             }
 		}

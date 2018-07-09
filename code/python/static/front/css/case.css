@@ -51,7 +51,8 @@
 	text-align: right;
 	vertical-align: text-top;
 	color: #53575a;
-	margin-top: 12px;
+	padding-top: 12px;
+	line-height: 32px;
 }
 .details-box  span{
 	width: 250px;

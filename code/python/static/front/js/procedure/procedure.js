@@ -1,34 +1,34 @@
 var table = null;
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
-    var form = layui.form;
-    var $ = layui.jquery;
+    var form    = layui.form;
+    var $       = layui.jquery;
     var laydate = layui.laydate;
-    table = layui.table;
-    var layer = layui.layer;
+        table   = layui.table;
+    var layer   = layui.layer;
 
     // 日期插件配置
     laydate.render({
-        elem: '#ecTime',
-        range: '~',
+        elem  : '#ecTime',
+        range : '~',
         format: 'yyyy-MM-dd ',
-        max: 0
+        max   : 0
     });
     laydate.render({
-        elem: '#insemiTime',
-        range: '~',
+        elem  : '#insemiTime',
+        range : '~',
         format: 'yyyy-MM-dd ',
-        max: 0
+        max   : 0
     });
 // 表格配置
     table.render({
         elem: '#case-table',
         page: true,
-		url: '/api/v1/procedure/list',
+        url : '/api/v1/procedure/list',
         cols: [
             [
                 {
-                    field: 'medical_record_no',
-                    title: '病历号',
+                    field  : 'medical_record_no',
+                    title  : '病历号',
                     templet: '#details-id'
                 }, {
                     field: 'patient_name',
@@ -41,9 +41,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     title: '胚胎数'
                 }, {
                     field: 'insemi_time',
-                    title: '授精时间', 
-                    width:180,
-					sort: true
+                    title: '授精时间',
+                    width: 180,
+                    sort : true
                 }, {
                     field: 'sjfs',
                     title: '授精方式',
@@ -51,13 +51,16 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     field: 'zzjd',
                     title: '最终阶段',
                 }, {
-                	 width:180,
-                    field: 'state',
-                    title: '状态',
+                	 width: 180,
+                	 field: 'state',
+                	 title: '状态',
                 }, {
-                    field: 'xst',
-                    title: '视图'
-                    , templet: function(d){
+
+										  width  : 120,
+										  field  : 'xst',
+										  title  : '视图'
+										, templet: function(d){
+
                     	if(d.xst!=null && d.xst!='') {
                     		var arr = d.xst.split(",");
                     		var url = "";
@@ -70,9 +73,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     	}
         	        }
                 }, {
-                    field: 'operation',
-                    title: '操作',
-                    width: 240,
+                    field  : 'operation',
+                    title  : '操作',
+                    width  : 240,
                     templet: '#operation',
                 }
             ]
@@ -81,16 +84,18 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     
     table.on('tool(case-table)', function(obj){
         var event = obj.event;
-        var id = obj.data.id;
+        var id    = obj.data.id;
         alert(id);
         if(event === 'details'){
             layer.open({
-              title:"病历详情",
-              type: 2,
-              area: ['1020px', '560px'],
-              maxmin : true,
+
+              title     : "病历详情",
+              type      : 2,
+              area      : ['1020px', '610px'],
+              maxmin    : true,
+
               shadeClose: false,
-              content: '/front/procedure/' + id
+              content   : '/front/procedure/' + id
             });
         }
  
@@ -105,14 +110,14 @@ function reload(){
       //执行重载
       table.reload('case-table', {
         page: {
-          curr: 1 //重新从第 1 页开始
+          curr: 1  //重新从第 1 页开始
         }
         ,where: {
-        	userName: $("#userName").val(),
+        	userName       : $("#userName").val(),
         	medicalRecordNo: $("#medicalRecordNo").val(),
-        	ecTime: $("#ecTime").val(),
-        	insemiTime: $("#insemiTime").val(),
-        	state: $("#state").val()
+        	ecTime         : $("#ecTime").val(),
+        	insemiTime     : $("#insemiTime").val(),
+        	state          : $("#state").val()
         }
       });
 }
@@ -127,7 +132,7 @@ function reset(){
       //执行重载
       table.reload('case-table', {
         page: {
-          curr: 1 //重新从第 1 页开始
+          curr: 1  //重新从第 1 页开始
         }
       });
 }
@@ -135,13 +140,14 @@ function reset(){
 $(function () {
 	//获取状态字典值
 	$.ajax({
-	    type:"get",
-	    url:"/api/v1/dict/list/state",
-	    datatype: "json", 
-	    success:function(data){
+	    type    : "get",
+	    url     : "/api/v1/dict/list/state",
+	    datatype: "json",
+	    success : function(data){
 	    	if(data.code==0){
 	    		for(var i=0;i<data.data.length;i++) {
 	    			$("#state").append("<option value='"+data.data[i].dictValue+"'>"+data.data[i].dictValue+"</option>");
+						
 	        		}
 	        	}else {
 	        		parent.layer.alert(data.msg);
@@ -154,15 +160,15 @@ $(function () {
 	
     $('#medicalRecordNo').autocompleter({
     	highlightMatches: true,
-    	minLength:3,
-    	source:'/api/v1/procedure/no/list',
-    	cache: false
+    	minLength       : 3,
+    	source          : '/api/v1/procedure/no/list',
+    	cache           : false
     	
     });
     
     $('#userName').autocompleter({
     	highlightMatches: true,
-    	source:'/api/v1/patient/name/list',
-    	cache: false
+    	source          : '/api/v1/patient/name/list',
+    	cache           : false
     });
 });

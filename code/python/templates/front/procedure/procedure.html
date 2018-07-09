@@ -18,8 +18,6 @@
 	<link rel="stylesheet" type="text/css" href="/static/front/autocompleter/jquery.autocompleter.css"/>
 </head>
 <body>
-	<div class="container">
-		
     <div class="main">
 			
 			<!--主体内容都放在这个div里-->
@@ -33,13 +31,18 @@
 				<div class="layui-inline">
 					<label class="layui-form-label">姓名</label>
 					<div class="layui-input-inline">
-						<input type="text" id="userName" name="userName" class="layui-input">
+						<div class="field">
+							<input type="text" id="userName" name="userName" class="layui-input">
+						</div>
 					</div>
+						
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label">病历号</label>
 					<div class="layui-input-inline">
-						<input type="text" id="medicalRecordNo" name="medicalRecordNo" class="layui-input">
+						<div class="field">
+							<input type="text" id="medicalRecordNo" name="medicalRecordNo" class="layui-input">
+						</div>
 					</div>
 				</div>
 				<div class="layui-inline">
@@ -56,10 +59,10 @@
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label">状态</label>
-					<div class="layui-input-block">
-						<select name="state" id="state" >
-							<option value="">请选择</option>
-						</select>
+					<div class="layui-input-inline">
+								<select name="state" id="state" class="m-select">
+										<option value="">请选择</option>
+								</select>
 					</div>
 				</div>
 				<div class="layui-inline btn-box">
@@ -67,37 +70,7 @@
 					<button  onclick="reset();" class="layui-btn layui-btn-primary">重置</button>
 				</div>
 			</div>
-		 
 			<table id="case-table" lay-filter="case-table" class="case-table"></table>
-			<!--弹窗--病历详情-->
-			<div class="details-box">
-				<h1 class="details-title">基本信息</h1>
-				<strong>姓名：</strong><span></span>
-				<strong>身份证：</strong><span></span>
-				<strong>电话：</strong><span></span>
-				<strong>邮箱：</strong><span></span>
-				<strong>出生日期：</strong><span></span>
-				<strong>住址：</strong><span></span>
-				<strong>吸烟史：</strong><span></span>
-				<strong>酗酒史：</strong><span></span>
-				<h1 class="details-title">周期资料</h1>
-				<strong>年龄：</strong><span></span>
-				<strong>身高：</strong><span></span>
-				<strong>体重：</strong><span></span>
-				<strong>取卵日期：</strong><span></span>
-				<strong>授精方式：</strong><span></span>
-				<strong>授精时间：</strong><span></span>
-				<strong>胚胎个数：</strong><span></span>
-				<strong>评分标准：</strong><span></span>
-				<h1 class="details-title">胚胎位置</h1>
-				<table>
-					<tr><th>胚胎编号</th><th>培养箱编号</th><th>培养皿位置</th><th>孔位置</th></tr>
-					<tr><td>1</td><td>1</td><td>1</td><td>1</td></tr>
-				</table>
-				<div class="layui-form-item btn-box">
-					<button class="layui-btn layui-bg-blue">修改</button>
-				</div>
-			</div>
 			<!--弹窗--回访信息-->
 			<div class="return-box">
 				<form class="layui-form" action="">
@@ -126,7 +99,6 @@
 				</form>	
 			</div>
 		</div>
-  </div>
   <script type="text/html" id="details-id">
 	<a class="layui-table-link details" lay-event="details">22</a>
 </script>
@@ -139,10 +111,10 @@
 	
 	<!--公共js引入-->
 	<script src="/static/admin/layui/layui.js"></script>
-	<!--case页js-->
+	<!--单独页js-->
 	<script src="/static/admin/common/jquery.min.js" charset="utf-8"></script>
 	<script src="/static/front/js/procedure/procedure.js"></script>
+	<script src="/static/front/js/selectFilter.js"></script>
 	<script src="/static/front/autocompleter/jquery.autocompleter.js"></script>
-
 </body>
 </html>

@@ -46,7 +46,10 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><i>*</i>身份证号</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="" required lay-verify="card" class="layui-input">
+                        <!--<input type="text" name="" required lay-verify="card" class="layui-input">-->
+						<div class="field">
+							<input type="text" name="nope" id="nope" placeholder="" class="layui-input" required lay-verify="card" />
+						</div>
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -134,12 +137,19 @@
 				<div class="layui-inline">
 					<label class="layui-form-label"><i>*</i>评分标准</label>
 					<div class="layui-input-inline">
-						<select name="city" required lay-verify="required">
-							<option value="">请选择一个城市</option>
-							<option value="010">北京</option>
-							<option value="021">上海</option>
-							<option value="0571">杭州</option>
-						</select>   
+						<div class="filter-box">
+							<div class="filter-text">
+								<i class="icon icon-filter-arrow"></i>
+							</div>
+							<select name="filter">
+								<option value="1">111</option>
+								<option value="2">222</option>
+								<option value="3">333</option>
+								<option value="4">444</option>
+								<option value="5">555</option>
+								<option value="6">666</option>
+							</select>
+						</div> 
 					</div>
 				</div>
             </div>
@@ -153,6 +163,10 @@
 
     <script src="lib/layui/layui.js"></script>
     <script src="js/createCase.js"></script>
+	<script src="js/selectFilter.js"></script>
+	<script src="lib/autocompleter/jquery.min.js"></script>
+	<script src="lib/autocompleter/jquery.autocompleter.js"></script>
+	<script src="lib/autocompleter/main.js"></script>
 </body>
 
 </html>
