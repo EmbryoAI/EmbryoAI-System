@@ -26,3 +26,8 @@ def edit(id):
     user = user_service.findUserById(id)
     return render_template('admin/user/edit.html', user=user)
 
+''' 跳转到修改密码页面 '''
+@user_controller.route('/toModifyPass', methods=['GET'])
+@login_required
+def toModifyPass():
+    return render_template('admin/user/edit_passwd.html')

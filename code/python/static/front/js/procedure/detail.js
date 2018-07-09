@@ -75,9 +75,30 @@ function update(){
         var mobile = $("#new_mobile").val();
         var email = $("#new_email").val();
         if(mobile == "" && email == ""){
-            alert("手机号码跟邮箱不能同时为空!");
+            parent.layer.alert("手机号码跟邮箱不能同时为空!");
             return;
         }
+
+        if(mobile != ""){
+            //手机号正则  
+            var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;  
+            //电话  
+            var phone = $.trim(mobile);  
+            if (!phoneReg.test(phone)) {  
+                parent.layer.alert('请输入有效的手机号码！'); 
+                return false;  
+            }  
+        }
+    
+        if(email != ""){
+            var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$"); 
+            var emailStr = $.trim(email);  
+            if (!reg.test(emailStr)) {  
+                parent.layer.alert('请输入有效的电子邮箱！');  
+                return false;  
+            }  
+        }
+
         $.ajax({
             cache : false,
             type : "POST",
@@ -88,7 +109,7 @@ function update(){
                 parent.layer.alert(request.responseText);
             },
             success : function(data) {
-                alert(data);
+                parent.layer.alert(data);
             }
         });
     }

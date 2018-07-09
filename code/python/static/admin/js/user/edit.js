@@ -32,17 +32,17 @@ function edit() {
 
 	var username = $("#username").val();
 	if(username == ""){
-		alert("用户名不能为空!");
+		parent.layer.alert("用户名不能为空!");
 		return false;
 	}
 	if(username.length < 5){
-		alert("用户名不能少于5个字符!");
+		parent.layer.alert("用户名不能少于5个字符!");
 		return false;
 	}
 	var mobile = $("#mobile").val();
 	var email = $("#email").val();
 	if(mobile == "" && email == ""){
-		alert("手机号码和电子邮箱必须填写一项!");
+		parent.layer.alert("手机号码和电子邮箱必须填写一项!");
 		return false;
 	}
 	if(mobile != ""){
@@ -51,7 +51,7 @@ function edit() {
 		//电话  
 		var phone = $.trim(mobile);  
 		if (!phoneReg.test(phone)) {  
-			alert('请输入有效的手机号码！');  
+			parent.layer.alert('请输入有效的手机号码！');  
 			return false;  
 		}  
 	}
@@ -60,23 +60,23 @@ function edit() {
 		var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$"); 
 		var emailStr = $.trim(email);  
 		if (!reg.test(emailStr)) {  
-			alert('请输入有效的电子邮箱！');  
+			parent.layer.alert('请输入有效的电子邮箱！');  
 			return false;  
 		}  
 	}
 	var truename = $("#truename").val();
 	if(truename == ""){
-		alert("真实姓名不能为空!");
+		parent.layer.alert("真实姓名不能为空!");
 		return false;
 	}
 	var title = $("#title").val();
 	if(title == ""){
-		alert("职称不能为空!");
+		parent.layer.alert("职称不能为空!");
 		return false;
 	}
 	var isAdmin = $('input:radio[name="isAdmin"]:checked').val();
 	if(isAdmin == undefined){
-		alert("是否管理员不能为空!");
+		parent.layer.alert("是否管理员不能为空!");
 		return false;
 	}
 
@@ -90,7 +90,7 @@ function edit() {
 			parent.layer.alert(request.responseText);
 		},
 		success : function(data) {
-			parent.layer.alert("修改用户成功!");
+			parent.layer.alert("修改用户资料成功!");
 			var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 			parent.layer.close(index);
 		}
