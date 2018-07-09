@@ -7,7 +7,7 @@ from app import db
 import service.admin.user_service as user_service
 from entity.User import User
 import time
-from app import login_required 
+from app import login_required,login_user,logout_user
 
 
 user_rest_controller = Blueprint('user_rest_controller', __name__)
@@ -15,16 +15,12 @@ url_prefix = '/api/v1/user'
 
 
 #用户修改密码
-@user_rest_controller.route('/password', methods=['PUT'])
+@user_rest_controller.route('/password', methods=['POST'])
 @login_required
 def password():
-    logger().info('进入user_controller.modifyPassword')
-    username = request.json.get("username")
-    password = request.json.get("password")
-
-    code, msg = user_service.updateUser(username, password)
-
+    code, msg = user_service.updatePassword(request)
     return make_response(jsonify(msg), code)
+
 
 #新增用户
 @user_rest_controller.route('', methods=['POST'])

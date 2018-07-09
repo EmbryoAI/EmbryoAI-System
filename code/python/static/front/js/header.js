@@ -23,9 +23,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
         layer.open({
             title: "密码修改",
             type: 2,
-            area: ['500px', '300px'],
+            area: ['400px', '230px'],
             shadeClose: true,
-            content: 'changePasswd.html',
+            content: '/admin/user/toModifyPass',
         });
     });
 
@@ -67,5 +67,22 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
                 userName: caseIdOrName
             }
         });
+    });
+
+    //搜索框监听回车事件
+    $('#caseIdOrName').bind('keypress',function(event){
+        if(event.keyCode == "13"){  
+            var caseIdOrName = $("#caseIdOrName").val();
+            // $("#userName").val(caseIdOrName);
+            //执行重载
+            table.reload('case-table', {
+                page: {
+                curr: 1  //重新从第 1 页开始
+                }
+                ,where: {
+                    userName: caseIdOrName
+                }
+            });
+        }
     });
 })

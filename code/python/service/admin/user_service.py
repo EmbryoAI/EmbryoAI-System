@@ -10,13 +10,21 @@ import hashlib
 import json
 from app import login_manager,login_user, logout_user, login_required,current_user
 
-def updatePassword(username, password):
+def updatePassword(request):
     try:
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        md5 = hashlib.md5()
+        md5.update(password.encode(encoding='utf-8'))
+        password = md5.hexdigest()
         params = {'username': username, 'password': password}
         user_mapper.updatePassword(params)
+
+        
     except:
         return 400, {'msg': '修改用户密码时发生错误'}
-    return 202, {'msg': '修改成功'}
+    return 200, {'msg': '修改成功'}
 
 def insertUser(request):
 
