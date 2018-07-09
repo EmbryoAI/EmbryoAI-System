@@ -99,7 +99,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
 
     //密码框监听回车事件
     $('#uPasswd').bind('keypress',function(event){
-        event.preventDefault();
         if(event.keyCode == "13"){  
             loginToFront();
         }
