@@ -15,14 +15,14 @@ url_prefix = '/api/v1/user'
 
 
 #用户修改密码
-@user_rest_controller.route('/password', methods=['PUT'])
+@user_rest_controller.route('/password', methods=['POST'])
 @login_required
 def password():
-    logger().info('进入user_controller.modifyPassword')
-    username = request.json.get("username")
-    password = request.json.get("password")
+    username = request.form.get("username")
+    password = request.form.get("password")
+    logger().info('进入user_controller.modifyPassword:', username, password)
 
-    code, msg = user_service.updateUser(username, password)
+    code, msg = user_service.updatePassword(username, password)
 
     return make_response(jsonify(msg), code)
 

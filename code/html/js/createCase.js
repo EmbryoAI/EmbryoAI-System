@@ -1,8 +1,9 @@
-layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function () {
+layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], function () {
     var form = layui.form;
     var $ = layui.jquery;
     var layer = layui.layer;
 	var laydate = layui.laydate;
+	var address = layui.address();
 
 	// 培养箱选择
 	$('.incubator').on('click','span',function(){

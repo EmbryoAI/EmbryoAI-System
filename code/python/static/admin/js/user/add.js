@@ -7,35 +7,35 @@ layui.use('form', function(){
 function add() {
 	var username = $("#username").val();
 	if(username == ""){
-		alert("用户名不能为空!");
+		parent.layer.alert("用户名不能为空!");
 		return false;
 	}
 	if(username.length < 5){
-		alert("用户名不能少于5个字符!");
+		parent.layer.alert("用户名不能少于5个字符!");
 		return false;
 	}
 	var password = $("#password").val();
 	if(password == ""){
-		alert("密码不能为空!");
+		parent.layer.alert("密码不能为空!");
 		return false;
 	}
 	if(password.length < 6){
-		alert("密码不能少于6个字符!");
+		parent.layer.alert("密码不能少于6个字符!");
 		return false;
 	}
 	var passwordagain = $("#passwordagain").val();
 	if(passwordagain == ""){
-		alert("请确认密码!");
+		parent.layer.alert("请确认密码!");
 		return false;
 	}
 	if(password != passwordagain){
-		alert("两次输入的密码不一致,请重新输入!");
+		parent.layer.alert("两次输入的密码不一致,请重新输入!");
 		return false;
 	}
 	var mobile = $("#mobile").val();
 	var email = $("#email").val();
 	if(mobile == "" && email == ""){
-		alert("手机号码和电子邮箱必须填写一项!");
+		parent.layer.alert("手机号码和电子邮箱必须填写一项!");
 		return false;
 	}
 	if(mobile != ""){
@@ -44,7 +44,7 @@ function add() {
 		//电话  
 		var phone = $.trim(mobile);  
 		if (!phoneReg.test(phone)) {  
-			alert('请输入有效的手机号码！');  
+			parent.layer.alert('请输入有效的手机号码！');  
 			return false;  
 		}  
 	}
@@ -53,24 +53,24 @@ function add() {
 		var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$"); 
 		var emailStr = $.trim(email);  
 		if (!reg.test(emailStr)) {  
-			alert('请输入有效的电子邮箱！');  
+			parent.layer.alert('请输入有效的电子邮箱！');  
 			return false;  
 		}  
 	}
 	
 	var truename = $("#truename").val();
 	if(truename == ""){
-		alert("真实姓名不能为空!");
+		parent.layer.alert("真实姓名不能为空!");
 		return false;
 	}
 	var title = $("#title").val();
 	if(title == ""){
-		alert("职称不能为空!");
+		parent.layer.alert("职称不能为空!");
 		return false;
 	}
 	var isAdmin = $('input:radio[name="isAdmin"]:checked').val();
 	if(isAdmin == undefined){
-		alert("是否管理员不能为空!");
+		parent.layer.alert("是否管理员不能为空!");
 		return false;
 	}
 

@@ -23,9 +23,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
         layer.open({
             title: "密码修改",
             type: 2,
-            area: ['500px', '300px'],
+            area: ['400px', '230px'],
             shadeClose: true,
-            content: 'changePasswd.html',
+            content: '/admin/user/toModifyPass',
         });
     });
 
