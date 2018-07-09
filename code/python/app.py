@@ -22,6 +22,7 @@ def read_yml_config( filename=app_root + 'configuration.yml'):
 
 def init_config(conf):
     '''初始化app的基本配置'''
+    from datetime import timedelta
     # 数据库连接字符串
     app.config['SQLALCHEMY_DATABASE_URI'] = getdefault(conf, 'SQLALCHEMY_DATABASE_URI', 
         'mysql+pymysql://root:123456@localhost/embryoai_system?charset=utf8')
@@ -30,6 +31,8 @@ def init_config(conf):
     app.config['SQLALCHEMY_POOL_TIMEOUT'] = getdefault(conf, 'SQLALCHEMY_POOL_TIMEOUT', 3)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SCHEDULER_API_ENABLED'] = getdefault(conf, 'SCHEDULER_API_ENABLED', True)
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(
+        seconds = getdefault(conf, 'SEND_FILE_MAX_AGE_DEFAULT', 60))
     app.config['JOBS'] = getdefault(conf, 'JOBS')
     # 返回的JSON数据保持原编码方式
     app.config['JSON_AS_ASCII'] = False
