@@ -32,7 +32,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     templet: function(d){
 
                     	if(d.medical_record_no!=null && d.medical_record_no!='') {
-                    		return "<a href='javascript:void()' onclick='showDetail(" + d.id + ")' class='layui-table-link view' >"+d.medical_record_no+"</a> ";
+                    		return "<a href='javascript:void()' onclick='showDetail(\"" + d.id + "\")' class='layui-table-link view' >"+d.medical_record_no+"</a> ";
                     	}else {
                     		return "无";
                     	}
