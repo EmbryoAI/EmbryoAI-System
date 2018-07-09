@@ -8,6 +8,7 @@ procedure_controller = Blueprint('procedure_controller', __name__)
 url_prefix = '/front/procedure'
 
 @procedure_controller.route('/', methods=['GET'])
+@login_required
 def main():
     logger().info('进入procedure_controller.procedure病历页面')
     return render_template('front/procedure/procedure.html',htmlType="incubator")

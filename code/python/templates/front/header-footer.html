@@ -16,6 +16,10 @@
 	<link rel="stylesheet" type="text/css" href="/static/front/css/main.css"/>
 	<link rel="stylesheet" type="text/css" href="/static/front/css/case.css"/>
 	<link rel="stylesheet" type="text/css" href="/static/front/autocompleter/jquery.autocompleter.css"/>
+		<!--公共js引入-->
+	<script src="/static/admin/layui/layui.js"></script>
+	<script src="/static/front/js/header.js"></script>
+	<script src="/static/admin/common/jquery.min.js" charset="utf-8"></script>
 </head>
 <body>
 	<div class="container">
@@ -85,25 +89,9 @@
 			</div>
 		</span>
 	</div>
-
-	<script type="text/html" id="details-id">
-		<a class="layui-table-link details" lay-event="details">${{medical_record_no}}</a>
-	</script>
  
-  	<script type="text/html" id="operation">
-		<a href=""  target="_blank" class="layui-table-link report">报告</a>	
-		<a href="javascript:;" class="layui-table-link return">回访</a>
-		<a href="javascript:;" class="layui-table-link del">删除</a>
-  	</script>	
-	
-	<!--公共js引入-->
-	<script src="/static/admin/layui/layui.js"></script>
-	<script src="/static/front/js/header.js"></script>
-	<!--单独页js-->
-	<script src="/static/admin/common/jquery.min.js" charset="utf-8"></script>
-	<script src="/static/front/js/procedure/procedure.js"></script>
-	<script src="/static/front/js/selectFilter.js"></script>
-	<script src="/static/front/autocompleter/jquery.autocompleter.js"></script>
+
+
 	
 
 </body>

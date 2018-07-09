@@ -96,3 +96,16 @@ def queryMedicalRecordNoList(sqlCondition,filters):
         result = db.session.execute(sql,filters) 
         sql_result = result.fetchall()
         return sql_result
+
+#删除病历异常
+def deleteProcedure(params):
+    try :
+        sql = text('update t_procedure set del_flag=:delFlag '
+            'where id=:id')
+        print(sql)
+        db.session.execute(sql, params)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('删除病历时异常', e.message, e)
