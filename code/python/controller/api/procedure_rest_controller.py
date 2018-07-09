@@ -14,6 +14,7 @@ url_prefix = '/api/v1/procedure'
 
 #查询所有培养箱
 @procedure_rest_controller.route('/list', methods=['GET'])
+@login_required
 def queryProcedureList():
     logger().info('进入procedure_controller.procedure查询病历列表')
     return procedure_service.queryProcedureList(request)
@@ -33,6 +34,17 @@ def updateProcedure():
 
 #查询根据输入值补全病历号
 @procedure_rest_controller.route('/no/list', methods=['GET'])
+@login_required
 def queryMedicalRecordNoList():
     logger().info('进入procedure_controller.queryMedicalRecordNoList')
     return procedure_service.queryMedicalRecordNoList(request)
+
+#根据id删除病历
+@procedure_rest_controller.route('/delete/<string:id>', methods=['GET'])
+@login_required
+def deleteProcedure(id):
+    procedure = procedure_service.getProcedureDetail(id)
+    if not procedure:
+        abort(404)
+    code, msg = procedure_service.deleteProcedure(id)
+    return make_response(jsonify(msg), code)
