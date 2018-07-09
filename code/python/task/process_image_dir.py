@@ -1,11 +1,9 @@
 # -*- coding: utf8 -*-
 
-from ini_parser import ConfigParser
-# from app import conf
 from numba import jit
 import numpy as np
-from ImageSharpnessTool import ImageSharpnessTool
-from TimeSeries import TimeSeries
+from task.ImageSharpnessTool import ImageSharpnessTool
+from task.TimeSeries import TimeSeries
 import os, json, cv2
 
 def calculate_sharpness(imfile, algorithm='lap'):
@@ -23,12 +21,17 @@ def calculate_sharpness(imfile, algorithm='lap'):
 def process_well(timeserie_path, well_id, start_index, zcount, algorithm='lap'):
     img_names = np.array([timeserie_path + os.path.sep + '%05d.jpg' %i 
             for i in range(start_index, start_index+zcount)])
-    img_qtys = np.array(list(map(lambda x: calculate_sharpness(x, algorithm), img_names)))
+    try:
+        img_qtys = np.array(list(map(lambda x: calculate_sharpness(x, algorithm), img_names)))
+    except:
+        return None, None
     best_qty = img_qtys.argmax()
+    # print(f'孔 #'+well_id+' 中胚胎图像最清晰为 '+str(start_index+best_qty)+'.jpg')
     return well_id, img_names[best_qty]
 
 @jit
 def process_dish(dish_path, dish_id, well_info_list, reindex=False):
+    print('\t正在处理培养皿 #'+dish_id+', 数据目录: '+dish_path)
     json_info_file = dish_path + os.path.sep + 'dish_process_info_smd.json'
     dish_json = []
     timeserie_index = 0
@@ -40,27 +43,37 @@ def process_dish(dish_path, dish_id, well_info_list, reindex=False):
     ts = TimeSeries()
     if timeserie_index:
         ts.move_to(timeserie_index)
+    end_frame = max(subdir_list(dish_path))
     while True:
         frame = ts.next()
         frame_path = dish_path + os.path.sep + frame
-        if not os.path.exists(frame_path):
+        if frame > end_frame:
             break
+        if not os.path.exists(frame_path):
+            continue
+        print("\t\t处理采集时间："+frame)
         start_index = 1
         well_infos = {}
         for well_id, zcount in well_info_list:
             wid, im_path = process_well(frame_path, well_id, start_index, zcount, 'smd')
-            well_infos[str(wid)] = im_path
+            if wid:
+                well_infos[str(wid)] = im_path
             start_index += zcount
         dish_json.append(well_infos)
     fn = open(json_info_file, 'w')
     fn.write(json.dumps(dish_json))
     fn.close()
-    mk_video(dish_path, '5', dish_json)
+    print('\t处理完成...')
+
+def subdir_list(path):
+    dirs = os.listdir(path)
+    dirs = list(filter(lambda x: os.path.isdir(path+os.path.sep+x), dirs))
+    return dirs
 
 def mk_video(dish_path, well_id, dish_json, size=(1280, 960), codec='avi'):
     from TimeSeries import serie_to_time
     fourcc = cv2.VideoWriter_fourcc(*'DIVX') if codec=='avi' else cv2.VideoWriter_fourcc(*'MJPG')
-    video = cv2.VideoWriter(dish_path + os.path.sep + well_id + '_smd.mp4', fourcc, 5, size)
+    video = cv2.VideoWriter(dish_path + os.path.sep + well_id + '_smd.avi', fourcc, 5, size)
     ts = TimeSeries()
     for frame in dish_json:
         f = ts.next()
@@ -75,4 +88,3 @@ def mk_video(dish_path, well_id, dish_json, size=(1280, 960), codec='avi'):
         video.write(img)
     video.release()
 
-process_dish('/Users/wangying/git/repos/EmbryoAI-System/models/demo0/20170624151700/DISH1/', 1, [(5, 11)], reindex=False)
