@@ -104,7 +104,7 @@ layui
 											width : 240,
 											templet : function(d) {
 												var a="<a style='cursor: pointer;' class='layui-table-link report'>报告</a>";
-												var b="<a style='cursor: pointer;' class='layui-table-link return'>回访</a>";
+												var b="<a style='cursor: pointer;' onclick='toReturnVisit(\""+d.id+"\")' class='layui-table-link return'>回访</a>";
 												var c="<a style='cursor: pointer;' onclick='deleteProcedure(\""+d.id+"\");' class='layui-table-link del'>删除</a>";
 												return a+b+c;
 											}
@@ -129,6 +129,19 @@ layui
 
 					});
 				})
+
+function toReturnVisit(id){
+	layer.open({
+
+		title : "病历回访",
+		type : 2,
+		area : [ '300px', '300px' ],
+		maxmin : true,
+
+		shadeClose : false,
+		content : '/front/procedure/return_visit/' + id
+	});
+}
 
 function showDetail(id) {
 	layer.open({

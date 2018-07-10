@@ -18,3 +18,8 @@ def main():
 def detail(id):
     logger().info('进入procedure_controller.procedure病历详情页面')
     return render_template('front/procedure/detail.html', id=id)
+
+@procedure_controller.route('/return_visit/<string:id>', methods=['GET'])
+@login_required
+def return_visit(id):
+    return render_template('front/procedure/return_visit.html', id=id)

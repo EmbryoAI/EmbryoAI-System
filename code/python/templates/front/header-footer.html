@@ -47,10 +47,6 @@
 				</li>
 				<li class="layui-nav-item"><a href="/front/statistics">统计</a></li>
 			</ul>
-			<div class="header-search left">
-				<input type="search" name="caseIdOrName" id="caseIdOrName" value="" placeholder="病历搜索"/>
-				<span class="header-search-btn" id="caseSearch"></span>
-			</div>
 			<ul class="layui-nav layui-bg-blue  right">
 				<li class="layui-nav-item">
 					{% if current_user.is_authenticated %}
@@ -63,6 +59,10 @@
 					</dl>
 				</li>
 			</ul>
+			<div class="header-search right">
+				<input type="search" name="caseIdOrName" id="caseIdOrName" value="" placeholder="病历搜索"/>
+				<span class="header-search-btn" id="caseSearch"></span>
+			</div>
 		</div>
 	{% block mianDiv %}
 		

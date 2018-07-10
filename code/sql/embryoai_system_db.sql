@@ -3646,8 +3646,8 @@ CREATE TABLE `t_embryo` (
 DROP TABLE IF EXISTS `t_feedback`;
 CREATE TABLE `t_feedback` (
   `procedure_id` varchar(32) NOT NULL COMMENT '周期ID -> t_procedure.id',
-  `biochem_pregnancy` bit(1) DEFAULT NULL COMMENT '生化妊娠：0：否；1：是',
-  `clinical_pregnancy` bit(1) DEFAULT NULL COMMENT '临床妊娠：0：否；1：是',
+  `biochem_pregnancy` int(1) DEFAULT NULL COMMENT '生化妊娠：0：否；1：是',
+  `clinical_pregnancy` int(1) DEFAULT NULL COMMENT '临床妊娠：0：否；1：是',
   `fetus_count` int(11) DEFAULT NULL COMMENT '临床妊娠胎数',
   `user_id` varchar(32) DEFAULT NULL COMMENT '回访用户ID -> sys_user.id',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
