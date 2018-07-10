@@ -139,7 +139,7 @@ function toReturnVisit(id){
 		maxmin : true,
 
 		shadeClose : false,
-		content : '/front/procedure/return_visit/' + id
+		content : '/front/feedback/return_visit/' + id
 	});
 }
 

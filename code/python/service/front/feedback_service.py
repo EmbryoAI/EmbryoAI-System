@@ -2,7 +2,7 @@
 from entity.RestResult import RestResult
 from entity.Feedback import Feedback
 import dao.front.feedback_mapper as feedback_mapper
-from flask import request
+from flask import request, jsonify
 from common import uuid
 import time
 
@@ -24,3 +24,6 @@ def save_feedback(args):
     except:
         return 500, '保存病历回访数据错误!'
     return 200, '保存病历回访数据成功!'
+
+def getFeedbackInfo(id):
+    return feedback_mapper.getFeedbackInfo(id)

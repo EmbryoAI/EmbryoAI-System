@@ -24,3 +24,8 @@ def save():
     args = parser.parse_args()
     code, msg = feedback_service.save_feedback(args)
     return make_response(jsonify(msg), code)
+
+#查询病历回访数据
+@feedback_rest_controller.route('/<string:id>', methods=['GET'])
+def geiFeedbackInfo(id):
+    return feedback_service.getFeedbackInfo(id)

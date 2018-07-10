@@ -1,7 +1,25 @@
 var form;
 layui.use('form', function(){
 	form = layui.form;
+	var biochem_pregnancy = $('#biochemPregnancy').val();
+	if(biochem_pregnancy != '' && biochem_pregnancy != 'None' && biochem_pregnancy != 0){
+		$("#biochem_pregnancy").attr("checked", "checked");
+		form.render("checkbox");
+		$('#second_div').show();
+	}
+	var clinical_pregnancy = $('#clinicalPregnancy').val();
+	if(clinical_pregnancy != '' && clinical_pregnancy != 'None' && clinical_pregnancy != 0){
+		$("#clinical_pregnancy").attr("checked", "checked");
+		form.render("checkbox");
+		$('#third_div').show();
+	}
+	var fetus_count = $('#fetusCount').val();
+	if(fetus_count != '' && fetus_count != 'None'){
+		$('#fetus_count_' + fetus_count).attr("checked", "checked");
+		form.render('radio');
+	}
 });
+
 
 function showNext(index){
 	if(index == 1){
