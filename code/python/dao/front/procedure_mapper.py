@@ -10,7 +10,7 @@ def queryProcedureList(page,limit,sqlCondition,filters):
     sql = text("""
         SELECT pr.id as id,medical_record_no AS medical_record_no,pa.patient_name AS patient_name,
         pr.patient_age AS patient_age,COUNT(DISTINCT e.id) AS pts,
-        CONCAT(pr.insemi_time) AS insemi_time,d.dict_value AS sjfs, CONCAT('D',DATEDIFF(NOW(),pr.insemi_time)) AS zzjd,d2.dict_value AS state,
+        CONCAT(pr.insemi_time) AS insemi_time,d.dict_value AS sjfs,CONCAT('D',DATEDIFF(IF(pr.cap_end_time,pr.cap_end_time,NOW()),pr.insemi_time)) AS zzjd ,d2.dict_value AS state,
         GROUP_CONCAT(DISTINCT po.dish_id) xst 
         FROM t_procedure pr 
         LEFT JOIN  t_patient pa 
