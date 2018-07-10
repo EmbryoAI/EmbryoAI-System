@@ -2,6 +2,7 @@
 import numpy as np
 import cv2
 
+
 def cross_domain(func):
     '''实现跨域访问装饰器，在每个需要实现跨域访问的controller方法前加标签 @cross_domain 即可
        例如：
@@ -38,3 +39,21 @@ def uuid():
     import uuid
     return str(uuid.uuid1()).replace('-', '')
 
+def parse_date(date_str):
+    import time
+    import datetime
+
+    contrast_date = time.strptime(date_str,"%Y-%m-%d %H:%M:%S")
+    current_date = datetime.datetime.now()
+    days = int(current_date.day) - int(contrast_date[2])
+
+    if days == 0:
+        return days, '今天'
+    if days == 1:
+        return days, '昨天'
+    if days == 2:
+        return days, '前天'
+    if days >= 3 and days <=7:
+        return days, str(days) + '天前'
+    if days > 7:
+        return days, date_str

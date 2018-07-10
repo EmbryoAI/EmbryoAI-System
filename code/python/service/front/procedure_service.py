@@ -5,8 +5,9 @@ from entity.RestResult import RestResult
 import dao.front.procedure_mapper as procedure_mapper
 import dao.front.patient_mapper as patient_mapper
 from flask import request, jsonify
-from common import uuid
+from common import parse_date
 import re
+import time
 
 def queryProcedureList(request):
     try:
@@ -65,9 +66,24 @@ def queryProcedureList(request):
 def getProcedureDetail(id):
     try: 
         result = procedure_mapper.getProcedureById(id)
+
+        days, ec_time = parse_date(str(result.ec_time))
+        if days > 7:
+            ec_time = time.strftime("%Y-%m-%d %H:%M", 
+            time.strptime(ec_time, "%Y-%m-%d %H:%M:%S"))  
+
+        days, insemi_time = parse_date(str(result.insemi_time))
+        if days > 7:
+            insemi_time = time.strftime("%Y-%m-%d %H:%M", 
+            time.strptime(insemi_time, "%Y-%m-%d %H:%M:%S")) 
+
+        result = dict(result)
+        result['ec_time'] = ec_time
+        result['insemi_time'] = insemi_time
+
         restResult = RestResult(0, "404", 0, None)
         if result is not None:
-            restResult = RestResult(0, "OK", 1, dict(result))
+            restResult = RestResult(0, "OK", 1, result)
         return jsonify(restResult.__dict__)
     except:
         return 400, '查询病历详情时发生错误!'
