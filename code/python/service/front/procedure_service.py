@@ -67,15 +67,8 @@ def getProcedureDetail(id):
     try: 
         result = procedure_mapper.getProcedureById(id)
 
-        days, ec_time = parse_date(str(result.ec_time))
-        if days > 7:
-            ec_time = time.strftime("%Y-%m-%d %H:%M", 
-            time.strptime(ec_time, "%Y-%m-%d %H:%M:%S"))  
-
-        days, insemi_time = parse_date(str(result.insemi_time))
-        if days > 7:
-            insemi_time = time.strftime("%Y-%m-%d %H:%M", 
-            time.strptime(insemi_time, "%Y-%m-%d %H:%M:%S")) 
+        ec_time = parse_date(str(result.ec_time), 1)
+        insemi_time = parse_date(str(result.insemi_time), 1)
 
         result = dict(result)
         result['ec_time'] = ec_time

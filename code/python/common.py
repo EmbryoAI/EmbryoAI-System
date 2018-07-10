@@ -39,7 +39,8 @@ def uuid():
     import uuid
     return str(uuid.uuid1()).replace('-', '')
 
-def parse_date(date_str):
+#时间格式转换方法 date_str:需要转换的时间字符串 type:精确位置 0:精确到秒  1:精确到分
+def parse_date(date_str, type):
     import time
     import datetime
 
@@ -48,12 +49,14 @@ def parse_date(date_str):
     days = int(current_date.day) - int(contrast_date[2])
 
     if days == 0:
-        return days, '今天'
+        return '今天'
     if days == 1:
-        return days, '昨天'
+        return '昨天'
     if days == 2:
-        return days, '前天'
+        return '前天'
     if days >= 3 and days <=7:
-        return days, str(days) + '天前'
-    if days > 7:
-        return days, date_str
+        return str(days) + '天前'
+    if days > 7 and type == 0:
+        return date_str
+    if days > 7 and type == 1:
+        return time.strftime("%Y-%m-%d %H:%M", time.strptime(date_str, "%Y-%m-%d %H:%M:%S"))  
