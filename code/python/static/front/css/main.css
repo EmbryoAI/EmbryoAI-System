@@ -171,16 +171,16 @@ body {
 .header-search {
     padding-top: 8px;
     position: relative;
-    margin-left: 80px;
+    margin-right: 100px;
 }
 .header-search input {
     border: none;
     border-radius: 28px;
-    width: 180px;
+    width: 200px;
     height: 28px;
     line-height: 28px;
     padding-left: 12px;
-    padding-right: 24px;
+    padding-right: 32px;
 }
 .header-search .header-search-btn {
     display: block;
@@ -442,7 +442,7 @@ body {
 	background: #CBCBCB;
 }
 .m-select{
-    width: 100%;
+	width: 100%;
     height: 32px;
     line-height: 32px;
     border: 1px solid #e6e6e6;
