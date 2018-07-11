@@ -168,12 +168,10 @@ layui
 
 function toReturnVisit(id){
 	layer.open({
-
 		title : "病历回访",
 		type : 2,
 		area : [ '300px', '300px' ],
 		maxmin : true,
-
 		shadeClose : false,
 		content : '/front/feedback/return_visit/' + id
 	});
@@ -181,12 +179,10 @@ function toReturnVisit(id){
 
 function showDetail(id) {
 	layer.open({
-
 		title : "病历详情",
 		type : 2,
 		area : [ '1020px', '610px' ],
 		maxmin : true,
-
 		shadeClose : false,
 		content : '/front/procedure/' + id
 	});
@@ -242,5 +238,3 @@ function reset() {
 	$("#state").val("");
 	reload();
 }
-
- 

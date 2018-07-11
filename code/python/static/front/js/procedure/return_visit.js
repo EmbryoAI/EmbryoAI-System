@@ -1,7 +1,25 @@
 var form;
 layui.use('form', function(){
 	form = layui.form;
+	var biochem_pregnancy = $('#biochemPregnancy').val();
+	if(biochem_pregnancy != '' && biochem_pregnancy != 'None' && biochem_pregnancy != 0){
+		$("#biochem_pregnancy").attr("checked", "checked");
+		form.render("checkbox");
+		$('#second_div').show();
+	}
+	var clinical_pregnancy = $('#clinicalPregnancy').val();
+	if(clinical_pregnancy != '' && clinical_pregnancy != 'None' && clinical_pregnancy != 0){
+		$("#clinical_pregnancy").attr("checked", "checked");
+		form.render("checkbox");
+		$('#third_div').show();
+	}
+	var fetus_count = $('#fetusCount').val();
+	if(fetus_count != '' && fetus_count != 'None'){
+		$('#fetus_count_' + fetus_count).attr("checked", "checked");
+		form.render('radio');
+	}
 });
+
 
 function showNext(index){
 	if(index == 1){
@@ -13,7 +31,12 @@ function showNext(index){
 		if(node.is(':hidden')){
 			node.show();
 		}else{
+			$('#clinical_pregnancy').removeAttr('checked');
+			form.render('checkbox');
 			node.hide();
+			$('input:radio[name="fetus_count"]').removeAttr('checked');
+			form.render('radio');
+			$('#third_div').hide();
 		}
 	}
 	if(index == 2){
@@ -61,9 +84,14 @@ function save() {
 			cache : false,
 			type : "POST",
 			url : "/api/v1/feedback/",
-			data: {"biochem_pregnancy":biochem_pregnancy,"clinical_pregnancy":
-				clinical_pregnancy,"fetus_count":fetus_count,"user_id":user_id,"procedureId":procedureId},
-			async : false,
+			data: JSON.stringify({                  
+                biochem_pregnancy: biochem_pregnancy,
+				clinical_pregnancy: clinical_pregnancy,
+				fetus_count: fetus_count,
+				user_id: user_id,
+				procedure_id: procedureId
+            }),
+            contentType: "application/json; charset=utf-8",
 			error : function(request) {
 				parent.layer.alert(request.responseText);
 			},
