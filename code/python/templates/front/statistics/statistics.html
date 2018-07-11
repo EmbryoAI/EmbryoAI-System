@@ -1,7 +1,7 @@
 {% extends 'front/header-footer.html' %} 
 {% block mianDiv %}
 
-<link rel="stylesheet" type="text/css" href="/static/front/css/statistics.css" />
+<link rel="stylesheet" type="text/css" href="/static/front/css/statistics.css" /> 
 <!-- 日期插件 -->
 <link rel="stylesheet" type="text/css" href="/static/front/datepicker/jquery-ui-1.9.2.custom.css" />
 <script src="/static/front/datepicker/jquery-1.8.3.js"></script>
@@ -23,7 +23,7 @@
 					<label class="layui-form-label">日期范围</label>
 				</div>
 				<div class="layui-inline" style="width: 220px;">
-					<input type="text" class="ui-datepicker-time layui-input" readonly value="" />
+					<input type="text" class="ui-datepicker-time layui-input" id="embryoOutcomeDate" readonly value="" />
 					<div class="ui-datepicker-css">
 						<div class="ui-datepicker-quick">
 							<p class="quick-title">快捷日期
@@ -44,13 +44,17 @@
 				</div>
 				<div class="layui-inline">
 					<div class="layui-input-inline">
-						<button class="layui-btn layui-bg-blue" lay-submit lay-filter="">查询</button>
+						<button class="layui-btn layui-bg-blue" id="embryoOutcomeButton" lay-submit lay-filter="">查询</button>
 					</div>
 				</div>
 			</div>
 			<div class="echart" id="endingBox">
 				<!--echart的div-->
 			</div>
+			<script type="text/javascript">
+				var endingBox1 = echarts.init(document.getElementById('endingBox'));
+				endingBox1.showLoading();
+			</script>
 
 			<div class="state2">
 				<div class="milestone">
@@ -58,7 +62,12 @@
 					<div class="echart" id="milestone">
 						<!--echart的div-->
 					</div>
+					<script type="text/javascript">
+						var myChart = echarts.init(document.getElementById('milestone'));
+						myChart.showLoading();
+					</script>
 				</div>
+
 				<div class="gestation">
 					<h1 class="details-title">妊娠率统计</h1>
 					<div class="layui-form-item">
@@ -66,7 +75,7 @@
 							<label class="layui-form-label">日期范围</label>
 						</div>
 						<div class="layui-inline" style="width: 220px;">
-							<input type="text" class="ui-datepicker-time layui-input" readonly value="" />
+							<input type="text" class="ui-datepicker-time layui-input" id="pregnancyRateDate" readonly value="" />
 							<div class="ui-datepicker-css">
 								<div class="ui-datepicker-quick">
 									<p class="quick-title">快捷日期
@@ -87,15 +96,25 @@
 						</div>
 						<div class="layui-inline">
 							<div class="layui-input-inline">
-								<button class="layui-btn layui-bg-blue" lay-submit lay-filter="">查询</button>
+								<button class="layui-btn layui-bg-blue" id="pregnancyRateButton" lay-submit lay-filter="">查询</button>
 							</div>
 						</div>
 					</div>
-					<div class="echart" id="pregnancyRate">
-						<!--echart的div-->
+					<div class="echart" >
+					 	<table>
+					 		<tr>
+					 			<td>生化妊娠率：</td><td id="shrsl">0.0%</td>
+					 		</tr>
+					 		<tr>
+					 			<td>临床妊娠率：</td><td id="lcrsl">0.0%</td>
+					 		</tr>
+					 		<tr>
+					 			<td>临床着床率：</td><td id="lczcl">0.0%</td>
+					 		</tr>
+					 	</table>
 					</div>
 				</div>
 			</div>
 		</div>
- <script src="/static/front/js/statistics/statistics.js"></script>
+<script src="/static/front/js/statistics/statistics.js"></script>
 {% endblock %}

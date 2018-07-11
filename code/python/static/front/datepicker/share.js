@@ -95,7 +95,7 @@ $(function(){
         timeStr = nowDate.getFullYear() + '-'+ month + '-' + day;
         nowDate.setDate(nowDate.getDate()+parseInt(0));
         
-        var month = nowDate.getMonth()+1;
+        var month = nowDate.getMonth();
         var day = nowDate.getDate();
         month=month<10?('0'+month):month;
         day  =day<10?('0'+day):day;

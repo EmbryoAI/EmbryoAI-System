@@ -128,6 +128,42 @@ layui
 						}
 
 					});
+					
+					// 获取状态字典值
+					$.ajax({
+						type : "get",
+						url : "/api/v1/dict/list/state",
+						datatype : "json",
+						success : function(data) {
+							if (data.code == 0) {
+								for (var i = 0; i < data.data.length; i++) {
+									$("#state").append(
+											"<option value='" + data.data[i].dictValue + "'>"
+													+ data.data[i].dictValue + "</option>");
+
+								}
+							} else {
+								layer.alert(data.msg);
+							}
+						},
+						error : function(request) {
+							layer.alert(request.responseText);
+						}
+					});
+
+					$('#medicalRecordNo').autocompleter({
+						highlightMatches : true,
+						minLength : 3,
+						source : '/api/v1/procedure/no/list',
+						cache : false
+
+					});
+
+					$('#userName').autocompleter({
+						highlightMatches : true,
+						source : '/api/v1/patient/name/list',
+						cache : false
+					});
 				})
 
 function toReturnVisit(id){
@@ -139,7 +175,7 @@ function toReturnVisit(id){
 		maxmin : true,
 
 		shadeClose : false,
-		content : '/front/procedure/return_visit/' + id
+		content : '/front/feedback/return_visit/' + id
 	});
 }
 
@@ -168,10 +204,10 @@ function deleteProcedure(id) {
     		url : "/api/v1/procedure/delete/" + id,
     		async : false,
     		error : function(request) {
-    			parent.layer.alert(request.responseText);
+    			layer.alert(request.responseText);
     		},
     		success : function(data) {
-    			parent.layer.alert("删除病例成功!");
+    			layer.alert("删除病例成功!");
     			reload();//刷新当前页面.
     		}
     	});
@@ -207,40 +243,4 @@ function reset() {
 	reload();
 }
 
-$(function() {
-	// 获取状态字典值
-	$.ajax({
-		type : "get",
-		url : "/api/v1/dict/list/state",
-		datatype : "json",
-		success : function(data) {
-			if (data.code == 0) {
-				for (var i = 0; i < data.data.length; i++) {
-					$("#state").append(
-							"<option value='" + data.data[i].dictValue + "'>"
-									+ data.data[i].dictValue + "</option>");
-
-				}
-			} else {
-				parent.layer.alert(data.msg);
-			}
-		},
-		error : function(request) {
-			parent.layer.alert(request.responseText);
-		}
-	});
-
-	$('#medicalRecordNo').autocompleter({
-		highlightMatches : true,
-		minLength : 3,
-		source : '/api/v1/procedure/no/list',
-		cache : false
-
-	});
-
-	$('#userName').autocompleter({
-		highlightMatches : true,
-		source : '/api/v1/patient/name/list',
-		cache : false
-	});
-});
+ 

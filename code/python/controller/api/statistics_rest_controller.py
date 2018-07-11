@@ -25,3 +25,10 @@ def embryoOutcome():
 def milestoneEmbryos():
     logger().info('进入statistics_controller.milestoneEmbryos周期中里程碑点胚胎数统计')
     return statistics_service.milestoneEmbryos()
+
+#时间范围胚胎结局统计
+@statistics_rest_controller.route('/pregnancy/rate', methods=['GET'])
+@login_required
+def pregnancyRate():
+    logger().info('进入statistics_controller.pregnancyRate妊娠率统计')
+    return statistics_service.pregnancyRate(request)
