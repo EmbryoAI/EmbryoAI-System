@@ -62,7 +62,6 @@ layui.use(['layer'],
 											roseType : 'radius',
 											name : '胚胎数',
 											type : 'pie',
-											roseType : 'area',
 											data : data.data
 										}]
 									};
