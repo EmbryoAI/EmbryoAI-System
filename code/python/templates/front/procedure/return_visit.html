@@ -32,7 +32,10 @@
     {% if current_user.is_authenticated %}
         <input type="hidden" name="userId" id="userId" value="{{current_user.id}}">
     {% endif %}
-    <input type="hidden" id="procedureId" value="{{id}}"/>
+    <input type="hidden" id="procedureId" value="{{feedback.procedureId}}"/>
+    <input type="hidden" id="biochemPregnancy" value="{{feedback.biochemPregnancy}}"/>
+    <input type="hidden" id="clinicalPregnancy" value="{{feedback.clinicalPregnancy}}"/>
+    <input type="hidden" id="fetusCount" value="{{feedback.fetusCount}}"/>
     <form class="layui-form" action="">
         <div class="layui-form-item">
             <label class="layui-form-label" style="width: 100px;">生化妊娠：</label>
