@@ -1,5 +1,41 @@
-//function iniEchars(divId,option) {
+
+
+//function iniEchars(divId,url,param) {
 //	var myChart = echarts.init(document.getElementById('endingBox'));
+//	$.ajax({
+//		cache : false,
+//		type : "get",
+//		url : "/api/v1/statistics/embryo/outcome",
+//		async : false,
+//		error : function(request) {
+//			parent.layer.alert(request.responseText);
+//		},
+//		success : function(data) {
+//			var nameData = new Array();;
+//			var countData = new Array();;
+//			if(data.code=="0") {
+//				for (var i = 0; i < data.data.length; i++) {
+//					var obj = data.data[i];
+//					nameData.push(obj.name);
+//					countData.push(obj.count);
+//				}
+//			}
+//			// 指定图表的配置项和数据
+//			var option = {
+//				xAxis : {
+//					data : nameData
+//				},
+//				yAxis : {},
+//				series : [ {
+//					type : 'bar',
+//					data : countData
+//				} ]
+//			};
+//			myChart.hideLoading();
+//			// 使用刚指定的配置项和数据显示图表。
+//			myChart.setOption(option);
+//		}
+//	});
 //	myChart.setOption(option);
 //}
 //
@@ -56,77 +92,50 @@ $.ajax({
 });
 
 var myChart = echarts.init(document.getElementById('milestone'));
-option = {
-	tooltip : {
-		trigger : 'item',
-		formatter : "{a} <br/>{b} : {c} ({d}%)"
+myChart.showLoading();
+$.ajax({
+	cache : false,
+	type : "get",
+	url : "/api/v1/statistics/milestone/embryos",
+	async : false,
+	error : function(request) {
+		parent.layer.alert(request.responseText);
 	},
-	calculable : true,
-	series : [ {
-		name : '面积模式',
-		type : 'pie',
-		roseType : 'area',
-		data : [ {
-			value : 10,
-			name : 'rose1'
-		}, {
-			value : 5,
-			name : 'rose2'
-		}, {
-			value : 15,
-			name : 'rose3'
-		}, {
-			value : 25,
-			name : 'rose4'
-		}, {
-			value : 20,
-			name : 'rose5'
-		}, {
-			value : 35,
-			name : 'rose6'
-		}, {
-			value : 30,
-			name : 'rose7'
-		}, {
-			value : 40,
-			name : 'rose8'
-		} ]
-	} ]
-};
-myChart.setOption(option);
+	success : function(data) {
+		// 指定图表的配置项和数据
+		option = {
+				tooltip : {
+					trigger : 'item',
+					formatter : "{a} <br/>{b} : {c} ({d}%)"
+				},
+				calculable : true,
+				series : [ {
+					radius : [30, 148],
+					roseType : 'radius',
+					name : '胚胎数',
+					type : 'pie',
+					roseType : 'area',
+					data : data.data
+				} ]
+			};
+		myChart.hideLoading();
+		// 使用刚指定的配置项和数据显示图表。
+		myChart.setOption(option);
+	}
+});
 
 
 
 
 var myChart = echarts.init(document.getElementById('pregnancyRate'));
-
 option = {
 	tooltip : {
 		trigger : 'item',
 		formatter : "{a} <br/>{b}: {c} ({d}%)"
 	},
-	legend : {
-		orient : 'vertical',
-		x : 'left',
-		data : [ '直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎' ]
-	},
 	series : [ {
 		name : '访问来源',
 		type : 'pie',
-		avoidLabelOverlap : false,
-		label : {
-			normal : {
-				show : false,
-				position : 'center'
-			},
-			emphasis : {
-				show : true,
-				textStyle : {
-					fontSize : '30',
-					fontWeight : 'bold'
-				}
-			}
-		},
 		labelLine : {
 			normal : {
 				show : false
