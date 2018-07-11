@@ -84,9 +84,14 @@ function save() {
 			cache : false,
 			type : "POST",
 			url : "/api/v1/feedback/",
-			data: {"biochem_pregnancy":biochem_pregnancy,"clinical_pregnancy":
-				clinical_pregnancy,"fetus_count":fetus_count,"user_id":user_id,"procedureId":procedureId},
-			async : false,
+			data: JSON.stringify({                  
+                biochem_pregnancy: biochem_pregnancy,
+				clinical_pregnancy: clinical_pregnancy,
+				fetus_count: fetus_count,
+				user_id: user_id,
+				procedure_id: procedureId
+            }),
+            contentType: "application/json; charset=utf-8",
 			error : function(request) {
 				parent.layer.alert(request.responseText);
 			},
