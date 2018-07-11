@@ -31,7 +31,12 @@ function showNext(index){
 		if(node.is(':hidden')){
 			node.show();
 		}else{
+			$('#clinical_pregnancy').removeAttr('checked');
+			form.render('checkbox');
 			node.hide();
+			$('input:radio[name="fetus_count"]').removeAttr('checked');
+			form.render('radio');
+			$('#third_div').hide();
 		}
 	}
 	if(index == 2){

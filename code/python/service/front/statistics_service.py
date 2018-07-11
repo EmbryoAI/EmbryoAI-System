@@ -35,6 +35,16 @@ def embryoOutcome(request):
         embryoOutcomeList = list(map(dict, result))
         
     except:
-        return 400, '查询病历列表时发生错误!'
+        return 400, '查询胚胎结局统计时发生错误!'
     restResult = RestResult(0, "OK",len(embryoOutcomeList), embryoOutcomeList)
+    return jsonify(restResult.__dict__)
+
+def milestoneEmbryos():
+    try: 
+        #查詢列表
+        result = statistics_mapper.milestoneEmbryos()
+        milestoneEmbryosList = list(map(dict, result))
+    except:
+        return 400, '查询周期中里程碑点胚胎数时发生错误!'
+    restResult = RestResult(0, "OK",len(milestoneEmbryosList), milestoneEmbryosList)
     return jsonify(restResult.__dict__)
