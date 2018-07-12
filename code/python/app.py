@@ -48,6 +48,8 @@ login_manager.session_protection = 'strong'
 login_manager.login_view = 'login_controller.index'
 logger = app.logger
 
+# 指定开发测试用的数据目录，发布版本应该屏蔽下面这句代码
+conf['EMBRYOAI_IMAGE_ROOT'] = app_root + '..' + os.path.sep + 'captures' + os.path.sep
 
 @login_manager.user_loader
 def load_user(user_id):

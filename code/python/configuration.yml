@@ -12,7 +12,8 @@ JOBS:
   - id: "embryo_job"
     func: "task.embryo_task:run"
     trigger: "interval"
-    seconds: 10
+    minutes: 10
 SCHEDULER_API_ENABLED: true
 
 EMBRYOAI_IMAGE_ROOT: "/Users/wangying/git/repos/EmbryoAI-System/models/demo0"
+ACTIVE_TIMEOUT: 60
