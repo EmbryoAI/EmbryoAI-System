@@ -2,27 +2,28 @@
 
 from common import logger
 from app import conf
-from process_cycle_dir import process_cycle
+from task.process_cycle_dir import process_cycle
 import json
 import os
 
 finished_json = conf['FINISHED_JSON_FILENAME']
 
 def run():
-    logger().debug('进入定时图像处理任务')
-    cap_dir = conf['EMBRYOAI_IMAGE_ROOT']
-    if not cap_dir.endswith(os.path.sep):
-        cap_dir += os.path.sep
-    active_dirs, finished_dirs = find_active_dirs(cap_dir)
-    for adir in active_dirs:
-        cycle_dir = cap_dir + adir + os.path.sep
-        logger().info(f'正在处理活动采集图像文件夹 {cycle_dir}')
-        state = process_cycle(cycle_dir)
-        if not state:
-            finished_dirs.append(adir)
-    with open(cap_dir + finished_json, 'w') as fn:
-        fn.write(json.dumps(finished_dirs))
-    logger().debug('结束定时任务')
+    pass
+    # logger().debug('进入定时图像处理任务')
+    # cap_dir = conf['EMBRYOAI_IMAGE_ROOT']
+    # if not cap_dir.endswith(os.path.sep):
+    #     cap_dir += os.path.sep
+    # active_dirs, finished_dirs = find_active_dirs(cap_dir)
+    # for adir in active_dirs:
+    #     cycle_dir = cap_dir + adir + os.path.sep
+    #     logger().info(f'正在处理活动采集图像文件夹 {cycle_dir}')
+    #     state = process_cycle(cycle_dir)
+    #     if state:
+    #         finished_dirs.append(adir)
+    # with open(cap_dir + finished_json, 'w') as fn:
+    #     fn.write(json.dumps(finished_dirs))
+    # logger().debug('结束定时任务')
 
 def find_active_dirs(path):
     json_file = path + finished_json

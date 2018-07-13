@@ -16,4 +16,8 @@ JOBS:
 SCHEDULER_API_ENABLED: true
 
 EMBRYOAI_IMAGE_ROOT: "/Users/wangying/git/repos/EmbryoAI-System/models/demo0"
+FINISHED_JSON_FILENAME: "finished_cycles.json"
+LAST_SERIE_FILENAME: ".last_op"
+EMBRYO_FOCUS_DIRNAME: "focus"
+SHARP_JSON_FILENAME: "sharp_images.json"
 ACTIVE_TIMEOUT: 60
