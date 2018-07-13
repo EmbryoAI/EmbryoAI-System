@@ -44,7 +44,7 @@ if __name__=='__main__':
             tag = ''
             window = cv2.namedWindow('Embryo stage annotation')
             img = cv2.imread(conf.images + os.path.sep + f, cv2.IMREAD_GRAYSCALE)
-            if not img or img.shape != (600, 600):
+            if img is None or img.shape != (600, 600):
                 img_files.remove(f)
                 continue
             cv2.imshow('Embryo stage annotation', img)

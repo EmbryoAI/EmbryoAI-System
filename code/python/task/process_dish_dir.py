@@ -15,15 +15,16 @@ def process_dish(path):
     f = partial(dir_filter, processed=processed, base=dish_path)
     todo = list(sorted(filter(f, os.listdir(dish_path))))
     for serie in todo:
-        pass
-        # last_op = process_serie(dish_path, serie)
+        # pass
+        last_op = process_serie(dish_path, serie)
     with open(dish_path + '.last_op', 'w') as fn:
         fn.write(last_op)
-    return check_finish_state(last_op)
+    return check_finish_state(path, last_op)
 
-def check_finish_state(last_serie):
-    from app import conf
+def check_finish_state(path, last_serie):
     import datetime as dt
+    from task.ini_parser import ConfigParser
+    
     return True
 
 
