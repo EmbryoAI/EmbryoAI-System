@@ -1,0 +1,394 @@
+/*上部滚动图*/
+.scrollpic {
+	width: 100%;
+	margin:auto;
+	height: 152px;
+}
+#myscroll {
+	display: block;
+	/*width: 100%;*/
+	position: relative;
+	height: 150px;
+	overflow: hidden;
+	float: left;
+}
+#myscroll #myscrollbox {
+	display: block;
+	float: left;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 1000000px;
+}
+#myscroll ul {
+	display: block;
+	float: left;
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+#myscroll ul li {
+	display: block;
+	float: left;
+	padding: 0;
+	width:146px;
+}
+#myscroll ul li a {
+	display: block;
+	float: left;
+	width: 124px;
+	padding: 2px;
+	position: relative;
+	height: 144px;
+	background-color: #f4f4f4;
+	border:1px solid #e0e2e6 ;
+	text-align: center;
+}
+#myscroll ul .active a {
+	border:1px solid #467cdc ;
+	box-shadow: 0px 0px 3px rgba(0,0,0,.5) inset;
+}
+#myscroll ul .active{
+	
+}
+
+#myscroll a img{
+	width: 100%;
+}
+#myscroll a span {
+	position: absolute;
+	left: 0;
+	bottom: 2px;
+	right: 0;
+	z-index: 10;
+	color: #42485b;
+	text-align: center;
+	letter-spacing: 2px;
+}
+#left,#right{
+	float: left;
+	width: 30px;
+	height: 150px;
+	line-height: 150px;
+	margin-right: 10px;
+	background-color: #f4f4f4;
+	border: 1px solid #e0e2e6;
+	vertical-align: middle;
+	text-align: center;
+	cursor: pointer;
+	
+}
+#right {
+	float: right;
+	margin-right: 0;
+	margin-left: 10px;
+}
+#left:hover,#right:hover{
+	background-color: #f0f0f0;
+	box-shadow: 0px 0px 3px rgba(0,0,0,.1);
+
+}
+#myscroll #myscrollbox,#right,#left{
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}
+/*胚胎大图*/
+.viewbox{
+	clear: both;
+	width: 100%;
+	margin: auto;
+	padding-top: 20px;
+}
+.embryo{
+	float: left;
+	width: 70%;
+	position: relative;
+}
+
+.lg-img{
+	width: 100%;
+	padding: 2px;
+	border: 2px solid #e0e2e6;
+}
+.lg-img img{
+	width: 100%;
+}
+.tool{
+	margin-top: 10px;
+	background-color: #eef1f8;
+	width: 100%;
+	height: 70px;
+	padding: 2px;
+	border: 2px solid #eef1f8;
+}
+.eminfo{
+	position: absolute;
+	left: 4px;
+	top: 4px;
+	color: #fff;
+	font-weight: bold;
+	text-shadow: 1px 1px 0px rgba(0,0,0,0.6);
+	z-index: 999;
+}
+.eminfo li{
+	padding-left: 8px;
+}
+.eminfo li:first-child span{
+	margin-right: 20px;
+}
+.metrical{
+	position: absolute;
+	left: 4px;
+	bottom:92px;
+	color: #fff;
+	background-color: rgba(238,212,38,0.5);
+	padding:8px;
+	color: #ed1b20;
+	z-index: 999;
+	/*text-shadow: 1px 1px 0px rgba(0,0,0,0.6);*/
+}
+.metrical span{
+	display: block;
+}
+.mark{
+	position: absolute;
+	right:-2px;
+	top: 4px;
+	padding:4px;
+	z-index: 999;
+}
+.mark i{
+	display: block;
+	width: 48px;
+	height: 48px;
+	z-index: 999;
+}
+.mark i.transplant{
+	background: url(../img/embryo-transplant.png);
+}
+.mark i.freeze{
+	background: url(../img/embryo-freeze.png);
+}
+.mark i.abandon{
+	background: url(../img/embryo-abandon.png);
+}
+.mark i.hold{
+	background: url(../img/embryo-hold.png);
+}
+.elect{
+	position: absolute;
+	bottom:92px;
+	right: -4px;
+	background-color: rgba(255,255,255,0.8);
+}
+.elect .layui-form-item{
+	margin-bottom: 0;
+}
+.elect .layui-input-block{
+	margin-left: 20px;
+}
+
+/*右边信息栏*/
+.info{
+	float: left;
+	width: 29%;
+	padding-left: 1%;
+}
+.site{
+	background-color: #f3f4f8;
+	border: 1px solid #b8c0d1;
+	width: 100%;
+	height: 120px;
+}
+.site h1{
+	float: left;
+	width: 24px;
+	height: 100px;
+	padding-top: 20px;
+	background-color: #dae1f1;
+	font-size: 14px;
+	color: #1b2437;
+	text-align: center;
+	font-weight: bold;
+}
+#siteitem{
+	height: 90px;
+	float: left;
+	margin-left: 10px;
+    margin-top: 10px;
+}
+#siteitem li{
+	width: 16.6%;
+	float: left;
+	position: relative;
+	margin-bottom: 10px;
+	text-align: center;
+	cursor: pointer;
+}
+#siteitem li img{
+	width: 46px;
+	
+}
+#siteitem li span{
+	position: absolute;
+	top: 0;
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+	color: #fff;
+	left: 0;
+	font-size: 12px
+}
+#siteitem .active i{
+	display: block;
+	width: 12px;
+	height: 12px;
+	position: absolute;
+	background: url(../img/site-icon.png);
+	top: 34px;
+	left: 64%;
+}
+/*备注*/
+.comment h1{
+	color: #1b2437;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 10px 0;
+}
+#milestone{
+	margin: 20px 0;
+	background-color: #dae1f1;
+	border: 1px solid #b8c0d1;
+	height: 31px;
+	overflow: hidden;
+}
+.milestone-select{
+	background-color: #f7f8fb;
+}
+.info h2{
+	color: #1b2437;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 10px;
+}
+.info h6{
+	width: 100%;
+    text-align: center;
+    color: #ff8429;
+    font-size: 48px;
+}
+#milestone-select .layui-btn{
+	height: 26px;
+	line-height: 26px;
+}
+.stage{
+	color: #457cdb;
+}
+.emdate input{
+	color: #3c83f7;
+}
+.layui-form-item{
+	margin-bottom: 5px;
+}
+.layui-form-label i{
+	color: #ec3135;
+	margin-right:2px ;
+	font-style: normal;
+}
+/*胚胎工具栏-播放*/
+.tool-play{
+	height: 46px;
+	border-right: 1px solid #b4b6d5;
+	margin-top: 12px;
+	width: 340px;
+	margin-left: 8px;
+	float: left;
+}
+.tool-play li{
+	float:left ;
+	width: 64px;
+	text-align: center;
+	color: #53575a;
+	font-size: 12px;
+	cursor: pointer;
+	margin-top: 2px;
+	transition: all 0.3s;
+}
+.tool-play li:hover{
+	margin-top: 0;
+}
+.tool-play li i{
+	display: block;
+	width: 100%;
+	height: 20px;
+	margin-bottom: 10px;
+}
+.tool-play li.pre-milestone i{
+	background: url(../img/tool-icon1.png) no-repeat center;
+}
+.tool-play li.pre-frame i{
+	background: url(../img/tool-icon2.png) no-repeat center;
+}
+.tool-play li.play i{
+	background: url(../img/tool-icon3.png) no-repeat center;
+}
+.tool-play li.stop i{
+	background: url(../img/tool-icon6.png) no-repeat center;
+}
+.tool-play li.next-frame i{
+	background: url(../img/tool-icon4.png) no-repeat center;
+}
+.tool-play li.next-milestone i{
+	background: url(../img/tool-icon5.png) no-repeat center;
+}
+/*胚胎工具栏-结局*/
+.tool-end{
+	height: 46px;
+	border-right: 1px solid #b4b6d5;
+	margin-top: 12px;
+	width: 238px;
+	margin-left: 8px;
+	float: left;
+}
+.tool-end li{
+	width: 58px;
+}
+.tool-end li.transplant i{
+	background: url(../img/tool-end1.png) no-repeat center;
+}
+.tool-end li.freeze i{
+	background: url(../img/tool-end2.png) no-repeat center;
+}
+.tool-end li.abandon i{
+	background: url(../img/tool-end3.png) no-repeat center;
+}
+.tool-end li.hold i{
+	background: url(../img/tool-end4.png) no-repeat center;
+}
+/*胚胎工具栏-测量*/
+.tool-metrical{
+	width: 140px;
+}
+.tool-metrical li.straight i{
+	background: url(../img/tool-measure1.png) no-repeat center;
+}
+.tool-metrical li.roundness i{
+	background: url(../img/tool-measure2.png) no-repeat center;
+}
+.tool-btn{
+	float: left;
+	width: 170px;
+	height: 24px;
+	margin-top: 23px;
+	margin-left: 10px;
+}
+.tool-btn .layui-btn{
+	height: 24px;
+	line-height: 24px;
+	font-size: 12px;
+	padding: 0 8px;
+	margin-left: 10px;
+}

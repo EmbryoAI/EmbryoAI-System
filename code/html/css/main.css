@@ -6,6 +6,7 @@ body {
     position: relative;
     background-color: #f3f4f8;
     color: #47494b;
+	font-family: '微软雅黑';
 }
 .container {
     min-height: 100%;
@@ -171,16 +172,16 @@ body {
 .header-search {
     padding-top: 8px;
     position: relative;
-    margin-left: 80px;
+    margin-right: 100px;
 }
 .header-search input {
     border: none;
     border-radius: 28px;
-    width: 180px;
+    width: 200px;
     height: 28px;
     line-height: 28px;
     padding-left: 12px;
-    padding-right: 24px;
+    padding-right: 32px;
 }
 .header-search .header-search-btn {
     display: block;
