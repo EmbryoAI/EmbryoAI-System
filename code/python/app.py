@@ -13,7 +13,7 @@ import os
 
 from flask_apscheduler import APScheduler
 
-app_root = os.path.split(os.path.realpath(__file__))[0] + os.path.sep
+app_root = os.path.dirname(__file__) + os.path.sep
 
 def read_yml_config( filename=app_root + 'configuration.yml'):
     '''从yaml文件中读取配置'''

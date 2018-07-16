@@ -10,3 +10,7 @@ class EmbryoIniParser(object):
         return self.config[key]
     def value(self, section, name):
         return self.config[section][name]
+    def __repr__(self):
+        return str(self.config.__dict__)
+    def __contains__(self, key):
+        return key in self.config

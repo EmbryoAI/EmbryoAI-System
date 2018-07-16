@@ -12,12 +12,13 @@ JOBS:
   - id: "embryo_job"
     func: "task.embryo_task:run"
     trigger: "interval"
-    minutes: 10
+    seconds: 10
 SCHEDULER_API_ENABLED: true
 
 EMBRYOAI_IMAGE_ROOT: "/Users/wangying/git/repos/EmbryoAI-System/models/demo0"
 FINISHED_JSON_FILENAME: "finished_cycles.json"
 LAST_SERIE_FILENAME: ".last_op"
 EMBRYO_FOCUS_DIRNAME: "focus"
-SHARP_JSON_FILENAME: "sharp_images.json"
-ACTIVE_TIMEOUT: 60
+WELL_JSON_FILENAME: "well_info.json"
+ACTIVE_TIMEOUT: 3600
+CASCADE_TEMPLATE: "embryo_cascade.xml"
