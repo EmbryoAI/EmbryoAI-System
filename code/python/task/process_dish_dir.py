@@ -1,42 +1,77 @@
 # -*- coding: utf8 -*-
 
-from task.TimeSeries import TimeSeries
+from task.TimeSeries import TimeSeries, serie_to_minute
 import os
 from app import conf
 from task.process_serie_dir import process_serie
 
+'''
+### 皿目录处理模块，皿目录命名规则：天小时分钟秒数 即 DHHmmss，后两位都为0，参见TimeSeries辅助类
+#### 处理需要完成的工作包括：
+- 为避免重复处理某个时间，读取LAST_SERIE_FILENAME配置的文件获得最后处理的时间目录（已完成，但后续可能要修改该文件为JSON格式）
+- 处理所有未处理的时间目录，时间目录的处理逻辑交给process_serie_dir模块（已完成）
+- 处理完所有未处理的目录后，检查最后一次的采集时间与当前系统时间相差是否超过1个小时，超过则设置该皿目录为结束采集（已完成）
+- 将结束采集时间更新到周期表 t_procedure 的结束采集时间中（未完成）
+'''
 
 def process_dish(path, dish_info):
+    '''
+    处理一个皿目录方法
+        @param path: 采集目录完整路径
+        @param dish_info: DishConfig配置信息对象
+        @returns state: 皿结束采集标志 True - 已结束采集；False - 未结束采集
+    '''
     from functools import partial
-    dish_path = path + f'DISH{dish_info.index}' + os.path.sep
+    dish_path = path + f'DISH{dish_info.index}' + os.path.sep # 皿目录完整路径
     try:
+        # 如果LAST_SERIE_FILENAME文件存在，读取最后采集的时间序列
         last_op = open(dish_path + conf['LAST_SERIE_FILENAME']).read()
     except:
+        # 如果不存在，设置为初始采集时间 0000000
         last_op = '0' * 7
+    # 已经处理过的时间序列列表
     processed = TimeSeries().range(last_op)
+    # 以下两行代码使用偏函数从当前目录中得到所有合法且未处理的时间序列子目录
     f = partial(dir_filter, processed=processed, base=dish_path)
     todo = list(sorted(filter(f, os.listdir(dish_path))))
+
+
     for serie in todo:
-        # pass
+        # 交给process_serie_dir模块对时间序列目录进行处理
         last_op = process_serie(dish_path, serie, dish_info)
+        # 每次处理完成都将最新处理的时间序列目录写入到LAST_SERIE_FILENAME文件中
         with open(dish_path + conf['LAST_SERIE_FILENAME'], 'w') as fn:
             fn.write(last_op)
+    # 返回皿目录是否已经结束采集的标志
     return check_finish_state(path, last_op)
 
 def check_finish_state(path, last_serie):
+    '''
+    检查皿目录状态是否已经结束采集，判断标准为当前系统时间是否已经超过最后一次采集的时间序列一个小时
+        @param path: 采集目录的完整路径，为了读取DishInfo.ini文件
+        @param last_serie: 最后处理完成的时间序列目录名称
+        @returns state: True - 结束采集；False - 未结束采集
+    '''
     import datetime as dt
     from task.ini_parser import EmbryoIniParser
     ini_conf = EmbryoIniParser(path+'DishInfo.ini')
-    start_ = ini_conf['Timelapse']['StartTime']
-    start_time = dt.datetime.strptime(start_, '%Y%m%d%H%M%S')
-    now = dt.datetime.now()
-    interval = now - start_time
+    start_ = ini_conf['Timelapse']['StartTime'] 
+    start_time = dt.datetime.strptime(start_, '%Y%m%d%H%M%S') # 采集开始时间
+    end_time = start_time + dt.timedelta(minutes=serie_to_minute(last_serie)) # 结束采集时间
+    now = dt.datetime.now() # 当前系统时间
+    interval = now - end_time
     if interval.days > 0 or interval.seconds > conf['ACTIVE_TIMEOUT']:
-        return True
+        return True # 大于设定时间，返回True
     return False
 
 
 def dir_filter(path, processed, base):
+    '''
+    过滤器方法，滤掉非子目录、已经处理过的目录以及focus缩略图目录
+        @param path: 子目录名称
+        @param processed: 已经处理过的目录列表
+        @param base: 皿目录完整路径
+    '''
     if not os.path.isdir(base + path):
         return False
     if path in processed:

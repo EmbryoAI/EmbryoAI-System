@@ -53,6 +53,8 @@ class ImageSharpnessTool(object):
         dy = np.abs(im[:,1:] - im[:,:-1]).sum()
         return (dx+dy)/im.size
 
+# 以下为单元测试
+
 import unittest
 class image_sharp_test(unittest.TestCase):
     def test(self):
