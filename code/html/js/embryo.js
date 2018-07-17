@@ -134,36 +134,39 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
         })
 
         // 滚动效果
-        function showText() {
-            n = n + 1;
-        }
-        setInterval(showText, 200);		
-		
-		function run() {
-			if (n < $(".lg-img img").length) {
-				n = n;
-			} else {
-				n = 0
-			}
-			$(".lg-img img").hide();
-			$(".lg-img img:eq(" + n + ")").show();
-		}
-		var timer;
-		// 点击播放暂停
-			$('#playBtn').click(function () {
-					if ($(this).hasClass('play')) {
-							$(this).removeClass('play');
-							$(this).addClass('stop');
-							console.log("播放");
-							timer =		setInterval(run, 200);
-	
-					} else {
-							$(this).removeClass('stop');
-							$(this).addClass('play');
-							console.log("暂停");
-							clearInterval(timer);
-					}
-			})
+        var textTime;
+        var imgTime;
+        // 点击播放暂停
+        $('#playBtn').click(function () {
+            if ($(this).hasClass('play')) {
+                $(this).removeClass('play');
+                $(this).addClass('stop');
+                console.log("播放");
+
+                function showText() {
+                    n = n + 1;
+                }
+                textTime = setInterval(showText, 200);
+
+                function run() {
+                    if (n < $(".lg-img img").length) {
+                        n = n;
+                    } else {
+                        n = 0
+                    }
+                    $(".lg-img img").hide();
+                    $(".lg-img img:eq(" + n + ")").show();
+                }
+                imgTime = setInterval(run, 200);
+
+            } else {
+                $(this).removeClass('stop');
+                $(this).addClass('play');
+                console.log("暂停");
+                clearInterval(textTime);
+                clearInterval(imgTime);
+            }
+        })
 
 
 
