@@ -148,25 +148,23 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			$(".lg-img img").hide();
 			$(".lg-img img:eq(" + n + ")").show();
 		}
-		var timer = setInterval(run, 200);
-		
-		
-                $('#playBtn').click(function () {
-                    if ($(this).hasClass('play')) {
-                        $(this).removeClass('play');
-                        $(this).addClass('stop');
-						console.log("播放");
-						timer
-						
-						
-                    } else {
-                        $(this).removeClass('stop');
-                        $(this).addClass('play');
-						console.log("暂停");
-						clearInterval(timer);
-                    }
-                })
-        
+		var timer;
+		// 点击播放暂停
+			$('#playBtn').click(function () {
+					if ($(this).hasClass('play')) {
+							$(this).removeClass('play');
+							$(this).addClass('stop');
+							console.log("播放");
+							timer =		setInterval(run, 200);
+	
+					} else {
+							$(this).removeClass('stop');
+							$(this).addClass('play');
+							console.log("暂停");
+							clearInterval(timer);
+					}
+			})
+
 
 
 
