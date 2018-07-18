@@ -6,7 +6,7 @@ import cv2
 import os
 import sys
 
-def embryo_cascade(cascade, img, minSize=(400, 400), maxSize=(600, 600)):
+def embryo_cascade(cascade, img, minSize=(400, 400), maxSize=None):
     if not cascade:
         raise ValueError(f'cascade分类器文件错误')
     rects = cascade.detectMultiScale(img, minSize=minSize, maxSize=maxSize)
