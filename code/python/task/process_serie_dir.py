@@ -6,6 +6,8 @@ import numpy as np
 from cv.ImageSharpnessTool import ImageSharpnessTool
 from cv.embryo_detector import find_embryo
 from app import app
+from task.dish_config import SerieInfo
+from cv.embryo_common import outer_edge, cell_edge
 
 logger = app.logger # 日志
 
@@ -32,35 +34,48 @@ def process_serie(path, serie, dish_info):
     wells = dish_info.wells # 皿中所有的孔信息
     well_info = {} # 空JSON
     for c in wells:
-        logger.debug(f'处理 序列 {serie} 孔 {c.index}')
+        logger.debug(f'处理 序列 {serie} 孔 {wells[c].index}')
         # 某个孔所有图像的完整路径列表
-        well_image_files = [f'{serie_path}{i:05d}.jpg' for i in range(c.fileStart, c.fileEnd)]
+        well_image_files = [f'{serie_path}{i:05d}.jpg' for i in range(wells[c].fileStart, wells[c].fileEnd)]
         # 获得该孔的最清晰图像
-        sharpest = find_sharpest(well_image_files)
-        logger.debug(f'返回的最清晰图像路径 {sharpest}')
-        if not sharpest:
-            # 没有找到清晰图像，没有找到胚胎，使用序号中间的图像作为最清晰图，缩略图使用默认找不到胚胎的图像代替
-            logger.info(f'序列 {serie} 孔 {c.index} 中找不到到胚胎，使用中间序号图像作为最清晰图，缩略图使用默认找不到胚胎图像')
-            sharpest = f'{serie_path}{(c.fileStart+c.fileEnd)//2:05d}.jpg'
-            focus_file = app_root + 'cv' + os.path.sep + 'embryo_not_found.jpg'
-        else:
+        try :
+            sharpest = find_sharpest(well_image_files)
+            logger.debug(f'返回的最清晰图像路径 {sharpest}')
+        except:
+            sharpest = None
+        serie_info = SerieInfo(wells[c], serie)
+        if sharpest:
             # 找到清晰图像
             img = read_img_grayscale(sharpest)
             # 定位胚胎位置
             left, top, right, bottom = find_embryo(img)
             img_focus = img[top:bottom, left:right]
-            focus_path = serie_path + 'focus' + os.path.sep
+            focus_path = path + conf['EMBRYO_FOCUS_DIRNAME'] + os.path.sep
             if not os.path.exists(focus_path):
                 os.makedirs(focus_path)
-            focus_file = f'{focus_path}{c.index}_focus.jpg'
+            focus_file = f'{wells[c].index:02d}_{serie}_focus.jpg'
             # 保存缩略图
-            cv2.imwrite(focus_file, img_focus)
-        # 加入清晰图像完整路径和缩略图完整路径到JSON中
-        file_info = {'sharp': sharpest, 'focus': focus_file}
-        well_info[c.index] = file_info
-    # 保存JSON文件，文件名由WELL_JSON_FILENAME配置指定
-    with open(serie_path+conf['WELL_JSON_FILENAME'], 'w') as fn:
-        fn.write(json.dumps(well_info))
+            cv2.imwrite(focus_path + focus_file, img_focus, [int(cv2.IMWRITE_JPEG_QUALITY), 50])
+            outer_cnt, outer_area, outer_diameter = outer_edge(img_focus)
+            if len(outer_cnt):
+                serie_info.outerArea = outer_area
+                serie_info.outerDiameter = outer_diameter
+            cell_result = cell_edge(img_focus)
+            if len(cell_result) == 1:
+                serie_info.innerArea = cell_result[0][1]
+                serie_info.innerDiameter = cell_result[0][2]
+            if len(cell_result) == 2:
+                serie_info.innerArea = cell_result[0][1]
+                serie_info.innerDiameter = cell_result[0][2]
+                serie_info.expansionArea = cell_result[1][1]
+            if serie_info.outerDiameter and serie_info.innerDiameter \
+                    and serie_info.outerDiameter > serie_info.innerDiameter:
+                serie_info.zonaThickness = (serie_info.outerDiameter - serie_info.innerDiameter) * 0.425
+            serie_info.embryoFound = True
+            relative = os.path.split(sharpest)[1]
+            serie_info.sharp = relative
+            serie_info.focus = f"{conf['EMBRYO_FOCUS_DIRNAME']+os.path.sep}{focus_file}"
+        wells[c].addSerie(serie_info)
     return serie
 
 def find_sharpest(files):
