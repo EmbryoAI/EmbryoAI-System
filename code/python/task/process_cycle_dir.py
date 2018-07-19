@@ -1,10 +1,12 @@
 # -*- coding: utf8 -*-
 
 from task.ini_parser import EmbryoIniParser
-from task.dish_config import DishConfig
+from task.dish_config import DishConfig, Generic
 from task.process_dish_dir import process_dish
 import json
+import os
 from app import app, conf
+from common import nested_dict
 
 logger = app.logger # 日志
 
@@ -24,6 +26,8 @@ def process_cycle(path):
         @returns finished: True - 全部皿处理完成；False - 该采集目录未完成
     """
     dish_ini = EmbryoIniParser(path + 'DishInfo.ini') # 采集设备生成的INI配置文件
+    dish_count = int(dish_ini['Timelapse']['DishCount'])
+    well_count = int(dish_ini['Timelapse']['WellCount'])
     logger.debug(f'正在处理活动采集图像文件夹 {path}')
     try:
         with open(path + conf['CYCLE_PROCESS_FILENAME']) as fn:
@@ -32,7 +36,7 @@ def process_cycle(path):
     except:
         # JSON文件不存在，设置所有有效的皿目录的状态为False
         cycle_json = {}
-        for i in range(1, 10):
+        for i in range(1, dish_count+1):
             if f'Dish{i}Info' in dish_ini:
                 cycle_json[i] = False
     finished = True
@@ -40,9 +44,17 @@ def process_cycle(path):
         if cycle_json[dish_index]:
             continue
         logger.debug(f'未结束的采集任务，皿号: {dish_index}')
-        # 如果皿目录未结束，创建皿配置对象DishConfig，并交给process_dish_dir模块进行处理
-        dish_conf = DishConfig(dish_index, dish_ini[f'Dish{dish_index}Info'])
+        # 如果皿目录未结束，先读取皿目录下面的dish_state.json文件，如果文件不存在，则生成一个空的state JSON
+        dish_path = path + f'DISH{dish_index}' + os.path.sep
+        dish_conf = DishConfig(dish_index, dish_ini[f'Dish{dish_index}Info'], well_count)
+        try :
+            dish_conf = json.loads(open(dish_path+conf['DISH_STATE_FILENAME']).read(), object_hook=Generic.from_dict)
+        except:
+            pass
         checkpoint = process_dish(path, dish_conf) # 每个皿的目录为DISH+皿编号
+        dish_conf.finished = checkpoint
+        with open(dish_path+conf['DISH_STATE_FILENAME'], 'w') as fn:
+            fn.write(json.dumps(nested_dict(dish_conf)))
         # 设置皿目录是否结束采集标志，该标志checkpoint由process_dish方法返回
         cycle_json[dish_index] = checkpoint
         finished = finished & checkpoint # 所有皿目录处理完成标志

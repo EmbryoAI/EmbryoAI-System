@@ -2,6 +2,7 @@
 
 from task.TimeSeries import TimeSeries, serie_to_minute
 import os
+import json
 from app import conf
 from task.process_serie_dir import process_serie
 
@@ -23,12 +24,10 @@ def process_dish(path, dish_info):
     '''
     from functools import partial
     dish_path = path + f'DISH{dish_info.index}' + os.path.sep # 皿目录完整路径
-    try:
-        # 如果LAST_SERIE_FILENAME文件存在，读取最后采集的时间序列
-        last_op = open(dish_path + conf['LAST_SERIE_FILENAME']).read()
-    except:
-        # 如果不存在，设置为初始采集时间 0000000
+    if not dish_info.lastSerie:
         last_op = '0' * 7
+    else:
+        last_op = dish_info.lastSerie
     # 已经处理过的时间序列列表
     processed = TimeSeries().range(last_op)
     # 以下两行代码使用偏函数从当前目录中得到所有合法且未处理的时间序列子目录
@@ -39,9 +38,8 @@ def process_dish(path, dish_info):
     for serie in todo:
         # 交给process_serie_dir模块对时间序列目录进行处理
         last_op = process_serie(dish_path, serie, dish_info)
-        # 每次处理完成都将最新处理的时间序列目录写入到LAST_SERIE_FILENAME文件中
-        with open(dish_path + conf['LAST_SERIE_FILENAME'], 'w') as fn:
-            fn.write(last_op)
+        # 每次处理完成都将最新处理的时间序列目录回写到state对象中
+        dish_info.lastSerie = last_op
     # 返回皿目录是否已经结束采集的标志
     return check_finish_state(path, last_op)
 

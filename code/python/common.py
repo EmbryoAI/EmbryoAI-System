@@ -60,3 +60,23 @@ def parse_date(date_str, type):
         return date_str
     if days > 7 and type == 1:
         return time.strftime("%Y-%m-%d %H:%M", time.strptime(date_str, "%Y-%m-%d %H:%M:%S"))  
+
+def nested_dict(obj):
+    if not hasattr(obj,"__dict__"):
+        return obj
+    result = {}
+    for key, val in obj.__dict__.items():
+        if key.startswith("_"):
+            continue
+        element = []
+        if isinstance(val, list):
+            for item in val:
+                element.append(nested_dict(item))
+        elif isinstance(val, dict):
+            element = {}
+            for child_key in val:
+                element[child_key] = nested_dict(val[child_key])
+        else:
+            element = nested_dict(val)
+        result[key] = element
+    return result
