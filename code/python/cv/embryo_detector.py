@@ -8,7 +8,7 @@ import numpy as np
 使用opencv cascade分类器对图像中胚胎进行目标检测的模块
 '''
 
-def find_embryo(img, minSize=(400, 400), maxSize=(600, 600)):
+def find_embryo(img, minSize=(400, 400), maxSize=None):
     '''
     在一张图像中对胚胎进行目标检测
         @param img: 图像numpy数组
@@ -28,7 +28,7 @@ def find_embryo(img, minSize=(400, 400), maxSize=(600, 600)):
     if len(rects) > 1:
         # 找到多于一个胚胎目标，选取最匹配值的窗口进行输出
         zone = rects[np.argmax(np.array(confidences))]
-    else:zone
+    else:
         zone = rects[0]
     # 将detectMultiScale返回的目标坐标和宽高转换为左上角和右下角坐标，并返回
     embryo_box = find_suitable_box(zone, img.shape)
