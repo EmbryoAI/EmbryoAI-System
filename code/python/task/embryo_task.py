@@ -40,7 +40,7 @@ def run():
             finished_dirs.append(adir) # 采集结束则将该目录添加到结束目录列表中
     # 保存JSON文件
     with open(cap_dir + finished_json, 'w') as fn:
-        fn.write(json.dumps(finished_dirs))
+        json.dump(finished_dirs, fn)
     
     logger.debug('结束定时任务')
 
@@ -53,7 +53,7 @@ def find_active_dirs(path):
     json_file = path + finished_json # 存储结束采集目录列表的JSON文件
     try:
         with open(json_file) as fn:
-            finished = json.loads(fn.read()) # 文件存在则读取文件的内容
+            finished = json.load(fn) # 文件存在则读取文件的内容
     except:
         # 文件不存在则创建一个JSON文件，并写入一个空列表
         with open(json_file, 'w') as fn:

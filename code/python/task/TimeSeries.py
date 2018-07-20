@@ -18,7 +18,7 @@ class TimeSeries(object):
         提供slice方法访问TimeSeries
             @param slicing: int/slice，slice参数
             @returns TimeSeries: str/list，单个的TimeSeries对象字符串或多个TimeSeries对象列表
-        可以使用python方括号方式slice时间序列，如ts[0:2] -> ['0000000','0001500','0003000']
+        可以使用python方括号方式slice时间序列，如ts[0:3] -> ['0000000','0001500','0003000']
         '''
         tmp_serie = self.next_frame_time()
         if isinstance(slicing, int):
@@ -69,14 +69,14 @@ class TimeSeries(object):
         d = 0
         h = 0
         m = 0
-        yield '%d%02d%02d00' %(d, h, m)
+        yield f'{d:d}{h:02d}{m:02d}00'
         while True:
             m += 15
             dh, m = divmod(m, 60)
             h += dh
             dd, h = divmod(h, 24)
             d += dd
-            yield '%d%02d%02d00' %(d, h, m)
+            yield f'{d:d}{h:02d}{m:02d}00'
 
 def serie_to_time(timeserie):
     '''

@@ -27,7 +27,8 @@ def process_dish(path, dish_info):
     if not dish_info.lastSerie:
         last_op = '0' * 7
     else:
-        last_op = dish_info.lastSerie
+        
+        last_op = TimeSeries()[serie_to_minute(dish_info.lastSerie)//15+1]
     # 已经处理过的时间序列列表
     processed = TimeSeries().range(last_op)
     # 以下两行代码使用偏函数从当前目录中得到所有合法且未处理的时间序列子目录

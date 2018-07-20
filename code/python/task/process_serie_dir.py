@@ -29,10 +29,9 @@ def process_serie(path, serie, dish_info):
         @dish_info: 皿配置信息 DishConfig对象
         @returns serie: 处理完的时间序列字符串
     '''
-    from app import app_root, conf
+    from app import conf
     serie_path = path + serie + os.path.sep # 时间序列目录完整路径
     wells = dish_info.wells # 皿中所有的孔信息
-    well_info = {} # 空JSON
     for c in wells:
         logger.debug(f'处理 序列 {serie} 孔 {wells[c].index}')
         # 某个孔所有图像的完整路径列表
@@ -43,7 +42,8 @@ def process_serie(path, serie, dish_info):
             logger.debug(f'返回的最清晰图像路径 {sharpest}')
         except:
             sharpest = None
-        serie_info = SerieInfo(wells[c], serie)
+        serie_info = SerieInfo()
+        serie_info.serieSetup(wells[c], serie)
         if sharpest:
             # 找到清晰图像
             img = read_img_grayscale(sharpest)

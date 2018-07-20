@@ -22,7 +22,8 @@ def process_cycle(path):
         if f'Dish{i}Info' in dish_ini:
             cycle_json[i] = False
     for dish_index in cycle_json:
-        dish_conf = DishConfig(dish_index, dish_ini[f'Dish{dish_index}Info'])
+        dish_conf = DishConfig()
+        dish_conf.dishSetup(dish_index, dish_ini[f'Dish{dish_index}Info'], int(dish_ini['Timelapse']['WellCount']))
         process_dish(path, dish_conf)
 
 def process_dish(path, dish_info):
@@ -69,9 +70,9 @@ def process_serie(path, serie, dish_info):
     serie_path = path + serie + os.path.sep # 时间序列目录完整路径
     wells = dish_info.wells # 皿中所有的孔信息
     for c in wells:
-        print(f'处理 序列 {serie} 孔 {c.index}')
+        print(f'处理 序列 {serie} 孔 {wells[c].index}')
         # 某个孔所有图像的完整路径列表
-        well_image_files = [f'{serie_path}{i:05d}.jpg' for i in range(c.fileStart, c.fileEnd)]
+        well_image_files = [f'{serie_path}{i:05d}.jpg' for i in range(wells[c].fileStart, wells[c].fileEnd)]
         # 获得该孔的最清晰图像
         try :
             sharpest = find_sharpest(well_image_files)
@@ -90,7 +91,7 @@ def process_serie(path, serie, dish_info):
             focus_path = path + 'focus' + os.path.sep
             if not os.path.exists(focus_path):
                 os.makedirs(focus_path)
-            focus_file = f'{focus_path}Dish{dish_info.index:02d}_{c.index:02d}_{serie}.jpg'
+            focus_file = f'{focus_path}Dish{dish_info.index:02d}_{wells[c].index:02d}_{serie}.jpg'
             # 保存缩略图
             cv2.imwrite(focus_file, img_focus, [int(cv2.IMWRITE_JPEG_QUALITY), 50])
 
@@ -156,15 +157,16 @@ def find_embryo(img, cascade, minSize=(400, 400), maxSize=(600, 600)):
         @param maxSize: 胚胎目标最大尺寸，2元组
         @returns embryo_box: 胚胎目标的左上角坐标left, top和右下角坐标right, bottom，4元组
     '''
-    rects = cascade.detectMultiScale(img, minSize=minSize, maxSize=maxSize)
+    rects, _, confidences = cascade.detectMultiScale3(img, minSize=minSize, maxSize=maxSize, outputRejectLevels=True)
     if len(rects) < 1:
         # 没有找到胚胎目标
         return None
     if len(rects) > 1:
-        # 找到多于一个胚胎目标，此情况表示有一定错误发生，目前暂未处理
-        pass
+        zone = rects[np.argmax(np.array(confidences))]
+    else:
+        zone = rects[0]
     # 将detectMultiScale返回的目标坐标和宽高转换为左上角和右下角坐标，并返回
-    embryo_box = find_suitable_box(rects[0], img.shape)
+    embryo_box = find_suitable_box(zone, img.shape)
     return embryo_box
 
 def find_suitable_box(rect, shape):

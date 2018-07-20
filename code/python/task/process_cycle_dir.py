@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 
 from task.ini_parser import EmbryoIniParser
-from task.dish_config import DishConfig, Generic
+from task.dish_config import DishConfig
 from task.process_dish_dir import process_dish
 import json
 import os
@@ -32,7 +32,7 @@ def process_cycle(path):
     try:
         with open(path + conf['CYCLE_PROCESS_FILENAME']) as fn:
             # 如果JSON文件存在，读取皿目录的处理状态，True已完成，False未完成
-            cycle_json = json.loads(fn.read()) 
+            cycle_json = json.load(fn) 
     except:
         # JSON文件不存在，设置所有有效的皿目录的状态为False
         cycle_json = {}
@@ -46,11 +46,13 @@ def process_cycle(path):
         logger.debug(f'未结束的采集任务，皿号: {dish_index}')
         # 如果皿目录未结束，先读取皿目录下面的dish_state.json文件，如果文件不存在，则生成一个空的state JSON
         dish_path = path + f'DISH{dish_index}' + os.path.sep
-        dish_conf = DishConfig(dish_index, dish_ini[f'Dish{dish_index}Info'], well_count)
         try :
-            dish_conf = json.loads(open(dish_path+conf['DISH_STATE_FILENAME']).read(), object_hook=Generic.from_dict)
-        except:
-            pass
+            with open(dish_path+conf['DISH_STATE_FILENAME']) as fn:
+                jstr = json.load(fn)
+                dish_conf = DishConfig(jstr)
+        except:            
+            dish_conf = DishConfig()
+            dish_conf.dishSetup(dish_index, dish_ini[f'Dish{dish_index}Info'], well_count)
         checkpoint = process_dish(path, dish_conf) # 每个皿的目录为DISH+皿编号
         dish_conf.finished = checkpoint
         with open(dish_path+conf['DISH_STATE_FILENAME'], 'w') as fn:

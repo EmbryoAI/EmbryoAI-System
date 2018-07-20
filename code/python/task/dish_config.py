@@ -7,7 +7,13 @@
 
 class WellConfig():
     ''' 孔的配置信息，数据从INI配置文件中获得'''
-    def __init__(self, index, avail, zcount, zslice, start):
+    def __init__(self, d=None):
+        if d:
+            self.__dict__.update(d)
+            self.series = {}
+            for s in d['series']:
+                self.series[s] = SerieInfo(d['series'][s])
+    def wellSetup(self, index, avail, zcount, zslice, start):
         self.index = index # 孔序号 1-12
         self.avail = avail # 是否有效标志 0 - 无效 1 - 有效
         self.zcount = zcount # Z轴层数，即垂直方向采集图像的张数，最大19
@@ -26,7 +32,14 @@ class WellConfig():
 
 class DishConfig():
     '''皿的配置信息，数据从INI配置文件中获得'''
-    def __init__(self, index, config, well_count):
+    def __init__(self, d=None):
+        if d:
+            self.__dict__.update(d)
+            self.wells = {}
+            for w in d['wells']:
+                self.wells[w] = WellConfig(d['wells'][w])
+
+    def dishSetup(self, index, config, well_count):
         self.index = index # 皿序号 1-9
         self.avail = int(config['Avail']) # 是否有效标志 0 - 无效 1 - 有效
         self.patientName = config['PatientName'] # 在采集软件中登记的病人姓名，无法登记中文，因为编码为日文Shift_JIS
@@ -41,13 +54,18 @@ class DishConfig():
             well_avail = int(config[f'Well{i}Avail'])
             zcount = int(config[f'Well{i}ZCount'])
             zslice = int(config[f'Well{i}ZSliceUm'])
-            well_conf = WellConfig(i, well_avail, zcount, zslice, s)
+            well_conf = WellConfig()
+            well_conf.wellSetup(i, well_avail, zcount, zslice, s)
             if well_conf.avail:
                 self.wells[i] = well_conf # 当avail为1时，将孔加到wells列表中
                 s += zcount # 图像序号每次增加Z轴图像数
 
-class SerieInfo(object):
-    def __init__(self, wellConfig, serie):
+class SerieInfo():
+    def __init__(self, d=None):
+        if d:
+            self.__dict__.update(d)
+
+    def serieSetup(self, wellConfig, serie):
         from app import conf
         self.serie = serie # 序列号，7位数字，DHHmmss
         self.embryoFound = False # 是否自动找到胚胎的标志
@@ -61,9 +79,18 @@ class SerieInfo(object):
         self.zonaThickness = None # 透明带厚度，单位um
         self.expansionArea = None # 扩张囊腔面积，单位um2
 
-class Generic:
-    @classmethod
-    def from_dict(cls, dict):
-        obj = cls()
-        obj.__dict__.update(dict)
-        return obj
+
+import unittest
+
+class ConfigTest(unittest.TestCase):
+    def test(self):
+        import json
+        file = '/Users/wangying/git/repos/EmbryoAI-System/code/captures/20180422152100/DISH8/dish_state.json'
+        with open(file) as fn:
+            jdict = json.load(fn)
+        dc = DishConfig(jdict)
+        self.assertEqual(len(dc.wells), 3)
+        self.assertEqual(len(dc.wells['1'].series), 673)
+
+if __name__=='__main__':
+    unittest.main()

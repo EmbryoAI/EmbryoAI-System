@@ -2,6 +2,7 @@
 
 import cv2
 import os
+import numpy as np
 
 '''
 使用opencv cascade分类器对图像中胚胎进行目标检测的模块
@@ -15,19 +16,22 @@ def find_embryo(img, minSize=(400, 400), maxSize=(600, 600)):
         @param maxSize: 胚胎目标最大尺寸，2元组
         @returns embryo_box: 胚胎目标的左上角坐标left, top和右下角坐标right, bottom，4元组
     '''
-    from app import conf, app_root
-    from common import getdefault, logger
+    from app import conf
+    from common import getdefault
     cascade_file = getdefault(conf, 'CASCADE_TEMPLATE', 'embryo_cascade.xml') # 配置的cascade分类器文件名
     cascade = cv2.CascadeClassifier(os.path.dirname(__file__) + os.path.sep + cascade_file)
-    rects = cascade.detectMultiScale(img, minSize=minSize, maxSize=maxSize)
+    rects, _, confidences = cascade.detectMultiScale3(img, minSize=minSize, maxSize=maxSize,
+        outputRejectLevels=True)
     if len(rects) < 1:
         # 没有找到胚胎目标
         return None
     if len(rects) > 1:
-        # 找到多于一个胚胎目标，此情况表示有一定错误发生，目前暂未处理
-        pass
+        # 找到多于一个胚胎目标，选取最匹配值的窗口进行输出
+        zone = rects[np.argmax(np.array(confidences))]
+    else:zone
+        zone = rects[0]
     # 将detectMultiScale返回的目标坐标和宽高转换为左上角和右下角坐标，并返回
-    embryo_box = find_suitable_box(rects[0], img.shape)
+    embryo_box = find_suitable_box(zone, img.shape)
     return embryo_box
 
 def find_suitable_box(rect, shape):
