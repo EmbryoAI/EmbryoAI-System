@@ -158,65 +158,53 @@
 								<button class="layui-btn layui-bg-blue" lay-submit lay-filter="">保存</button>
 							</div>
 					</div>
+					<form action="" id="milestoneForm" class="layui-form">
 					<div id="milestone">
-						<form action="" class="layui-form">
+						
 							<div class="layui-input-block" style="margin: 6px 8px 6px;min-height: 0;">
 								<input type="checkbox" name="set" lay-skin="primary" lay-filter="milestone" title="将当前图像设为里程碑">
 							</div>
 							<div class="milestone-select">
 								<h2>请选择里程碑节点</h2>
-								   <div class="layui-input-block"  style="margin-left: 10px;">
-									  <input type="radio" name="sex" value=" " title="PN">
-									  <input type="radio" name="sex" value=" " title="2C">
-									  <input type="radio" name="sex" value=" " title="3C">
-									  <input type="radio" name="sex" value=" " title="4C">
-									  <input type="radio" name="sex" value=" " title="5C">
-									  <input type="radio" name="sex" value=" " title="8C">
-									  <input type="radio" name="sex" value=" " title="囊胚">
-									  <div class="layui-input-inline" style="margin-left: 20px;padding: 10px 0;">
-									  	<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" style="height: 28px;line-height: 28px;">确认</button>
-									  </div>
-									</div>
+								   <div class="layui-input-block" id="milestoneIdDiv"  style="margin-left: 10px;">
+					 
+								  </div>
 							</div>
-						</form>
+						 
 					</div>
-					<h2>胚胎形态学<span class="stage">（8C）</span></h2>
-					<form action="" class="layui-form">
-						 <div class="layui-form-item">
+					<h2 id="stageDiv">胚胎形态学<span class="stage" id="stageId">（）</span></h2>
+				 
+						  <div class="layui-form-item" id="pnDiv">
+							<label class="layui-form-label"><i>*</i>PN数</label>
+							<div class="layui-input-block" id="pnIdDiv">
+							  
+							</div>
+						 </div>
+						 <div class="layui-form-item" id="countDiv">
 							<label class="layui-form-label"><i>*</i>细胞个数</label>
 							<div class="layui-input-block">
-							  <input type="radio" name="s" value=" " title="2C" checked="">
-							  <input type="radio" name="s" value=" " title="3C">
-							  <input type="radio" name="s" value=" " title="4C">
-							  <input type="radio" name="s" value=" " title="5C">							
-							  <input type="radio" name="s" value=" " title="6C">						
-							  <input type="radio" name="s" value=" " title="7C">						
-							  <input type="radio" name="s" value=" " title="8C">
+							  <input type="radio" name="count" value=" " title="2C" >
+							  <input type="radio" name="count" value=" " title="3C">
+							  <input type="radio" name="count" value=" " title="4C">
+							  <input type="radio" name="count" value=" " title="5C">							
+							  <input type="radio" name="count" value=" " title="6C">						
+							  <input type="radio" name="count" value=" " title="7C">						
+							  <input type="radio" name="count" value=" " title="8C">
 							</div>
 						 </div>
-						 <div class="layui-form-item">
+						 <div class="layui-form-item" id="evenDiv">
 							  <label class="layui-form-label">均匀度</label>
-							  <div class="layui-input-block" >
-								<input type="radio" name="a" value=" " title="均匀">
-								<input type="radio" name="a" value=" " title="不均匀">
+							  <div class="layui-input-block" id="evenIdDiv" >
 							  </div>
 						 </div>
-						 <div class="layui-form-item">
+						 <div class="layui-form-item" id="fragmentDiv">
 						 	<label class="layui-form-label">碎片率</label>
-						 	<div class="layui-input-block" >
-						 	<input type="radio" name="b" value=" " title="<=5%">
-						 	<input type="radio" name="b" value=" " title="5%~10%">
-						 	<input type="radio" name="b" value=" " title="10%~20%">
-							<input type="radio" name="b" value=" " title=">20%">
+						 	<div class="layui-input-block" id="fragmentIdDiv" >
 						 	</div>
 						 </div>
-						 <div class="layui-form-item">
+						 <div class="layui-form-item" id="gradeDiv">
 						 	<label class="layui-form-label"><i>*</i>评级</label>
-						 	<div class="layui-input-block" >
-						 	<input type="radio" name="c" value=" " title="Ⅰ" checked="">
-						 	<input type="radio" name="c" value=" " title="Ⅱ">
-							<input type="radio" name="c" value=" " title="Ⅲ">
-
+						 	<div class="layui-input-block" id="gradeIdDiv">
 						 	</div>
 						 </div>
 						<h2>胚胎数据</h2>
@@ -224,30 +212,32 @@
 						<div class="layui-inline">
 						  <label class="layui-form-label">直径</label>
 						  <div class="layui-input-inline" style="width: 60px;">
-							<input type="text" name="d" autocomplete="off" class="layui-input">
+							<input type="text" id="diameter" name="diameter" autocomplete="off" class="layui-input">
 						  </div>
 						</div>
 						<div class="layui-inline">
 						  <label class="layui-form-label">面积</label>
 						  <div class="layui-input-inline" style="width: 60px;">
-							<input type="text" name="e" autocomplete="off" class="layui-input">
+							<input type="text" id="area" name="area" autocomplete="off" class="layui-input">
 						  </div>
 						</div>
 						<div class="layui-inline">
-						<label class="layui-form-label" style="width: 70px;">透明度厚度</label>
+						<label class="layui-form-label" style="width: 70px;">透明带厚度</label>
 						<div class="layui-input-inline" style="width: 60px;">
-							<input type="text" name="f" autocomplete="off" class="layui-input">
+							<input type="text" id="thickness" name="thickness" autocomplete="off" class="layui-input">
 						</div>
 						</div>
 					  </div>
 					  <h2 style="padding-bottom: 0;">胚胎评分</h2>
 					  <h6>25</h6>	
+
+					  </form>
 					  <div class="layui-input-block" style="text-align: center;margin: 0;">
-					  	<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" style="padding: 0 80px;">保存数据</button>
+					  	<button id="saveMilestoneButton" class="layui-btn layui-bg-blue"   lay-submit lay-filter="" style="padding: 0 80px;">保存数据</button>
 					  </div>
 					  </div>
-					</form>
 				</div>
+				
 			</div>
 			<div style="clear: both;height: 20px;width: 100%;"></div>
 		</div>
