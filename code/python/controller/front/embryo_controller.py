@@ -8,8 +8,8 @@ from entity.Embryo import Embryo
 embryo_controller = Blueprint('embryo_controller', __name__)
 url_prefix = '/front/embryo'
 
-@embryo_controller.route('/', methods=['GET'])
+@embryo_controller.route('/<string:id>/<string:code>/<string:embryo_id>', methods=['GET'])
 @login_required
-def main():
+def main(id, code, embryo_id):
     logger().info('embryo_controller.embryo胚胎视图页面')
-    return render_template('front/embryo/embryo.html',htmlType="embryo")
+    return render_template('front/embryo/embryo.html', procedure_id=id, dish_code=code, embryo_id=embryo_id)

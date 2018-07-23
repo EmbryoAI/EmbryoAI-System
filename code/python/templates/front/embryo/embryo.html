@@ -20,6 +20,10 @@
 		}
 	</style>
 <div class="main">
+	<input type="text" id="procedureId" value="{{procedure_id}}"/>
+	<input type="text" id="dishCode" value="{{dish_code}}"/>
+	<input type="text" id="embryoId" value="{{embryo_id}}"/>
+	
 	<!--滚动图-->
 	<div class="scrollpic" id="scrollpic">
 		<div id="left">
@@ -144,7 +148,7 @@
 			<div class="site" id="site">
 				<h1>孔位选择</h1>
 				<ul id="siteitem">
-					<li class="active"><span>well1</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
+					<li class="active"><span>well1</span><img src="/static/front/img/20180711111150.png" onclick="querySeriesList()"><i></i></li>
 					<li><span>well2</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
 					<li><span>well3</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
 					<li><span>well4</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
@@ -263,6 +267,7 @@
 
 <!--公共js引入-->
 <script src="/static/front/js/embryo/embryo.js"></script>
+<script src="/static/front/js/embryo/well.js"></script>
 <!-- <script src="/static/front/js/embryo/zIndexImage.js"></script> -->
 
 {% endblock %}

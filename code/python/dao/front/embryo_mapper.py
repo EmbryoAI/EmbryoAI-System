@@ -4,7 +4,7 @@ from sqlalchemy import text
 
 def queryEmbryoList(procedureID):
     sql = text("""
-        SELECT t.`embryo_index`, sc.`cell_code`, sd.`dish_code`, si.`incubator_code` 
+        SELECT t.`id`, t.`embryo_index`, sc.`cell_code`, sd.`dish_code`, si.`incubator_code`, sc.`dish_id` 
         FROM `t_embryo` t 
         LEFT JOIN `sys_cell` sc 
         ON t.`cell_id` = sc.`id` 
