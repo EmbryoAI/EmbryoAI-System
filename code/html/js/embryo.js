@@ -53,13 +53,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             var site = document.getElementById('site');
             var siteItem = document.getElementById('siteitem');
             siteItem.style.width = (site.offsetWidth - 44) + "px";
-
         }
         site();
-        $(window).resize(function () {
-            scroll();
-            site();
-        });
 
         // 点击切换样式
         $('#myscrollboxul li').click(function () {
@@ -71,7 +66,12 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             $('#siteitem li').removeClass('active');
             $(this).addClass('active');
         });
-
+		// z轴点击样式
+		$('.time-vertical li').click(function () {
+			$('.time-vertical li').removeClass('active');
+			$(this).addClass('active');
+		});
+		
 
         // 选为最清晰的值提示
         form.on('checkbox(clear)', function (data) {
@@ -167,11 +167,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 clearInterval(imgTime);
             }
         })
-
-
-
-
-
         // 标记结局
         $(".tool-end").on('click', 'li[data-end]', function () {
             var indexData = $(this).attr('data-end');
@@ -187,9 +182,120 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 $(".mark i").attr('class', "");
                 layer.msg("已取消标注")
             }
-
-
-
         })
+		var canvas = document.getElementById('canvas'); // 得到画布
+		var ctx = canvas.getContext('2d'); // 得到画布的上下文对象
+		var flag = false;
+		var x = 0; // 鼠标开始移动的位置X
+		var y = 0; // 鼠标开始移动的位置Y
+		var url = ''; // canvas图片的二进制格式转为dataURL格式
+		
+		function canvasWidth(){
+			var embr = document.getElementById('embryo');
+			var canvasBox = document.getElementById('canvasBox');
+			canvasBox.style.width = embr.offsetWidth;
+			canvas.width = canvasBox.offsetWidth;
+			canvas.height = canvasBox.offsetHeight;
+		}
+		canvasWidth();
+		
+		/* 为canvas绑定mouse事件 */
+		
+		$(".tool-metrical li").click(function(){
+			$('.tool-metrical li').removeClass('active');
+			$(this).addClass('active');
+			if($(this).hasClass('straight')){
+				$('canvas').mousedown(function(e){
+					flag = true;
+					x = e.offsetX; // 鼠标落下时的X
+					y = e.offsetY; // 鼠标落下时的Y
+					console.log(x,y)
+				}).mouseup(function(e){
+					flag = false;
+					url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
+					x = e.offsetX; // 鼠标落下时的X
+					y = e.offsetY; // 鼠标落下时的Y
+					console.log(x,y)
+				}).mousemove(function(e){
+					drawLine(e); // 绘制方法
+				});
+			}else{
+				
+				$('canvas').mousedown(function(e){
+					flag = true;
+					x = e.offsetX; // 鼠标落下时的X
+					y = e.offsetY; // 鼠标落下时的Y
+					console.log(x,y)
+				}).mouseup(function(e){
+					flag = false;
+					url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
+					x = e.offsetX; // 鼠标落下时的X
+					y = e.offsetY; // 鼠标落下时的Y
+					console.log(x,y)
+				}).mousemove(function(e){
+					drawCircle(e); // 绘制方法
+				});
+				
+			}
+			
+			
+			
+			
+		})
+		
+		$('canvas').mousedown(function(e){
+			flag = true;
+			x = e.offsetX; // 鼠标落下时的X
+			y = e.offsetY; // 鼠标落下时的Y
+			console.log(x,y)
+		}).mouseup(function(e){
+			flag = false;
+			url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
+			x = e.offsetX; // 鼠标落下时的X
+			y = e.offsetY; // 鼠标落下时的Y
+			console.log(x,y)
+		}).mousemove(function(e){
+			drawLine(e); // 绘制方法
+		});
+		
+		// 画圆
+		function drawCircle(e){
+			if(flag){
+				ctx.clearRect(0,0,canvas.width,canvas.height);
+				ctx.beginPath();
+				var rx = (e.offsetX-x)/2;
+				var ry = (e.offsetY-y)/2;
+				var r = Math.sqrt(rx*rx+ry*ry);
+				ctx.arc(rx+x,ry+y,r,0,Math.PI*2); // 第5个参数默认是false-顺时针
+				ctx.stroke();
+				ctx.strokeStyle ="#ffee19" ; 
+				ctx.lineWidth = 2; 
+			}
+		}
+		
+		// 画直线
+		function drawLine(e){
+			if(flag){
+				ctx.clearRect(0,0,canvas.width,canvas.height);
+				ctx.beginPath();
+				ctx.moveTo(x,y);
+				ctx.lineTo(e.offsetX,e.offsetY);
+				ctx.stroke();
+				ctx.strokeStyle ="#ffee19" ; 
+				ctx.lineWidth = 2; 
+			}
+		}
+		
+		
+		
+		
+		// 跟随屏幕改变的设定	
+		$(window).resize(function () {
+			scroll();
+			site();
+			canvasWidth();
+		});
+		
+		
     });
 })
