@@ -72,7 +72,7 @@
 			<!--大图信息部分-->
 			<div class="viewbox">
 				<!--左边胚胎大图-->
-				<div class="embryo">
+				<div class="embryo" id="embryo">
 					<!--图片区域-->
 					<div class="lg-img">
 						<img src="img/20180711111150.png" >
@@ -94,7 +94,6 @@
 					<!--标记结局-->
 					<div class="mark">
 						<i class="" data-mark=""></i>
-
 					<!--	<i class="transplant" data-mark='1'></i>
 						<i class="freeze"  data-mark='2'></i>
 						<i class="abandon" data-mark='3'></i>
@@ -110,7 +109,22 @@
 							</div>
 						</form>
 					</div>
-					
+					<!--z轴滚动-->
+					<div class="shaft">
+						<ul class="time-vertical">
+								<li><b></b></li>
+								<li class="active"><b></b></li>
+								<li><b></b></li>
+								<li><b></b></li>
+								<li><b></b></li>
+								<li><b></b></li>
+						</ul>
+						<h6>z轴</h6>
+					</div>
+					<!--测量canvas-->
+					<div class="canvas-box" id="canvasBox">
+						<canvas id="canvas" width="" height=""></canvas>
+					</div>
 					<!--工具栏-->
 					<div class="tool">
 						<ul class="tool-play">
@@ -214,22 +228,21 @@
 							  </div>
 						 </div>
 						 <div class="layui-form-item">
-						 	<label class="layui-form-label">碎片率</label>
-						 	<div class="layui-input-block" >
-						 	<input type="radio" name="b" value=" " title="<=5%">
-						 	<input type="radio" name="b" value=" " title="5%~10%">
-						 	<input type="radio" name="b" value=" " title="10%~20%">
-							<input type="radio" name="b" value=" " title=">20%">
-						 	</div>
+								<label class="layui-form-label">碎片率</label>
+								<div class="layui-input-block" >
+								<input type="radio" name="b" value=" " title="<=5%">
+								<input type="radio" name="b" value=" " title="5%~10%">
+								<input type="radio" name="b" value=" " title="10%~20%">
+								<input type="radio" name="b" value=" " title=">20%">
+								</div>
 						 </div>
 						 <div class="layui-form-item">
-						 	<label class="layui-form-label"><i>*</i>评级</label>
-						 	<div class="layui-input-block" >
-						 	<input type="radio" name="c" value=" " title="Ⅰ" checked="">
-						 	<input type="radio" name="c" value=" " title="Ⅱ">
-							<input type="radio" name="c" value=" " title="Ⅲ">
-
-						 	</div>
+								<label class="layui-form-label"><i>*</i>评级</label>
+								<div class="layui-input-block" >
+								<input type="radio" name="c" value=" " title="Ⅰ" checked="">
+								<input type="radio" name="c" value=" " title="Ⅱ">
+								<input type="radio" name="c" value=" " title="Ⅲ">
+								</div>
 						 </div>
 						<h2>胚胎数据</h2>
 					  <div class="layui-form-item emdate">

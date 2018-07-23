@@ -183,6 +183,7 @@
 	bottom:92px;
 	right: -4px;
 	background-color: rgba(255,255,255,0.8);
+	z-index: 999;
 }
 .elect .layui-form-item{
 	margin-bottom: 0;
@@ -190,7 +191,54 @@
 .elect .layui-input-block{
 	margin-left: 20px;
 }
+/*z轴*/
+.shaft{
+	position: absolute;
+	right: 18px;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 999;
+}
+.shaft h6{
+	text-align: center;
+	color: #eed426;
+	font-weight: bold;
+}
+.time-vertical {
+    list-style-type: none;
+    border-left: 2px solid #eed426;
+    padding:6px 0px;
+	margin-left: 11px;
+}
+ 
+.time-vertical li{
+    position: relative;
+	width: 18px;
+	font-size: 0;
+	margin:0;
+	margin-left: -22px;
+	height: 16px;
+	padding-left: 12px;
+	line-height: 22px;
+	cursor: pointer;
+}
+.time-vertical li:hover b{
+	background: #fff;
 
+}
+.time-vertical li b{
+	display: inline-block;
+	background: #eed426;
+	width: 100%;
+	height: 3px;
+
+}
+.time-vertical li.active {
+	background: url(../img/timer-arrow.png) no-repeat left center;
+}
+.time-vertical li.active b{
+	height: 5px;
+}
 /*右边信息栏*/
 .info{
 	float: left;
@@ -391,4 +439,17 @@
 	font-size: 12px;
 	padding: 0 8px;
 	margin-left: 10px;
+}
+/*canvas设置*/
+.canvas-box{
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 90px;
+	right: 0;
+	background-color: transparent;
+}
+#canvas{
+	cursor: pointer;
+	background-color: transparent;
 }
