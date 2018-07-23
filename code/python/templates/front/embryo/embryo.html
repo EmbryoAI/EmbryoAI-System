@@ -61,10 +61,11 @@
 				<div class="embryo">
 					<!--图片区域-->
 					<div class="lg-img">
-						<img src="/static/front/img/20180711111150.png" >
+						<!-- <img src="/static/front/img/20180711111150.png" >
 						<img src="/static/front/img/20180713152312.png" >
 						<img src="/static/front/img/20180713153142.png" >
-						<img src="/static/front/img/20180713153221.png" >
+						<img src="/static/front/img/20180713153221.png" > -->
+						<img src="/api/v1/image/findImage?procedureId=1&dishId=1&wellId=1&timeSeries=0000000">
 					</div>
 					<!--胚胎信息-->
 					<ul class="eminfo">
@@ -255,5 +256,6 @@
 	<!--公共js引入-->
 	 
 	<script src="/static/front/js/embryo/embryo.js"></script>
+	<script src="/static/front/js/embryo/zIndexImage.js"></script>
 
 {% endblock %}
