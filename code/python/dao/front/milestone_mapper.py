@@ -10,9 +10,12 @@ from traceback import print_exc
 def insertMilestone(milestone,milestoneData):
     try :
         db.session.add(milestone)
-        db.session.add(MilestoneData)
+        db.session.add(milestoneData)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
         print_exc()
         raise DatabaseError('设置里程碑时发生错误!', e.message, e)
+    
+def getMilestoneByEmbryoId(embryoId):
+    return db.session.query(Milestone).filter(Milestone.embryoId == embryoId).one_or_none()
