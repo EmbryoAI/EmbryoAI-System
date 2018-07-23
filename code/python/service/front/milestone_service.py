@@ -4,11 +4,13 @@ from entity.Milestone import Milestone
 from entity.MilestoneData import MilestoneData
 from entity.RestResult import RestResult
 import dao.front.milestone_mapper as milestone_mapper
+import dao.front.milestone_data_mapper as milestone_data_mapper
 from flask import request, jsonify
 from common import parse_date
 from common import uuid
 import re
 import time
+from app import current_user
 
 def insertMilestone(request):
     id = uuid()
@@ -24,22 +26,22 @@ def insertMilestone(request):
     if milestoneId == "":
        return 400, '里程碑节点ID不能为空!'
    
-    #里程碑节点时间ID
-    milestoneTime = "";
+    #里程碑节点时间
+    milestoneTime = ""
     
     #里程碑时间点距离初次采集时间的间隔，单位分钟
-    milestone_elapse = "";
+    milestoneElapse = 1
     
-    userId = "";
+    userId = current_user.id
     
     #里程碑时间点类型：0-自动识别；1-用户设定
-    milestoneType = 1;
+    milestoneType = 1
     
     #里程碑时间点图像文件路径
-    milestone_path = "";
+    milestonePath = ""
    
     #里程碑时间点距离授精时间的间隔，单位分钟
-    milestone_stage = "";
+    milestoneStage = ""
     
     #PN数量字典值ID -> sys_dict.id，字典值类型为pn，可能取值：0：0PN；1：1PN；2：2PN；3：>=3PN
     pnId = request.form.get('pnId')
@@ -76,10 +78,9 @@ def insertMilestone(request):
     milestone = Milestone(id=id, embryoId=embryoId,milestoneId=milestoneId,milestoneTime=milestoneTime,milestoneElapse=milestoneElapse,
                           userId=userId,milestoneType=milestoneType,milestonePath=milestonePath)
     
-    milestoneData = MilestoneData(milestoneId=milestoneId, milestoneStage=milestoneStage,pnId=pnId,cellCount=cellCount,evenId=evenId,
+    milestoneData = MilestoneData(milestoneId=id, milestoneStage=milestoneStage,pnId=pnId,cellCount=cellCount,evenId=evenId,
                       fragmentId=fragmentId,gradeId=gradeId,diameter=diameter,area=area,thickness=thickness,milestoneScore=milestoneScore
                       ,userId=userId,memo=memo)
-    
     
     
     try:
@@ -90,3 +91,18 @@ def insertMilestone(request):
     except:
         return 400, '设置里程碑时异常!'
     return 200, milestone.to_dict()
+
+def getMilestoneByEmbryoId(embryoId):
+    try: 
+        milestone = milestone_mapper.getMilestoneByEmbryoId(embryoId)
+        if milestone!=None:
+            milestoneData = milestone_data_mapper.getMilestoneData(milestone.id)
+            result = {}
+            result["milestone"] = milestone.to_dict()
+            result["milestoneData"] = milestoneData.to_dict()
+        restResult = RestResult(0, "404", 0, None)
+        if milestone is not None:
+            restResult = RestResult(0, "OK", 1, result)
+        return jsonify(restResult.__dict__)
+    except:
+        return 400, '查询病历详情时发生错误!'

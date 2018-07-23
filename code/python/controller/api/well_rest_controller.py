@@ -16,3 +16,11 @@ url_prefix = '/api/v1/well'
 @login_required
 def queryWellList(procedureId, dishId):
     return well_service.queryWellList(procedureId, dishId)
+
+#根据路径返回孔缩略图
+@well_rest_controller.route('/image', methods=['GET'])
+@login_required
+def getWellImage():
+    parser = reqparse.RequestParser()
+    parser.add_argument('image_path', type=str)
+    return well_service.getWellImage(parser.parse_args())
