@@ -38,7 +38,7 @@ def insertMilestone(request):
     milestoneType = 1
     
     #里程碑时间点图像文件路径
-    milestonePath = ""
+    milestonePath = "milestone_path"
    
     #里程碑时间点距离授精时间的间隔，单位分钟
     milestoneStage = ""
@@ -83,9 +83,9 @@ def insertMilestone(request):
                       ,userId=userId,memo=memo)
     
     try:
-        #根据胚胎ID和的里程碑字典值查出是否已经存在了
-        sql = "AND embryo_id = :embryoId and milestone_id = :milestoneId "
-        filters = {'embryoId': embryoId,'milestoneId':milestoneId}
+        #根据胚胎ID和的里程碑的图片查出是否已经存在了
+        sql = "AND embryo_id = :embryoId and milestone_path = :milestonePath "
+        filters = {'embryoId': embryoId,'milestonePath':milestonePath}
         milestoneOld = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
         if not milestoneOld:
             milestone_mapper.insertMilestone(milestone,milestoneData)
@@ -112,4 +112,4 @@ def getMilestoneByEmbryoId(embryoId):
             restResult = RestResult(0, "OK", 1, result)
         return jsonify(restResult.__dict__)
     except:
-        return 400, '查询病历详情时发生错误!'
+        return 400, '查询里程碑详情时发生错误!'
