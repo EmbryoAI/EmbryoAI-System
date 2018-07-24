@@ -286,7 +286,18 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			}
 		}
 		
+		// 清除画布
 		
+			function clearCanvas()
+				{
+					ctx.clearRect(0,0,canvas.width,canvas.height);
+				}
+		
+		$(".tool").click(function(){
+			
+			clearCanvas()
+			
+		})
 		
 		
 		// 跟随屏幕改变的设定	
