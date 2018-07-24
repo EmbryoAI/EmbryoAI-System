@@ -21,6 +21,7 @@ class WellConfig():
         self.fileStart = start # 孔图像开始序号，包含
         self.fileEnd = start + zcount # 空图像结束序号，不包含
         self.zIndexFiles = self.fileList() # Z轴序号与图像文件对照字典，从1开始
+        self.lastEmbryoSerie = None # 最后一个能定位到胚胎的时间序列值
         self.series = {} # 该孔的所有时间序列
 
     def fileList(self):

@@ -1,56 +1,54 @@
-{% extends 'front/header-footer.html' %}
-{% block mianDiv %}
-	<link rel="stylesheet" type="text/css" href="/static/front/css/embryo.css"/>
-	<style type="text/css">
-		body{
-			min-width: 1366px;
-			background-color: #fff;
-		}
-		.container{
-			background-color: #fff;
-		}
-		.main{
-			/*width: 1440px;*/
-			margin: auto;
-		}
-		.layui-form-checkbox[lay-skin=primary] span{
-			font-size: 16px;
-			font-weight: bold;
-			color: #1b2437;
-		}
-	</style>
+{% extends 'front/header-footer.html' %} {% block mianDiv %}
+<link rel="stylesheet" type="text/css"
+	href="/static/front/css/embryo.css" />
+<style type="text/css">
+body {
+	min-width: 1366px;
+	background-color: #fff;
+}
+
+.container {
+	background-color: #fff;
+}
+
+.main {
+	/*width: 1440px;*/
+	margin: auto;
+}
+
+.layui-form-checkbox[lay-skin=primary] span {
+	font-size: 16px;
+	font-weight: bold;
+	color: #1b2437;
+}
+</style>
 <div class="main">
+	<input type="text" id="procedureId" value="{{procedure_id}}" /> <input
+		type="text" id="dishCode" value="{{dish_code}}" /> <input type="text"
+		id="embryoId" value="{{embryo_id}}" />
+
 	<!--滚动图-->
 	<div class="scrollpic" id="scrollpic">
 		<div id="left">
-			<img src="/static/front/img/arrowL.png" >
+			<img src="/static/front/img/arrowL.png">
 		</div>
 		<div id="myscroll">
 			<div id="myscrollbox">
 				<ul id="myscrollboxul">
-					<li class="active">
-						<a href="#">
-							<img src="/static/front/img/20180711111150.png">
-							<span>1h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="/static/front/img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="/static/front/img/loginbg.jpg">
+					<li class="active"><a href="#"> <img
+							src="/static/front/img/20180711111150.png"> <span>1h3min</span>
+					</a></li>
+					<li><a href="#"> <img
+							src="/static/front/img/1530082825.png"> <span>2h3min</span>
+					</a></li>
+					<li><a href="#"> <img src="/static/front/img/loginbg.jpg">
 							<span>3h3min</span>
-						</a>
-					</li>
+					</a></li>
 				</ul>
 			</div>
 		</div>
 		<div id="right">
-			<img src="/static/front/img/arrowR.png" >
+			<img src="/static/front/img/arrowR.png">
 		</div>
 	</div>
 	<!--大图信息部分-->
@@ -59,10 +57,10 @@
 		<div class="embryo" id="embryo">
 			<!--图片区域-->
 			<div class="lg-img">
-				<img src="/static/front/img/20180711111150.png" >
-				<img src="/static/front/img/20180713152312.png" >
-				<img src="/static/front/img/20180713153142.png" >
-				<img src="/static/front/img/20180713153221.png" >
+				<img src="/static/front/img/20180711111150.png"> <img
+					src="/static/front/img/20180713152312.png"> <img
+					src="/static/front/img/20180713153142.png"> <img
+					src="/static/front/img/20180713153221.png">
 			</div>
 			<!--胚胎信息-->
 			<ul class="eminfo">
@@ -72,13 +70,12 @@
 			</ul>
 			<!--测量的信息-->
 			<div class="metrical">
-				<span>长度：20px</span>
-				<span>长度：20px</span>
+				<span>长度：20px</span> <span>长度：20px</span>
 			</div>
 			<!--标记结局-->
 			<div class="mark">
 				<i class="" data-mark=""></i>
-			<!--	<i class="transplant" data-mark='1'></i>
+				<!--	<i class="transplant" data-mark='1'></i>
 				<i class="freeze"  data-mark='2'></i>
 				<i class="abandon" data-mark='3'></i>
 				<i class="hold" data-mark='4'></i>-->
@@ -88,7 +85,8 @@
 				<form action="" class="layui-form">
 					<div class="layui-form-item" pane="">
 						<div class="layui-input-block">
-						<input type="checkbox" name="distinct" lay-skin="primary" lay-filter="clear" title="标记为最清晰">
+							<input type="checkbox" name="distinct" lay-skin="primary"
+								lay-filter="clear" title="标记为最清晰">
 						</div>
 					</div>
 				</form>
@@ -96,12 +94,12 @@
 			<!--z轴滚动-->
 			<div class="shaft">
 				<ul class="time-vertical">
-						<li><b></b></li>
-						<li class="active"><b></b></li>
-						<li><b></b></li>
-						<li><b></b></li>
-						<li><b></b></li>
-						<li><b></b></li>
+					<li><b></b></li>
+					<li class="active"><b></b></li>
+					<li><b></b></li>
+					<li><b></b></li>
+					<li><b></b></li>
+					<li><b></b></li>
 				</ul>
 				<h6>z轴</h6>
 			</div>
@@ -130,10 +128,10 @@
 				</ul>
 				<div class="tool-btn">
 					<div class="layui-input-inline" style="margin-left: 0px;">
-					 <button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >导出视频</button>
+						<button class="layui-btn layui-bg-blue" lay-submit lay-filter="">导出视频</button>
 					</div>
 					<div class="layui-input-inline" style="margin-left: 0px;">
-						<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >导出图像</button>
+						<button class="layui-btn layui-bg-blue" lay-submit lay-filter="">导出图像</button>
 					</div>
 				</div>
 			</div>
@@ -144,114 +142,107 @@
 			<div class="site" id="site">
 				<h1>孔位选择</h1>
 				<ul id="siteitem">
-					<li class="active"><span>well1</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
-					<li><span>well2</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
-					<li><span>well3</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
-					<li><span>well4</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
-					<li><span>well5</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
-					<li><span>well6</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
-					<li><span>well7</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
-					<li><span>well8</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
-					<li><span>well9</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
-					<li><span>well10</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
-					<li><span>well11</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
-					<li><span>well12</span><img src="/static/front/img/20180711111150.png" ><i></i></li>
+
 				</ul>
 			</div>
 
-					<form action="" id="milestoneForm" class="layui-form">
-					<div id="milestone">
-						
-							<div class="layui-input-block" style="margin: 6px 8px 6px;min-height: 0;">
-								<input type="checkbox" name="set" id="milestoneCheckbox" lay-skin="primary" lay-filter="milestone" title="将当前图像设为里程碑">
-							</div>
-							<div class="milestone-select">
-								<h2>请选择里程碑节点</h2>
-								   <div class="layui-input-block" id="milestoneIdDiv"  style="margin-left: 10px;">
-					 
-								  </div>
-							</div>
-						 
+			<form action="" id="milestoneForm" class="layui-form">
+				<div id="milestone">
+
+					<div class="layui-input-block"
+						style="margin: 6px 8px 6px; min-height: 0;">
+						<input type="checkbox" name="set" id="milestoneCheckbox"
+							lay-skin="primary" lay-filter="milestone" title="将当前图像设为里程碑">
 					</div>
-					<h2 id="stageDiv">胚胎形态学<span class="stage" id="stageId">（）</span></h2>
-				 
-						  <div class="layui-form-item" id="pnDiv">
-							<label class="layui-form-label"><i>*</i>PN数</label>
-							<div class="layui-input-block" id="pnIdDiv">
-							  
-							</div>
-						 </div>
-						 <div class="layui-form-item" id="countDiv">
-							<label class="layui-form-label"><i>*</i>细胞个数</label>
-							<div class="layui-input-block">
-							  <input type="radio" name="count" value="2" title="2C" >
-							  <input type="radio" name="count" value="3" title="3C">
-							  <input type="radio" name="count" value="4" title="4C">
-							  <input type="radio" name="count" value="5" title="5C">							
-							  <input type="radio" name="count" value="6" title="6C">						
-							  <input type="radio" name="count" value="7" title="7C">						
-							  <input type="radio" name="count" value="8" title="8C">
-							</div>
-						 </div>
-						 <div class="layui-form-item" id="evenDiv">
-							  <label class="layui-form-label">均匀度</label>
-							  <div class="layui-input-block" id="evenIdDiv" >
-							  </div>
-						 </div>
-						 <div class="layui-form-item" id="fragmentDiv">
-						 	<label class="layui-form-label">碎片率</label>
-						 	<div class="layui-input-block" id="fragmentIdDiv" >
-						 	</div>
-						 </div>
-						 <div class="layui-form-item" id="gradeDiv">
-						 	<label class="layui-form-label"><i>*</i>评级</label>
-						 	<div class="layui-input-block" id="gradeIdDiv">
-						 	</div>
-						 </div>
-						<h2>胚胎数据</h2>
-					  <div class="layui-form-item emdate">
-						<div class="layui-inline">
-						  <label class="layui-form-label">直径</label>
-						  <div class="layui-input-inline" style="width: 60px;">
-							<input type="text" id="diameter" name="diameter" autocomplete="off" class="layui-input">
-						  </div>
-						</div>
-						<div class="layui-inline">
-						  <label class="layui-form-label">面积</label>
-						  <div class="layui-input-inline" style="width: 60px;">
-							<input type="text" id="area" name="area" autocomplete="off" class="layui-input">
-						  </div>
-						</div>
-						<div class="layui-inline">
-						<label class="layui-form-label" style="width: 70px;">透明带厚度</label>
-						<div class="layui-input-inline" style="width: 60px;">
-							<input type="text" id="thickness" name="thickness" autocomplete="off" class="layui-input">
-						</div>
-						</div>
-					  </div>
-					  			<!--备注-->
-					<div class="comment">
-						<h1>备注</h1>
-							<div class="layui-input-inline" style="width: 70%;">
-							  <textarea name="memo" id="memo" placeholder="请输入内容" class="layui-textarea"></textarea>
-							</div>
-					 
+					<div class="milestone-select">
+						<h2>请选择里程碑节点</h2>
+						<div class="layui-input-block" id="milestoneIdDiv"
+							style="margin-left: 10px;"></div>
 					</div>
-					  <h2 style="padding-bottom: 0;">胚胎评分</h2>
-					  <h6>25</h6>	
-					  <div class="layui-input-block" style="text-align: center;margin: 0;">
-					  	<button id="saveMilestoneButton" class="layui-btn layui-bg-blue"   lay-submit lay-filter="milestoneFormSub" style="padding: 0 80px;">保存数据</button>
-					  </div>
-					  </form>
 
 				</div>
+				<h2 id="stageDiv">
+					胚胎形态学<span class="stage" id="stageId">（）</span>
+				</h2>
+
+				<div class="layui-form-item" id="pnDiv">
+					<label class="layui-form-label"><i>*</i>PN数</label>
+					<div class="layui-input-block" id="pnIdDiv"></div>
+				</div>
+				<div class="layui-form-item" id="countDiv">
+					<label class="layui-form-label"><i>*</i>细胞个数</label>
+					<div class="layui-input-block">
+						<input type="radio" name="count" value="2" title="2C"> <input
+							type="radio" name="count" value="3" title="3C"> <input
+							type="radio" name="count" value="4" title="4C"> <input
+							type="radio" name="count" value="5" title="5C"> <input
+							type="radio" name="count" value="6" title="6C"> <input
+							type="radio" name="count" value="7" title="7C"> <input
+							type="radio" name="count" value="8" title="8C">
+					</div>
+				</div>
+				<div class="layui-form-item" id="evenDiv">
+					<label class="layui-form-label">均匀度</label>
+					<div class="layui-input-block" id="evenIdDiv"></div>
+				</div>
+				<div class="layui-form-item" id="fragmentDiv">
+					<label class="layui-form-label">碎片率</label>
+					<div class="layui-input-block" id="fragmentIdDiv"></div>
+				</div>
+				<div class="layui-form-item" id="gradeDiv">
+					<label class="layui-form-label"><i>*</i>评级</label>
+					<div class="layui-input-block" id="gradeIdDiv"></div>
+				</div>
+				<h2>胚胎数据</h2>
+				<div class="layui-form-item emdate">
+					<div class="layui-inline">
+						<label class="layui-form-label">直径</label>
+						<div class="layui-input-inline" style="width: 60px;">
+							<input type="text" id="diameter" name="diameter"
+								autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">面积</label>
+						<div class="layui-input-inline" style="width: 60px;">
+							<input type="text" id="area" name="area" autocomplete="off"
+								class="layui-input">
+						</div>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label" style="width: 70px;">透明带厚度</label>
+						<div class="layui-input-inline" style="width: 60px;">
+							<input type="text" id="thickness" name="thickness"
+								autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<!--备注-->
+					<div class="comment">
+						<h1>备注</h1>
+						<div class="layui-input-inline" style="width: 70%;">
+							<textarea placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+					</div>
+				</div>
+				<h2 style="padding-bottom: 0;">胚胎评分</h2>
+				<h6>25</h6>
+
+				<div class="layui-input-block"
+					style="text-align: center; margin: 0;">
+					<button id="saveMilestoneButton" class="layui-btn layui-bg-blue"
+						lay-submit lay-filter="milestoneFormSub" style="padding: 0 80px;">保存数据</button>
+				</div>
+			</form>
+
 		</div>
 	</div>
-	<div style="clear: both;height: 80px;width: 100%;"></div>
-</div>	 
+</div>
+<div style="clear: both; height: 80px; width: 100%;"></div>
+</div>
 
 <!--公共js引入-->
 <script src="/static/front/js/embryo/embryo.js"></script>
+<script src="/static/front/js/embryo/well.js"></script>
 <!-- <script src="/static/front/js/embryo/zIndexImage.js"></script> -->
 
 {% endblock %}
