@@ -5,6 +5,7 @@ from entity.MilestoneData import MilestoneData
 from entity.RestResult import RestResult
 import dao.front.milestone_mapper as milestone_mapper
 import dao.front.milestone_data_mapper as milestone_data_mapper
+import dao.front.procedure_mapper as procedure_mapper
 from flask import request, jsonify
 from common import parse_date
 from common import uuid
@@ -21,15 +22,21 @@ def insertMilestone(request):
     if embryoId == "":
        return 400, '胚胎ID不能为空!'
    
+    #周期ID
+    procedureId = request.form.get('procedureId')
+    if procedureId == "":
+       return 400, '周期ID不能为空!'
+   
+   
     #里程碑节点ID
     milestoneId = request.form.get('milestoneId')
     if milestoneId == "":
        return 400, '里程碑节点ID不能为空!'
    
-    #里程碑节点时间
+    #里程碑时间（自动识别或用户设定的里程碑时间点）时间序列
     milestoneTime = request.form.get('milestoneTime')
     
-    #里程碑时间点距离初次采集时间的间隔，单位分钟
+    #目前暂不使用
     milestoneElapse = 1
     
     userId = current_user.id
@@ -39,10 +46,12 @@ def insertMilestone(request):
     
     #里程碑时间点图像文件路径
     milestonePath = "milestone_path"
-   
-    #里程碑时间点距离授精时间的间隔，单位分钟
-    milestoneStage = ""
+    procedure_mapper.getProcedure(procedureId)
+    #根据周期ID获取受精时间
     
+    #里程碑时间点距离授精时间的间隔，单位分钟    采集时间+时间序列-授精时间算成分钟数
+    milestoneStage = 20180422152100+0160000-1
+          
     #PN数量字典值ID -> sys_dict.id，字典值类型为pn，可能取值：0：0PN；1：1PN；2：2PN；3：>=3PN
     pnId = request.form.get('pnId')
     
@@ -83,15 +92,24 @@ def insertMilestone(request):
                       ,userId=userId,memo=memo)
     
     try:
-        #根据胚胎ID和的里程碑的图片查出是否已经存在了
+        #根据胚胎ID和的里程碑的图片查出是否已经存在了,存在则更新
         sql = "AND embryo_id = :embryoId and milestone_path = :milestonePath "
         filters = {'embryoId': embryoId,'milestonePath':milestonePath}
         milestoneOld = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
         if not milestoneOld:
-            milestone_mapper.insertMilestone(milestone,milestoneData)
+            #根据胚胎ID和里程碑值查询是否存在了，存在则把当前里程碑节点替换成当前图片
+            sql = "AND embryo_id = :embryoId and milestone_id = :milestoneId "
+            filters = {'embryoId': embryoId,'milestoneId':milestoneId}
+            milestoneOld = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
+            if not milestoneOld:
+                milestone_mapper.insertMilestone(milestone,milestoneData)
+            else:
+                milestone.id = milestoneOld.id
+                milestoneData.milestoneId = milestoneOld.id
+                milestone_mapper.updateMilestone(milestone,milestoneData)
         else:
-            milestone.id = milestoneOld.id;
-            milestoneData.milestoneId = milestoneOld.id;
+            milestone.id = milestoneOld.id
+            milestoneData.milestoneId = milestoneOld.id
             milestone_mapper.updateMilestone(milestone,milestoneData)
     except:
         return 400, '设置里程碑时异常!'

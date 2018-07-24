@@ -110,3 +110,7 @@ def deleteProcedure(params):
         db.session.rollback()
         print_exc()
         raise DatabaseError('删除病历时异常', e.message, e)
+
+#根据主键ID查询
+def getProcedure(id):
+    return db.session.query(Procedure).filter(Procedure.id == id).one_or_none()
