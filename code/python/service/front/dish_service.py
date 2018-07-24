@@ -12,15 +12,18 @@ import dao.front.procedure_dish_mapper as procedure_dish_mapper
 from common import logger
 
 
+def querySeriesList(agrs):
+    procedure_id = agrs['procedure_id']
+    dish_id = agrs['dish_id']
+    well_id = agrs['well_id']
 
-def queryWellList(procedureId, dishId):
     try :
-        dish = dish_mapper.queryById(dishId)
+        dish = dish_mapper.queryById(dish_id)
         if not dish : 
             return None
             
         dishCode = dish.dishCode
-        pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId,dishId)
+        pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id,dish_id)
         path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
         if not os.path.isdir(path) :
             return None
@@ -30,18 +33,17 @@ def queryWellList(procedureId, dishId):
         logger().info(jsonPath)
         with open(f'{jsonPath}', 'r') as fn :
             dishJson = json.loads(fn.read())
+
+        last_seris = dishJson['wells'][well_id]['lastEmbryoSerie']
+        target_seris = int(last_seris) - 13500
         list=[]
-        for key in dishJson['wells']:
-            list.append(key)
-            last_seris = dishJson['wells'][key]['lastEmbryoSerie']
-            image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + '\\' + dishJson['wells'][key]['series'][last_seris]['focus']
-            list.append(image_path)
+        for i in range(target_seris, int(last_seris), 1500):
+            list.append(i)
+            for_target = dishJson['wells'][well_id]['series']
+            for key in for_target:
+                print(key)
+        
         return jsonify(list)
     except : 
         logger().info("读取dishState.json文件出现异常")
         return None
-
-def getWellImage(agrs):
-    image_path = agrs['image_path']
-    image = open(image_path,'rb').read()
-    return image

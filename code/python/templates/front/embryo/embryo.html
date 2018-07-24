@@ -24,7 +24,7 @@ body {
 		type="text" id="dishCode" value="{{dish_code}}" /> <input type="text"
 		id="embryoId" value="{{embryo_id}}" />
 
-	<!--¹ö¶¯Í¼-->
+	<!--æ»šåŠ¨å›¾-->
 	<div class="scrollpic" id="scrollpic">
 		<div id="left">
 			<img src="/static/front/img/arrowL.png">
@@ -48,28 +48,28 @@ body {
 			<img src="/static/front/img/arrowR.png">
 		</div>
 	</div>
-	<!--´óÍ¼ÐÅÏ¢²¿·Ö-->
+	<!--å¤§å›¾ä¿¡æ¯éƒ¨åˆ†-->
 	<div class="viewbox">
-		<!--×ó±ßÅßÌ¥´óÍ¼-->
+		<!--å·¦è¾¹èƒšèƒŽå¤§å›¾-->
 		<div class="embryo" id="embryo">
-			<!--Í¼Æ¬ÇøÓò-->
+			<!--å›¾ç‰‡åŒºåŸŸ-->
 			<div class="lg-img">
 				<img src="/static/front/img/20180711111150.png"> <img
 					src="/static/front/img/20180713152312.png"> <img
 					src="/static/front/img/20180713153142.png"> <img
 					src="/static/front/img/20180713153221.png">
 			</div>
-			<!--ÅßÌ¥ÐÅÏ¢-->
+			<!--èƒšèƒŽä¿¡æ¯-->
 			<ul class="eminfo">
-				<li><span>ÕçÃÀÀö</span><span>23Ëê</span></li>
-				<li><span>ÅßÌ¥±àºÅ£º</span><span>A565323</span></li>
-				<li><span>½×¶Î£º</span><span>DAY 2</span></li>
+				<li><span>ç”„ç¾Žä¸½</span><span>23å²</span></li>
+				<li><span>èƒšèƒŽç¼–å·ï¼š</span><span>A565323</span></li>
+				<li><span>é˜¶æ®µï¼š</span><span>DAY 2</span></li>
 			</ul>
-			<!--²âÁ¿µÄÐÅÏ¢-->
+			<!--æµ‹é‡çš„ä¿¡æ¯-->
 			<div class="metrical">
-				<span>³¤¶È£º20px</span> <span>³¤¶È£º20px</span>
+				<span>é•¿åº¦ï¼š20px</span> <span>é•¿åº¦ï¼š20px</span>
 			</div>
-			<!--±ê¼Ç½á¾Ö-->
+			<!--æ ‡è®°ç»“å±€-->
 			<div class="mark">
 				<i class="" data-mark=""></i>
 				<!--	<i class="transplant" data-mark='1'></i>
@@ -77,18 +77,18 @@ body {
 				<i class="abandon" data-mark='3'></i>
 				<i class="hold" data-mark='4'></i>-->
 			</div>
-			<!--Ñ¡Îª×îÇåÎú-->
+			<!--é€‰ä¸ºæœ€æ¸…æ™°-->
 			<div class="elect">
 				<form action="" class="layui-form">
 					<div class="layui-form-item" pane="">
 						<div class="layui-input-block">
 							<input type="checkbox" name="distinct" lay-skin="primary"
-								lay-filter="clear" title="±ê¼ÇÎª×îÇåÎú">
+								lay-filter="clear" title="æ ‡è®°ä¸ºæœ€æ¸…æ™°">
 						</div>
 					</div>
 				</form>
 			</div>
-			<!--zÖá¹ö¶¯-->
+			<!--zè½´æ»šåŠ¨-->
 			<div class="shaft">
 				<ul class="time-vertical">
 					<li><b></b></li>
@@ -98,46 +98,46 @@ body {
 					<li><b></b></li>
 					<li><b></b></li>
 				</ul>
-				<h6>zÖá</h6>
+				<h6>zè½´</h6>
 			</div>
-			<!--²âÁ¿canvas-->
+			<!--æµ‹é‡canvas-->
 			<div class="canvas-box" id="canvasBox">
 				<canvas id="canvas" width="" height=""></canvas>
 			</div>
-			<!--¹¤¾ßÀ¸-->
+			<!--å·¥å…·æ -->
 			<div class="tool">
 				<ul class="tool-play">
-					<li class="pre-milestone"><i></i><span>ÉÏÒ»Àï³Ì±®</span></li>
-					<li class="pre-frame"><i></i><span>ÉÏÒ»Ö¡</span></li>
-					<li class="play" id="playBtn"><i></i><span>²¥·Å</span></li>
-					<li class="next-frame"><i></i><span>ÏÂÒ»Ö¡</span></li>
-					<li class="next-milestone"><i></i><span>ÏÂÒ»Àï³Ì±®</span></li>
+					<li class="pre-milestone"><i></i><span>ä¸Šä¸€é‡Œç¨‹ç¢‘</span></li>
+					<li class="pre-frame"><i></i><span>ä¸Šä¸€å¸§</span></li>
+					<li class="play" id="playBtn"><i></i><span>æ’­æ”¾</span></li>
+					<li class="next-frame"><i></i><span>ä¸‹ä¸€å¸§</span></li>
+					<li class="next-milestone"><i></i><span>ä¸‹ä¸€é‡Œç¨‹ç¢‘</span></li>
 				</ul>
 				<ul class="tool-play tool-end">
-					<li class="transplant" data-end='1'><i></i><span>ÒÆÖ²</span></li>
-					<li class="freeze" data-end='2'><i></i><span>Àä¶³</span></li>
-					<li class="abandon" data-end='3'><i></i><span>Å×Æú</span></li>
-					<li class="hold" data-end='4'><i></i><span>´ý¶¨</span></li>
+					<li class="transplant" data-end='1'><i></i><span>ç§»æ¤</span></li>
+					<li class="freeze" data-end='2'><i></i><span>å†·å†»</span></li>
+					<li class="abandon" data-end='3'><i></i><span>æŠ›å¼ƒ</span></li>
+					<li class="hold" data-end='4'><i></i><span>å¾…å®š</span></li>
 				</ul>
 				<ul class="tool-play tool-metrical">
-					<li class="straight"><i></i><span>Ö±Ïß²âÁ¿</span></li>
-					<li class="roundness"><i></i><span>Ô²ÐÎ²âÁ¿</span></li>
+					<li class="straight"><i></i><span>ç›´çº¿æµ‹é‡</span></li>
+					<li class="roundness"><i></i><span>åœ†å½¢æµ‹é‡</span></li>
 				</ul>
 				<div class="tool-btn">
 					<div class="layui-input-inline" style="margin-left: 0px;">
-						<button class="layui-btn layui-bg-blue" lay-submit lay-filter="">µ¼³öÊÓÆµ</button>
+						<button class="layui-btn layui-bg-blue" lay-submit lay-filter="">å¯¼å‡ºè§†é¢‘</button>
 					</div>
 					<div class="layui-input-inline" style="margin-left: 0px;">
-						<button class="layui-btn layui-bg-blue" lay-submit lay-filter="">µ¼³öÍ¼Ïñ</button>
+						<button class="layui-btn layui-bg-blue" lay-submit lay-filter="">å¯¼å‡ºå›¾åƒ</button>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!--ÓÒ±ßÐÅÏ¢-->
+		<!--å³è¾¹ä¿¡æ¯-->
 		<div class="info">
-			<!--¿×Î»Ñ¡Ôñ-->
+			<!--å­”ä½é€‰æ‹©-->
 			<div class="site" id="site">
-				<h1>¿×Î»Ñ¡Ôñ</h1>
+				<h1>å­”ä½é€‰æ‹©</h1>
 				<ul id="siteitem">
 
 				</ul>
@@ -149,25 +149,25 @@ body {
 					<div class="layui-input-block"
 						style="margin: 6px 8px 6px; min-height: 0;">
 						<input type="checkbox" name="set" id="milestoneCheckbox"
-							lay-skin="primary" lay-filter="milestone" title="½«µ±Ç°Í¼ÏñÉèÎªÀï³Ì±®">
+							lay-skin="primary" lay-filter="milestone" title="å°†å½“å‰å›¾åƒè®¾ä¸ºé‡Œç¨‹ç¢‘">
 					</div>
 					<div class="milestone-select">
-						<h2>ÇëÑ¡ÔñÀï³Ì±®½Úµã</h2>
+						<h2>è¯·é€‰æ‹©é‡Œç¨‹ç¢‘èŠ‚ç‚¹</h2>
 						<div class="layui-input-block" id="milestoneIdDiv"
 							style="margin-left: 10px;"></div>
 					</div>
 
 				</div>
 				<h2 id="stageDiv">
-					ÅßÌ¥ÐÎÌ¬Ñ§<span class="stage" id="stageId">£¨£©</span>
+					èƒšèƒŽå½¢æ€å­¦<span class="stage" id="stageId">ï¼ˆï¼‰</span>
 				</h2>
 
 				<div class="layui-form-item" id="pnDiv">
-					<label class="layui-form-label"><i>*</i>PNÊý</label>
+					<label class="layui-form-label"><i>*</i>PNæ•°</label>
 					<div class="layui-input-block" id="pnIdDiv"></div>
 				</div>
 				<div class="layui-form-item" id="countDiv">
-					<label class="layui-form-label"><i>*</i>Ï¸°û¸öÊý</label>
+					<label class="layui-form-label"><i>*</i>ç»†èƒžä¸ªæ•°</label>
 					<div class="layui-input-block">
 						<input type="radio" name="count" value="2" title="2C"> <input
 							type="radio" name="count" value="3" title="3C"> <input
@@ -179,55 +179,55 @@ body {
 					</div>
 				</div>
 				<div class="layui-form-item" id="evenDiv">
-					<label class="layui-form-label">¾ùÔÈ¶È</label>
+					<label class="layui-form-label">å‡åŒ€åº¦</label>
 					<div class="layui-input-block" id="evenIdDiv"></div>
 				</div>
 				<div class="layui-form-item" id="fragmentDiv">
-					<label class="layui-form-label">ËéÆ¬ÂÊ</label>
+					<label class="layui-form-label">ç¢Žç‰‡çŽ‡</label>
 					<div class="layui-input-block" id="fragmentIdDiv"></div>
 				</div>
 				<div class="layui-form-item" id="gradeDiv">
-					<label class="layui-form-label"><i>*</i>ÆÀ¼¶</label>
+					<label class="layui-form-label"><i>*</i>è¯„çº§</label>
 					<div class="layui-input-block" id="gradeIdDiv"></div>
 				</div>
-				<h2>ÅßÌ¥Êý¾Ý</h2>
+				<h2>èƒšèƒŽæ•°æ®</h2>
 				<div class="layui-form-item emdate">
 					<div class="layui-inline">
-						<label class="layui-form-label">Ö±¾¶</label>
+						<label class="layui-form-label">ç›´å¾„</label>
 						<div class="layui-input-inline" style="width: 60px;">
 							<input type="text" id="diameter" name="diameter"
 								autocomplete="off" class="layui-input">
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">Ãæ»ý</label>
+						<label class="layui-form-label">é¢ç§¯</label>
 						<div class="layui-input-inline" style="width: 60px;">
 							<input type="text" id="area" name="area" autocomplete="off"
 								class="layui-input">
 						</div>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label" style="width: 70px;">Í¸Ã÷´øºñ¶È</label>
+						<label class="layui-form-label" style="width: 70px;">é€æ˜Žå¸¦åŽšåº¦</label>
 						<div class="layui-input-inline" style="width: 60px;">
 							<input type="text" id="thickness" name="thickness"
 								autocomplete="off" class="layui-input">
 						</div>
 					</div>
-					<!--±¸×¢-->
+					<!--å¤‡æ³¨-->
 					<div class="comment">
-						<h1>±¸×¢</h1>
+						<h1>å¤‡æ³¨</h1>
 						<div class="layui-input-inline" style="width: 70%;">
-							<textarea placeholder="ÇëÊäÈëÄÚÈÝ" class="layui-textarea"></textarea>
+							<textarea placeholder="è¯·è¾“å…¥å†…å®¹" class="layui-textarea"></textarea>
 						</div>
 					</div>
 				</div>
-				<h2 style="padding-bottom: 0;">ÅßÌ¥ÆÀ·Ö</h2>
+				<h2 style="padding-bottom: 0;">èƒšèƒŽè¯„åˆ†</h2>
 				<h6>25</h6>
 
 				<div class="layui-input-block"
 					style="text-align: center; margin: 0;">
 					<button id="saveMilestoneButton" class="layui-btn layui-bg-blue"
-						lay-submit lay-filter="milestoneFormSub" style="padding: 0 80px;">±£´æÊý¾Ý</button>
+						lay-submit lay-filter="milestoneFormSub" style="padding: 0 80px;">ä¿å­˜æ•°æ®</button>
 				</div>
 			</form>
 
@@ -237,7 +237,7 @@ body {
 <div style="clear: both; height: 80px; width: 100%;"></div>
 </div>
 
-<!--¹«¹²jsÒýÈë-->
+<!--å…¬å…±jså¼•å…¥-->
 <script src="/static/front/js/embryo/embryo.js"></script>
 <script src="/static/front/js/embryo/well.js"></script>
 <!-- <script src="/static/front/js/embryo/zIndexImage.js"></script> -->
