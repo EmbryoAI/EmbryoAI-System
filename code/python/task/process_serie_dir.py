@@ -75,6 +75,7 @@ def process_serie(path, serie, dish_info):
             relative = os.path.split(sharpest)[1]
             serie_info.sharp = relative
             serie_info.focus = f"{conf['EMBRYO_FOCUS_DIRNAME']+os.path.sep}{focus_file}"
+            wells[c].lastEmbryoSerie = serie
         wells[c].addSerie(serie_info)
     return serie
 
