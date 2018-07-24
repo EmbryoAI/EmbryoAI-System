@@ -41,6 +41,7 @@ encoding//code/python/service/front/procedure_service.py=utf8
 encoding//code/python/service/front/statistics_service.py=utf8
 encoding//code/python/static/front/css/case.css=UTF-8
 encoding//code/python/static/front/css/main.css=UTF-8
+encoding//code/python/templates/front/embryo/embryo.html=UTF-8
 encoding//code/python/templates/front/procedure/procedure.html=UTF-8
 encoding//code/python/templates/front/statistics/statistics.html=UTF-8
 encoding/<project>=UTF-8
