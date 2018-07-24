@@ -364,6 +364,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		                $("#diameter").val(milestoneData.diameter);
 		                $("#area").val(milestoneData.area);
 		                $("#thickness").val(milestoneData.thickness);
+		                $("#memo").val(milestoneData.memo);
+		                $("#stageId").html("("+milestone.milestoneName+")");
 		                showHide(milestone.milestoneId);
 					}
 					form.render();
