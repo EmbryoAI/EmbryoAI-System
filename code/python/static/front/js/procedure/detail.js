@@ -56,15 +56,16 @@ function queryEmbryo(procedureId){
                   + data.data[i].incubator_code +
                  "</a></td><td><a href=\"#\" onclick=\"showDish()\" class=\"layui-table-link\">"
                   + data.data[i].dish_code 
-                  + "</a></td><td><a href=\"#\" onclick=\"showEmbryo()\" class=\"layui-table-link\">"
+                  + "</a></td><td><a href=\"#\" onclick=\"showEmbryo('" + procedureId + 
+                  "','" + data.data[i].dish_id + "','" + data.data[i].id + "')\" class=\"layui-table-link\">"
                    + data.data[i].cell_code + "</a></td></tr>")
             }
 		}
 	});
 }
 
-function showEmbryo(){
-    alert("跳到胚胎视图");
+function showEmbryo(procedureId, dish_id, id){
+    window.open("/front/embryo/" + procedureId + "/" + dish_id + "/" + id);
 }
 function showDish(){
     alert("跳到皿视图");

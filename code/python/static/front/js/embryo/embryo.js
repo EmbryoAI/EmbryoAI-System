@@ -297,5 +297,212 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		});
 		
 		
+        //初始化radio通用方法
+		function chushihua(dictClass,radioId,divId) {
+			$.ajax({
+				type : "get",
+				url : "/api/v1/dict/list/"+dictClass,
+				datatype : "json",
+				success : function(data) {
+					if (data.code == 0) {
+						var str = "";
+						for (var i = 0; i < data.data.length; i++) {
+						 
+								str+="<input type='radio' name='"+radioId+"' lay-filter="+radioId+" value='" + data.data[i].dictKey + "' title='"+data.data[i].dictValue+"' />";
+						 
+						}
+						$("#"+divId).html(str);
+						form.render();
+					} else {
+						layer.alert(data.msg);
+					}
+				},
+				error : function(request) {
+					layer.alert(request.responseText);
+				}
+			});
+		}
+        
+        //动态初始化里程碑的值,字典表milestone
+        chushihua("milestone","milestoneId","milestoneIdDiv");
+                
+        //初始化PN数，字典值pn
+        chushihua("pn","pnId","pnIdDiv");
+		
+		//初始化均匀度,字典even
+		chushihua("even","evenId","evenIdDiv");
+		
+		//初始化碎片率，字典fragment
+		chushihua("fragment","fragmentId","fragmentIdDiv");
+		
+		//初始化评分,字典grade
+		chushihua("grade","gradeId","gradeIdDiv");
+		
+		
+		//根据胚胎ID查询该胚胎ID是否有里程碑，如果有则进行回显
+		$.ajax({
+			type : "get",
+			url : "/api/v1/milestone/3",
+			datatype : "json",
+			success : function(data) {
+				if (data.code == 0) {
+					if(data.data!=null) {//如果当前里程碑不为空则回显
+						var milestone = data.data.milestone;
+						var milestoneData = data.data.milestoneData;
+						$("#milestoneCheckbox").attr('checked', true);
+		                $('#milestone').animate({
+		                    height: '153px'
+		                });
+		                $("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").attr("checked",true);
+		                if(milestoneData.pnId!="") {
+		                	$("input:radio[name=pnId][value="+milestoneData.pnId+"]").attr("checked",true);
+		                }
+		                $("input:radio[name=count][value="+milestoneData.cellCount+"]").attr("checked",true);
+		                $("input:radio[name=evenId][value="+milestoneData.evenId+"]").attr("checked",true);
+		                $("input:radio[name=fragmentId][value="+milestoneData.fragmentId+"]").attr("checked",true);
+		                $("input:radio[name=gradeId][value="+milestoneData.gradeId+"]").attr("checked",true);
+		                $("#diameter").val(milestoneData.diameter);
+		                $("#area").val(milestoneData.area);
+		                $("#thickness").val(milestoneData.thickness);
+		                showHide(milestone.milestoneId);
+					}
+					form.render();
+					
+				} else {
+					layer.alert(data.msg);
+				}
+			},
+			error : function(request) {
+				layer.alert(request.responseText);
+			}
+		});
+
+	
+		
+		form.on('radio(milestoneId)', function(data){
+			var title = data.elem.title;
+			var value = data.value;
+			$("#stageId").html("("+title+")");
+			showHide(value);
+		});
+		
+		function showHide(value) {
+			//根据不同的value显示不同的胚胎形态
+			if(value=="1") {//PN
+				$("#countDiv").hide();
+				$("#evenDiv").hide();
+				$("#fragmentDiv").hide();
+				$("#gradeDiv").hide();
+				$("#pnDiv").show();
+			}else if(value=="2") {//2C
+				$("#countDiv").show();
+				$("#evenDiv").show();
+				$("#fragmentDiv").hide();
+				$("#gradeDiv").hide();
+				$("#pnDiv").hide();
+			}else if(value=="3" || value=="4" || value=="5" || value=="6") {
+				$("#countDiv").show();
+				$("#evenDiv").show();
+				$("#fragmentDiv").show();
+				if(value=="6") {
+					$("#gradeDiv").show();
+				}else {
+					$("#gradeDiv").hide();
+				}
+				$("#pnDiv").hide();
+			}else {
+				$("#pnDiv").hide();
+				$("#countDiv").hide();
+				$("#evenDiv").hide();
+				$("#fragmentDiv").hide();
+				$("#gradeDiv").hide();
+				layer.alert("待确认");
+			}
+		}
+		
+		
+		//监听提交
+        form.on('submit(milestoneFormSub)', function (data) {
+           
+			var value = $('[name=milestoneId]:checked').val();
+			if(value==undefined) {
+				layer.alert("里程碑节点不能为空,请选择里程碑节点!");
+				return;
+			}else if(value=="1") {//PN
+				var pnId = $("input[name='pnId']:checked").val();
+				if(pnId==undefined) {
+					layer.alert("PN数不能为空,请选择PN数!");
+					return;
+				}
+			}else if(value=="2" || value=="3" || value=="4" || value=="5" || value=="6" ) {//2C
+				var count = $("input[name='count']:checked").val();
+				if(count==undefined) {
+					layer.alert("细胞个数不能为空,请选择细胞个数!");
+					return;
+				}
+				
+				var evenId = $("input[name='evenId']:checked").val();
+				if(evenId==undefined) {
+					layer.alert("均匀度不能为空,请选择均匀度!");
+					return;
+				}
+				
+				if(value=="3" || value=="4" || value=="5" || value=="6") {
+					var fragmentId = $("input[name='fragmentId']:checked").val();
+					if(fragmentId==undefined) {
+						layer.alert("碎片率不能为空,请选择碎片率!");
+						return;
+					}
+				}
+				
+				if(value=="6") {
+					var gradeId = $("input[name='gradeId']:checked").val();
+					if(gradeId==undefined) {
+						layer.alert("评级不能为空,请选择评级!");
+						return;
+					}
+				}
+			}else {
+			 
+			}
+			
+
+			
+			var diameter = $("#diameter").val();
+			if(diameter=="") {
+				layer.alert("直径不能为空,请输入直径!");
+				return;
+			}
+			
+			var area = $("#area").val();
+			if(area=="") {
+				layer.alert("面积不能为空,请选择评级!");
+				return;
+			}
+			
+			var thickness = $("#thickness").val();
+			if(thickness=="") {
+				layer.alert("透明带厚度不能为空,请选择评级!");
+				return;
+			}
+			
+			
+			$.ajax({
+				cache : false,
+				type : "post",
+				url : "/api/v1/milestone/add",
+				data : $(data.form).serialize(),// 你的formid
+				async : false,
+				error : function(request) {
+					layer.alert(request.responseText);
+				},
+				success : function(data) {
+					layer.alert("设置成功!");
+				}
+			});
+
+            return false;
+        });
+
     });
 })
