@@ -27,7 +27,7 @@ def insertMilestone(request):
        return 400, '里程碑节点ID不能为空!'
    
     #里程碑节点时间
-    milestoneTime = ""
+    milestoneTime = request.form.get('milestoneTime')
     
     #里程碑时间点距离初次采集时间的间隔，单位分钟
     milestoneElapse = 1
@@ -82,23 +82,30 @@ def insertMilestone(request):
                       fragmentId=fragmentId,gradeId=gradeId,diameter=diameter,area=area,thickness=thickness,milestoneScore=milestoneScore
                       ,userId=userId,memo=memo)
     
-    
     try:
-#         incubatorOld = incubator_mapper.findIncubatorByCode(incubatorCode)
-#         if incubatorOld!=None:
-#             return 400, '当前培养箱编码已存在，请您使用其他编码!'
-        milestone_mapper.insertMilestone(milestone,milestoneData)
+        #根据胚胎ID和的里程碑字典值查出是否已经存在了
+        sql = "AND embryo_id = :embryoId and milestone_id = :milestoneId "
+        filters = {'embryoId': embryoId,'milestoneId':milestoneId}
+        milestoneOld = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
+        if not milestoneOld:
+            milestone_mapper.insertMilestone(milestone,milestoneData)
+        else:
+            milestone.id = milestoneOld.id;
+            milestoneData.milestoneId = milestoneOld.id;
+            milestone_mapper.updateMilestone(milestone,milestoneData)
     except:
         return 400, '设置里程碑时异常!'
     return 200, milestone.to_dict()
 
 def getMilestoneByEmbryoId(embryoId):
     try: 
-        milestone = milestone_mapper.getMilestoneByEmbryoId(embryoId)
+        sql = "AND embryo_id = :embryoId"
+        filters = {'embryoId': embryoId}
+        milestone = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
         if milestone!=None:
             milestoneData = milestone_data_mapper.getMilestoneData(milestone.id)
             result = {}
-            result["milestone"] = milestone.to_dict()
+            result["milestone"] = dict(milestone)
             result["milestoneData"] = milestoneData.to_dict()
         restResult = RestResult(0, "404", 0, None)
         if milestone is not None:

@@ -10,7 +10,7 @@ class Milestone(db.Model, mixin):
     id = db.Column("id", db.String(32), primary_key=True, nullable=False)
     embryoId = db.Column("embryo_id", db.String(32))
     milestoneId = db.Column("milestone_id", db.String(32))
-    milestoneTime = db.Column("milestone_time", db.DateTime)
+    milestoneTime = db.Column("milestone_time", db.String(32))
     milestoneElapse = db.Column("milestone_elapse", db.Integer)
     userId = db.Column("user_id", db.String(32))
     milestoneType = db.Column("milestone_type", db.Integer)
