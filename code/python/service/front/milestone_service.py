@@ -46,12 +46,12 @@ def insertMilestone(request):
     
     #里程碑时间点图像文件路径
     milestonePath = "milestone_path"
-    procedure_mapper.getProcedure(procedureId)
+    procedure = procedure_mapper.getProcedure(procedureId)
     #根据周期ID获取受精时间
     
     #里程碑时间点距离授精时间的间隔，单位分钟    采集时间+时间序列-授精时间算成分钟数
-    milestoneStage = 20180422152100+0160000-1
-          
+#     milestoneStage = 20180422152100+0160000-procedure.insemiTime
+    milestoneStage = ""
     #PN数量字典值ID -> sys_dict.id，字典值类型为pn，可能取值：0：0PN；1：1PN；2：2PN；3：>=3PN
     pnId = request.form.get('pnId')
     

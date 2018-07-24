@@ -10,6 +10,7 @@ import base64
 import dao.front.dish_mapper as dish_mapper
 import dao.front.procedure_dish_mapper as procedure_dish_mapper
 from common import logger
+from task.TimeSeries import TimeSeries,serie_to_time
 
 
 def querySeriesList(agrs):
@@ -34,15 +35,21 @@ def querySeriesList(agrs):
         with open(f'{jsonPath}', 'r') as fn :
             dishJson = json.loads(fn.read())
 
-        last_seris = dishJson['wells'][well_id]['lastEmbryoSerie']
-        target_seris = int(last_seris) - 13500
+        well_json = dishJson['wells'][well_id]
+        last_seris = well_json['lastEmbryoSerie']
+
+        ts = TimeSeries()
+        last_index = len(ts.range(last_seris)) + 1
+        begin_index = last_index - 9
+
         list=[]
-        for i in range(target_seris, int(last_seris), 1500):
+        for i in ts[begin_index:last_index]:
             list.append(i)
-            for_target = dishJson['wells'][well_id]['series']
-            for key in for_target:
-                print(key)
-        
+            image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + '\\' + well_json['series'][i]['focus']
+            list.append(image_path)
+            hour, minute = serie_to_time(i)
+            list.append(f'{hour:02d}H{minute:02d}M')
+
         return jsonify(list)
     except : 
         logger().info("读取dishState.json文件出现异常")

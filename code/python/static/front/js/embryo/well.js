@@ -42,7 +42,13 @@ function querySeriesList(well_id){
             parent.layer.alert(request.responseText);
         },
         success : function(data) {
-            alert(data);
+            var seris = "";
+            for(var i=0;i<data.length;i=i+3){
+                seris = seris + "<li class=\"active\"><a href=\"#\">" + 
+                                "<img src=\"/api/v1/well/image?image_path=" + data[i+1] + 
+                                "\"><span>" + data[i+2] + "</span></a></li>";
+            }
+            $("#myscrollboxul").html(seris);
         }
     });
 }
