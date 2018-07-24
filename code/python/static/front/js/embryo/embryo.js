@@ -342,7 +342,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		//根据胚胎ID查询该胚胎ID是否有里程碑，如果有则进行回显
 		$.ajax({
 			type : "get",
-			url : "/api/v1/milestone/3",
+			url : "/api/v1/milestone/"+$("#embryoId").val(),
 			datatype : "json",
 			success : function(data) {
 				if (data.code == 0) {
@@ -367,6 +367,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		                $("#memo").val(milestoneData.memo);
 		                $("#stageId").html("("+milestone.milestoneName+")");
 		                showHide(milestone.milestoneId);
+					}else {//为空则全部隐藏
+						  showHide(null);
 					}
 					form.render();
 					
@@ -390,7 +392,23 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		
 		function showHide(value) {
 			//根据不同的value显示不同的胚胎形态
-			if(value=="1") {//PN
+			if(value!=null) {
+				$("#embryoDiv").show();
+				$("#embryoSjDiv").show();
+				$("#stageDiv").show();
+				
+			}
+			
+			if(value==null) {
+				$("#countDiv").hide();
+				$("#evenDiv").hide();
+				$("#fragmentDiv").hide();
+				$("#gradeDiv").hide();
+				$("#pnDiv").hide();
+				$("#embryoDiv").hide();
+				$("#embryoSjDiv").hide();
+				$("#stageDiv").hide();
+			}else if(value=="1") {//PN
 				$("#countDiv").hide();
 				$("#evenDiv").hide();
 				$("#fragmentDiv").hide();
@@ -429,31 +447,31 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			var value = $('[name=milestoneId]:checked').val();
 			if(value==undefined) {
 				layer.alert("里程碑节点不能为空,请选择里程碑节点!");
-				return;
+				return false;
 			}else if(value=="1") {//PN
 				var pnId = $("input[name='pnId']:checked").val();
 				if(pnId==undefined) {
 					layer.alert("PN数不能为空,请选择PN数!");
-					return;
+					return false;
 				}
 			}else if(value=="2" || value=="3" || value=="4" || value=="5" || value=="6" ) {//2C
 				var count = $("input[name='count']:checked").val();
 				if(count==undefined) {
 					layer.alert("细胞个数不能为空,请选择细胞个数!");
-					return;
+					return false;
 				}
 				
 				var evenId = $("input[name='evenId']:checked").val();
 				if(evenId==undefined) {
 					layer.alert("均匀度不能为空,请选择均匀度!");
-					return;
+					return false;
 				}
 				
 				if(value=="3" || value=="4" || value=="5" || value=="6") {
 					var fragmentId = $("input[name='fragmentId']:checked").val();
 					if(fragmentId==undefined) {
 						layer.alert("碎片率不能为空,请选择碎片率!");
-						return;
+						return false;
 					}
 				}
 				
@@ -461,7 +479,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 					var gradeId = $("input[name='gradeId']:checked").val();
 					if(gradeId==undefined) {
 						layer.alert("评级不能为空,请选择评级!");
-						return;
+						return false;
 					}
 				}
 			}else {
@@ -473,19 +491,19 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			var diameter = $("#diameter").val();
 			if(diameter=="") {
 				layer.alert("直径不能为空,请输入直径!");
-				return;
+				return false;
 			}
 			
 			var area = $("#area").val();
 			if(area=="") {
 				layer.alert("面积不能为空,请选择评级!");
-				return;
+				  return false;
 			}
 			
 			var thickness = $("#thickness").val();
 			if(thickness=="") {
 				layer.alert("透明带厚度不能为空,请选择评级!");
-				return;
+				  return false;
 			}
 			
 			

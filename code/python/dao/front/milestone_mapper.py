@@ -50,8 +50,8 @@ def updateMilestone(milestone,milestoneData):
                 WHERE milestone_id =:milestoneId  
         """)
         
-        db.session.execute(sql, milestone)
-        db.session.execute(sql2, milestoneData)
+        db.session.execute(sql, milestone.to_dict())
+        db.session.execute(sql2, milestoneData.to_dict())
         db.session.commit()
     except Exception as e:
         db.session.rollback()
