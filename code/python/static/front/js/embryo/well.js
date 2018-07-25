@@ -106,3 +106,12 @@ function nextFrame(){
         }
     });
 }
+
+$(document).keydown(function(event){
+    if(event.which == "37"){
+        preFrame();
+    }
+    if(event.which == "39"){
+        nextFrame();
+    }
+});
