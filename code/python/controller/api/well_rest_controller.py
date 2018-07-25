@@ -24,3 +24,19 @@ def getWellImage():
     parser = reqparse.RequestParser()
     parser.add_argument('image_path', type=str)
     return well_service.getWellImage(parser.parse_args())
+
+#根据当前时间序列获取上一帧序列
+@well_rest_controller.route('/preframe', methods=['GET'])
+@login_required
+def getPreFrame():
+    parser = reqparse.RequestParser()
+    parser.add_argument('current_seris', type=str)
+    return well_service.getPreFrame(parser.parse_args())
+
+#根据当前时间序列获取下一帧序列
+@well_rest_controller.route('/nextframe', methods=['GET'])
+@login_required
+def getNextFrame():
+    parser = reqparse.RequestParser()
+    parser.add_argument('current_seris', type=str)
+    return well_service.getNextFrame(parser.parse_args())
