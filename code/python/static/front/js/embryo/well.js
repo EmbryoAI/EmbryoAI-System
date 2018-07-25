@@ -1,6 +1,7 @@
 var procedureId = "";
 var dishId = "";
 var wellId = "";
+var lastSeris = "";
 
 $(function(){
     procedureId = $("#procedureId").val();
@@ -64,6 +65,7 @@ function querySeriesList(wellId){
                 }
             }
             $("#myscrollboxul").html(seris);
+            lastSeris = data[data.length-3];
         }
     });
 }
@@ -75,6 +77,10 @@ function getBigImage(procedureId, dishId, wellId, seris){
 
 function preFrame(){
     var currentSeris = "5171500";
+    if(currentSeris == "0000000"){
+        parent.layer.alert("已经是第一张了!");
+        return;
+    }
     $.ajax({
         cache : false,
         type : "GET",
@@ -92,6 +98,10 @@ function preFrame(){
 
 function nextFrame(){
     var currentSeris = "5171500";
+    if(parseInt(currentSeris) >= parseInt(lastSeris)){
+        parent.layer.alert("已经是最后一张了!");
+        return;
+    }
     $.ajax({
         cache : false,
         type : "GET",

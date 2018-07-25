@@ -55,5 +55,5 @@ def getPreFrame(agrs):
 def getNextFrame(agrs):
     current_seris = agrs['current_seris']
     ts = TimeSeries()
-    next_index = len(ts.range(current_seris)) + 1
-    return ts[next_index]
+    ts.move_to(len(ts.range(current_seris)) + 1)
+    return ts[1000]
