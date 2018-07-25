@@ -18,7 +18,7 @@ if __name__ == '__main__':
     parser.add_argument('-m', '--model', help='ImageNet模型名称', default='Xception')
     parser.add_argument('-o', '--output', help='输出模型及参数文件目录', required=True)
     parser.add_argument('-s', '--size', help='图像尺寸', default='100')
-    parser.add_argument('-e', '--epochs', help='EPOCHS批次', defalut='20')
+    parser.add_argument('-e', '--epochs', help='EPOCHS批次', default='20')
     parser.add_argument('-b', '--batch', help='BATCH_SIZE每批图像数量', default='128')
     conf = parser.parse_args()
     img_size = (int(conf.size), int(conf.size))
