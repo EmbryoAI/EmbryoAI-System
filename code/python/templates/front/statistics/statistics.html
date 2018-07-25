@@ -3,10 +3,6 @@
 
 <link rel="stylesheet" type="text/css" href="/static/front/css/statistics.css" /> 
 <!-- 日期插件 -->
-<link rel="stylesheet" type="text/css" href="/static/front/datepicker/jquery-ui-1.9.2.custom.css" />
-<script src="/static/front/datepicker/jquery-1.8.3.js"></script>
-<script src="/static/front/datepicker/jquery-ui-1.9.2.custom.js"></script>
-<script src="/static/front/datepicker/share.js"></script>
 <!-- echars -->
 <script src="/static/front/echars/echarts.common.min.js"></script>
 
@@ -23,24 +19,7 @@
 					<label class="layui-form-label">日期范围</label>
 				</div>
 				<div class="layui-inline" style="width: 220px;">
-					<input type="text" class="ui-datepicker-time layui-input" id="embryoOutcomeDate" readonly value="" />
-					<div class="ui-datepicker-css">
-						<div class="ui-datepicker-quick">
-							<p class="quick-title">快捷日期
-							</p>
-							<div>
-								<input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name="" />
-								<input class="ui-date-quick-button" type="button" value="一年内" alt="-364" name="" />
-							</div>
-						</div>
-						<div class="ui-datepicker-choose">
-							<p>自选日期</p>
-							<div class="ui-datepicker-date">
-								<input name="startDate" id="startDate" class="startDate" readonly value=" " type="text"> -
-								<input name="endDate" id="endDate" class="endDate" readonly value=" " type="text" disabled onChange="datePickers()">
-							</div>
-						</div>
-					</div>
+					<input type="text" readonly="readonly" class="layui-input" name="embryoOutcomeDate" id="embryoOutcomeDate" placeholder="-">
 				</div>
 				<div class="layui-inline">
 					<div class="layui-input-inline">
@@ -75,24 +54,7 @@
 							<label class="layui-form-label">日期范围</label>
 						</div>
 						<div class="layui-inline" style="width: 220px;">
-							<input type="text" class="ui-datepicker-time layui-input" id="pregnancyRateDate" readonly value="" />
-							<div class="ui-datepicker-css">
-								<div class="ui-datepicker-quick">
-									<p class="quick-title">快捷日期
-									</p>
-									<div>
-										<input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name="" />
-										<input class="ui-date-quick-button" type="button" value="一年内" alt="-364" name="" />
-									</div>
-								</div>
-								<div class="ui-datepicker-choose">
-									<p>自选日期</p>
-									<div class="ui-datepicker-date">
-										<input name="startDate" id="startDate" class="startDate" readonly value=" " type="text"> -
-										<input name="endDate" id="endDate" class="endDate" readonly value=" " type="text" disabled onChange="datePickers()">
-									</div>
-								</div>
-							</div>
+							<input type="text" readonly="readonly" class="layui-input" name="pregnancyRateDate" id="pregnancyRateDate" placeholder="-">
 						</div>
 						<div class="layui-inline">
 							<div class="layui-input-inline">
@@ -115,6 +77,9 @@
 					</div>
 				</div>
 			</div>
+			<div style="clear: both;height: 46px;width: 100%;"></div>
 		</div>
 <script src="/static/front/js/statistics/statistics.js"></script>
+
+
 {% endblock %}
