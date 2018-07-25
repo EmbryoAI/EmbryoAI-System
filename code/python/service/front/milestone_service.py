@@ -11,6 +11,7 @@ from common import parse_date
 from common import uuid
 import re
 import time
+import datetime
 from app import current_user
 
 def insertMilestone(request):
@@ -50,7 +51,21 @@ def insertMilestone(request):
     #根据周期ID获取受精时间
     
     #里程碑时间点距离授精时间的间隔，单位分钟    采集时间+时间序列-授精时间算成分钟数
-#     milestoneStage = 20180422152100+0160000-procedure.insemiTime
+    timeSeries= "0000000" 
+    milestoneStage = "20180722152100"
+    milestoneStage = datetime.datetime.strptime(milestoneStage, "%Y%m%d%H%M%S")
+    milestoneStage = (milestoneStage+datetime.timedelta(days=int(timeSeries[0:1]))
+    +datetime.timedelta(hours=int(timeSeries[1:3]))+datetime.timedelta(minutes=int(timeSeries[3:5]))
+    +datetime.timedelta(seconds=int(timeSeries[5:7])))
+    milestoneStage = milestoneStage-procedure.insemiTime
+    milestoneStage = int(round(milestoneStage.total_seconds()/60,1))
+    print(milestoneStage)
+#     c = a+b
+#     d = c+datetime.datetime.strptime("0160000", '%d%H:%M:%S')
+#
+#     print(c);
+    
+    
     milestoneStage = ""
     #PN数量字典值ID -> sys_dict.id，字典值类型为pn，可能取值：0：0PN；1：1PN；2：2PN；3：>=3PN
     pnId = request.form.get('pnId')
@@ -82,7 +97,7 @@ def insertMilestone(request):
     #备注
     memo = request.form.get('memo')
     
-    create_time = update_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 
+#     create_time = update_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 
  
     milestone = Milestone(id=id, embryoId=embryoId,milestoneId=milestoneId,milestoneTime=milestoneTime,milestoneElapse=milestoneElapse,
                           userId=userId,milestoneType=milestoneType,milestonePath=milestonePath)
