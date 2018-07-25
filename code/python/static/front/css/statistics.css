@@ -23,3 +23,56 @@
 	float: left;
 	height: 400px;
 }
+.circle {
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	border-radius: 50%;
+	background: #37a2da;
+	top: 50px
+}
+.pie_left, .pie_right {
+	width:100px; 
+	height:100px;
+	position: absolute;
+	top: 0;left: 0;
+}
+.circle .left,.circle .right {
+	width:100px; 
+	height:100px;
+	background:#8378ea;
+	border-radius: 50%;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.pie_right,.circle .right {
+	clip:rect(0,auto,auto,50px);
+}
+.pie_left,.circle .left {
+	clip:rect(0,50px,auto,0);
+}
+.mask {
+	width: 74px;
+	height: 74px;
+	border-radius: 50%;
+	left: 13px;
+	top: 13px;
+	background: #FFF;
+	position: absolute;
+	text-align: center;
+	line-height: 70px;
+	font-size: 16px;
+	font-weight: bold;
+	color: #1b2437;
+}
+.circle p{
+	position: absolute;
+	width: 100px;
+	bottom: -30px;
+	left: 0;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bold;
+	color: #1b2437;
+}

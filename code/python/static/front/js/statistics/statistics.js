@@ -75,6 +75,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'],
 				}
 				// 指定图表的配置项和数据
 				var option = {
+					
 					xAxis : {
 						data : nameData
 					},
@@ -82,7 +83,10 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'],
 					series : [ {
 						type : 'bar',
 						data : countData
-					} ]
+					} ],
+					color: [
+						'#d87a80','#b6a2de','#5ab1ef','#ffb980','#d87a80',
+					],
 				};
 				endingBox1.hideLoading();
 				// 使用刚指定的配置项和数据显示图表。
@@ -109,8 +113,19 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'],
 							formatter : "{a} <br/>{b} : {c} ({d}%)"
 						},
 						calculable : true,
+						legend: {
+							orient: 'vertical',
+							x: 'left',
+							data:data.data
+						},
+						color: [
+							'#2ec7c9','#b6a2de','#5ab1ef','#ffb980','#d87a80',
+							'#8d98b3','#e5cf0d','#97b552','#95706d','#dc69aa',
+							'#07a2a4','#9a7fd1','#588dd5','#f5994e','#c05050',
+							'#59678c','#c9ab00','#7eb00a','#6f5553','#c14089'
+						],
 						series : [{
-							radius : [30, 148],
+							radius : [80, 130],
 							roseType : 'radius',
 							name : '胚胎数',
 							type : 'pie',
@@ -159,6 +174,22 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'],
 	
 	//生化妊娠率、临床妊娠率、临床着床率初始化 
 	pregnancyRate();
+
+
+	$(function() {
+		$('.circle').each(function(index, el) {
+			var num = $(this).find('span').text() * 3.6;
+			if (num<=180) {
+				$(this).find('.right').css('transform', "rotate(" + num + "deg)");
+			} else {
+				$(this).find('.right').css('transform', "rotate(180deg)");
+				$(this).find('.left').css('transform', "rotate(" + (num - 180) + "deg)");
+			};
+		});
+
+	});
+
+
 })
  
 
