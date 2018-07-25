@@ -19,7 +19,7 @@ def read_dataset(data_path, size, classes=14):
         for img_file in filter(lambda x: x.endswith('.jpg'), os.listdir(img_path)):
             img = imread(img_path+img_file)
             img = resize(img, size)
-            X_.append(img)
+            X_.append(img[...,np.newaxis])
             y_.append(i)
     X = np.array(X_)
     y = np.array(y_)
