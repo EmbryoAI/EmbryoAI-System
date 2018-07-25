@@ -34,7 +34,7 @@ def queryWellList(procedureId, dishId):
         for key in dishJson['wells']:
             list.append(key)
             last_seris = dishJson['wells'][key]['lastEmbryoSerie']
-            image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + '\\' + dishJson['wells'][key]['series'][last_seris]['focus']
+            image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + dishJson['wells'][key]['series'][last_seris]['focus']
             list.append(image_path)
         return jsonify(list)
     except : 

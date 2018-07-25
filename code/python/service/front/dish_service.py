@@ -45,7 +45,7 @@ def querySeriesList(agrs):
         list=[]
         for i in ts[begin_index:last_index]:
             list.append(i)
-            image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + '\\' + well_json['series'][i]['focus']
+            image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + well_json['series'][i]['focus']
             list.append(image_path)
             hour, minute = serie_to_time(i)
             list.append(f'{hour:02d}H{minute:02d}M')
