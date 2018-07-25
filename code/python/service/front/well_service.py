@@ -10,7 +10,7 @@ import base64
 import dao.front.dish_mapper as dish_mapper
 import dao.front.procedure_dish_mapper as procedure_dish_mapper
 from common import logger
-
+from task.TimeSeries import TimeSeries
 
 
 def queryWellList(procedureId, dishId):
@@ -45,3 +45,15 @@ def getWellImage(agrs):
     image_path = agrs['image_path']
     image = open(image_path,'rb').read()
     return image
+
+def getPreFrame(agrs):
+    current_seris = agrs['current_seris']
+    ts = TimeSeries()
+    pre_index = len(ts.range(current_seris)) - 1
+    return ts[pre_index]
+
+def getNextFrame(agrs):
+    current_seris = agrs['current_seris']
+    ts = TimeSeries()
+    ts.move_to(len(ts.range(current_seris)) + 1)
+    return ts[1000]

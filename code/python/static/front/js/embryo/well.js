@@ -1,6 +1,11 @@
+var procedureId = "";
+var dishId = "";
+var wellId = "";
+var lastSeris = "";
+
 $(function(){
-    var procedureId = $("#procedureId").val();
-    var dishId = $("#dishId").val();
+    procedureId = $("#procedureId").val();
+    dishId = $("#dishId").val();
     $.ajax({
         cache : false,
         type : "GET",
@@ -24,18 +29,19 @@ $(function(){
                 }
             }
             $("#siteitem").html(well);
-            querySeriesList(data[0]);
+            wellId = data[0];
+            querySeriesList(wellId);
         }
     });
 });
 
-function querySeriesList(well_id){
+function querySeriesList(wellId){
     var procedureId = $("#procedureId").val();
     var dishId = $("#dishId").val();
     $.ajax({
         cache : false,
         type : "GET",
-        url : "/api/v1/dish/list?procedure_id=" + procedureId + "&dish_id=" + dishId + "&well_id=" + well_id,
+        url : "/api/v1/dish/list?procedure_id=" + procedureId + "&dish_id=" + dishId + "&well_id=" + wellId,
         data : "",
         async : false,
         error : function(request) {
@@ -44,11 +50,78 @@ function querySeriesList(well_id){
         success : function(data) {
             var seris = "";
             for(var i=0;i<data.length;i=i+3){
-                seris = seris + "<li class=\"active\"><a href=\"#\">" + 
-                                "<img src=\"/api/v1/well/image?image_path=" + data[i+1] + 
-                                "\"><span>" + data[i+2] + "</span></a></li>";
+                if(i == data.length-3){
+                    seris = seris + "<li class=\"active\"><a href=\"#\">" + 
+                                    "<img src=\"/api/v1/well/image?image_path=" + data[i+1] + 
+                                    "\" onclick=\"getBigImage('" + procedureId + "','" + dishId + 
+                                    "','" + wellId + "','" + data[i] + "')\">" +
+                                    "<span>" + data[i+2] + "</span></a></li>";
+                }else{
+                    seris = seris + "<li><a href=\"#\">" + 
+                                    "<img src=\"/api/v1/well/image?image_path=" + data[i+1] + 
+                                    "\" onclick=\"getBigImage('" + procedureId + "','" + dishId + 
+                                    "','" + wellId + "','" + data[i] + "')\">" +
+                                    "<span>" + data[i+2] + "</span></a></li>";
+                }
             }
             $("#myscrollboxul").html(seris);
+            lastSeris = data[data.length-3];
         }
     });
 }
+
+function getBigImage(procedureId, dishId, wellId, seris){
+    alert("传入周期ID:" + procedureId + ",皿ID:" + dishId + 
+            ",孔ID:" + wellId + ",时间序列:" + seris + ",调用小妹妹的方法获取大图");
+}
+
+function preFrame(){
+    var currentSeris = "5171500";
+    if(currentSeris == "0000000"){
+        parent.layer.alert("已经是第一张了!");
+        return;
+    }
+    $.ajax({
+        cache : false,
+        type : "GET",
+        url : "/api/v1/well/preframe?current_seris=" + currentSeris,
+        data : "",
+        async : false,
+        error : function(request) {
+            parent.layer.alert(request.responseText);
+        },
+        success : function(data) {
+            getBigImage(procedureId, dishId, wellId, data);
+        }
+    });
+}
+
+function nextFrame(){
+    var currentSeris = "5171500";
+    if(parseInt(currentSeris) >= parseInt(lastSeris)){
+        parent.layer.alert("已经是最后一张了!");
+        return;
+    }
+    $.ajax({
+        cache : false,
+        type : "GET",
+        url : "/api/v1/well/nextframe?current_seris=" + currentSeris,
+        data : "",
+        async : false,
+        error : function(request) {
+            parent.layer.alert(request.responseText);
+        },
+        success : function(data) {
+            getBigImage(procedureId, dishId, wellId, data);
+        }
+    });
+}
+
+$(document).keydown(function(event){
+    if(event.which == "37"){
+        preFrame();
+    }
+    if(event.which == "39"){
+        nextFrame();
+    }
+});

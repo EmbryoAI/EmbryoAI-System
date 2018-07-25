@@ -10,17 +10,97 @@ layui
 					var layer = layui.layer;
 
 					// 日期插件配置
+					//定义接收本月的第一天和最后一天
+					var startDate1=new Date(new Date().setDate(1));
+					var endDate1=new Date(new Date(new Date().setMonth(new Date().getMonth()+1)).setDate(0));
+					//定义接收上个月的第一天和最后一天
+					var startDate2=new Date(new Date(new Date().setMonth(new Date().getMonth()-1)).setDate(1));
+					var endDate2=new Date(new Date().setDate(0));		
 					laydate.render({
 						elem : '#ecTime',
 						range : '~',
-						format : 'yyyy-MM-dd ',
-						max : 0
+						format : 'yyyy/MM/dd ',
+						max : 0,
+						extrabtns: [{
+										id: 'today',
+										text: '今天',
+										range: [new Date(), new Date()]
+								},
+								{
+										id: 'yesterday',
+										text: '昨天',
+										range: [new Date(new Date().setDate(new Date().getDate() - 1)),
+												new Date()
+										]
+								},
+								{
+										id: 'lastday-2',
+										text: '前天',
+										range: [new Date(new Date().setDate(new Date().getDate() - 2)),
+												new Date()
+										]
+								},
+								{
+										id: 'lastday-3',
+										text: '三天内',
+										range: [new Date(new Date().setDate(new Date().getDate() - 3)),
+												new Date()
+										]
+								},
+								{
+										id: 'lastday-5',
+										text: '五天内',
+										range: [new Date(new Date().setDate(new Date().getDate() - 4)),
+												new Date()
+										]
+								}
+						],
+						ready: function(date){
+						$(".laydate-main-list-0 .laydate-prev-m").click();
+						}			
 					});
 					laydate.render({
 						elem : '#insemiTime',
 						range : '~',
-						format : 'yyyy-MM-dd ',
-						max : 0
+						format : 'yyyy/MM/dd ',
+						max : 0,
+						extrabtns: [{
+										id: 'today',
+										text: '今天',
+										range: [new Date(), new Date()]
+								},
+								{
+										id: 'yesterday',
+										text: '昨天',
+										range: [new Date(new Date().setDate(new Date().getDate() - 1)),
+												new Date()
+										]
+								},
+								{
+										id: 'lastday-2',
+										text: '前天',
+										range: [new Date(new Date().setDate(new Date().getDate() - 2)),
+												new Date()
+										]
+								},
+								{
+										id: 'lastday-3',
+										text: '三天内',
+										range: [new Date(new Date().setDate(new Date().getDate() - 3)),
+												new Date()
+										]
+								},
+								{
+										id: 'lastday-5',
+										text: '五天内',
+										range: [new Date(new Date().setDate(new Date().getDate() - 4)),
+												new Date()
+										]
+								}
+						],
+						ready: function(date){
+						$(".laydate-main-list-0 .laydate-prev-m").click();
+						}												
 					});
 					// 表格配置
 					table

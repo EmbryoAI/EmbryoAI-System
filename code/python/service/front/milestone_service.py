@@ -63,7 +63,7 @@ def insertMilestone(request):
 #     c = a+b
 #     d = c+datetime.datetime.strptime("0160000", '%d%H:%M:%S')
 #
-#     print(c);
+#     print(c)
     
     
     milestoneStage = ""
