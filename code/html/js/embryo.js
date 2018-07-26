@@ -202,9 +202,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		/* 为canvas绑定mouse事件 */
 		
 		$(".tool-metrical li").click(function(){
-			$('.tool-metrical li').removeClass('active');
-			$(this).addClass('active');
-			if($(this).hasClass('straight')){
+			 var self= $(this)
 				$('canvas').mousedown(function(e){
 					flag = true;
 					x = e.offsetX; // 鼠标落下时的X
@@ -217,46 +215,19 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 					y = e.offsetY; // 鼠标落下时的Y
 					console.log(x,y)
 				}).mousemove(function(e){
-					drawLine(e); // 绘制方法
+					
+					if(self.hasClass('straight')){
+						drawLine(e); // 绘制方法
+					}else{
+						drawCircle(e); // 绘制方法	
+					}
 				});
-			}else{
-				
-				$('canvas').mousedown(function(e){
-					flag = true;
-					x = e.offsetX; // 鼠标落下时的X
-					y = e.offsetY; // 鼠标落下时的Y
-					console.log(x,y)
-				}).mouseup(function(e){
-					flag = false;
-					url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
-					x = e.offsetX; // 鼠标落下时的X
-					y = e.offsetY; // 鼠标落下时的Y
-					console.log(x,y)
-				}).mousemove(function(e){
-					drawCircle(e); // 绘制方法
-				});
-				
-			}
+			
 			
 			
 			
 			
 		})
-		
-		$('canvas').mousedown(function(e){
-			flag = true;
-			x = e.offsetX; // 鼠标落下时的X
-			y = e.offsetY; // 鼠标落下时的Y
-			console.log(x,y)
-		}).mouseup(function(e){
-			flag = false;
-			url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
-			x = e.offsetX; // 鼠标落下时的X
-			y = e.offsetY; // 鼠标落下时的Y
-			console.log(x,y)
-		}).mousemove(function(e){
-			drawLine(e); // 绘制方法
-		});
 		
 		// 画圆
 		function drawCircle(e){
@@ -285,9 +256,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				ctx.lineWidth = 2; 
 			}
 		}
-		
 		// 清除画布
-		
 			function clearCanvas()
 				{
 					ctx.clearRect(0,0,canvas.width,canvas.height);
