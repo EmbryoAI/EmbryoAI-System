@@ -5,6 +5,9 @@ from skimage.transform import resize
 import numpy as np
 import os
 
+'''
+将图像dataset目录下的文件读取到内存中进行学习，此方式适合数据量较小的情况，在数据量大的情况下，必须使用generator
+'''
 def preprocess_image(img):
     return (img/255-0.5)*2.0
 
