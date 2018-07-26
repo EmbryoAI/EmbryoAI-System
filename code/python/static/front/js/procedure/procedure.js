@@ -119,7 +119,7 @@ layui
 														&& d.medical_record_no != '') {
 													return "<a href='javascript:void()' onclick='showDetail(\""
 															+ d.id
-															+ "\")' class='layui-table-link view' >"
+															+ "\")' class='layui-table-link case' >"
 															+ d.medical_record_no
 															+ "</a> ";
 												} else {

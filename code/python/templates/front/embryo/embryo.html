@@ -24,6 +24,9 @@ body {
 .footer{
 	background-color: #f3f4f8;
 }
+.layui-form-radio *{
+	font-size: 12px
+}
 </style>
 <div class="main">
 	<input type="hidden" id="procedureId" value="{{procedure_id}}"/>
@@ -45,60 +48,6 @@ body {
 							<span>2h3min</span>
 						</a>
 					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
 				</ul>
 			</div>
 		</div>
@@ -112,8 +61,7 @@ body {
 		<div class="embryo" id="embryo">
 			<!--图片区域-->
 			<div class="lg-img">
-				<img src="/static/front/img/20180711111150.png">
-				<img src="/static/front/img/20180713153221.png">
+				<img src="/static/front/img/20180725183944.jpg">
 			</div>
 			<!--胚胎信息-->
 			<ul class="eminfo">
@@ -275,15 +223,12 @@ body {
 					<h2>备注</h2>
 					<div class="comment">
 						<div class="layui-input-inline" style="width: 90%;">
-							<textarea id="memo" name="memo" placeholder="请输入内容" class="layui-textarea"></textarea>
+							<textarea id="memo" name="memo" placeholder="请输入内容" class="layui-textarea" style="min-height: 46px"></textarea>
 						</div>
 					</div>
 				</div>
-				<h2 style="padding-bottom: 0;">胚胎评分</h2>
-				<h6>25</h6>
-
-				<div class="layui-input-block"
-					style="text-align: center; margin: 0;">
+				<h2 style="padding-bottom: 0;">胚胎评分<span class="score">25</span></h2>
+				<div class="layui-input-block"	style="text-align: center; margin:20px 0 0;">
 					<button id="saveMilestoneButton" class="layui-btn layui-bg-blue"
 						lay-submit lay-filter="milestoneFormSub" style="padding: 0 80px;">保存数据</button>
 				</div>

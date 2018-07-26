@@ -88,12 +88,12 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             const a = data.elem.checked;
 
             if (a == true) {
-                layer.msg('打开');
+                // layer.msg('打开');
                 $('#milestone').animate({
-                    height: '153px'
+                    height: '120px'
                 });
             } else {
-                layer.msg('关闭');
+                // layer.msg('关闭');
                 $('#milestone').animate({
                     height: '31px'
                 });
@@ -326,7 +326,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 						var milestoneData = data.data.milestoneData;
 						$("#milestoneCheckbox").attr('checked', true);
 		                $('#milestone').animate({
-		                    height: '153px'
+		                    height: '120px'
 		                });
 		                $("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").attr("checked",true);
 		                if(milestoneData.pnId!="") {
