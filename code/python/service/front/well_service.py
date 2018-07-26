@@ -56,4 +56,4 @@ def getNextFrame(agrs):
     current_seris = agrs['current_seris']
     ts = TimeSeries()
     ts.move_to(len(ts.range(current_seris)) + 1)
-    return ts[1000]
+    return ts.next()
