@@ -11,7 +11,7 @@ NB_CLASSES = 14
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument('-m', '--model', help='ImageNet模型名称', default='Xception')
+    parser.add_argument('-m', '--model', help='ImageNet模型名称', required=True)
     parser.add_argument('-s', '--size', help='图像尺寸', default='100')
     parser.add_argument('-b', '--batch', help='BATCH_SIZE每批图像数量', default='128')
     conf = parser.parse_args()
