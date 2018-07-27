@@ -46,7 +46,10 @@ if __name__ == '__main__':
     # y_test = np_utils.to_categorical(y_test, num_classes=NB_CLASSES)
     
     # model = ImageNetModel(weights=None, input_shape=(img_size[0], img_size[1], 1)).getModel(conf.model)
-    model = init_model((img_size[0], img_size[1], 1))
+    if conf.model == 'custom':
+        model = init_model((img_size[0], img_size[1], 1))
+    else:
+        model = ImageNetModel(weights=None, input_shape=(img_size[0], img_size[1], 1)).getModel(conf.model)
     model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
     model.summary()
     # model.fit(X_train, y_train, batch_size=BATCH_SIZE, epochs=EPOCHS, verbose=1, validation_split=0.25)
