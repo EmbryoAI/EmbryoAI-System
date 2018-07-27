@@ -23,11 +23,11 @@ $(function(){
                     if(i == data[0]){
                         well = well + "<li class=\"active\"><span>well" + i + 
                         "</span><img src=\"/api/v1/well/image?image_path=" + result +
-                        "\" onclick=\"querySeriesList('" + i + "')\"><i></i></li>";
+                        "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie')\"><i></i></li>";
                     }else{
                         well = well + "<li><span>well" + i + 
                         "</span><img src=\"/api/v1/well/image?image_path=" + result +
-                        "\" onclick=\"querySeriesList('" + i + "')\"><i></i></li>";
+                        "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie')\"><i></i></li>";
                     }
                 }else{
                     well = well + "<li><span>well" + i + 
@@ -36,7 +36,7 @@ $(function(){
             }
             $("#siteitem").html(well);
             wellId = data[0];
-            querySeriesList(wellId);
+            querySeriesList(wellId,'lastEmbryoSerie');
         }
     });
 });
@@ -51,13 +51,13 @@ function check(index, data){
     return result;
 }
 
-function querySeriesList(wellId){
+function querySeriesList(wellId, seris){
     var procedureId = $("#procedureId").val();
     var dishId = $("#dishId").val();
     $.ajax({
         cache : false,
         type : "GET",
-        url : "/api/v1/dish/list?procedure_id=" + procedureId + "&dish_id=" + dishId + "&well_id=" + wellId,
+        url : "/api/v1/dish/list?procedure_id=" + procedureId + "&dish_id=" + dishId + "&well_id=" + wellId + "&seris=" + seris,
         data : "",
         async : false,
         error : function(request) {
@@ -67,22 +67,18 @@ function querySeriesList(wellId){
             var seris = "";
             for(var i=0;i<data.length;i=i+3){
                 var imagePath = "/api/v1/well/image?image_path=" + data[i+1];
-                if(imagePath.indexOf("embryo_not_found") != -1){
+                if(data[i+1].indexOf("embryo_not_found") != -1){
                     imagePath = "/static/front/img/icon-noembryo.jpg";
                 }
-                if(i == data.length-3){
-                    seris = seris + "<li class=\"active\"><a href=\"#\">" + 
-                                    "<img src=\"" + imagePath +"\" onclick=\"getBigImage('" 
-                                    + procedureId + "','" + dishId + 
-                                    "','" + wellId + "','" + data[i] + "')\">" +
-                                    "<span>" + data[i+2] + "</span></a></li>";
-                }else{
-                    seris = seris + "<li><a href=\"#\">" + 
-                                    "<img src=\"" + imagePath + "\" onclick=\"getBigImage('" 
-                                    + procedureId + "','" + dishId + 
-                                    "','" + wellId + "','" + data[i] + "')\">" +
-                                    "<span>" + data[i+2] + "</span></a></li>";
+                var active = "<div class=\"swiper-slide\">";
+                if(i == 12){
+                    active = "<div class=\"swiper-slide active\">";
                 }
+                seris = seris + active + "<span><img src=\"" + 
+                                    imagePath +"\" onclick=\"getBigImage('" 
+                                    + procedureId + "','" + dishId + 
+                                    "','" + wellId + "','" + data[i] + "')\"><b>" + 
+                                    data[i+2] + "</b></div>";
             }
             $("#myscrollboxul").html(seris);
             lastSeris = data[data.length-3];
@@ -91,8 +87,8 @@ function querySeriesList(wellId){
 }
 
 function getBigImage(procedureId, dishId, wellId, seris){
-    alert("传入周期ID:" + procedureId + ",皿ID:" + dishId + 
-            ",孔ID:" + wellId + ",时间序列:" + seris + ",调用小妹妹的方法获取大图");
+    querySeriesList(wellId, seris);
+    
 }
 
 function preFrame(){
