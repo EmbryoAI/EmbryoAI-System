@@ -18,6 +18,6 @@ def addMilestone():
 
 #根据胚胎ID查询出里程碑相关信息
 @milestone_rest_controller.route('/<string:embryoId>', methods=['GET'])
-# @login_required
+@login_required
 def getMilestoneByEmbryoId(embryoId):
     return milestone_service.getMilestoneByEmbryoId(embryoId)

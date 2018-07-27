@@ -15,3 +15,9 @@ url_prefix = '/api/v1/dict'
 def queryDictListByClass(dictClass):
     logger().info('进入dict_rest_controller.queryDictListByClass查询字典列表')
     return dict_service.queryDictListByClass(dictClass)
+
+#根据逗号隔开多个字典类别获取列表，减少ajax请求
+@dict_rest_controller.route('/lists/<string:dictClass>', methods=['GET'])
+def queryDictListByClassS(dictClass):
+    logger().info('进入dict_rest_controller.queryDictListByClassS查询字典列表')
+    return dict_service.queryDictListByClassS(dictClass)

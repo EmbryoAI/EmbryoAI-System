@@ -11,4 +11,5 @@ class Dict(db.Model, mixin):
     dictClass = db.Column("dict_class", db.String(50))
     dictKey = db.Column("dict_key", db.String(100))
     dictValue = db.Column("dict_value", db.String(200))
+    dictSpare = db.Column("dict_spare", db.String(50))
 
