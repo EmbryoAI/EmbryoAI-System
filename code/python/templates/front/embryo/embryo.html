@@ -1,15 +1,14 @@
 {% extends 'front/header-footer.html' %} {% block mianDiv %}
-<link rel="stylesheet" type="text/css"
-	href="/static/front/css/embryo.css" />
+<link rel="stylesheet" type="text/css"	href="/static/front/css/embryo.css" />
+<link rel="stylesheet" type="text/css" href="/static/front/css/swiper.min.css" />
 <style type="text/css">
 body {
-	min-width: 1366px;
-	/* background-color: #fff; */
+	width: 1400px;
+	background-color: #fff;
+	margin: auto;
 }
 .container {
 	background-color: #fff;
-		width: 1366px;
-		margin: auto;
 }
 .main {
 	/* width: 1440px; */
@@ -27,6 +26,29 @@ body {
 .layui-form-radio *{
 	font-size: 12px
 }
+.swiper-button-next, .swiper-container-rtl .swiper-button-prev {
+    background-image: url(/static/front/img/arrowR.png);
+    right: -42px;
+    left: auto;
+}
+.swiper-button-prev, .swiper-container-rtl .swiper-button-next {
+	background-image: url(/static/front/img/arrowL.png);
+	left: -42px;
+	right: auto;
+}
+.swiper-button-next, .swiper-button-prev {
+	position: absolute;
+	top: 20px;
+	width: 34px;
+	height: 154px;
+	z-index: 10;
+	cursor: pointer;
+	-moz-background-size: 27px 44px;
+	-webkit-background-size: 27px 44px;
+	background-size: initial;
+	background-position: center;
+	background-repeat: no-repeat;
+}
 </style>
 <div class="main">
 	<input type="hidden" id="procedureId" value="{{procedure_id}}"/>
@@ -36,23 +58,24 @@ body {
 
 	<!--滚动图-->
 	<div class="scrollpic" id="scrollpic">
-		<div id="left">
-			<img src="/static/front/img/arrowL.png">
-		</div>
 		<div id="myscroll">
-			<div id="myscrollbox">
-				<ul id="myscrollboxul">
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<div id="right">
-			<img src="/static/front/img/arrowR.png">
+				<div id="topNav" class="swiper-container">
+					 <div class="swiper-wrapper">
+						<div class="swiper-slide active"><span><img src="/static/front/img/icon-noembryo.jpg"><b>1h2min</b></div>
+						<div class="swiper-slide"><span><img src="/static/front/img/icon-noembryo.jpg"><b>2h2min</b></span></div>
+						<div class="swiper-slide"><span><img src="/static/front/img/icon-noembryo.jpg"><b>3h2min</b></span></div>
+						<div class="swiper-slide"><span><img src="/static/front/img/icon-noembryo.jpg"><b>4h2min</b></span></div>
+						<div class="swiper-slide"><span><img src="/static/front/img/icon-noembryo.jpg"><b>5h2min</b></span></div>
+						<div class="swiper-slide"><span><img src="/static/front/img/icon-noembryo.jpg"><b>6h2min</b></span></div>
+						<div class="swiper-slide"><span><img src="/static/front/img/icon-noembryo.jpg"><b>7h2min</b></span></div>
+						<div class="swiper-slide"><span><img src="/static/front/img/icon-noembryo.jpg"><b>8h2min</b></span></div>
+						<div class="swiper-slide"><span><img src="/static/front/img/icon-noembryo.jpg"><b>9h2min</b></span></div>
+						<div class="swiper-slide"><span><img src="/static/front/img/icon-noembryo.jpg"><b>10h2min</b></span></div>
+					</div>
+				</div>
+				<!--左右按钮-->
+				<div class="swiper-button-prev"></div>
+				<div class="swiper-button-next"></div>
 		</div>
 	</div>
 	<!--大图信息部分-->
@@ -239,6 +262,7 @@ body {
 <!--公共js引入-->
 <script src="/static/front/js/embryo/embryo.js"></script>
 <script src="/static/front/js/embryo/well.js"></script>
+<script src="/static/front/js/embryo/swiper.min.js"></script>
 <!-- <script src="/static/front/js/embryo/zIndexImage.js"></script> -->
 
 {% endblock %}

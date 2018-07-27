@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="lib/layui/css/layui.css"/>
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
 	<link rel="stylesheet" type="text/css" href="css/embryo.css"/>
+	<link rel="stylesheet" href="css/swiper.min.css">
 	<style type="text/css">
 		body{
 			width: 1400px;
@@ -29,10 +30,34 @@
 			margin: auto;
 		}
 		.layui-form-checkbox[lay-skin=primary] span{
-			font-size: 16px;
+			font-size: 14px;
 			font-weight: bold;
 			color: #1b2437;
 		}
+		.swiper-button-next, .swiper-container-rtl .swiper-button-prev {
+    background-image: url(img/arrowR.png);
+    right: -42px;
+    left: auto;
+		}
+		.swiper-button-prev, .swiper-container-rtl .swiper-button-next {
+    background-image: url(img/arrowL.png);
+		left: -42px;
+    right: auto;
+}
+		.swiper-button-next, .swiper-button-prev {
+    position: absolute;
+    top: 20px;
+    width: 34px;
+    height: 154px;
+    /*margin-top: -22px;*/
+    z-index: 10;
+    cursor: pointer;
+    -moz-background-size: 27px 44px;
+    -webkit-background-size: 27px 44px;
+    background-size: initial;
+    background-position: center;
+    background-repeat: no-repeat;
+}
 	</style>
 </head>
 <body>
@@ -40,37 +65,27 @@
 		<div class="main">
 			<!--滚动图-->
 			<div class="scrollpic" id="scrollpic">
-				<div id="left">
-					<img src="img/arrowL.png" >
-				</div>
 				<div id="myscroll">
-					<div id="myscrollbox">
-						<ul id="myscrollboxul">
-							<li class="active">
-								<a href="#">
-									<img src="img/1530082825.png">
-									<span>1h3min</span>
-								</a>
-							</li>
-							<li>
-								<a href="#">
-									<img src="img/1530082825.png">
-									<span>2h3min</span>
-								</a>
-							</li>
-							<li>
-								<a href="#">
-									<img src="img/icon-wellnone.jpg">
-									<span>3h3min</span>
-								</a>
-							</li>
-						</ul>
-					</div>
+						<div id="topNav" class="swiper-container">
+							 <div class="swiper-wrapper">
+										<div class="swiper-slide active"><span><img src="img/icon-noembryo.jpg"><b>1h2min</></b></div>
+										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>2h2min</b></span></div>
+										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>3h2min</b></span></div>
+										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>4h2min</b></span></div>
+										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>5h2min</b></span></div>
+										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>6h2min</b></span></div>
+										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>7h2min</b></span></div>
+										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>8h2min</b></span></div>
+										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>9h2min</b></span></div>
+										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>10h2min</b></span></div>
+								</div>
+						</div>
+						<!--左右按钮-->
+						<div class="swiper-button-prev"></div>
+						<div class="swiper-button-next"></div>
 				</div>
-				<div id="right">
-					<img src="img/arrowR.png" >
-				</div>
-			</div>
+</div>
+
 			<!--大图信息部分-->
 			<div class="viewbox">
 				<!--左边胚胎大图-->
@@ -280,5 +295,6 @@
 	<!--公共js引入-->
 	<script src="lib/layui/layui.js"></script>
 	<script src="js/embryo.js"></script>
+	<script src="js/swiper.min.js"></script>
 </body>
 </html>

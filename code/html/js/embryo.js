@@ -8,46 +8,100 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     $(function () {
 
         // 上部图片滚动设置
+//         var scrollpic = document.getElementById('scrollpic');
+//             var myscroll = document.getElementById('myscroll');
+//             myscroll.style.width = (scrollpic.offsetWidth - 84) + "px";
+        var mySwiper = new Swiper('#topNav', {
+            freeMode: true,
+            freeModeMomentumRatio: 0.5,
+            slidesPerView: 'auto',
+			prevButton:'.swiper-button-prev',
+			nextButton:'.swiper-button-next',
+        });
+        
+        swiperWidth = mySwiper.container[0].clientWidth
+        maxTranslate = mySwiper.maxTranslate();
+        maxWidth = -maxTranslate + swiperWidth / 2
+        
+        $(".swiper-container").on('touchstart', function(e) {
+            e.preventDefault()
+        })
+        
+        mySwiper.on('tap', function(swiper, e) {
+        
+            e.preventDefault()
+        
+            slide = swiper.slides[swiper.clickedIndex]
+            slideLeft = slide.offsetLeft
+            slideWidth = slide.clientWidth
+            slideCenter = slideLeft + slideWidth / 2
+            // 被点击slide的中心点
+        
+            mySwiper.setWrapperTransition(300)
+        
+            if (slideCenter < swiperWidth / 2) {
+                
+                mySwiper.setWrapperTranslate(0)
+        
+            } else if (slideCenter > maxWidth) {
+                
+                mySwiper.setWrapperTranslate(maxTranslate)
+        
+            } else {
+        
+                nowTlanslate = slideCenter - swiperWidth / 2
+        
+                mySwiper.setWrapperTranslate(-nowTlanslate)
+        
+            }
+        
+            $("#topNav  .active").removeClass('active')
+        
+            $("#topNav .swiper-slide").eq(swiper.clickedIndex).addClass('active')
+        
+        })
 
-        function scroll() {
-            var scrollpic = document.getElementById('scrollpic');
-            var myscroll = document.getElementById('myscroll');
-            myscroll.style.width = (scrollpic.offsetWidth - 84) + "px";
-            var blw = $("#myscrollbox li").width();
-            var liArr = $("#myscrollbox ul").children("li");
-            var mysw = $("#myscroll").width();
-            var mus = parseInt(mysw / blw); //计算出需要显示的子元素的数量
-            var length = liArr.length - mus; //计算子元素可移动次数（被隐藏的子元素数量）
 
-            var i = 0;
-            $("#right").click(function () {
-                i++
-                if (length < 0) {
-                    return false
-                }
+        
+        // function scroll() {
+        //     var scrollpic = document.getElementById('scrollpic');
+        //     var myscroll = document.getElementById('myscroll');
+        //     myscroll.style.width = (scrollpic.offsetWidth - 84) + "px";
+        //     var blw = $("#myscrollbox li").width();
+        //     var liArr = $("#myscrollbox ul").children("li");
+        //     var mysw = $("#myscroll").width();
+        //     var mus = parseInt(mysw / blw); //计算出需要显示的子元素的数量
+        //     var length = liArr.length - mus; //计算子元素可移动次数（被隐藏的子元素数量）
 
-                if (i < length) {
+        //     var i = 0;
+        //     $("#right").click(function () {
+        //         i++
+        //         if (length < 0) {
+        //             return false
+        //         }
 
-                    $("#myscrollbox").css("left", -(blw * i));
+        //         if (i < length) {
 
-                } else {
-                    i = length;
-                    $("#myscrollbox").css("left", -(blw * length));
-                }
+        //             $("#myscrollbox").css("left", -(blw * i));
 
-            });
-            $("#left").click(function () {
-                i--
-                if (i >= 0) {
-                    $("#myscrollbox").css("left", -(blw * i));
-                } else {
-                    i = 0;
-                    $("#myscrollbox").css("left", 0);
-                }
-                0
-            });
-        };
-        scroll();
+        //         } else {
+        //             i = length;
+        //             $("#myscrollbox").css("left", -(blw * length));
+        //         }
+
+        //     });
+        //     $("#left").click(function () {
+        //         i--
+        //         if (i >= 0) {
+        //             $("#myscrollbox").css("left", -(blw * i));
+        //         } else {
+        //             i = 0;
+        //             $("#myscrollbox").css("left", 0);
+        //         }
+        //         0
+        //     });
+        // };
+        // scroll();
 
         function site() {
             var site = document.getElementById('site');
