@@ -17,6 +17,7 @@ def querySeriesList(agrs):
     procedure_id = agrs['procedure_id']
     dish_id = agrs['dish_id']
     well_id = agrs['well_id']
+    seris = agrs['seris']
 
     try :
         dish = dish_mapper.queryById(dish_id)
@@ -38,9 +39,12 @@ def querySeriesList(agrs):
         well_json = dishJson['wells'][well_id]
         last_seris = well_json['lastEmbryoSerie']
 
+        if seris != 'lastEmbryoSerie':
+            last_seris = seris
+
         ts = TimeSeries()
-        last_index = len(ts.range(last_seris)) + 1
-        begin_index = last_index - 9
+        last_index = len(ts.range(last_seris)) + 5
+        begin_index = len(ts.range(last_seris)) - 5
 
         list=[]
         for i in ts[begin_index:last_index]:

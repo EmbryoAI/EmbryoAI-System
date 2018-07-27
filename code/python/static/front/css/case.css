@@ -20,9 +20,9 @@
 .view{
 	margin-right: 8px;
 }
-.report,.return,.del{
+.report,.return,.del,.case{
 	display: inline-block;
-	padding-left: 24px;
+	padding-left: 22px;
 	margin-right: 8px;
 	background: url(../img/table-icon2.png)no-repeat left center;
 }
@@ -31,6 +31,9 @@
 }
 .del{
 	background: url(../img/table-icon1.png)no-repeat left center;
+}
+.case{
+	background: url(../img/table-icon4.png)no-repeat left center;
 }
 /*弹窗详情*/
 .details-box{

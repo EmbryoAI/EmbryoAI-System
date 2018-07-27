@@ -1,100 +1,60 @@
 /*上部滚动图*/
 .scrollpic {
-	width: 100%;
+	width: 1280px;
 	margin:auto;
 	height: 152px;
+	margin-top: 10px;
 }
 #myscroll {
 	display: block;
-	/*width: 100%;*/
 	position: relative;
-	height: 150px;
-	overflow: hidden;
-	float: left;
+	height: 152px;
+	/*overflow: hidden;*/
+	/*float: left;*/
 }
-#myscroll #myscrollbox {
-	display: block;
-	float: left;
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 1000000px;
-}
-#myscroll ul {
-	display: block;
-	float: left;
-	list-style-type: none;
-	padding: 0;
-	margin: 0;
-}
-#myscroll ul li {
-	display: block;
-	float: left;
-	padding: 0;
-	width:146px;
-}
-#myscroll ul li a {
-	display: block;
-	float: left;
-	width: 124px;
-	padding: 2px;
-	position: relative;
-	height: 144px;
-	background-color: #f4f4f4;
-	border:1px solid #e0e2e6 ;
-	text-align: center;
-}
-#myscroll ul .active a {
-	border:1px solid #467cdc ;
-	box-shadow: 0px 0px 3px rgba(0,0,0,.5) inset;
-}
-#myscroll ul .active{
-	
-}
-
-#myscroll a img{
+#topNav {
 	width: 100%;
 }
-#myscroll a span {
-	position: absolute;
-	left: 0;
-	bottom: 2px;
-	right: 0;
-	z-index: 10;
-	color: #42485b;
-	text-align: center;
-	letter-spacing: 2px;
-}
-#left,#right{
-	float: left;
-	width: 30px;
-	height: 150px;
-	line-height: 150px;
-	margin-right: 10px;
-	background-color: #f4f4f4;
+#topNav .swiper-slide {
+	/*padding: 0 8px;*/
+	margin: 0 14px;
+	letter-spacing:2px;
+	width:130px;
+	height: 148px;
+	text-align:center;
 	border: 1px solid #e0e2e6;
-	vertical-align: middle;
-	text-align: center;
+	background-color: #f4f4f4;
 	cursor: pointer;
-	
-}
-#right {
-	float: right;
-	margin-right: 0;
-	margin-left: 10px;
-}
-#left:hover,#right:hover{
-	background-color: #f0f0f0;
-	box-shadow: 0px 0px 3px rgba(0,0,0,.1);
+	transition:all .3s ease;
 
 }
-#myscroll #myscrollbox,#right,#left{
-	-webkit-transition: all 0.5s ease;
-	-moz-transition: all 0.5s ease;
-	-ms-transition: all 0.5s ease;
-	-o-transition: all 0.5s ease;
-	transition: all 0.5s ease;
+#topNav .swiper-slide span{
+	width: 126px;
+	margin: auto;
+	padding-top: 5px;
+	transition:all .3s ease;
+	display:block;
 }
+#topNav .swiper-slide span img{
+	width: 120px;
+	margin: auto;
+}
+#topNav .swiper-slide span b{
+	font-size: 12px;
+	font-weight: normal;
+	display: inline-block;
+	padding-left: 20px;
+	background: url(../img/icon-e--time.png) no-repeat left center;
+}
+#topNav .active{
+	transform:scale(1.1);
+	color:#467cdc;
+	border: 1px solid #467cdc;
+	height: 141px;
+
+
+}
+
 /*胚胎大图*/
 .viewbox{
 	clear: both;
@@ -307,7 +267,7 @@
 	padding: 10px 0;
 }
 #milestone{
-	margin: 20px 0;
+	margin: 10px 0;
 	background-color: #dae1f1;
 	border: 1px solid #b8c0d1;
 	height: 31px;
@@ -320,13 +280,13 @@
 	color: #1b2437;
 	font-size: 14px;
 	font-weight: bold;
-	padding: 10px;
+	padding:2px 10px;
 }
-.info h6{
-	width: 100%;
-    text-align: center;
+.info h2 .score{
     color: #ff8429;
-    font-size: 48px;
+	font-size: 28px;
+	vertical-align: middle;
+	margin-left: 40px;
 }
 #milestone-select .layui-btn{
 	height: 26px;
@@ -339,7 +299,7 @@
 	color: #3c83f7;
 }
 .layui-form-item{
-	margin-bottom: 5px;
+	margin-bottom: 2px;
 }
 .layui-form-label i{
 	color: #ec3135;

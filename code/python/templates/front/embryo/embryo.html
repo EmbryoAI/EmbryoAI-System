@@ -1,15 +1,14 @@
 {% extends 'front/header-footer.html' %} {% block mianDiv %}
-<link rel="stylesheet" type="text/css"
-	href="/static/front/css/embryo.css" />
+<link rel="stylesheet" type="text/css"	href="/static/front/css/embryo.css" />
+<link rel="stylesheet" type="text/css" href="/static/front/css/swiper.min.css" />
 <style type="text/css">
 body {
-	min-width: 1366px;
-	/* background-color: #fff; */
+	width: 1400px;
+	background-color: #fff;
+	margin: auto;
 }
 .container {
 	background-color: #fff;
-		width: 1366px;
-		margin: auto;
 }
 .main {
 	/* width: 1440px; */
@@ -24,6 +23,32 @@ body {
 .footer{
 	background-color: #f3f4f8;
 }
+.layui-form-radio *{
+	font-size: 12px
+}
+.swiper-button-next, .swiper-container-rtl .swiper-button-prev {
+    background-image: url(/static/front/img/arrowR.png);
+    right: -42px;
+    left: auto;
+}
+.swiper-button-prev, .swiper-container-rtl .swiper-button-next {
+	background-image: url(/static/front/img/arrowL.png);
+	left: -42px;
+	right: auto;
+}
+.swiper-button-next, .swiper-button-prev {
+	position: absolute;
+	top: 20px;
+	width: 34px;
+	height: 154px;
+	z-index: 10;
+	cursor: pointer;
+	-moz-background-size: 27px 44px;
+	-webkit-background-size: 27px 44px;
+	background-size: initial;
+	background-position: center;
+	background-repeat: no-repeat;
+}
 </style>
 <div class="main">
 	<input type="hidden" id="procedureId" value="{{procedure_id}}"/>
@@ -33,77 +58,15 @@ body {
 
 	<!--滚动图-->
 	<div class="scrollpic" id="scrollpic">
-		<div id="left">
-			<img src="/static/front/img/arrowL.png">
-		</div>
 		<div id="myscroll">
-			<div id="myscrollbox">
-				<ul id="myscrollboxul">
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="img/1530082825.png">
-							<span>2h3min</span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<div id="right">
-			<img src="/static/front/img/arrowR.png">
+				<div id="topNav" class="swiper-container">
+					 <div class="swiper-wrapper" id="myscrollboxul">
+						
+					</div>
+				</div>
+				<!--左右按钮-->
+				<div class="swiper-button-prev"></div>
+				<div class="swiper-button-next"></div>
 		</div>
 	</div>
 	<!--大图信息部分-->
@@ -112,8 +75,7 @@ body {
 		<div class="embryo" id="embryo">
 			<!--图片区域-->
 			<div class="lg-img">
-				<img src="/static/front/img/20180711111150.png">
-				<img src="/static/front/img/20180713153221.png">
+				<img src="/static/front/img/20180725183944.jpg">
 			</div>
 			<!--胚胎信息-->
 			<ul class="eminfo">
@@ -169,11 +131,7 @@ body {
 					<li class="next-frame" onclick="nextFrame()"><i></i><span>下一帧</span></li>
 					<li class="next-milestone"><i></i><span>下一里程碑</span></li>
 				</ul>
-				<ul class="tool-play tool-end">
-					<li class="transplant" data-end='1'><i></i><span>移植</span></li>
-					<li class="freeze" data-end='2'><i></i><span>冷冻</span></li>
-					<li class="abandon" data-end='3'><i></i><span>抛弃</span></li>
-					<li class="hold" data-end='4'><i></i><span>待定</span></li>
+				<ul class="tool-play tool-end" id="embryo_fate_typeIdDiv">
 				</ul>
 				<ul class="tool-play tool-metrical">
 					<li class="straight"><i></i><span>直线测量</span></li>
@@ -195,7 +153,7 @@ body {
 			<div class="site" id="site">
 				<h1>孔位选择</h1>
 				<ul id="siteitem">
-
+					<li class="active"><span>well1</span><img src="/static/front/img/20180725183944.jpg"><i></i></li>
 				</ul>
 			</div>
 
@@ -275,15 +233,12 @@ body {
 					<h2>备注</h2>
 					<div class="comment">
 						<div class="layui-input-inline" style="width: 90%;">
-							<textarea id="memo" name="memo" placeholder="请输入内容" class="layui-textarea"></textarea>
+							<textarea id="memo" name="memo" placeholder="请输入内容" class="layui-textarea" style="min-height: 46px"></textarea>
 						</div>
 					</div>
 				</div>
-				<h2 style="padding-bottom: 0;">胚胎评分</h2>
-				<h6>25</h6>
-
-				<div class="layui-input-block"
-					style="text-align: center; margin: 0;">
+				<h2 style="padding-bottom: 0;">胚胎评分<span class="score">25</span></h2>
+				<div class="layui-input-block"	style="text-align: center; margin:20px 0 0;">
 					<button id="saveMilestoneButton" class="layui-btn layui-bg-blue"
 						lay-submit lay-filter="milestoneFormSub" style="padding: 0 80px;">保存数据</button>
 				</div>
@@ -298,6 +253,7 @@ body {
 <!--公共js引入-->
 <script src="/static/front/js/embryo/embryo.js"></script>
 <script src="/static/front/js/embryo/well.js"></script>
+<script src="/static/front/js/embryo/swiper.min.js"></script>
 <!-- <script src="/static/front/js/embryo/zIndexImage.js"></script> -->
 
 {% endblock %}
