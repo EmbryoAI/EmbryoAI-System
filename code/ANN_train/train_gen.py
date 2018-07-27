@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from keras.optimizers import Adam
 from keras.utils import np_utils
 from keras.preprocessing.image import ImageDataGenerator
+from train_model import init_model
 
 NB_CLASSES = 14
 
@@ -26,7 +27,12 @@ if __name__ == '__main__':
     EPOCHS = int(conf.epochs)
     BATCH_SIZE = int(conf.batch)
     # X, y = read_dataset(conf.dataset, img_size)
-    train_data = ImageDataGenerator(rotation_range=180, horizontal_flip=True, vertical_flip=True, rescale=1.0/255)
+    train_data = ImageDataGenerator(
+        # rotation_range=180, 
+        # horizontal_flip=True, 
+        # vertical_flip=True, 
+        rescale=1.0/255
+        )
     val_data = ImageDataGenerator(rescale=1.0/255)
     test_data = ImageDataGenerator(rescale=1.0/255)
     train_gen = train_data.flow_from_directory(conf.dataset+os.path.sep+'train', 
@@ -38,7 +44,9 @@ if __name__ == '__main__':
     # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1978)
     # y_train = np_utils.to_categorical(y_train, num_classes=NB_CLASSES)
     # y_test = np_utils.to_categorical(y_test, num_classes=NB_CLASSES)
-    model = ImageNetModel(weights=None, input_shape=(img_size[0], img_size[1], 1)).getModel(conf.model)
+    
+    # model = ImageNetModel(weights=None, input_shape=(img_size[0], img_size[1], 1)).getModel(conf.model)
+    model = init_model((img_size[0], img_size[1], 1))
     model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
     model.summary()
     # model.fit(X_train, y_train, batch_size=BATCH_SIZE, epochs=EPOCHS, verbose=1, validation_split=0.25)
