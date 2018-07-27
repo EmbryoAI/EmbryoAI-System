@@ -90,7 +90,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             if (a == true) {
                 layer.msg('打开');
                 $('#milestone').animate({
-                    height: '153px'
+                    height: '120px'
                 });
             } else {
                 layer.msg('关闭');

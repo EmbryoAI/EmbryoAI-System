@@ -307,7 +307,7 @@
 	padding: 10px 0;
 }
 #milestone{
-	margin: 20px 0;
+	margin: 10px 0;
 	background-color: #dae1f1;
 	border: 1px solid #b8c0d1;
 	height: 31px;
@@ -320,13 +320,13 @@
 	color: #1b2437;
 	font-size: 14px;
 	font-weight: bold;
-	padding: 10px;
+	padding:2px 10px;
 }
-.info h6{
-	width: 100%;
-    text-align: center;
+.info h2 .score{
     color: #ff8429;
-    font-size: 48px;
+	font-size: 28px;
+	vertical-align: middle;
+	margin-left: 40px;
 }
 #milestone-select .layui-btn{
 	height: 26px;
@@ -339,7 +339,7 @@
 	color: #3c83f7;
 }
 .layui-form-item{
-	margin-bottom: 5px;
+	margin-bottom: 2px;
 }
 .layui-form-label i{
 	color: #ec3135;
