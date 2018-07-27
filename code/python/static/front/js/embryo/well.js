@@ -17,15 +17,21 @@ $(function(){
         },
         success : function(data) {
             var well = "";
-            for(var i=0;i<data.length;i=i+2){
-                if(i == 0){
-                    well = well + "<li class=\"active\"><span>well" + data[i] + 
-                    "</span><img src=\"/api/v1/well/image?image_path=" + data[i+1] +
-                     "\" onclick=\"querySeriesList('" + data[i] + "')\"><i></i></li>";
+            for(var i=1;i<=12;i++){
+                var result = check(i, data);
+                if(result != ''){
+                    if(i == data[0]){
+                        well = well + "<li class=\"active\"><span>well" + i + 
+                        "</span><img src=\"/api/v1/well/image?image_path=" + result +
+                        "\" onclick=\"querySeriesList('" + i + "')\"><i></i></li>";
+                    }else{
+                        well = well + "<li><span>well" + i + 
+                        "</span><img src=\"/api/v1/well/image?image_path=" + result +
+                        "\" onclick=\"querySeriesList('" + i + "')\"><i></i></li>";
+                    }
                 }else{
-                    well = well + "<li><span>well" + data[i] + 
-                    "</span><img src=\"/api/v1/well/image?image_path=" + data[i+1] +
-                     "\" onclick=\"querySeriesList('" + data[i] + "')\"><i></i></li>";
+                    well = well + "<li><span>well" + i + 
+                    "</span><img src=\"/static/front/img/icon-wellnone.jpg\"><i></i></li>";
                 }
             }
             $("#siteitem").html(well);
@@ -34,6 +40,16 @@ $(function(){
         }
     });
 });
+
+function check(index, data){
+    var result = '';
+    for(var i=0;i<data.length;i=i+2){
+        if(index == data[i]){
+            result = data[i+1];
+        }
+    }
+    return result;
+}
 
 function querySeriesList(wellId){
     var procedureId = $("#procedureId").val();
@@ -50,16 +66,20 @@ function querySeriesList(wellId){
         success : function(data) {
             var seris = "";
             for(var i=0;i<data.length;i=i+3){
+                var imagePath = "/api/v1/well/image?image_path=" + data[i+1];
+                if(imagePath.indexOf("embryo_not_found") != -1){
+                    imagePath = "/static/front/img/icon-noembryo.jpg";
+                }
                 if(i == data.length-3){
                     seris = seris + "<li class=\"active\"><a href=\"#\">" + 
-                                    "<img src=\"/api/v1/well/image?image_path=" + data[i+1] + 
-                                    "\" onclick=\"getBigImage('" + procedureId + "','" + dishId + 
+                                    "<img src=\"" + imagePath +"\" onclick=\"getBigImage('" 
+                                    + procedureId + "','" + dishId + 
                                     "','" + wellId + "','" + data[i] + "')\">" +
                                     "<span>" + data[i+2] + "</span></a></li>";
                 }else{
                     seris = seris + "<li><a href=\"#\">" + 
-                                    "<img src=\"/api/v1/well/image?image_path=" + data[i+1] + 
-                                    "\" onclick=\"getBigImage('" + procedureId + "','" + dishId + 
+                                    "<img src=\"" + imagePath + "\" onclick=\"getBigImage('" 
+                                    + procedureId + "','" + dishId + 
                                     "','" + wellId + "','" + data[i] + "')\">" +
                                     "<span>" + data[i+2] + "</span></a></li>";
                 }
