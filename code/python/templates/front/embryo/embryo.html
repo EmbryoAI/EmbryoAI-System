@@ -59,14 +59,14 @@ body {
 	<!--滚动图-->
 	<div class="scrollpic" id="scrollpic">
 		<div id="myscroll">
-				<div id="topNav" class="swiper-container">
-					 <div class="swiper-wrapper" id="myscrollboxul">
-						
-					</div>
+			<div id="topNav" class="swiper-container">
+				 <div class="swiper-wrapper" id="myscrollboxul">
+				
 				</div>
-				<!--左右按钮-->
-				<div class="swiper-button-prev"></div>
-				<div class="swiper-button-next"></div>
+			</div>
+			<!--左右按钮-->
+			<div class="swiper-button-prev"></div>
+			<div class="swiper-button-next"></div>
 		</div>
 	</div>
 	<!--大图信息部分-->
@@ -74,8 +74,10 @@ body {
 		<!--左边胚胎大图-->
 		<div class="embryo" id="embryo">
 			<!--图片区域-->
-			<div class="lg-img">
-				<img src="/static/front/img/20180725183944.jpg">
+			<div class="lg-img" id="imgDiv">
+				<!-- <img src="/static/front/img/20180711111150.png">
+				<img src="/static/front/img/20180713153221.png"> -->
+				<!-- <img src="/api/v1/image/findImage?procedureId=1&dishId=1&wellId=1&timeSeries=0000000"> -->
 			</div>
 			<!--胚胎信息-->
 			<ul class="eminfo">
@@ -100,21 +102,21 @@ body {
 				<form action="" class="layui-form">
 					<div class="layui-form-item" pane="">
 						<div class="layui-input-block">
-							<input type="checkbox" name="distinct" lay-skin="primary"
+							<input type="checkbox" id="distinct" name="distinct" lay-skin="primary"
 								lay-filter="clear" title="标记为最清晰">
 						</div>
 					</div>
 				</form>
 			</div>
 			<!--z轴滚动-->
-			<div class="shaft">
-				<ul class="time-vertical">
-					<li><b></b></li>
+			<div class="shaft" id="zIndexDiv">
+				<ul class="time-vertical" id="zIndex">
+					<!-- <li><b></b></li>
 					<li class="active"><b></b></li>
 					<li><b></b></li>
 					<li><b></b></li>
 					<li><b></b></li>
-					<li><b></b></li>
+					<li><b></b></li> -->
 				</ul>
 				<h6>z轴</h6>
 			</div>
@@ -153,7 +155,7 @@ body {
 			<div class="site" id="site">
 				<h1>孔位选择</h1>
 				<ul id="siteitem">
-					<li class="active"><span>well1</span><img src="/static/front/img/20180725183944.jpg"><i></i></li>
+						<li class="active"><span>well1</span><img src="/static/front/img/20180725183944.jpg"><i></i></li>
 				</ul>
 			</div>
 
@@ -254,6 +256,8 @@ body {
 <script src="/static/front/js/embryo/embryo.js"></script>
 <script src="/static/front/js/embryo/well.js"></script>
 <script src="/static/front/js/embryo/swiper.min.js"></script>
-<!-- <script src="/static/front/js/embryo/zIndexImage.js"></script> -->
+<script src="/static/admin/common/jquery.mousewheel.js"></script>
+<script src="/static/admin/common/jquery.mousewheel.min.js"></script>
+<script src="/static/front/js/embryo/image.js"></script>
 
 {% endblock %}

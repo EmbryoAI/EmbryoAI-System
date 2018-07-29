@@ -10,15 +10,17 @@ from app import conf
 import json,os,cv2
 
 def getImageByCondition(agrs):
+    logger().info(agrs)
     procedureId = agrs['procedureId']
     dishId = agrs['dishId']
     wellId = agrs['wellId']
     timeSeries = agrs['timeSeries']
     zIndex = agrs['zIndex']
     try:
-        path,dishJson = readDishState(procedureId,dishId)
+        imagePath,path,dishJson = readDishState(procedureId,dishId)
         if dishJson['finished'] & dishJson['avail'] == 1 : 
-            if timeSeries is None :
+            if not timeSeries.strip() :
+            # if not timeSeries:
                 timeSeries = dishJson['lastSerie']
             wells = dishJson['wells']
             oneWell = wells[f'{wellId}']
@@ -45,19 +47,26 @@ def getAllZIndex(agrs):
     procedureId = agrs['procedureId']
     dishId = agrs['dishId']
     wellId = agrs['wellId']
+    timeSeries = agrs['timeSeries']
     zData = {}
     try:
-        path,dishJson = readDishState(procedureId,dishId)
+        imagePath,path,dishJson = readDishState(procedureId,dishId)
         if dishJson['finished'] & dishJson['avail'] == 1 : 
             wells = dishJson['wells']
             oneWell = wells[f'{wellId}']
             if oneWell['avail']:
-                # zData['path'] = path
+                zData['imagePath'] = imagePath
                 zData['zIndexFiles'] = oneWell['zIndexFiles']
                 zData['zcount'] = oneWell['zcount']
                 zData['zslice'] = oneWell['zslice']
                 zData['fileStart'] = oneWell['fileStart']
                 zData['fileEnd'] = oneWell['fileEnd']
+            # if not timeSeries :
+            if not timeSeries.strip() :
+                timeSeries = dishJson['lastSerie']
+            series = oneWell['series']
+            oneSeries = series[f'{timeSeries}']
+            zData['sharp'] = oneSeries['sharp']
         logger().info(zData)
         restResult = RestResult(200, "获取所有z轴节点成功", 1, dict(zData))
     except:
@@ -82,9 +91,9 @@ def readDishState(procedureId,dishId):
         with open(f'{jsonPath}', 'r') as fn :
             dishJson = json.loads(fn.read())
         if dishJson['finished'] & dishJson['avail'] == 1 :
-            return path, dishJson
+            return pd.imagePath,path, dishJson
         else :
-            return None,None
+            return None,None,None
     except : 
         logger().info("读取dishState.json文件出现异常")
-        return None,None
+        return None,None,None
