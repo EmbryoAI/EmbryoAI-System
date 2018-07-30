@@ -41,13 +41,14 @@ def querySeriesList(agrs):
 
         if seris != 'lastEmbryoSerie':
             last_seris = seris
+        
 
         ts = TimeSeries()
         last_index = len(ts.range(last_seris)) + 5
-        begin_index = len(ts.range(last_seris)) - 5
-
+        begin_index = len(ts.range(last_seris)) - 4
         list=[]
         for i in ts[begin_index:last_index]:
+            print(i)
             list.append(i)
             image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + well_json['series'][i]['focus']
             list.append(image_path)
