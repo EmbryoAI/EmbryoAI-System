@@ -65,13 +65,13 @@ function querySeriesList(wellId, seris){
         },
         success : function(data) {
             var seris = "";
-            for(var i=0;i<data.length;i=i+3){
+            for(var i=0;i<data.length;i=i+4){
                 var imagePath = "/api/v1/well/image?image_path=" + data[i+1];
                 if(data[i+1].indexOf("embryo_not_found") != -1){
                     imagePath = "/static/front/img/icon-noembryo.jpg";
                 }
                 var active = "<div class=\"swiper-slide\">";
-                if(i == 12){
+                if(i == 16){
                     active = "<div class=\"swiper-slide active\">";
                 }
                 seris = seris + active + "<span><img src=\"" + 
@@ -81,7 +81,7 @@ function querySeriesList(wellId, seris){
                                     data[i+2] + "</b></div>";
             }
             $("#myscrollboxul").html(seris);
-            lastSeris = data[data.length-3];
+            lastSeris = data[data.length-1];
         }
     });
 }

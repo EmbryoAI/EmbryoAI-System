@@ -38,6 +38,7 @@ def querySeriesList(agrs):
 
         well_json = dishJson['wells'][well_id]
         last_seris = well_json['lastEmbryoSerie']
+        print(last_seris)
 
         if seris != 'lastEmbryoSerie':
             last_seris = seris
@@ -48,12 +49,12 @@ def querySeriesList(agrs):
         begin_index = len(ts.range(last_seris)) - 4
         list=[]
         for i in ts[begin_index:last_index]:
-            print(i)
             list.append(i)
             image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + well_json['series'][i]['focus']
             list.append(image_path)
             hour, minute = serie_to_time(i)
             list.append(f'{hour:02d}H{minute:02d}M')
+            list.append(last_seris)
 
         return jsonify(list)
     except : 
