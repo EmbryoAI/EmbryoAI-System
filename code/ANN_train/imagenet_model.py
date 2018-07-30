@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from keras.applications import InceptionV3, Xception, VGG16, VGG19, \
+from keras.applications import InceptionV3, Xception, VGG16, VGG19, NASNetLarge, NASNetMobile, \
     ResNet50, InceptionResNetV2, MobileNet, MobileNetV2, DenseNet169, \
     DenseNet121, DenseNet201
 
@@ -22,7 +22,7 @@ class ImageNetModel():
         if not hasattr(self, 'input_shape'):
             self.input_shape = None # 输入图像shape
         if not hasattr(self, 'pooling'):
-            self.pooling = None # 最后池化方式，默认无池化
+            self.pooling = 'max' # 最后池化方式，默认无池化
     def getModel(self, model_type='InceptionV3'):
         '''
         获取ImageNet预训练模型的keras model对象
