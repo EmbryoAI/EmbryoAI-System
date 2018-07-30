@@ -82,6 +82,8 @@ function querySeriesList(wellId, seris){
             }
             $("#myscrollboxul").html(seris);
             lastSeris = data[data.length-1];
+            loadingImage(procedureId,dishId,wellId,lastSeris,'');
+            loadingZIndex(procedureId,dishId,wellId,lastSeris);
         }
     });
 }

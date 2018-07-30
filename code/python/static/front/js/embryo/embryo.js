@@ -1,20 +1,77 @@
+var form = null;
+//最清晰的jpg
+var sharpJpg = null;
+//最清晰的jpg对应的z轴位置
+var sharpZIndex = null;
+//z轴总数
+var zIndexLength = 0;
+//采集时间
+var acquisitionTime = null;
+//目录
+var path = null;
+var procedureId = "";
+var dishId = "";
+var wellId = "";
+var lastSeris = "";
+var jaindex = "";
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
-    var form = layui.form;
+    form = layui.form;
     var $ = layui.jquery;
     var laydate = layui.laydate;
     var table = layui.table;
     var layer = layui.layer;
-
+	//增加加载层 LYZ
+	jaindex = layer.msg('渲染胚胎视图中，请耐心等待', {
+		  icon: 16
+		  ,shade: 0.3,time:0
+	});
     $(function () {
-    	//增加加载层 LYZ
-    	var jaindex = layer.msg('渲染胚胎视图中，请耐心等待', {
-    		  icon: 16
-    		  ,shade: 0.01
-    		});
+    	//初始化所有字典值 对应的radio 按钮等。
+    	//动态初始化里程碑的值,字典表milestone
+		//初始化PN数，字典值pn
+		//初始化均匀度,字典even
+		//初始化碎片率，字典fragment
+		//初始化评分,字典grade
+		//初始化胚胎结局字典值ID -> sys_dict.id，字典值类型为embryo_fate_type，可能取值包括：1：移植；2：冷冻；3：丢弃；4：待定
+    	dict = chushihua("'milestone','pn','even','fragment','grade','embryo_fate_type'");
     	
+    	//获取孔
+        procedureId = $("#procedureId").val();
+        dishId = $("#dishId").val();
+        $.ajax({
+            cache : false,
+            type : "GET",
+            url : "/api/v1/well/list/" + procedureId + "/" + dishId,
+            data : "",
+            error : function(request) {
+                parent.layer.alert(request.responseText);
+            },
+            success : function(data) {
+                var well = "";
+                for(var i=1;i<=12;i++){
+                    var result = check(i, data);
+                    if(result != ''){
+                        if(i == data[0]){
+                            well = well + "<li class=\"active\"><span>well" + i + 
+                            "</span><img src=\"/api/v1/well/image?image_path=" + result +
+                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie')\"><i></i></li>";
+                        }else{
+                            well = well + "<li><span>well" + i + 
+                            "</span><img src=\"/api/v1/well/image?image_path=" + result +
+                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie')\"><i></i></li>";
+                        }
+                    }else{
+                        well = well + "<li><span>well" + i + 
+                        "</span><img src=\"/static/front/img/icon-wellnone.jpg\"><i></i></li>";
+                    }
+                }
+                $("#siteitem").html(well);
+                wellId = data[0];
+                querySeriesList(wellId,'lastEmbryoSerie');//获取每个孔下面的时间序列
+            }
+        });
 
         // 上部图片滚动设置
-
 		var mySwiper = new Swiper('#topNav', {
             freeMode: true,
             freeModeMomentumRatio: 0.5,
@@ -309,210 +366,13 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			site();
 			canvasWidth();
 		});
-		
-		var defer = $.Deferred();
-        //初始化radio通用方法
-		function chushihua(dictClass) {
-			$.ajax({
-				type : "get",
-				url : "/api/v1/dict/lists/"+dictClass,
-				datatype : "json",
-				success : function(data) {
-					defer.resolve(data);
-				},
-				error : function(request) {
-					layer.alert(request.responseText);
-				}
-			});
-			 return defer.promise();
-		}
-		
-		//初始化以及页面回显
-		function ini(dictClass) {
-			//初始化所有字典值 对应的radio 按钮等。
-			dict = chushihua(dictClass);
-			dict.done(function(data){
-				if (data.code == 0) {
-					for (var i = 0; i < data.data.length; i++) {
-						var obj = data.data[i];
-						var radioId = obj.dictClass+"Id";
-						var divId = radioId+"Div";
-						var str="";
-						if(obj.dictClass=="embryo_fate_type") {//如果为标记的，需要特殊处理
-							str = "<li class='"+obj.dictSpare+"' data-end='"+obj.dictKey+"'><i></i><span>"+obj.dictValue+"</span></li>";
-						}else {
-							str="<input type='radio' name='"+radioId+"' lay-filter="+radioId+" value='" + obj.dictKey + "' title='"+obj.dictValue+"' />";
-						}
-						$("#"+divId).append(str);
-					}
-					form.render();
-				} else {
-					layer.alert(data.msg);
-				}
-				
-				//根据胚胎ID查询该胚胎ID是否有里程碑，如果有则进行回显
-				$.ajax({
-					type : "get",
-					url : "/api/v1/milestone/"+$("#embryoId").val(),
-					datatype : "json",
-					cache:false,
-					success : function(data) {
-						if (data.code == 0) {
-							if(data.data!=null) {//如果当前里程碑不为空则回显
-								var milestone = data.data.milestone;
-								var milestoneData = data.data.milestoneData;
-								$("#milestoneCheckbox").attr('checked', true);
-				                $('#milestone').animate({
-				                    height: '120px'
-				                });
-				                $("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").attr("checked",true);
-				                if(milestoneData.pnId!="") {
-				                	$("input:radio[name=pnId][value="+milestoneData.pnId+"]").attr("checked",true);
-				                }
-				                $("input:radio[name=count][value="+milestoneData.cellCount+"]").attr("checked",true);
-				                $("input:radio[name=evenId][value="+milestoneData.evenId+"]").attr("checked",true);
-				                $("input:radio[name=fragmentId][value="+milestoneData.fragmentId+"]").attr("checked",true);
-				                $("input:radio[name=gradeId][value="+milestoneData.gradeId+"]").attr("checked",true);
-				                $("#diameter").val(milestoneData.diameter);
-				                $("#area").val(milestoneData.area);
-				                $("#thickness").val(milestoneData.thickness);
-				                $("#memo").val(milestoneData.memo);
-				                $("#stageId").html("("+milestone.milestoneName+")");
-				                showHide(milestone.milestoneId);
-							}else {//为空则全部隐藏
-								  showHide(null);
-							}
-							form.render();
-							
-						} else {
-							layer.alert(data.msg);
-						}
-					},
-					error : function(request) {
-						layer.alert(request.responseText);
-					}
-				});
-				
-				//回显胚胎结局
-				//根据胚胎ID查询该胚胎ID是否有里程碑，如果有则进行回显
-				$.ajax({
-					type : "get",
-					url : "/api/v1/embryo/"+$("#embryoId").val(),
-					datatype : "json",
-					cache:false,
-					success : function(data) {
-						if (data.code == 0) {
-				            if (data.data.embryoFateId != 0) {
-				            	embryoFateIdQj=data.data.embryoFateId;
-				                $(".mark i").attr('data-mark', data.data.embryoFateId);
-				                $(".mark i").attr('class', data.data.dictSpare);
-				            } else {
-				                $(".mark i").attr('data-mark', "");
-				                $(".mark i").attr('class', "");
-				            }
-						} else {
-							layer.alert(data.msg);
-						}
-						layer.close(jaindex);
-					},
-					error : function(request) {
-						layer.alert(request.responseText);
-					}
-				});
-				
-			 });
-		}
-		
-		
-		
-		//动态初始化里程碑的值,字典表milestone
-		//初始化PN数，字典值pn
-		//初始化均匀度,字典even
-		//初始化碎片率，字典fragment
-		//初始化评分,字典grade
-		//初始化胚胎结局字典值ID -> sys_dict.id，字典值类型为embryo_fate_type，可能取值包括：1：移植；2：冷冻；3：丢弃；4：待定
-		ini("'milestone','pn','even','fragment','grade','embryo_fate_type'");
-
-		
-		
-        
-//        //动态初始化里程碑的值,字典表milestone
-//        chushihua("milestone","milestoneId","milestoneIdDiv");
-//                
-//        //初始化PN数，字典值pn
-//        chushihua("pn","pnId","pnIdDiv");
-//		
-//		//初始化均匀度,字典even
-//		chushihua("even","evenId","evenIdDiv");
-//		
-//		//初始化碎片率，字典fragment
-//		chushihua("fragment","fragmentId","fragmentIdDiv");
-//		
-//		//初始化评分,字典grade
-//		chushihua("grade","gradeId","gradeIdDiv");
-		
-		
-
-
-	
-		
+	   
 		form.on('radio(milestoneId)', function(data){
 			var title = data.elem.title;
 			var value = data.value;
 			$("#stageId").html("("+title+")");
 			showHide(value);
 		});
-		
-		function showHide(value) {
-			//根据不同的value显示不同的胚胎形态
-			if(value!=null) {
-				$("#embryoDiv").show();
-				$("#embryoSjDiv").show();
-				$("#stageDiv").show();
-				
-			}
-			
-			if(value==null) {
-				$("#countDiv").hide();
-				$("#evenDiv").hide();
-				$("#fragmentDiv").hide();
-				$("#gradeDiv").hide();
-				$("#pnDiv").hide();
-				$("#embryoDiv").hide();
-				$("#embryoSjDiv").hide();
-				$("#stageDiv").hide();
-			}else if(value=="1") {//PN
-				$("#countDiv").hide();
-				$("#evenDiv").hide();
-				$("#fragmentDiv").hide();
-				$("#gradeDiv").hide();
-				$("#pnDiv").show();
-			}else if(value=="2") {//2C
-				$("#countDiv").show();
-				$("#evenDiv").show();
-				$("#fragmentDiv").hide();
-				$("#gradeDiv").hide();
-				$("#pnDiv").hide();
-			}else if(value=="3" || value=="4" || value=="5" || value=="6") {
-				$("#countDiv").show();
-				$("#evenDiv").show();
-				$("#fragmentDiv").show();
-				if(value=="6") {
-					$("#gradeDiv").show();
-				}else {
-					$("#gradeDiv").hide();
-				}
-				$("#pnDiv").hide();
-			}else {
-				$("#pnDiv").hide();
-				$("#countDiv").hide();
-				$("#evenDiv").hide();
-				$("#fragmentDiv").hide();
-				$("#gradeDiv").hide();
-				layer.alert("待确认");
-			}
-		}
-		
 		
 		//监听提交
         form.on('submit(milestoneFormSub)', function (data) {
@@ -585,7 +445,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				type : "post",
 				url : "/api/v1/milestone/add",
 				data : $(data.form).serialize(),// 你的formid
-				async : false,
 				error : function(request) {
 					layer.alert(request.responseText);
 				},
@@ -599,3 +458,354 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 
     });
 })
+
+function loadingZIndex(procedureId,dishId,wellId,timeSeries){
+
+    //加载z轴所以节点，并渲染
+    $.ajax({
+        cache : false,
+        type : "GET",
+        url : "/api/v1/image/findAllZIndex",
+        data : {"procedureId":procedureId,"dishId":dishId,"wellId":wellId,"timeSeries":timeSeries},
+        error : function(request) {
+            alert(request.responseText);
+        },
+        success : function(data) {
+            var zLi = "";
+            if(data.code == 200 && data.data != null){
+                var i = data.data.fileStart;
+                var length = data.data.fileEnd;
+                acquisitionTime = data.data.imagePath;
+                path = data.data.path;
+                sharpJpg = data.data.sharp;
+                zData = data.data.zIndexFiles;
+                zIndexLength = zData.length;
+                for (;i < length; i++) {
+                    if(sharpJpg == zData[i]) {
+                        sharpZIndex = i;
+                        zLi = "<li class='active' onclick=checkZIndex('"+ procedureId +"','"+ dishId +"','"+ wellId +"','"+ timeSeries +"','" + i + "') zIndex=" + i + " zJpg='" + zData[i] + "'><b></b></li>" + zLi;
+                    } else {
+                        zLi = "<li onclick=checkZIndex('"+ procedureId +"','"+ dishId +"','"+ wellId +"','"+ timeSeries +"','" + i + "') zIndex=" + i + " zJpg='" + zData[i] + "'><b></b></li>" + zLi;
+                    }
+                }
+                $("#zIndex").html(zLi);
+                var imageName = $(".time-vertical .active").attr("zJpg");
+                ini(acquisitionTime,timeSeries,path,imageName)
+            }
+        }
+    });
+    
+    $('#zIndexDiv').bind('mousewheel', function(event, delta) {
+        var zIndex = $(".time-vertical .active").attr('zIndex');
+        var length = $(".time-vertical li").length;
+        if(delta > 0){
+            zIndex = parseInt(zIndex) + 1;
+            if(zIndex > length){
+                zIndex = 1;
+            }
+        } else {
+            zIndex = parseInt(zIndex) - 1;
+            if(zIndex < 1){
+                zIndex = length;
+            }
+        }
+        $('.time-vertical li').removeClass('active');
+        $('.time-vertical li[zIndex='+zIndex+']').addClass('active');
+        loadingImage(procedureId,dishId,wellId,timeSeries,zIndex);
+        var imageName = $(".time-vertical li[zIndex="+zIndex+"]").attr("zJpg");
+        ini(acquisitionTime,path,timeSeries,imageName)
+        return false;    
+    });
+    
+}
+
+function checkZIndex(procedureId,dishId,wellId,timeSeries,zIndex){
+    $('.time-vertical li').removeClass('active');
+    $('.time-vertical li[zIndex='+zIndex+']').addClass('active');
+    loadingImage(procedureId,dishId,wellId,timeSeries,zIndex);
+    var imageName = $(".time-vertical li[zIndex="+zIndex+"]").attr("zJpg");
+    ini(acquisitionTime,path,timeSeries,imageName)
+}
+
+function loadingImage(procedureId,dishId,wellId,timeSeries,zIndex){
+    var imgUrl = "/api/v1/image/findImage?procedureId="+ procedureId +"&dishId="+ dishId +"&wellId="+ wellId +"&timeSeries="+ timeSeries +"&zIndex=" + zIndex; 
+    var img = "<img src=" + imgUrl + ">";
+    $("#imgDiv").html(img);
+    if(zIndex == null || zIndex == '' || sharpZIndex == zIndex){
+        // alert(111111111111);
+        $("#distinct").attr("checked",true);
+        form.render("checkbox");
+    } else {
+        // alert(222222222222);
+        // $("#distinct").attr("checked",false);
+        $("#distinct").removeAttr('checked')
+        form.render("checkbox");
+    }
+    
+}
+
+//羊城
+function check(index, data){
+    var result = '';
+    for(var i=0;i<data.length;i=i+2){
+        if(index == data[i]){
+            result = data[i+1];
+        }
+    }
+    return result;
+}
+
+function querySeriesList(wellId, seris){
+    var procedureId = $("#procedureId").val();
+    var dishId = $("#dishId").val();
+    $.ajax({
+        cache : false,
+        type : "GET",
+        url : "/api/v1/dish/list?procedure_id=" + procedureId + "&dish_id=" + dishId + "&well_id=" + wellId + "&seris=" + seris,
+        data : "",
+        error : function(request) {
+            parent.layer.alert(request.responseText);
+        },
+        success : function(data) {
+            var seris = "";
+            for(var i=0;i<data.length;i=i+4){
+                var imagePath = "/api/v1/well/image?image_path=" + data[i+1];
+                if(data[i+1].indexOf("embryo_not_found") != -1){
+                    imagePath = "/static/front/img/icon-noembryo.jpg";
+                }
+                var active = "<div class=\"swiper-slide\">";
+                if(i == 16){
+                    active = "<div class=\"swiper-slide active\">";
+                }
+                seris = seris + active + "<span><img src=\"" + 
+                                    imagePath +"\" onclick=\"getBigImage('" 
+                                    + procedureId + "','" + dishId + 
+                                    "','" + wellId + "','" + data[i] + "')\"><b>" + 
+                                    data[i+2] + "</b></div>";
+            }
+            $("#myscrollboxul").html(seris);
+            lastSeris = data[data.length-1];
+            loadingImage(procedureId,dishId,wellId,lastSeris,'');
+            loadingZIndex(procedureId,dishId,wellId,lastSeris);
+        }
+    });
+}
+
+function getBigImage(procedureId, dishId, wellId, seris){
+    querySeriesList(wellId, seris);
+    
+}
+
+function preFrame(){
+    var currentSeris = "5171500";
+    if(currentSeris == "0000000"){
+        parent.layer.alert("已经是第一张了!");
+        return;
+    }
+    $.ajax({
+        cache : false,
+        type : "GET",
+        url : "/api/v1/well/preframe?current_seris=" + currentSeris,
+        data : "",
+       
+        error : function(request) {
+            parent.layer.alert(request.responseText);
+        },
+        success : function(data) {
+            getBigImage(procedureId, dishId, wellId, data);
+        }
+    });
+}
+
+function nextFrame(){
+    var currentSeris = "5171500";
+    if(parseInt(currentSeris) >= parseInt(lastSeris)){
+        parent.layer.alert("已经是最后一张了!");
+        return;
+    }
+    $.ajax({
+        cache : false,
+        type : "GET",
+        url : "/api/v1/well/nextframe?current_seris=" + currentSeris,
+        data : "",
+        error : function(request) {
+            parent.layer.alert(request.responseText);
+        },
+        success : function(data) {
+            getBigImage(procedureId, dishId, wellId, data);
+        }
+    });
+}
+
+$(document).keydown(function(event){
+    if(event.which == "37"){
+        preFrame();
+    }
+    if(event.which == "39"){
+        nextFrame();
+    }
+});
+
+
+
+//刘勇智
+var defer = $.Deferred();
+//初始化radio通用方法
+function chushihua(dictClass) {
+	$.ajax({
+		type : "get",
+		url : "/api/v1/dict/lists/"+dictClass,
+		datatype : "json",
+		success : function(data) {
+			defer.resolve(data);
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
+	 return defer.promise();
+}
+
+//初始化以及页面回显   采集目录 、时间序列、 图片路径、图片名称
+function ini(acquisitionTime,timeSeries,path,imageName) {
+	//由于使用的layUI的表单提交，需要把值复制到表单中
+	$("#milestoneStage").val(acquisitionTime);
+	$("#milestonePath").val(path+imageName);
+	$("#timeSeries").val(timeSeries);
+	dict.done(function(data){
+		if (data.code == 0) {
+			for (var i = 0; i < data.data.length; i++) {
+				var obj = data.data[i];
+				var radioId = obj.dictClass+"Id";
+				var divId = radioId+"Div";
+				var str="";
+				if(obj.dictClass=="embryo_fate_type") {//如果为标记的，需要特殊处理
+					str = "<li class='"+obj.dictSpare+"' data-end='"+obj.dictKey+"'><i></i><span>"+obj.dictValue+"</span></li>";
+				}else {
+					str="<input type='radio' name='"+radioId+"' lay-filter="+radioId+" value='" + obj.dictKey + "' title='"+obj.dictValue+"' />";
+				}
+				$("#"+divId).append(str);
+			}
+			form.render();
+		} else {
+			layer.alert(data.msg);
+		}
+		
+		//根据胚胎ID查询该胚胎ID是否有里程碑，如果有则进行回显
+		$.ajax({
+			type : "get",
+			url : "/api/v1/milestone/"+$("#embryoId").val(),
+			datatype : "json",
+			data:{"milestonePath":path+imageName},
+			cache:false,
+			success : function(data) {
+					if(data!=null) {//如果当前里程碑不为空则回显
+						var milestone = data.milestone;
+						var milestoneData = data.milestoneData;
+						$("#milestoneCheckbox").attr('checked', true);
+		                $('#milestone').animate({
+		                    height: '120px'
+		                });
+		                $("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").attr("checked",true);
+		                if(milestoneData.pnId!="") {
+		                	$("input:radio[name=pnId][value="+milestoneData.pnId+"]").attr("checked",true);
+		                }
+		                $("input:radio[name=count][value="+milestoneData.cellCount+"]").attr("checked",true);
+		                $("input:radio[name=evenId][value="+milestoneData.evenId+"]").attr("checked",true);
+		                $("input:radio[name=fragmentId][value="+milestoneData.fragmentId+"]").attr("checked",true);
+		                $("input:radio[name=gradeId][value="+milestoneData.gradeId+"]").attr("checked",true);
+		                $("#diameter").val(milestoneData.diameter);
+		                $("#area").val(milestoneData.area);
+		                $("#thickness").val(milestoneData.thickness);
+		                $("#memo").val(milestoneData.memo);
+		                $("#stageId").html("("+milestone.milestoneName+")");
+		                showHide(milestone.milestoneId);
+					}else {
+						showHide(null);
+					}
+					form.render();
+			},
+			error : function(request) {
+				layer.alert(request.responseText);
+			}
+		});
+		
+		//回显胚胎结局
+		//根据胚胎ID查询该胚胎ID是否有里程碑，如果有则进行回显
+		$.ajax({
+			type : "get",
+			url : "/api/v1/embryo/"+$("#embryoId").val(),
+			datatype : "json",
+			cache:false,
+			success : function(data) {
+				if (data.code == 0) {
+		            if (data.data.embryoFateId != 0) {
+		            	embryoFateIdQj=data.data.embryoFateId;
+		                $(".mark i").attr('data-mark', data.data.embryoFateId);
+		                $(".mark i").attr('class', data.data.dictSpare);
+		            } else {
+		                $(".mark i").attr('data-mark', "");
+		                $(".mark i").attr('class', "");
+		            }
+				} else {
+					layer.alert(data.msg);
+				}
+				layer.close(jaindex);
+			},
+			error : function(request) {
+				layer.alert(request.responseText);
+			}
+		});
+		
+	 });
+}
+
+function showHide(value) {
+	//根据不同的value显示不同的胚胎形态
+	if(value!=null) {
+		$("#embryoDiv").show();
+		$("#embryoSjDiv").show();
+		$("#stageDiv").show();
+		
+	}
+	
+	if(value==null) {
+		$("#countDiv").hide();
+		$("#evenDiv").hide();
+		$("#fragmentDiv").hide();
+		$("#gradeDiv").hide();
+		$("#pnDiv").hide();
+		$("#embryoDiv").hide();
+		$("#embryoSjDiv").hide();
+		$("#stageDiv").hide();
+	}else if(value=="1") {//PN
+		$("#countDiv").hide();
+		$("#evenDiv").hide();
+		$("#fragmentDiv").hide();
+		$("#gradeDiv").hide();
+		$("#pnDiv").show();
+	}else if(value=="2") {//2C
+		$("#countDiv").show();
+		$("#evenDiv").show();
+		$("#fragmentDiv").hide();
+		$("#gradeDiv").hide();
+		$("#pnDiv").hide();
+	}else if(value=="3" || value=="4" || value=="5" || value=="6") {
+		$("#countDiv").show();
+		$("#evenDiv").show();
+		$("#fragmentDiv").show();
+		if(value=="6") {
+			$("#gradeDiv").show();
+		}else {
+			$("#gradeDiv").hide();
+		}
+		$("#pnDiv").hide();
+	}else {
+		$("#pnDiv").hide();
+		$("#countDiv").hide();
+		$("#evenDiv").hide();
+		$("#fragmentDiv").hide();
+		$("#gradeDiv").hide();
+		layer.alert("待确认");
+	}
+}

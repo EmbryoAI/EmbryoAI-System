@@ -14,16 +14,16 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     var table = layui.table;
     var layer = layui.layer;
 
-    $(function () {
-        var procedureId = $("#procedureId").val();
-        var dishId = $("#dishId").val();
-        var wellId = 1;
-        var timeSeries = '0000000';
-        var zIndex = '';
-        loadingImage(procedureId,dishId,wellId,timeSeries,zIndex)
-        loadingZIndex(procedureId,dishId,wellId,timeSeries)
-
-    });
+//    $(function () {
+//        var procedureId = $("#procedureId").val();
+//        var dishId = $("#dishId").val();
+//        var wellId = 1;
+//        var timeSeries = '0000000';
+//        var zIndex = '';
+//        loadingImage(procedureId,dishId,wellId,timeSeries,zIndex)
+//        loadingZIndex(procedureId,dishId,wellId,timeSeries)
+//
+//    });
 });
 
 function loadingZIndex(procedureId,dishId,wellId,timeSeries){
@@ -56,6 +56,7 @@ function loadingZIndex(procedureId,dishId,wellId,timeSeries){
                     }
                 }
                 $("#zIndex").html(zLi);
+                ini(acquisitionTime,data.data.path,sharpJpg)
             }
         }
     });
@@ -95,12 +96,12 @@ function loadingImage(procedureId,dishId,wellId,timeSeries,zIndex){
     if(zIndex == null || zIndex == '' || sharpZIndex == zIndex){
         // alert(111111111111);
         $("#distinct").attr("checked",true);
-        form.render("checkbox");
+//        form.render("checkbox");
     } else {
         // alert(222222222222);
         // $("#distinct").attr("checked",false);
         $("#distinct").removeAttr('checked')
-        form.render("checkbox");
+//        form.render("checkbox");
     }
     
 }

@@ -162,6 +162,9 @@ body {
 			<form action="" id="milestoneForm" class="layui-form">
 				<input type="hidden" name="embryoId" value="{{embryo_id}}"/>
 				<input type="hidden" name="procedureId" value="{{procedure_id}}"/>
+				<input type="hidden" id="milestoneStage" name="milestoneStage"  />
+				<input type="hidden" id="milestonePath" name="milestonePath"  />
+				<input type="hidden" id="timeSeries"  name="timeSeries"  />
 				<div id="milestone">
 
 					<div class="layui-input-block"
@@ -208,8 +211,8 @@ body {
 					<label class="layui-form-label"><i>*</i>评级</label>
 					<div class="layui-input-block" id="gradeIdDiv"></div>
 				</div>
-				<h2>胚胎数据</h2>
-				<div class="layui-form-item emdate">
+				<h2 id="embryoSjDiv">胚胎数据</h2>
+				<div id="embryoDiv" class="layui-form-item emdate">
 					<div class="layui-inline">
 						<label class="layui-form-label">直径</label>
 						<div class="layui-input-inline" style="width: 60px;">
@@ -235,7 +238,7 @@ body {
 					<h2>备注</h2>
 					<div class="comment">
 						<div class="layui-input-inline" style="width: 90%;">
-							<textarea id="memo" name="memo" placeholder="请输入内容" class="layui-textarea" style="min-height: 46px"></textarea>
+							<textarea id="memo" rows="5" name="memo" placeholder="请输入内容" class="layui-textarea" style="min-height: 46px"></textarea>
 						</div>
 					</div>
 				</div>
@@ -254,10 +257,11 @@ body {
 
 <!--公共js引入-->
 <script src="/static/front/js/embryo/embryo.js"></script>
-<script src="/static/front/js/embryo/well.js"></script>
+<!--<script src="/static/front/js/embryo/image.js"></script> -->
+<!--<script src="/static/front/js/embryo/well.js"></script> -->
 <script src="/static/front/js/embryo/swiper.min.js"></script>
 <script src="/static/admin/common/jquery.mousewheel.js"></script>
 <script src="/static/admin/common/jquery.mousewheel.min.js"></script>
-<script src="/static/front/js/embryo/image.js"></script>
+
 
 {% endblock %}

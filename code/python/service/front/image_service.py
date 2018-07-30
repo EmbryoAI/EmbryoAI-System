@@ -56,6 +56,7 @@ def getAllZIndex(agrs):
             oneWell = wells[f'{wellId}']
             if oneWell['avail']:
                 zData['imagePath'] = imagePath
+                zData['path'] = path
                 zData['zIndexFiles'] = oneWell['zIndexFiles']
                 zData['zcount'] = oneWell['zcount']
                 zData['zslice'] = oneWell['zslice']

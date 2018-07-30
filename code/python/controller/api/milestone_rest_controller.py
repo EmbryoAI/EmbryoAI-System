@@ -16,8 +16,11 @@ def addMilestone():
     code, milestone = milestone_service.insertMilestone(request)
     return make_response(jsonify(milestone), code)
 
-#根据胚胎ID查询出里程碑相关信息
+#根据胚胎ID、和图片路径 查询出里程碑相关信息
 @milestone_rest_controller.route('/<string:embryoId>', methods=['GET'])
 @login_required
 def getMilestoneByEmbryoId(embryoId):
-    return milestone_service.getMilestoneByEmbryoId(embryoId)
+    parser = reqparse.RequestParser()
+    parser.add_argument('milestonePath', type=str)
+    code, milestone = milestone_service.getMilestoneByEmbryoId(embryoId, parser.parse_args()['milestonePath'])
+    return make_response(jsonify(milestone), code)
