@@ -20,18 +20,18 @@ def insertMilestone(request):
     
     #胚胎ID
     embryoId = request.form.get('embryoId')
-    if embryoId == "":
+    if not embryoId:
        return 400, '胚胎ID不能为空!'
    
     #周期ID
     procedureId = request.form.get('procedureId')
-    if procedureId == "":
+    if not procedureId:
        return 400, '周期ID不能为空!'
    
    
-    #里程碑节点ID
+    #里程碑节点ID  对应字典值
     milestoneId = request.form.get('milestoneId')
-    if milestoneId == "":
+    if not milestoneId:
        return 400, '里程碑节点ID不能为空!'
    
     #里程碑时间（自动识别或用户设定的里程碑时间点）时间序列
@@ -46,20 +46,22 @@ def insertMilestone(request):
     milestoneType = 1
     
     #里程碑时间点图像文件路径
-    milestonePath = "milestone_path"
+    milestonePath = request.form.get('milestonePath')
+    if not milestonePath:
+       return 400, '图片路径不能为空!'
+    
     procedure = procedure_mapper.getProcedure(procedureId)
     #根据周期ID获取受精时间
     
     #里程碑时间点距离授精时间的间隔，单位分钟    采集时间+时间序列-授精时间算成分钟数
-    timeSeries= "0000000" 
-    milestoneStage = "20180722152100"
+    timeSeries= request.form.get('timeSeries')
+    milestoneStage = request.form.get('milestoneStage')
     milestoneStage = datetime.datetime.strptime(milestoneStage, "%Y%m%d%H%M%S")
     milestoneStage = (milestoneStage+datetime.timedelta(days=int(timeSeries[0:1]))
     +datetime.timedelta(hours=int(timeSeries[1:3]))+datetime.timedelta(minutes=int(timeSeries[3:5]))
     +datetime.timedelta(seconds=int(timeSeries[5:7])))
     milestoneStage = milestoneStage-procedure.insemiTime
     milestoneStage = int(round(milestoneStage.total_seconds()/60,1))
-    print(milestoneStage)
 #     c = a+b
 #     d = c+datetime.datetime.strptime("0160000", '%d%H:%M:%S')
 #
@@ -130,19 +132,21 @@ def insertMilestone(request):
         return 400, '设置里程碑时异常!'
     return 200, milestone.to_dict()
 
-def getMilestoneByEmbryoId(embryoId):
+def getMilestoneByEmbryoId(embryoId,milestonePath):
     try: 
-        sql = "AND embryo_id = :embryoId"
-        filters = {'embryoId': embryoId}
+        if not milestonePath:
+           return 400, '初始化里程碑节点出错，图片路径不能为空!'
+        sql = "AND embryo_id = :embryoId and milestone_path = :milestonePath "
+        filters = {'embryoId': embryoId,'milestonePath':milestonePath}
         milestone = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
+        result = {}
         if milestone!=None:
             milestoneData = milestone_data_mapper.getMilestoneData(milestone.id)
-            result = {}
             result["milestone"] = dict(milestone)
             result["milestoneData"] = milestoneData.to_dict()
-        restResult = RestResult(0, "404", 0, None)
-        if milestone is not None:
-            restResult = RestResult(0, "OK", 1, result)
-        return jsonify(restResult.__dict__)
+        if not result:
+            return 200, None
+        else: 
+            return 200, result
     except:
         return 400, '查询里程碑详情时发生错误!'

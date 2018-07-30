@@ -38,14 +38,15 @@ def querySeriesList(agrs):
 
         well_json = dishJson['wells'][well_id]
         last_seris = well_json['lastEmbryoSerie']
+        print(last_seris)
 
         if seris != 'lastEmbryoSerie':
             last_seris = seris
+        
 
         ts = TimeSeries()
         last_index = len(ts.range(last_seris)) + 5
-        begin_index = len(ts.range(last_seris)) - 5
-
+        begin_index = len(ts.range(last_seris)) - 4
         list=[]
         for i in ts[begin_index:last_index]:
             list.append(i)
@@ -53,6 +54,7 @@ def querySeriesList(agrs):
             list.append(image_path)
             hour, minute = serie_to_time(i)
             list.append(f'{hour:02d}H{minute:02d}M')
+            list.append(last_seris)
 
         return jsonify(list)
     except : 

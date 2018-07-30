@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>ASTEC Embryo Ai</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta http-equiv="Access-Control-Allow-Origin" content="*">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="icon" href="favicon.ico">
+	<link rel="stylesheet" href="lib/layui/css/layui.css"/>
+	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+	<link rel="stylesheet" type="text/css" href="css/jquery.autocompleter.css"/>
+	<link rel="stylesheet" type="text/css" href="css/cycleView.css"/>
+	<style type="text/css">
+		.layui-table-view{
+				margin-top: 0;
+		}
+		.layui-table-cell {
+			height: 34px;
+			line-height: 34px;
+			font-weight: bolder;
+		}
+		tbody tr td .layui-table-cell {
+			height: 144px;
+			line-height: 134px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="main">
+			<div class="title">
+				<h1>周期综合视图</h1>
+				<h6>Cycle View</h6>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">病历号</label>
+					<div class="layui-input-inline">
+						<div class="field">
+							<input type="text"  name="nope" id="nope" class="layui-input">
+						</div>
+					</div>
+				</div>
+				<div class="layui-inline btn-box">
+					<button  class="layui-btn layui-bg-blue" >查询</button>
+				</div>
+			</div>
+			<div class="det-box">
+				<ul class="info-top">
+					<li><span>甄美丽</span><span>29 岁</span><strong>授精时间：</strong><span>2019/08/08 10:10</span></li>
+					<li class="emb"><strong>胚胎个数：</strong><span>2</span></li>
+					<li class="tran"><strong>移植个数：</strong><span>2</span></li>
+					<li class="freez"><strong>冷冻个数：</strong><span>2</span></li>
+				</ul>
+				<table id="cycle-table" lay-filter="" class="cycle-table"></table>
+			</div>
+		</div>
+    </div>
+		
+	<!--公共js引入-->
+	<script src="lib/layui/layui.js"></script>
+	<script src="lib/autocompleter/jquery.min.js"></script>
+	<script src="lib/autocompleter/jquery.autocompleter.js"></script>
+	<script src="lib/autocompleter/main.js"></script>
+	<script src="js/cycleView.js"></script>
+</body>
+</html>
