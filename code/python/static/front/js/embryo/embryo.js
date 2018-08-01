@@ -14,6 +14,7 @@ var dishId = "";
 var wellId = "";
 var lastSeris = "";
 var jaindex = "";
+var currentSeris = "";
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     form = layui.form;
     var $ = layui.jquery;
@@ -141,11 +142,11 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             $('#siteitem li').removeClass('active');
             $(this).addClass('active');
         });
-		// z轴点击样式
-		$('.time-vertical li').click(function () {
-			$('.time-vertical li').removeClass('active');
-			$(this).addClass('active');
-		});
+		// // z轴点击样式
+		// $('.time-vertical li').click(function () {
+		// 	$('.time-vertical li').removeClass('active');
+		// 	$(this).addClass('active');
+		// });
 		
 
         // 选为最清晰的值提示
@@ -242,6 +243,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 clearInterval(imgTime);
             }
         })
+        
         //记录最新的标记状态值
         var embryoFateIdQj = "";
         // 标记结局
@@ -513,7 +515,7 @@ function loadingZIndex(procedureId,dishId,wellId,timeSeries){
         $('.time-vertical li[zIndex='+zIndex+']').addClass('active');
         loadingImage(procedureId,dishId,wellId,timeSeries,zIndex);
         var imageName = $(".time-vertical li[zIndex="+zIndex+"]").attr("zJpg");
-        ini(acquisitionTime,path,timeSeries,imageName)
+        ini(acquisitionTime,timeSeries,path,imageName)
         return false;    
     });
     
@@ -524,24 +526,18 @@ function checkZIndex(procedureId,dishId,wellId,timeSeries,zIndex){
     $('.time-vertical li[zIndex='+zIndex+']').addClass('active');
     loadingImage(procedureId,dishId,wellId,timeSeries,zIndex);
     var imageName = $(".time-vertical li[zIndex="+zIndex+"]").attr("zJpg");
-    ini(acquisitionTime,path,timeSeries,imageName)
+    ini(acquisitionTime,timeSeries,path,imageName)
 }
 
 function loadingImage(procedureId,dishId,wellId,timeSeries,zIndex){
+    if(zIndex == null || zIndex == '' || sharpZIndex == zIndex){
+        $("#distinct").prop("checked",true);
+    } else {
+        $("#distinct").prop("checked",false);
+    }
     var imgUrl = "/api/v1/image/findImage?procedureId="+ procedureId +"&dishId="+ dishId +"&wellId="+ wellId +"&timeSeries="+ timeSeries +"&zIndex=" + zIndex; 
     var img = "<img src=" + imgUrl + ">";
     $("#imgDiv").html(img);
-    if(zIndex == null || zIndex == '' || sharpZIndex == zIndex){
-        // alert(111111111111);
-        $("#distinct").attr("checked",true);
-        form.render("checkbox");
-    } else {
-        // alert(222222222222);
-        // $("#distinct").attr("checked",false);
-        $("#distinct").removeAttr('checked')
-        form.render("checkbox");
-    }
-    
 }
 
 //羊城
@@ -593,11 +589,12 @@ function querySeriesList(wellId, seris){
 
 function getBigImage(procedureId, dishId, wellId, seris){
     querySeriesList(wellId, seris);
-    
+    loadingImage(procedureId,dishId,wellId,seris,'');
+    loadingZIndex(procedureId,dishId,wellId,seris);
 }
 
 function preFrame(){
-    var currentSeris = "5171500";
+    currentSeris = seris;
     if(currentSeris == "0000000"){
         parent.layer.alert("已经是第一张了!");
         return;
@@ -618,7 +615,7 @@ function preFrame(){
 }
 
 function nextFrame(){
-    var currentSeris = "5171500";
+    currentSeris = seris;
     if(parseInt(currentSeris) >= parseInt(lastSeris)){
         parent.layer.alert("已经是最后一张了!");
         return;
@@ -649,7 +646,6 @@ $(document).keydown(function(event){
 
 
 //刘勇智
-var defer = $.Deferred();
 //初始化radio通用方法
 function chushihua(dictClass) {
 	$.ajax({
@@ -657,107 +653,104 @@ function chushihua(dictClass) {
 		url : "/api/v1/dict/lists/"+dictClass,
 		datatype : "json",
 		success : function(data) {
-			defer.resolve(data);
+			if (data.code == 0) {
+				for (var i = 0; i < data.data.length; i++) {
+					var obj = data.data[i];
+					var radioId = obj.dictClass+"Id";
+					var divId = radioId+"Div";
+					var str="";
+					if(obj.dictClass=="embryo_fate_type") {//如果为标记的，需要特殊处理
+						str = "<li class='"+obj.dictSpare+"' data-end='"+obj.dictKey+"'><i></i><span>"+obj.dictValue+"</span></li>";
+					}else {
+						str="<input type='radio' name='"+radioId+"' lay-filter="+radioId+" value='" + obj.dictKey + "' title='"+obj.dictValue+"' />";
+					}
+					$("#"+divId).append(str);
+				}
+				form.render();
+			} else {
+				layer.alert(data.msg);
+			}
 		},
 		error : function(request) {
 			layer.alert(request.responseText);
 		}
 	});
-	 return defer.promise();
 }
 
 //初始化以及页面回显   采集目录 、时间序列、 图片路径、图片名称
 function ini(acquisitionTime,timeSeries,path,imageName) {
-	//由于使用的layUI的表单提交，需要把值复制到表单中
+    //由于使用的layUI的表单提交，需要把值复制到表单中
 	$("#milestoneStage").val(acquisitionTime);
 	$("#milestonePath").val(path+imageName);
 	$("#timeSeries").val(timeSeries);
-	dict.done(function(data){
-		if (data.code == 0) {
-			for (var i = 0; i < data.data.length; i++) {
-				var obj = data.data[i];
-				var radioId = obj.dictClass+"Id";
-				var divId = radioId+"Div";
-				var str="";
-				if(obj.dictClass=="embryo_fate_type") {//如果为标记的，需要特殊处理
-					str = "<li class='"+obj.dictSpare+"' data-end='"+obj.dictKey+"'><i></i><span>"+obj.dictValue+"</span></li>";
+	//根据胚胎ID查询该胚胎ID是否有里程碑，如果有则进行回显
+	$.ajax({
+		type : "get",
+		url : "/api/v1/milestone/"+$("#embryoId").val(),
+		datatype : "json",
+		data:{"milestonePath":path+imageName},
+		cache:false,
+		success : function(data) {
+		 
+				if(data!=null) {//如果当前里程碑不为空则回显
+					var milestone = data.milestone;
+					var milestoneData = data.milestoneData;
+					$("#milestoneCheckbox").attr('checked', true);
+	                $('#milestone').animate({
+	                    height: '120px'
+	                });
+	                $("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").attr("checked",true);
+	                if(milestoneData.pnId!="") {
+	                	$("input:radio[name=pnId][value="+milestoneData.pnId+"]").attr("checked",true);
+	                }
+	                $("input:radio[name=count][value="+milestoneData.cellCount+"]").attr("checked",true);
+	                $("input:radio[name=evenId][value="+milestoneData.evenId+"]").attr("checked",true);
+	                $("input:radio[name=fragmentId][value="+milestoneData.fragmentId+"]").attr("checked",true);
+	                $("input:radio[name=gradeId][value="+milestoneData.gradeId+"]").attr("checked",true);
+	                $("#diameter").val(milestoneData.diameter);
+	                $("#area").val(milestoneData.area);
+	                $("#thickness").val(milestoneData.thickness);
+	                $("#memo").val(milestoneData.memo);
+	                $("#stageId").html("("+milestone.milestoneName+")");
+	                showHide(milestone.milestoneId);
 				}else {
-					str="<input type='radio' name='"+radioId+"' lay-filter="+radioId+" value='" + obj.dictKey + "' title='"+obj.dictValue+"' />";
+					showHide(null);
 				}
-				$("#"+divId).append(str);
-			}
-			form.render();
-		} else {
-			layer.alert(data.msg);
+				form.render();
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
 		}
-		
-		//根据胚胎ID查询该胚胎ID是否有里程碑，如果有则进行回显
-		$.ajax({
-			type : "get",
-			url : "/api/v1/milestone/"+$("#embryoId").val(),
-			datatype : "json",
-			data:{"milestonePath":path+imageName},
-			cache:false,
-			success : function(data) {
-					if(data!=null) {//如果当前里程碑不为空则回显
-						var milestone = data.milestone;
-						var milestoneData = data.milestoneData;
-						$("#milestoneCheckbox").attr('checked', true);
-		                $('#milestone').animate({
-		                    height: '120px'
-		                });
-		                $("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").attr("checked",true);
-		                if(milestoneData.pnId!="") {
-		                	$("input:radio[name=pnId][value="+milestoneData.pnId+"]").attr("checked",true);
-		                }
-		                $("input:radio[name=count][value="+milestoneData.cellCount+"]").attr("checked",true);
-		                $("input:radio[name=evenId][value="+milestoneData.evenId+"]").attr("checked",true);
-		                $("input:radio[name=fragmentId][value="+milestoneData.fragmentId+"]").attr("checked",true);
-		                $("input:radio[name=gradeId][value="+milestoneData.gradeId+"]").attr("checked",true);
-		                $("#diameter").val(milestoneData.diameter);
-		                $("#area").val(milestoneData.area);
-		                $("#thickness").val(milestoneData.thickness);
-		                $("#memo").val(milestoneData.memo);
-		                $("#stageId").html("("+milestone.milestoneName+")");
-		                showHide(milestone.milestoneId);
-					}else {
-						showHide(null);
-					}
-					form.render();
-			},
-			error : function(request) {
-				layer.alert(request.responseText);
+	});
+	
+	//回显胚胎结局
+	//根据胚胎ID查询该胚胎ID是否有里程碑，如果有则进行回显
+	$.ajax({
+		type : "get",
+		url : "/api/v1/embryo/"+$("#embryoId").val(),
+		datatype : "json",
+		cache:false,
+		success : function(data) {
+			if (data.code == 0) {
+	            if (data.data.embryoFateId != 0) {
+	            	embryoFateIdQj=data.data.embryoFateId;
+	                $(".mark i").attr('data-mark', data.data.embryoFateId);
+	                $(".mark i").attr('class', data.data.dictSpare);
+	            } else {
+	                $(".mark i").attr('data-mark', "");
+	                $(".mark i").attr('class', "");
+	            }
+			} else {
+				layer.alert(data.msg);
 			}
-		});
+			layer.close(jaindex);
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
 		
-		//回显胚胎结局
-		//根据胚胎ID查询该胚胎ID是否有里程碑，如果有则进行回显
-		$.ajax({
-			type : "get",
-			url : "/api/v1/embryo/"+$("#embryoId").val(),
-			datatype : "json",
-			cache:false,
-			success : function(data) {
-				if (data.code == 0) {
-		            if (data.data.embryoFateId != 0) {
-		            	embryoFateIdQj=data.data.embryoFateId;
-		                $(".mark i").attr('data-mark', data.data.embryoFateId);
-		                $(".mark i").attr('class', data.data.dictSpare);
-		            } else {
-		                $(".mark i").attr('data-mark', "");
-		                $(".mark i").attr('class', "");
-		            }
-				} else {
-					layer.alert(data.msg);
-				}
-				layer.close(jaindex);
-			},
-			error : function(request) {
-				layer.alert(request.responseText);
-			}
-		});
-		
-	 });
+	  
 }
 
 function showHide(value) {
@@ -778,6 +771,21 @@ function showHide(value) {
 		$("#embryoDiv").hide();
 		$("#embryoSjDiv").hide();
 		$("#stageDiv").hide();
+		$("#milestoneCheckbox").attr('checked', false);
+        $('#milestone').animate({
+            height: '31px'
+        });
+        $("input:radio[name=milestoneId]").attr("checked",false);
+        $("input:radio[name=pnId]").attr("checked",false);
+        $("input:radio[name=count]").attr("checked",true);
+        $("input:radio[name=evenId]").attr("checked",true);
+        $("input:radio[name=fragmentId]").attr("checked",true);
+        $("input:radio[name=gradeId]").attr("checked",true);
+        $("#diameter").val("");
+        $("#area").val("");
+        $("#thickness").val("");
+        $("#memo").val("");
+        $("#stageId").html("()");
 	}else if(value=="1") {//PN
 		$("#countDiv").hide();
 		$("#evenDiv").hide();

@@ -16,6 +16,14 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 	})
 	// 培养皿选择
 	$('.dish').on('click','span',function(){
+		const length = $('.dish').children('.active').length;
+		const text = $(this).text();
+		if(length>=2){
+			if($(this).hasClass('active')){
+				$(this).removeClass('active');
+			}
+			return
+		}
 		if($(this).hasClass('active')){
 			$(this).removeClass('active');
 		}else{

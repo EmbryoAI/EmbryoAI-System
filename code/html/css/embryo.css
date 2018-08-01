@@ -71,6 +71,7 @@
 	width: 100%;
 	padding: 2px;
 	border: 2px solid #e0e2e6;
+	min-height: 600px;
 }
 .lg-img img{
 	width: 100%;
@@ -143,6 +144,7 @@
 	right: -4px;
 	background-color: rgba(255,255,255,0.8);
 	z-index: 999;
+	padding: 10px;
 }
 .elect .layui-form-item{
 	margin-bottom: 0;
@@ -209,6 +211,7 @@
 	border: 1px solid #b8c0d1;
 	width: 100%;
 	height: 120px;
+	overflow: hidden;
 }
 .site h1{
 	float: left;
@@ -296,6 +299,17 @@
 }
 .emdate input{
 	color: #3c83f7;
+}
+.emdate .layui-form-label{
+	width: 84px;
+	padding: 8px 4px;
+}
+.emdate .layui-input-inline{
+	margin-right: 4px;
+	width: 60px;
+}
+.emdate .unit{
+	line-height: 30px;
 }
 .layui-form-item{
 	margin-bottom: 2px;
@@ -411,4 +425,43 @@
 #canvas{
 	cursor: pointer;
 	background-color: transparent;
+}
+.elect label {
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.elect label i {
+	font-size: 12px;
+	font-style: normal;
+	display: inline-block;
+	width: 12px;
+	height: 12px;
+	text-align: center;
+	line-height: 12px;
+	color: #fff;
+	vertical-align: middle;
+	margin: -2px 2px 1px 0px;
+	border: #3c64f7 1px solid;
+	background-color: #fff;
+}
+
+.elect input[type="checkbox"],input[type="radio"] {
+	display: none;
+}
+
+.elect input[type="radio"]+i {
+	border-radius: 7px;
+}
+
+.elect input[type="checkbox"]:checked+i,input[type="radio"]:checked+i {
+	background: #3c64f7;
+}
+
+.elect input[type="checkbox"]:disabled+i,input[type="radio"]:disabled+i {
+	border-color: #ccc;
+}
+
+.elect input[type="checkbox"]:checked:disabled+i,input[type="radio"]:checked:disabled+i {
+	background: #ccc;
 }
