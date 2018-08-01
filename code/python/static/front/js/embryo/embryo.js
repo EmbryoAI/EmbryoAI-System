@@ -141,11 +141,11 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             $('#siteitem li').removeClass('active');
             $(this).addClass('active');
         });
-		// z轴点击样式
-		$('.time-vertical li').click(function () {
-			$('.time-vertical li').removeClass('active');
-			$(this).addClass('active');
-		});
+		// // z轴点击样式
+		// $('.time-vertical li').click(function () {
+		// 	$('.time-vertical li').removeClass('active');
+		// 	$(this).addClass('active');
+		// });
 		
 
         // 选为最清晰的值提示
@@ -514,7 +514,7 @@ function loadingZIndex(procedureId,dishId,wellId,timeSeries){
         $('.time-vertical li[zIndex='+zIndex+']').addClass('active');
         loadingImage(procedureId,dishId,wellId,timeSeries,zIndex);
         var imageName = $(".time-vertical li[zIndex="+zIndex+"]").attr("zJpg");
-        ini(acquisitionTime,path,timeSeries,imageName)
+        ini(acquisitionTime,timeSeries,path,imageName)
         return false;    
     });
     
@@ -525,24 +525,18 @@ function checkZIndex(procedureId,dishId,wellId,timeSeries,zIndex){
     $('.time-vertical li[zIndex='+zIndex+']').addClass('active');
     loadingImage(procedureId,dishId,wellId,timeSeries,zIndex);
     var imageName = $(".time-vertical li[zIndex="+zIndex+"]").attr("zJpg");
-    ini(acquisitionTime,path,timeSeries,imageName)
+    ini(acquisitionTime,timeSeries,path,imageName)
 }
 
 function loadingImage(procedureId,dishId,wellId,timeSeries,zIndex){
+    if(zIndex == null || zIndex == '' || sharpZIndex == zIndex){
+        $("#distinct").prop("checked",true);
+    } else {
+        $("#distinct").prop("checked",false);
+    }
     var imgUrl = "/api/v1/image/findImage?procedureId="+ procedureId +"&dishId="+ dishId +"&wellId="+ wellId +"&timeSeries="+ timeSeries +"&zIndex=" + zIndex; 
     var img = "<img src=" + imgUrl + ">";
     $("#imgDiv").html(img);
-    if(zIndex == null || zIndex == '' || sharpZIndex == zIndex){
-        // alert(111111111111);
-        $("#distinct").attr("checked",true);
-        form.render("checkbox");
-    } else {
-        // alert(222222222222);
-        // $("#distinct").attr("checked",false);
-        $("#distinct").removeAttr('checked')
-        form.render("checkbox");
-    }
-    
 }
 
 //羊城
@@ -683,7 +677,7 @@ function chushihua(dictClass) {
 
 //初始化以及页面回显   采集目录 、时间序列、 图片路径、图片名称
 function ini(acquisitionTime,timeSeries,path,imageName) {
-	//由于使用的layUI的表单提交，需要把值复制到表单中
+    //由于使用的layUI的表单提交，需要把值复制到表单中
 	$("#milestoneStage").val(acquisitionTime);
 	$("#milestonePath").val(path+imageName);
 	$("#timeSeries").val(timeSeries);
