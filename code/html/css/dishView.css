@@ -42,6 +42,35 @@
 	margin-bottom: 10px;
 	margin-right: 10px;
 	overflow: hidden;
+	position: relative;
+}
+.dishimg li.active{
+	border: 1px solid #4a81e4;
+	box-shadow: 0px 5px 10px rgba(68,122,218,0.2)
+}
+.dishimg i{
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	display:block;
+	width:30px;
+	height:30px;
+}
+.dishimg i.standard{
+	background: url(../img/icon-dish1.png) no-repeat center top;
+	left: 2px;
+}
+.dishimg i.transplant{
+	background: url(../img/icon-dish2.png) no-repeat center top;
+}
+.dishimg i.freeze{
+	background: url(../img/icon-dish3.png) no-repeat center top;
+}
+.dishimg i.abandon{
+	background: url(../img/icon-dish4.png) no-repeat center top;
+}
+.dishimg i.hold{
+	background: url(../img/icon-dish5.png) no-repeat center top;
 }
 .dishimg li img{
 	width: 100%;
@@ -139,4 +168,7 @@
 	cursor: pointer;
 	box-shadow: 0px 5px 10px rgba(159,165,175,0.34);
 
+}
+.s-cursor{
+	cursor: url('../img/tool-end0.png'),auto;
 }

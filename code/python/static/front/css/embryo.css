@@ -301,6 +301,17 @@
 .emdate input{
 	color: #3c83f7;
 }
+.emdate .layui-form-label{
+	width: 84px;
+	padding: 8px 4px;
+}
+.emdate .layui-input-inline{
+	margin-right: 4px;
+	width: 60px;
+}
+.emdate .unit{
+	line-height: 30px;
+}
 .layui-form-item{
 	margin-bottom: 2px;
 }
