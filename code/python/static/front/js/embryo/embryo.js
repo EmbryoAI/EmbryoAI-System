@@ -14,6 +14,7 @@ var dishId = "";
 var wellId = "";
 var lastSeris = "";
 var jaindex = "";
+var currentSeris = "";
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     form = layui.form;
     var $ = layui.jquery;
@@ -593,11 +594,12 @@ function querySeriesList(wellId, seris){
 
 function getBigImage(procedureId, dishId, wellId, seris){
     querySeriesList(wellId, seris);
-    
+    loadingImage(procedureId,dishId,wellId,seris,'');
+    loadingZIndex(procedureId,dishId,wellId,seris);
 }
 
 function preFrame(){
-    var currentSeris = "5171500";
+    currentSeris = seris;
     if(currentSeris == "0000000"){
         parent.layer.alert("已经是第一张了!");
         return;
@@ -618,7 +620,7 @@ function preFrame(){
 }
 
 function nextFrame(){
-    var currentSeris = "5171500";
+    currentSeris = seris;
     if(parseInt(currentSeris) >= parseInt(lastSeris)){
         parent.layer.alert("已经是最后一张了!");
         return;
