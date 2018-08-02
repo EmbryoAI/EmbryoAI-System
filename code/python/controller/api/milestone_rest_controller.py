@@ -22,5 +22,9 @@ def addMilestone():
 def getMilestoneByEmbryoId(embryoId):
     parser = reqparse.RequestParser()
     parser.add_argument('milestonePath', type=str)
-    code, milestone = milestone_service.getMilestoneByEmbryoId(embryoId, parser.parse_args()['milestonePath'])
+    parser.add_argument('procedureId', type=str)
+    parser.add_argument('dishId', type=str)
+    parser.add_argument('timeSeries', type=str)
+    parser.add_argument('wellId', type=str)
+    code, milestone = milestone_service.getMilestoneByEmbryoId(embryoId, parser.parse_args()['milestonePath'], parser.parse_args()['procedureId'], parser.parse_args()['dishId'], parser.parse_args()['timeSeries'], parser.parse_args()['wellId'])
     return make_response(jsonify(milestone), code)

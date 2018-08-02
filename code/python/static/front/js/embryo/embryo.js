@@ -683,7 +683,7 @@ function chushihua(dictClass) {
 	});
 }
 
-//初始化以及页面回显   采集目录 、时间序列、 图片路径、图片名称
+//初始化以及页面回显   采集目录 、时间序列、 图片路径、图片名称, 周期ID, 皿ID
 function ini(acquisitionTime,timeSeries,path,imageName) {
 	//由于使用的layUI的表单提交，需要把值复制到表单中
 	$("#milestoneStage").val(acquisitionTime);
@@ -694,10 +694,9 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 		type : "get",
 		url : "/api/v1/milestone/"+$("#embryoId").val(),
 		datatype : "json",
-		data:{"milestonePath":path+imageName},
+		data:{"milestonePath":path+imageName, "timeSeries":timeSeries, "wellId":wellId, "procedureId":procedureId, "dishId":dishId},
 		cache:false,
 		success : function(data) {
-		 
 				if(data!=null) {//如果当前里程碑不为空则回显
 					var milestone = data.milestone;
 					var milestoneData = data.milestoneData;
@@ -713,9 +712,12 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 	                $("input:radio[name=evenId][value="+milestoneData.evenId+"]").attr("checked",true);
 	                $("input:radio[name=fragmentId][value="+milestoneData.fragmentId+"]").attr("checked",true);
 	                $("input:radio[name=gradeId][value="+milestoneData.gradeId+"]").attr("checked",true);
-	                $("#diameter").val(milestoneData.diameter);
-	                $("#area").val(milestoneData.area);
-	                $("#thickness").val(milestoneData.thickness);
+                    $("#innerDiameter").val(Math.round(milestoneData.innerDiameter));
+                    $("#innerArea").val(Math.round(milestoneData.innerArea));
+                    $("#outDiameter").val(Math.round(milestoneData.outerDiameter));
+                    $("#outArea").val(Math.round(milestoneData.outerArea));
+                    $("#expansionArea").val(Math.round(milestoneData.expansionArea));
+	                $("#zonaThickness").val(Math.round(milestoneData.zonaThickness));
 	                $("#memo").val(milestoneData.memo);
 	                $("#stageId").html("("+milestone.milestoneName+")");
 	                showHide(milestone.milestoneId);

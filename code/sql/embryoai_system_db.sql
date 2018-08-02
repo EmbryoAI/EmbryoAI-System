@@ -3675,7 +3675,6 @@ CREATE TABLE `t_milestone` (
 -- ----------------------------
 -- Table structure for t_milestone_data
 -- ----------------------------
-DROP TABLE IF EXISTS `t_milestone_data`;
 CREATE TABLE `t_milestone_data` (
   `milestone_id` varchar(32) NOT NULL COMMENT '里程碑时间点ID -> t_milestone.id',
   `milestone_stage` int(11) DEFAULT NULL COMMENT '里程碑时间点距离授精时间的间隔，单位分钟',
@@ -3684,12 +3683,15 @@ CREATE TABLE `t_milestone_data` (
   `even_id` varchar(32) DEFAULT NULL COMMENT '细胞是否均匀字典值ID -> sys_dict.id，字典值类型为even，可能取值：0：均匀；1：不均匀',
   `fragment_id` varchar(255) DEFAULT NULL COMMENT '碎片比例字典值ID -> sys_dict.id，字典值类型fragment，可能取值：1：<5%；2：5%-10%；3：10%-20%；4：>=20%',
   `grade_id` varchar(255) DEFAULT NULL COMMENT '胚胎评级字典值ID -> sys_dict.id，字典值类别为grade，可能取值包括：1：I级；2：II级；3：III级',
-  `diameter` int(11) DEFAULT NULL COMMENT '胚胎直径，单位um',
-  `area` int(11) DEFAULT NULL COMMENT '胚胎面积，单位平方um',
-  `thickness` int(11) DEFAULT NULL COMMENT '透明带厚度，单位um',
+  `inner_diameter` int(11) DEFAULT NULL COMMENT '胚胎内直径，单位um',
+  `inner_area` int(11) DEFAULT NULL COMMENT '胚胎内面积，单位平方um',
+  `zona_thickness` int(11) DEFAULT NULL COMMENT '透明带厚度，单位um',
   `milestone_score` double DEFAULT NULL COMMENT '里程碑时间点得分',
   `user_id` varchar(32) DEFAULT NULL COMMENT '填写或确认的用户ID',
   `memo` varchar(500) DEFAULT NULL COMMENT '备注',
+  `outer_area` int(11) DEFAULT NULL COMMENT '胚胎外面积,单位平方um',
+  `outer_diameter` int(11) DEFAULT NULL COMMENT '胚胎外直径,单位um',
+  `expansion_area` int(11) DEFAULT NULL COMMENT '扩张囊胚面积,单位平台um',
   PRIMARY KEY (`milestone_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='胚胎里程碑时间点数据表';
 

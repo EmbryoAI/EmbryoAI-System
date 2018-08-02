@@ -41,12 +41,15 @@ def updateMilestone(milestone,milestoneData):
                 even_id =:evenId , 
                 fragment_id =:fragmentId , 
                 grade_id =:gradeId , 
-                diameter =:diameter , 
-                AREA =:area , 
-                thickness =:thickness , 
+                inner_diameter =:innerDiameter , 
+                inner_area =:innerArea, 
+                zona_thickness =:zonaThickness, 
                 milestone_score =:milestoneScore , 
                 user_id =:userId , 
-                memo =:memo
+                memo =:memo ,
+                outer_area =:outerArea ,
+                outer_diameter =:outerDiameter ,
+                expansion_area =:expansionArea 
                 WHERE milestone_id =:milestoneId  
         """)
         

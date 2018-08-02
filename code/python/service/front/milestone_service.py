@@ -13,6 +13,7 @@ import re
 import time
 import datetime
 from app import current_user
+import service.front.image_service as image_service
 
 def insertMilestone(request):
     id = uuid()
@@ -85,19 +86,28 @@ def insertMilestone(request):
     gradeId = request.form.get('gradeId')
 
     #胚胎直径，单位um
-    diameter = request.form.get('diameter')
+    innerDiameter = request.form.get('innerDiameter')
     
     #胚胎面积，单位平方um
-    area = request.form.get('area')
+    innerArea = request.form.get('innerArea')
     
     #透明带厚度，单位um
-    thickness = request.form.get('thickness')
+    zonaThickness = request.form.get('zonaThickness')
     
     #里程碑时间点得分
     milestoneScore = request.form.get('milestoneScore')
     
     #备注
     memo = request.form.get('memo')
+
+    #胚胎外面积
+    outerArea = request.form.get('outerArea')
+
+    #胚胎外直接
+    outerDiameter = request.form.get('outerDiameter')
+
+    #扩张囊腔面积
+    expansionArea = request.form.get('expansionArea')
     
 #     create_time = update_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 
  
@@ -105,8 +115,8 @@ def insertMilestone(request):
                           userId=userId,milestoneType=milestoneType,milestonePath=milestonePath)
     
     milestoneData = MilestoneData(milestoneId=id, milestoneStage=milestoneStage,pnId=pnId,cellCount=cellCount,evenId=evenId,
-                      fragmentId=fragmentId,gradeId=gradeId,diameter=diameter,area=area,thickness=thickness,milestoneScore=milestoneScore
-                      ,userId=userId,memo=memo)
+                      fragmentId=fragmentId,gradeId=gradeId,innerDiameter=innerDiameter,innerArea=innerArea,zonaThickness=zonaThickness,milestoneScore=milestoneScore
+                      ,userId=userId,memo=memo, outerArea=outerArea, outerDiameter=outerDiameter, expansionArea=expansionArea)
     
     try:
         #根据胚胎ID和的里程碑的图片查出是否已经存在了,存在则更新
@@ -132,21 +142,28 @@ def insertMilestone(request):
         return 400, '设置里程碑时异常!'
     return 200, milestone.to_dict()
 
-def getMilestoneByEmbryoId(embryoId,milestonePath):
-    try: 
-        if not milestonePath:
-           return 400, '初始化里程碑节点出错，图片路径不能为空!'
-        sql = "AND embryo_id = :embryoId and milestone_path = :milestonePath "
-        filters = {'embryoId': embryoId,'milestonePath':milestonePath}
-        milestone = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
-        result = {}
-        if milestone!=None:
-            milestoneData = milestone_data_mapper.getMilestoneData(milestone.id)
-            result["milestone"] = dict(milestone)
-            result["milestoneData"] = milestoneData.to_dict()
-        if not result:
-            return 200, None
-        else: 
-            return 200, result
-    except:
-        return 400, '查询里程碑详情时发生错误!'
+def getMilestoneByEmbryoId(embryoId,milestonePath,procedureId, dishId, timeSeries, wellId):
+    if not milestonePath:
+        return 400, '初始化里程碑节点出错，图片路径不能为空!'
+    sql = "AND embryo_id = :embryoId and milestone_path = :milestonePath "
+    filters = {'embryoId': embryoId,'milestonePath':milestonePath}
+    milestone = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
+    result = {}
+    if milestone!=None:
+        milestoneData = milestone_data_mapper.getMilestoneData(milestone.id)
+
+        result["milestone"] = dict(milestone)
+        result["milestoneData"] = milestoneData.to_dict()
+
+        if milestoneData is None:
+            result["milestoneData"] = analysisMilestoneData(procedureId, dishId, timeSeries, wellId)
+        
+    if not result:
+        return 200, None
+    else: 
+        return 200, result
+    
+
+def analysisMilestoneData(procedureId, dishId, timeSeries, wellId):
+    imagePath, path, dishJson = image_service.readDishState(procedureId, dishId)
+    return dishJson['wells'][wellId]['series'][timeSeries]
