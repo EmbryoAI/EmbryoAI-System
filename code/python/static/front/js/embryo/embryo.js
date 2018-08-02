@@ -15,6 +15,7 @@ var wellId = "";
 var lastSeris = "";
 var jaindex = "";
 var currentSeris = "";
+var seris = "";
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     form = layui.form;
     var $ = layui.jquery;
@@ -191,7 +192,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 n = n - 1;
             } else {
                 n < $(".lg-img img").length - 1;
-                layer.msg("已经是第一张了")
             }
             $(".lg-img img").hide();
             $(".lg-img img:eq(" + n + ")").show();
@@ -203,7 +203,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 
             } else {
                 n = $(".lg-img img").length - 1;
-                layer.msg("已经是最后一张了")
             }
             $(".lg-img img").hide();
             $(".lg-img img:eq(" + n + ")").show();
@@ -580,9 +579,9 @@ function querySeriesList(wellId, seris){
                                     data[i+2] + "</b></div>";
             }
             $("#myscrollboxul").html(seris);
-            lastSeris = data[data.length-1];
-            loadingImage(procedureId,dishId,wellId,lastSeris,'');
-            loadingZIndex(procedureId,dishId,wellId,lastSeris);
+            currentSeris = data[data.length-1];
+            loadingImage(procedureId,dishId,wellId,currentSeris,'');
+            loadingZIndex(procedureId,dishId,wellId,currentSeris);
         }
     });
 }
@@ -594,7 +593,6 @@ function getBigImage(procedureId, dishId, wellId, seris){
 }
 
 function preFrame(){
-    currentSeris = seris;
     if(currentSeris == "0000000"){
         parent.layer.alert("已经是第一张了!");
         return;
@@ -615,11 +613,6 @@ function preFrame(){
 }
 
 function nextFrame(){
-    currentSeris = seris;
-    if(parseInt(currentSeris) >= parseInt(lastSeris)){
-        parent.layer.alert("已经是最后一张了!");
-        return;
-    }
     $.ajax({
         cache : false,
         type : "GET",
@@ -629,7 +622,11 @@ function nextFrame(){
             parent.layer.alert(request.responseText);
         },
         success : function(data) {
-            getBigImage(procedureId, dishId, wellId, data);
+            if(data == null){
+                parent.layer.alert("已经是最后一张了!");
+            }else{
+                getBigImage(procedureId, dishId, wellId, data);
+            }
         }
     });
 }
