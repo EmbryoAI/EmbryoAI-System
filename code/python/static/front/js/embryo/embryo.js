@@ -16,6 +16,7 @@ var lastSeris = "";
 var jaindex = "";
 var currentSeris = "";
 var seris = "";
+var drwaType = "";
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     form = layui.form;
     var $ = layui.jquery;
@@ -300,26 +301,41 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		
 		
 		$(".tool-metrical li").click(function(){
-			var self= $(this)
+            var self= $(this)
+            var x1 = 0;
+            var y1 = 0;
 			   $('canvas').mousedown(function(e){
 				   flag = true;
-				   x = e.offsetX; // 鼠标落下时的X
-				   y = e.offsetY; // 鼠标落下时的Y
+				   x1,x = e.offsetX; // 鼠标落下时的X
+				   y1,y = e.offsetY; // 鼠标落下时的Y
 				   console.log(x,y)
 			   }).mouseup(function(e){
-				   flag = false;
-				   url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
-				   x = e.offsetX; // 鼠标落下时的X
-				   y = e.offsetY; // 鼠标落下时的Y
-				   console.log(x,y)
+				    flag = false;
+				    url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
+				    x = e.offsetX; // 鼠标落下时的X
+                    y = e.offsetY; // 鼠标落下时的Y
+                    console.log(x,y)
+                    if(drwaType == 'straight'){
+                       alert(1);
+                    }else{
+                        alert(2);
+                        var rx = (e.offsetX-x1);
+                        var ry = (e.offsetY-y1);
+                        var r = Math.round(Math.sqrt(rx*rx+ry*ry));
+                        $('#diameter').text('直径:' + r + "um");
+                        var area = Math.round(Math.PI * r/2 * r/2);
+                        $('#area').text('面积:' + area + "um²");
+                    }
 			   }).mousemove(function(e){
-				   
-				   if(self.hasClass('straight')){
-					   drawLine(e); // 绘制方法
-				   }else{
-					   drawCircle(e); // 绘制方法	
-				   }
-			   });
+				    if(self.hasClass('straight')){
+                        drwaType = 'straight';
+					    drawLine(e); // 绘制方法
+				    }else{
+                        drwaType = 'circle';
+					    drawCircle(e); // 绘制方法	
+				    }
+               });
+               
 	   })
 	   
 	   // 画圆
@@ -334,7 +350,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			   ctx.stroke();
 			   ctx.strokeStyle ="#ffee19" ; 
 			   ctx.lineWidth = 2; 
-		   }
+           }
+           console.log(r)
 	   }
 	   
 	   // 画直线
@@ -354,12 +371,12 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			   {
 				   ctx.clearRect(0,0,canvas.width,canvas.height);
 			   }
-	   
-	   $(".tool").click(function(){
-		   
-		   clearCanvas()
-		   
-	   })
+            function loadImage(){
+                alert(1);
+                var img = new Image();
+                img.src = url;
+                ctx.drawImage(img,0,0,canvas.width,canvas.height);
+            }
 		
 		// 跟随屏幕改变的设定	
 		$(window).resize(function () {
