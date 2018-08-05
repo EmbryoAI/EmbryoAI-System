@@ -38,25 +38,18 @@
 					<li>
 						<img src="img/icon-noembryo.jpg" >
 						<img src="img/icon-wellnone.jpg" >
-						<i class="transplant"></i>
 					</li>
 					<li>
 						<img src="img/icon-noembryo.jpg" >
 						<img src="img/icon-wellnone.jpg" >
-						<i class="freeze"></i>
-
 					</li>
 					<li>
 						<img src="img/icon-noembryo.jpg" >
 						<img src="img/icon-wellnone.jpg" >
-						<i class="abandon"></i>
-
 					</li>
 					<li>
 						<img src="img/icon-noembryo.jpg" >
 						<img src="img/icon-wellnone.jpg" >
-						<i class="hold"></i>
-
 					</li>
 					<li>
 						<img src="img/icon-noembryo.jpg" >
@@ -100,15 +93,15 @@
 						<li class="next-milestone"><i></i><span>下一里程碑</span></li>
 					</ul>
 					<ul class="tool-play tool-end">
-						<li class="standard"><i></i><span>基准</span></li>
-						<li class="transplant"><i></i><span>移植</span></li>
-						<li class="freeze"><i></i><span>冷冻</span></li>
-						<li class="abandon"><i></i><span>抛弃</span></li>
-						<li class="hold"><i></i><span>待定</span></li>
+						<li class="standard" data-end="0"><i></i><span>基准</span></li>
+						<li class="transplant" data-end="1"><i></i><span>移植</span></li>
+						<li class="freeze" data-end="2"><i></i><span>冷冻</span></li>
+						<li class="abandon" data-end="3"><i></i><span>抛弃</span></li>
+						<li class="hold" data-end="4"><i></i><span>待定</span></li>
 					</ul>
 					<div class="tool-btn">
 						<div class="layui-input-inline" style="margin-left: 0px;">
-							<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >取消状态</button>
+							<button class="layui-btn layui-bg-blue" id="cancelEnd" lay-filter="" >取消状态</button>
 						</div>
 					</div>
 				</div>

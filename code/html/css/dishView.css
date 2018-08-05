@@ -56,9 +56,16 @@
 	width:30px;
 	height:30px;
 }
-.dishimg i.standard{
-	background: url(../img/icon-dish1.png) no-repeat center top;
+.dishimg span{
+	position: absolute;
+	top: 2px;
 	left: 2px;
+	display:block;
+	width:30px;
+	height:30px;
+}
+.dishimg span.standard{
+	background: url(../img/icon-dish1.png) no-repeat center top;
 }
 .dishimg i.transplant{
 	background: url(../img/icon-dish2.png) no-repeat center top;
@@ -171,4 +178,27 @@
 }
 .s-cursor{
 	cursor: url('../img/tool-end0.png'),auto;
+}
+.t-cursor{
+	cursor: url('../img/tool-end1.png'),auto;
+}
+.f-cursor{
+	cursor: url('../img/tool-end2.png'),auto;
+}
+.a-cursor{
+	cursor: url('../img/tool-end3.png'),auto;
+}
+.h-cursor{
+	cursor: url('../img/tool-end4.png'),auto;
+}
+.tool-end li{
+	/* opacity: 0.8; */
+	-webkit-filter: grayscale(80%);
+    filter: grayscale(80%);
+}
+.tool-end .active{
+	transform:scale(1.2);
+	font-weight: bolder;
+	-webkit-filter: none;
+	filter: none;
 }
