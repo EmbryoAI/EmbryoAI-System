@@ -10,6 +10,8 @@ from keras.optimizers import Adam
 from keras.utils import np_utils
 from keras.preprocessing.image import ImageDataGenerator
 from train_model import init_model
+import tensorflow as tf
+from keras.backend.tensorflow_backend import set_session
 
 NB_CLASSES = 14
 
@@ -22,7 +24,13 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--size', help='训练图像尺寸', default='100')
     parser.add_argument('-e', '--epochs', help='EPOCHS批次', default='20')
     parser.add_argument('-b', '--batch', help='BATCH_SIZE每批图像数量', default='128')
+    parser.add_argument('-t', '--optimizer', help='梯度优化函数名称', default='Adam')
     conf = parser.parse_args()
+    tf_config = tf.ConfigProto()
+    tf_config.gpu_options.allow_growth = True
+    tf_config.log_device_placement = True
+    sess = tf.Session(config=tf_config)
+    set_session(sess)
     img_size = (int(conf.size), int(conf.size))
     EPOCHS = int(conf.epochs)
     BATCH_SIZE = int(conf.batch)
@@ -50,7 +58,7 @@ if __name__ == '__main__':
         model = init_model((img_size[0], img_size[1], 1))
     else:
         model = ImageNetModel(weights=None, input_shape=(img_size[0], img_size[1], 1)).getModel(conf.model)
-    model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer=conf.optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
     model.summary()
     # model.fit(X_train, y_train, batch_size=BATCH_SIZE, epochs=EPOCHS, verbose=1, validation_split=0.25)
     model.fit_generator(train_gen, epochs=EPOCHS, validation_data=val_gen, verbose=1)
