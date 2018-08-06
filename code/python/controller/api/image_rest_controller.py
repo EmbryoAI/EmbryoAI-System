@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify,request, make_response,Response
 from flask_restful import reqparse
 import service.front.image_service as image_service
 from common import logger
+from app import login_required
 
 image_rest_controller = Blueprint('image_rest_controller', __name__)
 url_prefix = '/api/v1/image'
@@ -14,6 +15,7 @@ url_prefix = '/api/v1/image'
     @param zIndex ： z轴位置
 '''
 @image_rest_controller.route('/findImage', methods=['POST','GET'])
+@login_required
 def findImage():
     parser = reqparse.RequestParser()
     parser.add_argument('procedureId', type=str)
@@ -27,7 +29,14 @@ def findImage():
         response.headers['Content-Type'] = 'image/png'
     return response
 
+''' 根据周期id、皿编号、孔编号、时间序列获取z轴数据
+    @param procedureId: 周期id
+    @param dishId ： 皿id
+    @param wellId ： 孔编号
+    @param timeSeries ： 时间序列
+'''
 @image_rest_controller.route('/findAllZIndex', methods=['POST','GET'])
+@login_required
 def findAllZIndex():
     parser = reqparse.RequestParser()
     parser.add_argument('procedureId', type=str)
@@ -36,3 +45,14 @@ def findAllZIndex():
     parser.add_argument('timeSeries', type=str)
 
     return image_service.getAllZIndex(parser.parse_args())
+
+@image_rest_controller.route('/markDistinct', methods=['POST'])
+@login_required
+def markDistinct():
+    parser = reqparse.RequestParser()
+    parser.add_argument('path', type=str)
+    parser.add_argument('imageName', type=str)
+    parser.add_argument('timeSeries', type=str)
+    parser.add_argument('wellId', type=str)
+
+    return image_service.markDistinct(parser.parse_args())
