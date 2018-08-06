@@ -3,7 +3,6 @@
 	width: 1280px;
 	margin:auto;
 	height: 152px;
-	margin-top: 10px;
 }
 #myscroll {
 	display: block;
@@ -43,7 +42,7 @@
 	font-size: 12px;
 	font-weight: normal;
 	display: inline-block;
-	padding-left: 20px;
+	padding-left: 18px;
 	background: url(../img/icon-e--time.png) no-repeat left center;
 }
 #topNav .active{
@@ -64,7 +63,7 @@
 }
 .embryo{
 	float: left;
-	width: 70%;
+	width: 60%;
 	position: relative;
 }
 
@@ -204,15 +203,24 @@
 /*右边信息栏*/
 .info{
 	float: left;
-	width: 29%;
+	width: 39%;
 	padding-left: 1%;
+}
+.info .layui-form-radio{
+	margin-right: 0px;
+}
+.export-btn{
+	float: left;
+	width: 130px;
+	height: 120px;
 }
 .site{
 	background-color: #f3f4f8;
 	border: 1px solid #b8c0d1;
-	width: 100%;
+	width: 397px;
 	height: 120px;
 	overflow: hidden;
+	float: left;
 }
 .site h1{
 	float: left;
@@ -300,6 +308,7 @@
 }
 .emdate input{
 	color: #3c83f7;
+	padding-left: 0;
 }
 .emdate .layui-form-label{
 	width: 84px;
@@ -307,7 +316,7 @@
 }
 .emdate .layui-input-inline{
 	margin-right: 4px;
-	width: 60px;
+	width: 52px;
 }
 .emdate .unit{
 	line-height: 30px;
@@ -320,13 +329,26 @@
 	margin-right:2px ;
 	font-style: normal;
 }
+.measuredata{
+	color: #ff8429;
+}
+.measuredata a{
+	margin-left: 10px;
+	display: inline-block;
+    color: #135de0;
+    border-bottom: 1px solid;
+	cursor: pointer;
+}
+.measuredata a:hover{
+	color: #1e9fec;
+}
 /*胚胎工具栏-播放*/
 .tool-play{
 	height: 46px;
 	border-right: 1px solid #b4b6d5;
 	margin-top: 12px;
-	width: 340px;
-	margin-left: 8px;
+	width: 328px;
+	margin-left: 2px;
 	float: left;
 }
 .tool-play li{
@@ -371,12 +393,12 @@
 	height: 46px;
 	border-right: 1px solid #b4b6d5;
 	margin-top: 12px;
-	width: 238px;
+	width: 206px;
 	margin-left: 8px;
 	float: left;
 }
 .tool-end li{
-	width: 58px;
+	width: 50px;
 }
 .tool-end li.transplant i{
 	background: url(../img/tool-end1.png) no-repeat center;
@@ -392,13 +414,20 @@
 }
 /*胚胎工具栏-测量*/
 .tool-metrical{
-	width: 140px;
+	width: 260px;
+	border-right: none;
 }
 .tool-metrical li.straight i{
 	background: url(../img/tool-measure1.png) no-repeat center;
 }
 .tool-metrical li.roundness i{
 	background: url(../img/tool-measure2.png) no-repeat center;
+}
+.tool-metrical li.roundness2 i{
+	background: url(../img/tool-measure3.png) no-repeat center;
+}
+.tool-metrical li.roundness3 i{
+	background: url(../img/tool-measure4.png) no-repeat center;
 }
 .tool-btn{
 	float: left;

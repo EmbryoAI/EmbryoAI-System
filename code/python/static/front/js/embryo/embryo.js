@@ -168,7 +168,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             if (a == true) {
                 // layer.msg('打开');
                 $('#milestone').animate({
-                    height: '120px'
+                    height: '90px'
                 });
             } else {
                 // layer.msg('关闭');
@@ -710,7 +710,7 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 					var milestoneData = data.milestoneData;
 					$("#milestoneCheckbox").attr('checked', true);
 	                $('#milestone').animate({
-	                    height: '120px'
+	                    height: '90px'
 	                });
 	                $("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").attr("checked",true);
 	                if(milestoneData.pnId!="") {

@@ -159,20 +159,32 @@
 						</ul>
 						<ul class="tool-play tool-metrical">
 							<li class="straight"><i></i><span>直线测量</span></li>
-							<li class="roundness"><i></i><span>圆形测量</span></li>
+							<li class="roundness"><i></i><span>内圆测量</span></li>
+							<li class="roundness2"><i></i><span>外周测量</span></li>
+							<li class="roundness3"><i></i><span>囊腔面积</span></li>
+
 						</ul>
-						<div class="tool-btn">
+						<!-- <div class="tool-btn">
 							<div class="layui-input-inline" style="margin-left: 0px;">
 							 <button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >导出视频</button>
 							</div>
 							<div class="layui-input-inline" style="margin-left: 0px;">
 								<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >导出图像</button>
 							</div>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<!--右边信息-->
 				<div class="info">
+					<div style="width:100%; height: 130px;">
+					<div class="export-btn">
+						<div class="layui-input-block" style="margin: 12px 0 20px 0;">
+						<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >导出当前视频</button>
+						</div>
+						<div class="layui-input-block" style="margin-left: 0px;">
+							<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >导出当前图像</button>
+						</div>
+					</div>
 					<!--孔位选择-->
 					<div class="site" id="site">
 						<h1>孔位选择</h1>
@@ -191,8 +203,9 @@
 							<li><span>well12</span><img src="img/icon-wellnone.jpg" ><i></i></li>
 						</ul>
 					</div>
+					</div>
 					<!--备注-->
-					<div class="comment">
+					<!-- <div class="comment">
 						<h1>备注</h1>
 							<div class="layui-input-inline" style="width: 70%;">
 							  <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
@@ -200,7 +213,7 @@
 							<div class="layui-input-inline" style="padding-top: 60px;margin-left: 20px;">
 								<button class="layui-btn layui-bg-blue" lay-submit lay-filter="">保存</button>
 							</div>
-					</div>
+					</div> -->
 					<div id="milestone">
 						<form action="" class="layui-form">
 							<div class="layui-input-block" style="margin: 6px 8px 6px;min-height: 0;">
@@ -268,7 +281,7 @@
 								<div class="layui-input-inline">
 									<input type="text" id="area" name="area" autocomplete="off" class="layui-input">
 								</div>
-								<label class="unit">²um</label>
+								<label class="unit">um²</label>
 							</div>
 							<div class="layui-inline">
 								<label class="layui-form-label">胚胎外周直径</label>
@@ -282,7 +295,7 @@
 								<div class="layui-input-inline">
 									<input type="text" id="area" name="area" autocomplete="off" class="layui-input">
 								</div>
-								<label class="unit">²um</label>
+								<label class="unit">um²</label>
 							</div>
 							<div class="layui-inline">
 								<label class="layui-form-label">胚胎内直径</label>
@@ -296,7 +309,7 @@
 								<div class="layui-input-inline">
 									<input type="text" id="thickness" name="thickness" autocomplete="off" class="layui-input">
 								</div>
-								<label class="unit">²um</label>
+								<label class="unit">um²</label>
 							</div>
 							<div class="layui-inline">
 								<label class="layui-form-label">透明带厚度</label>
@@ -304,6 +317,10 @@
 									<input type="text" id="thickness" name="thickness" autocomplete="off" class="layui-input">
 								</div>
 								<label class="unit">um</label>
+							</div>
+							<div class="measuredata">
+								测量数据—面积:<span>123456</span>&nbsp;um²&nbsp;直径:<span>123456</span>&nbsp;um&nbsp;长度:<span>123456</span>&nbsp;um&nbsp;
+								<a>导入</a><a>重置</a>
 							</div>
 					  </div>
 					  <h2 style="padding-bottom: 0;">胚胎评分<span class="score">25</span>	</h2>
