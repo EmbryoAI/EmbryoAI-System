@@ -1,10 +1,6 @@
 var form = null;
-//最清晰的jpg
-var sharpJpg = null;
 //最清晰的jpg对应的z轴位置
 var sharpZIndex = null;
-//z轴总数
-var zIndexLength = 0;
 //采集时间
 var acquisitionTime = null;
 //目录
@@ -152,15 +148,37 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		
 
         // 选为最清晰的值提示
-        form.on('checkbox(clear)', function (data) {
-            const a = data.elem.checked;
-            if (a == true) {
-                layer.msg('已标注为最清晰的图片');
-            } else {
-                layer.msg('已取消标注');
+        $("#distinct").on("click", function (event) {
+            var checked = $("#distinct").prop("checked");
+            if(checked){
+                var imageName = $(".time-vertical .active").attr("zjpg");
+                var imageIndex = $(".time-vertical .active").attr("zindex");
+                $.ajax({
+                    cache : false,
+                    type : "POST",
+                    url : "/api/v1/image/markDistinct",
+                    data : {"path":path,"imageName":imageName,"timeSeries":currentSeris,"wellId":wellId},
+                    async : false,
+                    error : function(request) {
+                        alert(request.responseText);
+                    },
+                    success : function(data) {
+                        console.info(data);
+                        if(data.code == '200'){
+                            sharpZIndex = imageIndex;
+                            $("#distinct").prop("disabled",true);
+                            layer.msg('已标注为最清晰的图片');
+                            var url = $("#"+currentSeris).prop("src") + "&random=" + Math.random() ;
+                            $("#"+currentSeris).prop("src",url);
+                        } else {
+                            layer.msg('标注为最清晰的图片失败');
+                        }
+                    }
+                });
+                
             }
-
         });
+
         // 选中里程碑出现的内容
         form.on('checkbox(milestone)', function (data) {
             const a = data.elem.checked;
@@ -495,26 +513,25 @@ function loadingZIndex(procedureId,dishId,wellId,timeSeries){
                 var length = data.data.fileEnd;
                 acquisitionTime = data.data.imagePath;
                 path = data.data.path;
-                sharpJpg = data.data.sharp;
+                var sharpJpg = data.data.sharp;
                 zData = data.data.zIndexFiles;
-                zIndexLength = zData.length;
                 for (;i < length; i++) {
                     if(sharpJpg == zData[i]) {
                         sharpZIndex = i;
-                        zLi = "<li class='active' onclick=checkZIndex('"+ procedureId +"','"+ dishId +"','"+ wellId +"','"+ timeSeries +"','" + i + "') zIndex=" + i + " zJpg='" + zData[i] + "'><b></b></li>" + zLi;
+                        zLi = "<li class='active' onclick=checkZIndex('"+ procedureId +"','"+ dishId +"','"+ wellId +"','"+ timeSeries +"','" + i + "') zindex=" + i + " zjpg='" + zData[i] + "'><b></b></li>" + zLi;
                     } else {
-                        zLi = "<li onclick=checkZIndex('"+ procedureId +"','"+ dishId +"','"+ wellId +"','"+ timeSeries +"','" + i + "') zIndex=" + i + " zJpg='" + zData[i] + "'><b></b></li>" + zLi;
+                        zLi = "<li onclick=checkZIndex('"+ procedureId +"','"+ dishId +"','"+ wellId +"','"+ timeSeries +"','" + i + "') zindex=" + i + " zjpg='" + zData[i] + "'><b></b></li>" + zLi;
                     }
                 }
                 $("#zIndex").html(zLi);
-                var imageName = $(".time-vertical .active").attr("zJpg");
-                ini(acquisitionTime,timeSeries,path,imageName)
+                // var imageName = $(".time-vertical .active").attr("zjpg");
+                ini(acquisitionTime,timeSeries,path,sharpJpg);
             }
         }
     });
     
     $('#zIndexDiv').bind('mousewheel', function(event, delta) {
-        var zIndex = $(".time-vertical .active").attr('zIndex');
+        var zIndex = $(".time-vertical .active").attr('zindex');
         var length = $(".time-vertical li").length;
         if(delta > 0){
             zIndex = parseInt(zIndex) + 1;
@@ -530,7 +547,7 @@ function loadingZIndex(procedureId,dishId,wellId,timeSeries){
         $('.time-vertical li').removeClass('active');
         $('.time-vertical li[zIndex='+zIndex+']').addClass('active');
         loadingImage(procedureId,dishId,wellId,timeSeries,zIndex);
-        var imageName = $(".time-vertical li[zIndex="+zIndex+"]").attr("zJpg");
+        var imageName = $(".time-vertical li[zIndex="+zIndex+"]").attr("zjpg");
         ini(acquisitionTime,timeSeries,path,imageName)
         return false;    
     });
@@ -541,14 +558,18 @@ function checkZIndex(procedureId,dishId,wellId,timeSeries,zIndex){
     $('.time-vertical li').removeClass('active');
     $('.time-vertical li[zIndex='+zIndex+']').addClass('active');
     loadingImage(procedureId,dishId,wellId,timeSeries,zIndex);
-    var imageName = $(".time-vertical li[zIndex="+zIndex+"]").attr("zJpg");
+    var imageName = $(".time-vertical li[zIndex="+zIndex+"]").attr("zjpg");
     ini(acquisitionTime,timeSeries,path,imageName)
 }
 
 function loadingImage(procedureId,dishId,wellId,timeSeries,zIndex){
     if(zIndex == null || zIndex == '' || sharpZIndex == zIndex){
+        $("#distinctDiv").show();
+        $("#distinct").prop("disabled",true);
         $("#distinct").prop("checked",true);
     } else {
+        $("#distinctDiv").show();
+        $("#distinct").prop("disabled",false);
         $("#distinct").prop("checked",false);
     }
     var imgUrl = "/api/v1/image/findImage?procedureId="+ procedureId +"&dishId="+ dishId +"&wellId="+ wellId +"&timeSeries="+ timeSeries +"&zIndex=" + zIndex; 
@@ -589,7 +610,7 @@ function querySeriesList(wellId, seris){
                 if(i == 16){
                     active = "<div class=\"swiper-slide active\">";
                 }
-                seris = seris + active + "<span><img src=\"" + 
+                seris = seris + active + "<span><img id='" + data[i] + "' src=\"" + 
                                     imagePath +"\" onclick=\"getBigImage('" 
                                     + procedureId + "','" + dishId + 
                                     "','" + wellId + "','" + data[i] + "')\"><b>" + 

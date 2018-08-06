@@ -7,7 +7,7 @@ import entity.Dish as Dish
 from flask import request, jsonify
 from common import uuid,logger
 from app import conf
-import json,os,cv2
+import json,os
 
 def getImageByCondition(agrs):
     logger().info(agrs)
@@ -91,10 +91,74 @@ def readDishState(procedureId,dishId):
         logger().info(jsonPath)
         with open(f'{jsonPath}', 'r') as fn :
             dishJson = json.loads(fn.read())
-        if dishJson['finished'] & dishJson['avail'] == 1 :
-            return pd.imagePath,path, dishJson
-        else :
-            return None,None,None
+        # if dishJson['finished'] & dishJson['avail'] == 1 :
+        #     return pd.imagePath,path, dishJson
+        # else :
+        #     return None,None,None
+        return pd.imagePath,path, dishJson
     except : 
         logger().info("读取dishState.json文件出现异常")
         return None,None,None
+
+
+def markDistinct(agrs):
+    import cv2
+    from task.process_serie_dir import read_img_grayscale
+    from cv.embryo_detector import find_embryo
+    from cv.embryo_common import outer_edge,cell_edge
+    from task.dish_config import DishConfig,SerieInfo
+    from common import nested_dict
+    logger().info(agrs)
+    wellId = agrs['wellId']
+    path = agrs['path']
+    imageName = agrs['imageName']
+    timeSeries = agrs['timeSeries']
+    
+    try :
+        dishJsonPath = path + conf['DISH_STATE_FILENAME']
+        with open(dishJsonPath) as fn:
+            jstr = json.load(fn)
+            dishConf = DishConfig(jstr)
+        imagePath = path + timeSeries + os.path.sep + imageName
+        if imagePath :
+            serieInfo = dishConf.wells[wellId].series[timeSeries]
+            logger().info(nested_dict(serieInfo))
+            img = read_img_grayscale(imagePath)
+            # 定位胚胎位置
+            left, top, right, bottom = find_embryo(img)
+            imgFocus = img[top:bottom, left:right]
+            # focusPath = path + conf['EMBRYO_FOCUS_DIRNAME'] + os.path.sep
+            # if not os.path.exists(focusPath):
+            #     os.makedirs(focusPath)
+            focusFile = serieInfo.focus  
+            print(path + focusFile)
+            # if os.path.exists(focusPath + focusFile):
+            #     os.remove(focusPath + focusFile)
+            # 保存缩略图
+            cv2.imwrite(path + focusFile, imgFocus, [int(cv2.IMWRITE_JPEG_QUALITY), 50])
+            outer_cnt, outer_area, outer_diameter = outer_edge(imgFocus)
+            if len(outer_cnt):
+                serieInfo.outerArea = outer_area
+                serieInfo.outerDiameter = outer_diameter
+            cell_result = cell_edge(imgFocus)
+            if len(cell_result) == 1:
+                serieInfo.innerArea = cell_result[0][1]
+                serieInfo.innerDiameter = cell_result[0][2]
+            if len(cell_result) == 2:
+                serieInfo.innerArea = cell_result[0][1]
+                serieInfo.innerDiameter = cell_result[0][2]
+                serieInfo.expansionArea = cell_result[1][1]
+            if serieInfo.outerDiameter and serieInfo.innerDiameter \
+                    and serieInfo.outerDiameter > serieInfo.innerDiameter:
+                serieInfo.zonaThickness = (serieInfo.outerDiameter - serieInfo.innerDiameter) * 0.425
+            
+            serieInfo.sharp = imageName
+            dishConf.wells[wellId].series[timeSeries] = serieInfo
+
+            logger().info(nested_dict(dishConf.wells[wellId].series[timeSeries]))
+            with open(dishJsonPath, 'w') as fn:
+                fn.write(json.dumps(nested_dict(dishConf)))
+            restResult = RestResult(200, "标记最清晰图片成功", 0, imageName)
+    except:
+        restResult = RestResult(404, "标记最清晰图片错误", 0, imageName)
+    return jsonify(restResult.__dict__)
