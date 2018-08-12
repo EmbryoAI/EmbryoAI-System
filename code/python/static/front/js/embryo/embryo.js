@@ -689,8 +689,8 @@ function exportImg(){
 
 function exportVideo(){
     const aLink = document.createElement('a')
-    aLink.download = '11.mp4';
-    aLink.href = '/api/v1/well/video?procedure_id=1&dish_id=1&well_id=1'; 
+    aLink.download = '孔' + wellId + '.mp4';
+    aLink.href = '/api/v1/well/video?procedure_id=' + procedureId + '&dish_id=' + dishId + '&well_id=' + wellId; 
     aLink.dispatchEvent(new MouseEvent('click', {}))
 }
 

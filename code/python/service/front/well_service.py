@@ -71,7 +71,7 @@ def getWellVideo(agrs):
         return None
         
     dishCode = dish.dishCode
-    pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id, well_id)
+    pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id, dish_id)
     path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
     video_path = path + 'video'
 
