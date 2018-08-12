@@ -13,6 +13,7 @@ var jaindex = "";
 var currentSeris = "";
 var seris = "";
 var drwaType = "";
+var current_seris_image_path = "";
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     form = layui.form;
     var $ = layui.jquery;
@@ -575,6 +576,7 @@ function loadingImage(procedureId,dishId,wellId,timeSeries,zIndex){
     var imgUrl = "/api/v1/image/findImage?procedureId="+ procedureId +"&dishId="+ dishId +"&wellId="+ wellId +"&timeSeries="+ timeSeries +"&zIndex=" + zIndex; 
     var img = "<img src=" + imgUrl + ">";
     $("#imgDiv").html(img);
+    current_seris_image_path = imgUrl;
 }
 
 //羊城
@@ -678,7 +680,12 @@ $(document).keydown(function(event){
     }
 });
 
-
+function exportImg(){
+    const aLink = document.createElement('a')
+    aLink.download = currentSeris + '.jpg';
+    aLink.href = current_seris_image_path; 
+    aLink.dispatchEvent(new MouseEvent('click', {}))
+}
 
 //刘勇智
 //初始化radio通用方法
