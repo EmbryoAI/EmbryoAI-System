@@ -40,3 +40,12 @@ def getNextFrame():
     parser = reqparse.RequestParser()
     parser.add_argument('current_seris', type=str)
     return well_service.getNextFrame(parser.parse_args())
+
+#将孔下面的所有大图生成视频
+@well_rest_controller.route('/video', methods=['GET'])
+def getWellVideo():
+    parser = reqparse.RequestParser()
+    parser.add_argument('procedure_id', type=str)
+    parser.add_argument('dish_id', type=str)
+    parser.add_argument('well_id', type=str)
+    return well_service.getWellVideo(parser.parse_args())
