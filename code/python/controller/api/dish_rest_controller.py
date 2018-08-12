@@ -20,3 +20,15 @@ def querySeriesList():
     parser.add_argument('well_id', type=str)
     parser.add_argument('seris', type=str)
     return dish_service.querySeriesList(parser.parse_args())
+
+#左右滚动
+@dish_rest_controller.route('/list', methods=['GET'])
+@login_required
+def queryScrollbarSeriesList():
+    parser = reqparse.RequestParser()
+    parser.add_argument('procedure_id', type=str)
+    parser.add_argument('dish_id', type=str)
+    parser.add_argument('well_id', type=str)
+    parser.add_argument('current_seris', type=str)
+    parser.add_argument('direction', type=str)
+    return dish_service.queryScrollbarSeriesList(parser.parse_args())
