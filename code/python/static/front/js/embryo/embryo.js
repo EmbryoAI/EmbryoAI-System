@@ -711,6 +711,13 @@ function exportImg(){
     aLink.dispatchEvent(new MouseEvent('click', {}))
 }
 
+function exportVideo(){
+    const aLink = document.createElement('a')
+    aLink.download = '孔' + wellId + '.mp4';
+    aLink.href = '/api/v1/well/video?procedure_id=' + procedureId + '&dish_id=' + dishId + '&well_id=' + wellId; 
+    aLink.dispatchEvent(new MouseEvent('click', {}))
+}
+
 //刘勇智
 //初始化radio通用方法
 function chushihua(dictClass) {
