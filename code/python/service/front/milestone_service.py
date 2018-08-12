@@ -36,7 +36,7 @@ def insertMilestone(request):
        return 400, '里程碑节点ID不能为空!'
    
     #里程碑时间（自动识别或用户设定的里程碑时间点）时间序列
-    milestoneTime = request.form.get('milestoneTime')
+    milestoneTime = request.form.get('timeSeries')
     
     #目前暂不使用
     milestoneElapse = 1
@@ -120,8 +120,8 @@ def insertMilestone(request):
     
     try:
         #根据胚胎ID和的里程碑的图片查出是否已经存在了,存在则更新
-        sql = "AND embryo_id = :embryoId and milestone_path = :milestonePath "
-        filters = {'embryoId': embryoId,'milestonePath':milestonePath}
+        sql = "AND embryo_id = :embryoId and milestone_time = :milestoneTime "
+        filters = {'embryoId': embryoId,'milestoneTime':milestoneTime}
         milestoneOld = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
         if not milestoneOld:
             #根据胚胎ID和里程碑值查询是否存在了，存在则把当前里程碑节点替换成当前图片
@@ -142,11 +142,11 @@ def insertMilestone(request):
         return 400, '设置里程碑时异常!'
     return 200, milestone.to_dict()
 
-def getMilestoneByEmbryoId(embryoId,milestonePath,procedureId, dishId, timeSeries, wellId):
-    if not milestonePath:
+def getMilestoneByEmbryoId(embryoId, timeSeries):
+    if not timeSeries:
         return 400, '初始化里程碑节点出错，图片路径不能为空!'
-    sql = "AND embryo_id = :embryoId and milestone_path = :milestonePath "
-    filters = {'embryoId': embryoId,'milestonePath':milestonePath}
+    sql = "AND embryo_id = :embryoId and milestone_time = :milestoneTime "
+    filters = {'embryoId': embryoId,'milestoneTime':timeSeries}
     milestone = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
     result = {}
     if milestone!=None:
@@ -167,3 +167,22 @@ def getMilestoneByEmbryoId(embryoId,milestonePath,procedureId, dishId, timeSerie
 def analysisMilestoneData(procedureId, dishId, timeSeries, wellId):
     imagePath, path, dishJson = image_service.readDishState(procedureId, dishId)
     return dishJson['wells'][wellId]['series'][timeSeries]
+
+def getMilepostNode(embryoId,milestoneTime,upOrdown):
+    #首先获取当前胚胎的所有里程碑节点
+    milestoneList = milestone_mapper.queryMilestoneList(embryoId)
+    if "up" == upOrdown:#如果为上一里程碑集合反转
+       milestoneList.reverse()
+    
+    milestone = None
+    for obj in milestoneList:
+        print(obj.milestoneTime)
+        if "up" == upOrdown: #如果是上一里程碑
+            if obj.milestoneTime < milestoneTime:
+                milestone = obj.to_dict()
+                break
+        else :
+            if obj.milestoneTime > milestoneTime:
+                milestone = obj.to_dict()
+                break
+    return 200, milestone

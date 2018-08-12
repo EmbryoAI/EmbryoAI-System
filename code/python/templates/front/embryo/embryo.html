@@ -119,11 +119,11 @@ body {
 			<!--工具栏-->
 			<div class="tool">
 				<ul class="tool-play">
-					<li class="pre-milestone"><i></i><span>上一里程碑</span></li>
+					<li class="pre-milestone" onclick="node('up');" ><i></i><span>上一里程碑</span></li>
 					<li class="pre-frame" onclick="preFrame()"><i></i><span>上一帧</span></li>
 					<li class="play" id="playBtn"><i></i><span>播放</span></li>
 					<li class="next-frame" onclick="nextFrame()"><i></i><span>下一帧</span></li>
-					<li class="next-milestone"><i></i><span>下一里程碑</span></li>
+					<li class="next-milestone" onclick="node('down');" ><i></i><span>下一里程碑</span></li>
 				</ul>
 				<ul class="tool-play tool-end" id="embryo_fate_typeIdDiv">
 				</ul>
@@ -165,7 +165,7 @@ body {
 
 					<div class="layui-input-block"
 						style="margin: 6px 8px 6px; min-height: 0;">
-						<input type="checkbox" name="set" id="milestoneCheckbox"
+						<input type="checkbox" name="milestoneCheckbox" id="milestoneCheckbox"
 							lay-skin="primary" lay-filter="milestone" title="将当前图像设为里程碑">
 					</div>
 					<div class="milestone-select">
@@ -186,6 +186,7 @@ body {
 				<div class="layui-form-item" id="countDiv">
 					<label class="layui-form-label"><i>*</i>细胞个数</label>
 					<div class="layui-input-block">
+						<input type="radio" name="count" value="1" title="未分裂">
 						<input type="radio" name="count" value="2" title="2C"> <input
 							type="radio" name="count" value="3" title="3C"> <input
 							type="radio" name="count" value="4" title="4C"> <input
@@ -226,7 +227,7 @@ body {
 					<div class="layui-inline">
 						<label class="layui-form-label">胚胎外面积</label>
 						<div class="layui-input-inline">
-							<input type="text" id="outArea" name="outerArea" autocomplete="off" class="layui-input">
+							<input type="text" id="outerArea" name="outerArea" autocomplete="off" class="layui-input">
 						</div>
 						<label class="unit">um²</label>
 					</div>
@@ -274,7 +275,7 @@ body {
 	</div>
 </div>
 <div style="clear: both; height: 80px; width: 100%;"></div>
-</div>
+ 
 
 <!--公共js引入-->
 <script src="/static/front/js/embryo/embryo.js"></script>

@@ -13,6 +13,7 @@ var jaindex = "";
 var currentSeris = "";
 var seris = "";
 var drwaType = "";
+var clearImageUrlList="";
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     form = layui.form;
     var $ = layui.jquery;
@@ -236,11 +237,10 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 $(this).removeClass('play');
                 $(this).addClass('stop');
                 console.log("播放");
-
                 function showText() {
                     n = n + 1;
                 }
-                textTime = setInterval(showText, 200);
+                textTime = setInterval(showText, 2500);
 
                 function run() {
                     if (n < $(".lg-img img").length) {
@@ -251,7 +251,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     $(".lg-img img").hide();
                     $(".lg-img img:eq(" + n + ")").show();
                 }
-                imgTime = setInterval(run, 200);
+                imgTime = setInterval(run, 2500);
 
             } else {
                 $(this).removeClass('stop');
@@ -457,22 +457,40 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			
 
 			
-			var diameter = $("#diameter").val();
-			if(diameter=="") {
-				layer.alert("直径不能为空,请输入直径!");
+			var innerArea = $("#innerArea").val();
+			if(innerArea=="") {
+				layer.alert("胚胎内周面积不能为空,请输入胚胎内周面积!");
 				return false;
 			}
 			
-			var area = $("#area").val();
-			if(area=="") {
-				layer.alert("面积不能为空,请选择评级!");
-				  return false;
+			var innerDiameter = $("#innerDiameter").val();
+			if(innerDiameter=="") {
+				layer.alert("胚胎内周直径不能为空,请输入胚胎内周直径!");
+				return false;
 			}
 			
-			var thickness = $("#thickness").val();
-			if(thickness=="") {
-				layer.alert("透明带厚度不能为空,请选择评级!");
-				  return false;
+			var outerArea = $("#outerArea").val();
+			if(outerArea=="") {
+				layer.alert("胚胎外面积不能为空,请输入胚胎外面积!");
+				return false;
+			}
+			
+			var outDiameter = $("#outDiameter").val();
+			if(outDiameter=="") {
+				layer.alert("胚胎外直径不能为空,请输入胚胎外直径!");
+				return false;
+			}
+			
+			var expansionArea = $("#expansionArea").val();
+			if(expansionArea=="") {
+				layer.alert("扩张囊腔面积不能为空,请输入扩张囊腔面积!");
+				return false;
+			}
+			
+			var zonaThickness = $("#zonaThickness").val();
+			if(zonaThickness=="") {
+				layer.alert("透明带厚度不能为空,请输入透明带厚度!");
+				return false;
 			}
 			
 			
@@ -626,8 +644,8 @@ function querySeriesList(wellId, seris){
 
 function getBigImage(procedureId, dishId, wellId, seris){
     querySeriesList(wellId, seris);
-    loadingImage(procedureId,dishId,wellId,seris,'');
-    loadingZIndex(procedureId,dishId,wellId,seris);
+//    loadingImage(procedureId,dishId,wellId,seris,'');
+//    loadingZIndex(procedureId,dishId,wellId,seris);
 }
 
 function preFrame(){
@@ -676,6 +694,12 @@ $(document).keydown(function(event){
     if(event.which == "39"){
         nextFrame();
     }
+    if(event.which == "38"){
+    	node("up");
+    }
+    if(event.which == "40"){
+    	node("down");
+    }
 });
 
 
@@ -723,33 +747,33 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 		type : "get",
 		url : "/api/v1/milestone/"+$("#embryoId").val(),
 		datatype : "json",
-		data:{"milestonePath":path+imageName, "timeSeries":timeSeries, "wellId":wellId, "procedureId":procedureId, "dishId":dishId},
+		data:{"timeSeries":timeSeries},
 		cache:false,
 		success : function(data) {
 				if(data!=null) {//如果当前里程碑不为空则回显
 					var milestone = data.milestone;
 					var milestoneData = data.milestoneData;
-					$("#milestoneCheckbox").attr('checked', true);
+					$("#milestoneCheckbox").prop('checked', true);
 	                $('#milestone').animate({
 	                    height: '90px'
 	                });
-	                $("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").attr("checked",true);
+	                $("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").prop("checked",true);
 	                if(milestoneData.pnId!="") {
-	                	$("input:radio[name=pnId][value="+milestoneData.pnId+"]").attr("checked",true);
+	                	$("input:radio[name=pnId][value="+milestoneData.pnId+"]").prop("checked",true);
 	                }
-	                $("input:radio[name=count][value="+milestoneData.cellCount+"]").attr("checked",true);
-	                $("input:radio[name=evenId][value="+milestoneData.evenId+"]").attr("checked",true);
-	                $("input:radio[name=fragmentId][value="+milestoneData.fragmentId+"]").attr("checked",true);
-	                $("input:radio[name=gradeId][value="+milestoneData.gradeId+"]").attr("checked",true);
+	                $("input:radio[name=count][value="+milestoneData.cellCount+"]").prop("checked",true);
+	                $("input:radio[name=evenId][value="+milestoneData.evenId+"]").prop("checked",true);
+	                $("input:radio[name=fragmentId][value="+milestoneData.fragmentId+"]").prop("checked",true);
+	                $("input:radio[name=gradeId][value="+milestoneData.gradeId+"]").prop("checked",true);
                     $("#innerDiameter").val(Math.round(milestoneData.innerDiameter));
                     $("#innerArea").val(Math.round(milestoneData.innerArea));
                     $("#outDiameter").val(Math.round(milestoneData.outerDiameter));
-                    $("#outArea").val(Math.round(milestoneData.outerArea));
+                    $("#outerArea").val(Math.round(milestoneData.outerArea));
                     $("#expansionArea").val(Math.round(milestoneData.expansionArea));
 	                $("#zonaThickness").val(Math.round(milestoneData.zonaThickness));
 	                $("#memo").val(milestoneData.memo);
 	                $("#stageId").html("("+milestone.milestoneName+")");
-	                showHide(milestone.milestoneId);
+					showHide(milestone.milestoneId);
 				}else {
 					showHide(null);
 				}
@@ -787,7 +811,7 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 		}
 	});
 		
-	  
+	queryClearImageUrl();
 }
 
 function showHide(value) {
@@ -808,16 +832,16 @@ function showHide(value) {
 		$("#embryoDiv").hide();
 		$("#embryoSjDiv").hide();
 		$("#stageDiv").hide();
-		$("#milestoneCheckbox").attr('checked', false);
+		$("#milestoneCheckbox").prop('checked', false);
         $('#milestone').animate({
             height: '31px'
         });
-        $("input:radio[name=milestoneId]").attr("checked",false);
-        $("input:radio[name=pnId]").attr("checked",false);
-        $("input:radio[name=count]").attr("checked",true);
-        $("input:radio[name=evenId]").attr("checked",true);
-        $("input:radio[name=fragmentId]").attr("checked",true);
-        $("input:radio[name=gradeId]").attr("checked",true);
+        $("input:radio[name=milestoneId]").prop("checked",false);
+        $("input:radio[name=pnId]").prop("checked",false);
+        $("input:radio[name=count]").prop("checked",true);
+        $("input:radio[name=evenId]").prop("checked",true);
+        $("input:radio[name=fragmentId]").prop("checked",true);
+        $("input:radio[name=gradeId]").prop("checked",true);
         $("#diameter").val("");
         $("#area").val("");
         $("#thickness").val("");
@@ -853,4 +877,51 @@ function showHide(value) {
 		$("#gradeDiv").hide();
 		layer.alert("待确认");
 	}
+}
+
+//根据周期id、皿ID、孔ID、获取孔的时间序列对应最清晰的URL
+function queryClearImageUrl() {
+	$.ajax({
+		type : "get",
+		url : "/api/v1/image/pay/queryClearImageUrl",
+		datatype : "json",
+		cache:false,
+		data : {"procedureId":procedureId,"dishId":dishId,"wellId":wellId},
+		success : function(data) {
+			 if(data!=null) {
+				 clearImageUrlList = data;
+//		    	 for(var i=0;i<clearImageUrlList.length;i++) {
+//					 var image = "<img style='display:none' src='/api/v1/well/image?image_path="+clearImageUrlList[i]+"' />";
+//					 $("#imgDiv").append(image);
+//				 }
+			 }
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
+}
+
+//上下里程碑   根据胚胎ID 和 当前时间序列 获取上下里程碑节点ID
+function node(upOrdown) {
+	$.ajax({
+		type : "get",
+		url : "/api/v1/milestone/node/"+$("#embryoId").val()+"/"+currentSeris+"/"+upOrdown,
+		datatype : "json",
+		cache:false,
+		success : function(data) {
+			 if(data!=null) {
+				 getBigImage(procedureId, dishId, wellId, data.milestoneTime);
+			 }else {
+				 if("up"==upOrdown) {
+					 layer.alert("当前已经是第一个里程碑了!");
+				 }else {
+					 layer.alert("当前已经是最后一个里程碑了!");
+				 }
+			 }
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
 }

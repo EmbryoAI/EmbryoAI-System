@@ -1,11 +1,9 @@
 # -*- coding: utf8 -*-
 
 from entity.RestResult import RestResult
-import dao.front.embryo_mapper as embryo_mapper
 from flask import request, jsonify
 import json,os
 from app import conf
-import service.front.image_service as image_service
 import base64
 import dao.front.dish_mapper as dish_mapper
 import dao.front.procedure_dish_mapper as procedure_dish_mapper

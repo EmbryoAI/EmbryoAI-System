@@ -5,4 +5,10 @@ from sqlalchemy import text
 from traceback import print_exc
 
 def queryByProcedureIdAndDishId(procedureId,dishId):
-    return db.session.query(ProcedureDish).filter(ProcedureDish.procedureId == procedureId,ProcedureDish.dishId == dishId).one_or_none()
+    try:
+        procedureDish =  db.session.query(ProcedureDish).filter(ProcedureDish.procedureId == procedureId,ProcedureDish.dishId == dishId).one_or_none()
+    except Exception as e:
+        return milestoneList
+    finally:
+        db.session.close()
+    return procedureDish
