@@ -106,4 +106,4 @@ if __name__=='__main__':
     scheduler.init_app(app)
     scheduler.start()
     logger.info('服务器启动成功，侦听端口：%d' %port)
-    app.run(port=port, debug=debug, threaded=threaded, use_reloader=False) #启动app
+    app.run(port=port, debug=debug, threaded=threaded, use_reloader=False, host="0.0.0.0") #启动app
