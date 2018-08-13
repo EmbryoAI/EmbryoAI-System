@@ -18,6 +18,7 @@ def process_cycle(path):
     dish_ini = EmbryoIniParser(path + 'DishInfo.ini') # 采集设备生成的INI配置文件
     print(f'正在处理采集图像文件夹 {path}')
     cycle_json = {}
+    # print(dish_ini['Timelapse']['StartTime'])
     for i in range(1, 10):
         if f'Dish{i}Info' in dish_ini:
             cycle_json[i] = False
@@ -34,6 +35,7 @@ def process_dish(path, dish_info):
     '''
     from functools import partial
     dish_path = path + f'DISH{dish_info.index}' + os.path.sep 
+    print(f'processing dish {dish_path}')
     last_op = '0' * 7
     processed = TimeSeries().range(last_op)
     # 以下两行代码使用偏函数从当前目录中得到所有合法且未处理的时间序列子目录
