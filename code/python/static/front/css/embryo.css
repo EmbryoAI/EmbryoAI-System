@@ -312,14 +312,20 @@
 }
 .emdate .layui-form-label{
 	width: 84px;
-	padding: 8px 4px;
+	padding: 5px 4px;
 }
 .emdate .layui-input-inline{
 	margin-right: 4px;
-	width: 52px;
+	width: 54px;
+}
+.emdate .layui-inline{	
+	margin-bottom: 0;
 }
 .emdate .unit{
-	line-height: 30px;
+	line-height: 22px;
+}
+.emdate .layui-input{
+	height: 23px;
 }
 .layui-form-item{
 	margin-bottom: 2px;
@@ -331,13 +337,31 @@
 }
 .measuredata{
 	color: #ff8429;
+	font-size: 14px;
+}
+.measuredata span{
+	display: inline-block;
+	width: 98px;
+}
+.measuredata strong{
+	display: inline-block;
+	width: 82px;
+	font-style: italic;
+}
+.mdbtn span{
+	  color: #007DDB;
+    margin-right: 10px;
+    cursor: pointer;
+    padding-top: 8px;
+    display: inline-block;
+    font-style: italic;
+    text-decoration: underline;
 }
 .measuredata a{
 	margin-left: 10px;
 	display: inline-block;
     color: #135de0;
-    border-bottom: 1px solid;
-	cursor: pointer;
+   	cursor: pointer;
 }
 .measuredata a:hover{
 	color: #1e9fec;
@@ -416,6 +440,9 @@
 .tool-metrical{
 	width: 260px;
 	border-right: none;
+}
+.tool-metrical li{
+	width: 86px;
 }
 .tool-metrical li.straight i{
 	background: url(../img/tool-measure1.png) no-repeat center;

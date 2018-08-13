@@ -131,7 +131,7 @@ body {
 					<li class="straight"><i></i><span>直线测量</span></li>
 					<li class="roundness"><i></i><span>内周测量</span></li>
 					<li class="roundness2"><i></i><span>外周测量</span></li>
-					<li class="roundness3"><i></i><span>囊腔面积</span></li>
+					<!-- <li class="roundness3"><i></i><span>囊腔面积</span></li> -->
 				</ul>
 				
 			</div>
@@ -211,6 +211,23 @@ body {
 				<h2 id="embryoSjDiv">胚胎数据</h2>
 				<div id="embryoDiv" class="layui-form-item emdate">
 					<div class="layui-inline">
+						<label class="layui-form-label">胚胎外面积</label>
+						<div class="layui-input-inline">
+							<input type="text" id="outerArea" name="outerArea" autocomplete="off" class="layui-input">
+						</div>
+						<label class="unit">um²</label>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">胚胎外直径</label>
+						<div class="layui-input-inline">
+							<input type="text" id="outDiameter" name="outerDiameter" autocomplete="off" class="layui-input">
+						</div>
+						<label class="unit">um</label>
+					</div>
+					<div class="measuredata">
+						<span>测量外周面积：</span><strong>123456</strong><span>测量外周直径：</span><strong>123456</strong>
+					</div>
+					<div class="layui-inline">
 						<label class="layui-form-label">胚胎内周面积</label>
 						<div class="layui-input-inline">
 							<input type="text" id="innerArea" name="innerArea" autocomplete="off" class="layui-input">
@@ -225,27 +242,6 @@ body {
 						<label class="unit">um</label>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">胚胎外面积</label>
-						<div class="layui-input-inline">
-							<input type="text" id="outerArea" name="outerArea" autocomplete="off" class="layui-input">
-						</div>
-						<label class="unit">um²</label>
-					</div>
-					<div class="layui-inline">
-						<label class="layui-form-label">胚胎外直径</label>
-						<div class="layui-input-inline">
-							<input type="text" id="outDiameter" name="outerDiameter" autocomplete="off" class="layui-input">
-						</div>
-						<label class="unit">um</label>
-					</div>
-					<div class="layui-inline">
-						<label class="layui-form-label">扩张囊腔面积</label>
-						<div class="layui-input-inline">
-							<input type="text" id="expansionArea" name="expansionArea" autocomplete="off" class="layui-input">
-						</div>
-						<label class="unit">um²</label>
-					</div>
-					<div class="layui-inline">
 						<label class="layui-form-label">透明带厚度</label>
 						<div class="layui-input-inline" >
 							<input type="text" id="zonaThickness" name="zonaThickness" autocomplete="off" class="layui-input">
@@ -253,18 +249,26 @@ body {
 						<label class="unit">um</label>
 					</div>
 					<div class="measuredata">
+						<span>测量外周面积：</span><strong>123456</strong><span>测量外周直径：</span><strong>123456</strong>
+						<span style="width: 84px;">测量的厚度：</span><strong>123456</strong>
+					</div>
+					<div class="mdbtn">
+						<span>导入测量数据</span><span>恢复原始数据</span>
+					</div>
+					<!-- <div class="measuredata">
 						测量数据—面积:<span>123456</span>&nbsp;um²&nbsp;直径:<span>123456</span>&nbsp;um&nbsp;长度:<span>123456</span>&nbsp;um&nbsp;
 						<a>导入</a><a>重置</a>
-					</div>
+					</div> -->
 					<!--备注-->
 					<h2>备注</h2>
 					<div class="comment">
-						<div class="layui-input-inline" style="width: 90%;">
+						<div class="layui-input-inline" style="width: 100%;">
 							<textarea id="memo" rows="5" name="memo" placeholder="请输入内容" class="layui-textarea" style="min-height: 46px"></textarea>
 						</div>
 					</div>
+					<h2 style="padding-bottom: 0;">胚胎评分<span class="score">25</span></h2>
 				</div>
-				<h2 style="padding-bottom: 0;">胚胎评分<span class="score">25</span></h2>
+				
 				<div class="layui-input-block"	style="text-align: center; margin:20px 0 0;">
 					<button id="saveMilestoneButton" class="layui-btn layui-bg-blue"
 						lay-submit lay-filter="milestoneFormSub" style="padding: 0 80px;">保存数据</button>
