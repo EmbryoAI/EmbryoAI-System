@@ -34,28 +34,29 @@
 			font-weight: bold;
 			color: #1b2437;
 		}
-		.swiper-button-next, .swiper-container-rtl .swiper-button-prev {
+		
+			.button-next, .button-prev {
+			position: absolute;
+			top: -2px;
+			width: 34px;
+			height: 154px;
+			z-index: 10;
+			cursor: pointer;
+			background-size: initial;
+			background-position: center;
+			background-repeat: no-repeat;
+		}
+		
+		
+		.button-prev {
     background-image: url(img/arrowR.png);
     right: -42px;
     left: auto;
 		}
-		.swiper-button-prev, .swiper-container-rtl .swiper-button-next {
+		.button-next {
     background-image: url(img/arrowL.png);
 		left: -42px;
     right: auto;
-	}
-		.swiper-button-next, .swiper-button-prev {
-    position: absolute;
-    top: 20px;
-    width: 34px;
-    height: 154px;
-    z-index: 10;
-    cursor: pointer;
-    -moz-background-size: 27px 44px;
-    -webkit-background-size: 27px 44px;
-    background-size: initial;
-    background-position: center;
-    background-repeat: no-repeat;
 	}
 	
 	</style>
@@ -81,8 +82,8 @@
 								</div>
 						</div>
 						<!--左右按钮-->
-						<div class="swiper-button-prev"></div>
-						<div class="swiper-button-next"></div>
+						<div class="button-prev"></div>
+						<div class="button-next"></div>
 				</div>
 			</div>
 
@@ -92,9 +93,9 @@
 				<div class="embryo" id="embryo">
 					<!--图片区域-->
 					<div class="lg-img">
-						<img src="img/20180725183944.jpg" >
+						<!-- <img src="img/20180725183944.jpg" >
 						<img src="img/20180725183945.jpg" >
-						<img src="img/20180725183946.jpg" >
+						<img src="img/20180725183946.jpg" > -->
 					</div>
 					<!--胚胎信息-->
 					<ul class="eminfo">
@@ -159,9 +160,9 @@
 						</ul>
 						<ul class="tool-play tool-metrical">
 							<li class="straight"><i></i><span>直线测量</span></li>
-							<li class="roundness"><i></i><span>内圆测量</span></li>
-							<li class="roundness2"><i></i><span>外周测量</span></li>
-							<li class="roundness3"><i></i><span>囊腔面积</span></li>
+							<li class="roundness"><i></i><span>胚胎内周测量</span></li>
+							<li class="roundness2"><i></i><span>胚胎外周测量</span></li>
+							<!-- <li class="roundness3"><i></i><span>囊腔面积</span></li> -->
 
 						</ul>
 						<!-- <div class="tool-btn">
@@ -290,6 +291,9 @@
 								</div>
 								<label class="unit">um</label>
 							</div>
+							<div class="measuredata">
+								<span>测量外周面积：</span><strong>123456</strong><span>测量外周直径：</span><strong>123456</strong>
+							</div>
 							<div class="layui-inline">
 								<label class="layui-form-label">胚胎内面积</label>
 								<div class="layui-input-inline">
@@ -305,13 +309,6 @@
 								<label class="unit">um</label>
 							</div>
 							<div class="layui-inline">
-								<label class="layui-form-label">扩张囊腔面积</label>
-								<div class="layui-input-inline">
-									<input type="text" id="thickness" name="thickness" autocomplete="off" class="layui-input">
-								</div>
-								<label class="unit">um²</label>
-							</div>
-							<div class="layui-inline">
 								<label class="layui-form-label">透明带厚度</label>
 								<div class="layui-input-inline" >
 									<input type="text" id="thickness" name="thickness" autocomplete="off" class="layui-input">
@@ -319,15 +316,19 @@
 								<label class="unit">um</label>
 							</div>
 							<div class="measuredata">
-								测量数据—面积:<span>123456</span>&nbsp;um²&nbsp;直径:<span>123456</span>&nbsp;um&nbsp;长度:<span>123456</span>&nbsp;um&nbsp;
-								<a>导入</a><a>重置</a>
+								<span>测量外周面积：</span><strong>123456</strong><span>测量外周直径：</span><strong>123456</strong>
+								<span style="width: 84px;">测量的厚度：</span><strong>123456</strong>
 							</div>
 					  </div>
+						<div class="mdbtn">
+							<span>导入测量数据</span><span>恢复原始数据</span>
+						</div>
 					  <h2 style="padding-bottom: 0;">胚胎评分<span class="score">25</span>	</h2>
 					  
 					  <div class="layui-input-block" style="text-align: center;margin: 0;">
 					  	<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" style="padding: 0 80px;">保存数据</button>
 					  </div>
+						
 					  </div>
 					</form>
 				</div>

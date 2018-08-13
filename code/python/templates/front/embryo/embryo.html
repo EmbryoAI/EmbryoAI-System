@@ -26,29 +26,29 @@ body {
 .layui-form-radio *{
 	font-size: 12px
 }
-.swiper-button-next, .swiper-container-rtl .swiper-button-prev {
-    background-image: url(/static/front/img/arrowR.png);
+.button-next, .button-prev {
+			position: absolute;
+			top: -2px;
+			width: 34px;
+			height: 154px;
+			z-index: 10;
+			cursor: pointer;
+			background-size: initial;
+			background-position: center;
+			background-repeat: no-repeat;
+		}
+		
+		
+		.button-prev {
+    background-image: url(img/arrowR.png);
     right: -42px;
     left: auto;
-}
-.swiper-button-prev, .swiper-container-rtl .swiper-button-next {
-	background-image: url(/static/front/img/arrowL.png);
-	left: -42px;
-	right: auto;
-}
-.swiper-button-next, .swiper-button-prev {
-	position: absolute;
-	top: 20px;
-	width: 34px;
-	height: 154px;
-	z-index: 10;
-	cursor: pointer;
-	-moz-background-size: 27px 44px;
-	-webkit-background-size: 27px 44px;
-	background-size: initial;
-	background-position: center;
-	background-repeat: no-repeat;
-}
+		}
+		.button-next {
+    background-image: url(img/arrowL.png);
+		left: -42px;
+    right: auto;
+	}
 </style>
 <div class="main">
 	<input type="hidden" id="procedureId" value="{{procedure_id}}"/>
@@ -64,8 +64,8 @@ body {
 				</div>
 			</div>
 			<!--左右按钮-->
-			<div class="swiper-button-prev"></div>
-			<div class="swiper-button-next"></div>
+			<div class="button-prev"></div>
+			<div class="button-next"></div>
 		</div>
 	</div>
 	<!--大图信息部分-->
