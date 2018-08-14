@@ -160,19 +160,10 @@
 						</ul>
 						<ul class="tool-play tool-metrical">
 							<li class="straight"><i></i><span>直线测量</span></li>
-							<li class="roundness"><i></i><span>胚胎内周测量</span></li>
-							<li class="roundness2"><i></i><span>胚胎外周测量</span></li>
-							<!-- <li class="roundness3"><i></i><span>囊腔面积</span></li> -->
+							<li class="roundness"><i></i><span>圆形测量</span></li>
+							<!-- <li class="roundness2"><i></i><span>胚胎外周测量</span></li> -->
 
 						</ul>
-						<!-- <div class="tool-btn">
-							<div class="layui-input-inline" style="margin-left: 0px;">
-							 <button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >导出视频</button>
-							</div>
-							<div class="layui-input-inline" style="margin-left: 0px;">
-								<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >导出图像</button>
-							</div>
-						</div> -->
 					</div>
 				</div>
 				<!--右边信息-->
@@ -291,9 +282,6 @@
 								</div>
 								<label class="unit">um</label>
 							</div>
-							<div class="measuredata">
-								<span>测量外周面积：</span><strong>123456</strong><span>测量外周直径：</span><strong>123456</strong>
-							</div>
 							<div class="layui-inline">
 								<label class="layui-form-label">胚胎内面积</label>
 								<div class="layui-input-inline">
@@ -315,14 +303,7 @@
 								</div>
 								<label class="unit">um</label>
 							</div>
-							<div class="measuredata">
-								<span>测量外周面积：</span><strong>123456</strong><span>测量外周直径：</span><strong>123456</strong>
-								<span style="width: 84px;">测量的厚度：</span><strong>123456</strong>
-							</div>
 					  </div>
-						<div class="mdbtn">
-							<span>导入测量数据</span><span>恢复原始数据</span>
-						</div>
 					  <h2 style="padding-bottom: 0;">胚胎评分<span class="score">25</span>	</h2>
 					  
 					  <div class="layui-input-block" style="text-align: center;margin: 0;">
@@ -334,6 +315,16 @@
 				</div>
 			</div>
 			<div style="clear: both;height: 20px;width: 100%;"></div>
+			<div class="dbox" id="dbox-l">
+				<p><strong>测量直线长度：</strong><span>56656</span>&nbsp;um</p>
+				<p><label>设置为透明带厚度&nbsp;<input type="radio" name="1" checked><i>✓</i></label></p>
+			</div>
+			<div class="dbox" id="dbox-c">
+				<p><strong>测量直径：</strong><span>56656</span>&nbsp;um</p>
+				<p><strong>测量面积：</strong><span>55656</span>&nbsp;um²</p>
+				<p><label>设置为外周数据&nbsp;<input type="radio" name="2" checked><i>✓</i></label></p>
+				<p><label>设置为内周数据&nbsp;<input type="radio" name="2"><i>✓</i></label></p>
+			</div>
 		</div>
     </div>
 		

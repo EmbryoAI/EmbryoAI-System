@@ -243,7 +243,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		var x = 0; // 鼠标开始移动的位置X
 		var y = 0; // 鼠标开始移动的位置Y
 		var url = ''; // canvas图片的二进制格式转为dataURL格式
-		
+		var drwaType ='';
 		function canvasWidth(){
 			var embr = document.getElementById('embryo');
 			var canvasBox = document.getElementById('canvasBox');
@@ -268,13 +268,50 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 					x = e.offsetX; // 鼠标落下时的X
 					y = e.offsetY; // 鼠标落下时的Y
 					console.log(x,y)
+					  if(drwaType == 'straight'){
+                       layer.open({
+						  type: 1,
+						  area: ['300px', '280px'],
+						  shadeClose: true, 
+						  content: $("#dbox-l"),
+						  btn:["确认导入","取消"],
+						  yes: function(index, layero){
+						  layer.closeAll();
+						  layer.msg("导入成功！")
+						  clearCanvas()
+						  }
+						  ,btn2: function(index, layero){
+						  clearCanvas()
+						  },
+						  btnAlign: 'c'
+						});
+                    }else{
+						layer.open({
+						type: 1,
+						area: ['300px', '280px'],
+						shadeClose: true, 
+						content: $("#dbox-c"),
+						btn:["确认导入","取消"],
+						yes: function(index, layero){
+						layer.closeAll();
+						layer.msg("导入成功！")
+						clearCanvas()
+						}
+						,btn2: function(index, layero){
+						clearCanvas()
+						},
+						btnAlign: 'c'
+						});
+                    }
 				}).mousemove(function(e){
 					
 					if(self.hasClass('straight')){
-						drawLine(e); // 绘制方法
-					}else{
-						drawCircle(e); // 绘制方法	
-					}
+                        drwaType = 'straight';
+					    drawLine(e); // 绘制方法
+				    }else{
+                        drwaType = 'circle';
+					    drawCircle(e); // 绘制方法	
+				    }
 				});
 			
 			

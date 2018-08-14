@@ -336,8 +336,40 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     console.log(x,y)
                     if(drwaType == 'straight'){
                        alert(1);
+                       layer.open({
+                        type: 1,
+                        area: ['300px', '280px'],
+                        shadeClose: true, 
+                        content: $("#dbox-l"),
+                        btn:["确认导入","取消"],
+                        yes: function(index, layero){
+                        layer.closeAll();
+                        layer.msg("导入成功！")
+                        clearCanvas()
+                        }
+                        ,btn2: function(index, layero){
+                        clearCanvas()
+                        },
+                        btnAlign: 'c'
+                      });
                     }else{
                         alert(2);
+                        layer.open({
+                            type: 1,
+                            area: ['300px', '280px'],
+                            shadeClose: true, 
+                            content: $("#dbox-c"),
+                            btn:["确认导入","取消"],
+                            yes: function(index, layero){
+                            layer.closeAll();
+                            layer.msg("导入成功！")
+                            clearCanvas()
+                            }
+                            ,btn2: function(index, layero){
+                            clearCanvas()
+                            },
+                            btnAlign: 'c'
+                            });
                         var rx = (e.offsetX-x1);
                         var ry = (e.offsetY-y1);
                         var r = Math.round(Math.sqrt(rx*rx+ry*ry));

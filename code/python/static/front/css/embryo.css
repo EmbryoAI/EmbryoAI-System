@@ -312,21 +312,21 @@
 }
 .emdate .layui-form-label{
 	width: 84px;
-	padding: 5px 4px;
+	padding: 8px 4px;
 }
 .emdate .layui-input-inline{
 	margin-right: 4px;
 	width: 54px;
 }
 .emdate .layui-inline{	
-	margin-bottom: 0;
+	margin-bottom: 14px;
 }
 .emdate .unit{
-	line-height: 22px;
+	line-height: 32px;
 }
-.emdate .layui-input{
+/* .emdate .layui-input{
 	height: 23px;
-}
+} */
 .layui-form-item{
 	margin-bottom: 2px;
 }
@@ -371,13 +371,13 @@
 	height: 46px;
 	border-right: 1px solid #b4b6d5;
 	margin-top: 12px;
-	width: 328px;
+	width: 358px;
 	margin-left: 2px;
 	float: left;
 }
 .tool-play li{
 	float:left ;
-	width: 64px;
+	width: 68px;
 	text-align: center;
 	color: #53575a;
 	font-size: 12px;
@@ -417,12 +417,12 @@
 	height: 46px;
 	border-right: 1px solid #b4b6d5;
 	margin-top: 12px;
-	width: 206px;
+	width: 256px;
 	margin-left: 8px;
 	float: left;
 }
 .tool-end li{
-	width: 50px;
+	width: 60px;
 }
 .tool-end li.transplant i{
 	background: url(../img/tool-end1.png) no-repeat center;
@@ -438,7 +438,7 @@
 }
 /*胚胎工具栏-测量*/
 .tool-metrical{
-	width: 260px;
+	width: 184px;
 	border-right: none;
 }
 .tool-metrical li{
@@ -520,5 +520,57 @@
 }
 
 .elect input[type="checkbox"]:checked:disabled+i,input[type="radio"]:checked:disabled+i {
+	background: #ccc;
+}
+
+/* 测量数据导入 */
+.dbox{
+	width: 260px;
+	padding: 10px;
+	margin: auto;
+	display: none;
+}
+.dbox p{
+	margin-top:14px;
+	text-align: center;
+	color: #ff8429;
+}
+.dbox p strong{
+	color: #47494b;
+}
+.dbox label{
+	cursor: pointer;
+	color: #47494b;
+}
+.dbox label i {
+	font-size: 14px;
+	font-style: normal;
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	text-align: center;
+	line-height: 14px;
+	color: #fff;
+	vertical-align: middle;
+	margin: -2px 2px 1px 0px;
+	border: #3c64f7 1px solid;
+	background-color: #fff;
+}
+.dbox input[type="checkbox"],input[type="radio"] {
+	display: none;
+}
+.dbox input[type="radio"]+i {
+	border-radius: 50%;
+}
+
+.dbox input[type="checkbox"]:checked+i,input[type="radio"]:checked+i {
+	background: #3c64f7;
+}
+
+.dbox input[type="checkbox"]:disabled+i,input[type="radio"]:disabled+i {
+	border-color: #ccc;
+}
+
+.dbox input[type="checkbox"]:checked:disabled+i,input[type="radio"]:checked:disabled+i {
 	background: #ccc;
 }
