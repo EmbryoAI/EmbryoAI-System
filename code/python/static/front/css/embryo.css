@@ -574,3 +574,13 @@
 .dbox input[type="checkbox"]:checked:disabled+i,input[type="radio"]:checked:disabled+i {
 	background: #ccc;
 }
+.info h2 .reset{
+	margin-left: 10px;
+	text-decoration: underline;
+	color: #007AFF;
+	font-size: 12px;
+	cursor: pointer;
+}
+.info h2 .reset:hover{
+	opacity: 0.8;
+}
