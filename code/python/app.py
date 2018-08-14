@@ -51,6 +51,14 @@ logger = app.logger
 # 指定开发测试用的数据目录，发布版本应该屏蔽下面这句代码
 conf['EMBRYOAI_IMAGE_ROOT'] = app_root + '..' + os.path.sep + 'captures' + os.path.sep
 
+@app.teardown_request
+def shutdown_session(response_or_exc):
+    if app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN']:
+        if response_or_exc is None:
+            db.session.commit()
+    db.session.remove()
+    
+
 @login_manager.user_loader
 def load_user(user_id):
     import service.admin.user_service as user_service
