@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from app import db
+from app import db, app
 from entity.User import User
 from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
@@ -38,7 +38,10 @@ def insertUser(user):
         raise DatabaseError('插入用户数据时发生错误', e.message, e)
 
 def findUserById(id):
-    return db.session.query(User).filter(User.id == id).one_or_none()
+    # return db.session.query(User).filter(User.id == id).one_or_none()
+    rs = db.session.query(User).filter(User.id == id).one_or_none()
+    db.session.remove()
+    return rs
 
 def findAllUsers(page_number, page_size, filters):
     return db.session.query(User).filter_by(**filters).limit(int(page_size)).offset((int(page_number)-1)*int(page_size))
