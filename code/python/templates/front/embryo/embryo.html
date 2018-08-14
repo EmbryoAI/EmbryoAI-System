@@ -84,10 +84,11 @@ body {
 				<li><span>胚胎编号：</span><span>A565323</span></li>
 				<li><span>阶段：</span><span>DAY 2</span></li>
 			</ul>
-			<!--测量的信息-->
+			<!--测量的信息
 			<div class="metrical">
 				<span id="area"></span> <span id="diameter"></span>
 			</div>
+			-->
 			<!--标记结局-->
 			<div class="mark">
 				<i class="" data-mark=""></i>
@@ -208,33 +209,21 @@ body {
 					<label class="layui-form-label"><i>*</i>评级</label>
 					<div class="layui-input-block" id="gradeIdDiv"></div>
 				</div>
-				<h2 id="embryoSjDiv">胚胎数据</h2>
+				<h2 id="embryoSjDiv">胚胎数据<span class="reset">重置</span></h2>
 				<div id="embryoDiv" class="layui-form-item emdate">
 					<div class="layui-inline">
-						<label class="layui-form-label">胚胎外面积</label>
+						<label class="layui-form-label">胚胎外周面积</label>
 						<div class="layui-input-inline">
 							<input type="text" id="outerArea" name="outerArea" autocomplete="off" class="layui-input">
+							<input type="hidden" id="hideOuterArea">
 						</div>
 						<label class="unit">um²</label>
 					</div>
 					<div class="layui-inline">
-						<label class="layui-form-label">胚胎外直径</label>
+						<label class="layui-form-label">胚胎外周直径</label>
 						<div class="layui-input-inline">
 							<input type="text" id="outDiameter" name="outerDiameter" autocomplete="off" class="layui-input">
-						</div>
-						<label class="unit">um</label>
-					</div>
-					<div class="layui-inline">
-						<label class="layui-form-label">胚胎内周面积</label>
-						<div class="layui-input-inline">
-							<input type="text" id="innerArea" name="innerArea" autocomplete="off" class="layui-input">
-						</div>
-						<label class="unit">um²</label>
-					</div>
-					<div class="layui-inline">
-						<label class="layui-form-label">胚胎内周直径</label>
-						<div class="layui-input-inline">
-							<input type="text" id="innerDiameter" name="innerDiameter" autocomplete="off" class="layui-input">
+							<input type="hidden" id="hideOutDiameter">
 						</div>
 						<label class="unit">um</label>
 					</div>
@@ -242,9 +231,28 @@ body {
 						<label class="layui-form-label">透明带厚度</label>
 						<div class="layui-input-inline" >
 							<input type="text" id="zonaThickness" name="zonaThickness" autocomplete="off" class="layui-input">
+							<input type="hidden" id="hideZonaThickness">
 						</div>
 						<label class="unit">um</label>
 					</div>
+					
+					<div class="layui-inline">
+						<label class="layui-form-label">胚胎内周直径</label>
+						<div class="layui-input-inline">
+							<input type="text" id="innerDiameter" name="innerDiameter" autocomplete="off" class="layui-input">
+							<input type="hidden" id="hideInnerDiameter">
+						</div>
+						<label class="unit">um</label>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">胚胎内周面积</label>
+						<div class="layui-input-inline">
+							<input type="text" id="innerArea" name="innerArea" autocomplete="off" class="layui-input">
+							<input type="hidden" id="hideInnerArea">
+						</div>
+						<label class="unit">um²</label>
+					</div>
+					
 					<!-- <div class="measuredata">
 						测量数据—面积:<span>123456</span>&nbsp;um²&nbsp;直径:<span>123456</span>&nbsp;um&nbsp;长度:<span>123456</span>&nbsp;um&nbsp;
 						<a>导入</a><a>重置</a>
@@ -270,14 +278,14 @@ body {
 </div>
 <div style="clear: both; height: 80px; width: 100%;"></div>
 <div class="dbox" id="dbox-l">
-	<p><strong>测量直线长度：</strong><span>56656</span>&nbsp;um</p>
+	<p><strong>测量直线长度：</strong><span id="length"></span>&nbsp;um</p>
 	<p><label>设置为透明带厚度&nbsp;<input type="radio" name="1" checked><i>✓</i></label></p>
 </div>
 <div class="dbox" id="dbox-c">
-	<p><strong>测量直径：</strong><span>56656</span>&nbsp;um</p>
-	<p><strong>测量面积：</strong><span>55656</span>&nbsp;um²</p>
-	<p><label>设置为外周数据&nbsp;<input type="radio" name="2" checked><i>✓</i></label></p>
-	<p><label>设置为内周数据&nbsp;<input type="radio" name="2"><i>✓</i></label></p>
+	<p><strong>测量直径：</strong><span id="diameter"></span>&nbsp;um</p>
+	<p><strong>测量面积：</strong><span id="area"></span>&nbsp;um²</p>
+	<p><label>设置为外周数据&nbsp;<input value="choseOut" type="radio" name="2" checked><i>✓</i></label></p>
+	<p><label>设置为内周数据&nbsp;<input value="choseIn" type="radio" name="2"><i>✓</i></label></p>
 </div>
 
 <!--公共js引入-->
