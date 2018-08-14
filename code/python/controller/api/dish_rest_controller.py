@@ -22,7 +22,7 @@ def querySeriesList():
     return dish_service.querySeriesList(parser.parse_args())
 
 #左右滚动
-@dish_rest_controller.route('/list', methods=['GET'])
+@dish_rest_controller.route('/scroll', methods=['GET'])
 @login_required
 def queryScrollbarSeriesList():
     parser = reqparse.RequestParser()

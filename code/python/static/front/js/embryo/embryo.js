@@ -718,6 +718,40 @@ function exportVideo(){
     aLink.dispatchEvent(new MouseEvent('click', {}))
 }
 
+function arrow(direction){
+    $.ajax({
+		type : "get",
+        url : "/api/v1/dish/scroll?procedure_id=" + procedureId + "&dish_id=" + dishId + 
+                "&well_id=" + wellId + "&current_seris=" + currentSeris + "&direction=" + direction,
+		datatype : "json",
+		success : function(data) {
+			var seris = "";
+            for(var i=0;i<data.length;i=i+4){
+                var imagePath = "/api/v1/well/image?image_path=" + data[i+1];
+                if(data[i+1].indexOf("embryo_not_found") != -1){
+                    imagePath = "/static/front/img/icon-noembryo.jpg";
+                }
+                var active = "<div class=\"swiper-slide\">";
+                if(i == 16){
+                    active = "<div class=\"swiper-slide active\">";
+                }
+                seris = seris + active + "<span><img id='" + data[i] + "' src=\"" + 
+                                    imagePath +"\" onclick=\"getBigImage('" 
+                                    + procedureId + "','" + dishId + 
+                                    "','" + wellId + "','" + data[i] + "')\"><b>" + 
+                                    data[i+2] + "</b></div>";
+            }
+            $("#myscrollboxul").html(seris);
+            currentSeris = data[data.length-1];
+            loadingImage(procedureId,dishId,wellId,currentSeris,'');
+            loadingZIndex(procedureId,dishId,wellId,currentSeris);
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
+}
+
 //刘勇智
 //初始化radio通用方法
 function chushihua(dictClass) {

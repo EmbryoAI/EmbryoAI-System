@@ -40,12 +40,12 @@ body {
 		
 		
 		.button-prev {
-    background-image: url(img/arrowR.png);
+    background-image: url(/static/front/img/arrowR.png);
     right: -42px;
     left: auto;
 		}
 		.button-next {
-    background-image: url(img/arrowL.png);
+    background-image: url(/static/front/img/arrowL.png);
 		left: -42px;
     right: auto;
 	}
@@ -64,8 +64,8 @@ body {
 				</div>
 			</div>
 			<!--左右按钮-->
-			<div class="button-prev"></div>
-			<div class="button-next"></div>
+			<div class="button-next" onclick="arrow('left')"></div>
+			<div class="button-prev" onclick="arrow('right')"></div>
 		</div>
 	</div>
 	<!--大图信息部分-->

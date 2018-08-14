@@ -92,9 +92,11 @@ def queryScrollbarSeriesList(agrs):
         begin_index = len(ts.range(current_seris)) - 4
 
         if direction == 'left':
+            current_seris = ts[len(ts.range(current_seris)) - 9]
             last_index = last_index - 9
             begin_index = begin_index - 9
         if direction == 'right':
+            current_seris = ts[len(ts.range(current_seris)) + 9]
             last_index = last_index + 9
             begin_index = begin_index + 9
 
