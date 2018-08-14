@@ -67,6 +67,7 @@ function queryEmbryo(procedureId){
 
 function showDish(){
     alert("跳到皿视图");
+    
 }
 function showIncubator(){
     alert("跳到培养箱视图");

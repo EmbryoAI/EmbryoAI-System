@@ -1,0 +1,119 @@
+{% extends 'front/header-footer.html' %} {% block mianDiv %}
+<link rel="stylesheet" type="text/css" href="/static/front/css/embryo.css"/>
+<link rel="stylesheet" type="text/css" href="/static/front/css/dishView.css"/>
+<style type="text/css">
+    body{
+        width: 1400px;
+        margin: auto;
+    }
+</style>
+
+<!--主体内容都放在这个div里-->
+<div class="main">
+    <div class="title">
+        <h1>皿视图</h1>
+        <h6>Dish View</h6>
+    </div>
+    <div class="dish-name"><a>@培养箱 002 ： Dish #1</a></div>
+    <div class="dish-sec">
+        <div class="dish-box">
+            <ul class="dishimg" id="dishImageUl">
+                <li embryoId="1">
+                    <img src="/static/front/img/icon-noembryo.jpg" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
+                </li>
+                <li embryoId="2">
+                    <img src="/static/front/img/icon-noembryo.jpg" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
+                </li>
+                <li embryoId="3"> 
+                    <img src="/static/front/img/icon-noembryo.jpg" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
+                </li>
+                <li embryoId="1">
+                    <img src="/static/front/img/icon-noembryo.jpg" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
+                </li>
+                <li embryoId="1">
+                    <img src="/static/front/img/icon-noembryo.jpg" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
+                </li>
+                <li embryoId="1">
+                    <img src="/static/front/img/icon-noembryo.jpg" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
+                </li>
+                <li embryoId="1">
+                    <img src="/static/front/img/icon-noembryo.jpg" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
+                </li>
+                <li embryoId="1">
+                    <img src="/static/front/img/icon-noembryo.jpg" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
+                </li>
+                <li embryoId="1">
+                    <img src="/static/front/img/icon-noembryo.jpg" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
+                </li>
+                <li embryoId="1">
+                    <img src="/static/front/img/icon-noembryo.jpg" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
+                </li>
+                <li embryoId="1">
+                    <img src="/static/front/img/icon-noembryo.jpg" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
+                </li>
+                <li embryoId="1">
+                    <img src="/static/front/img/icon-noembryo.jpg" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
+                </li>
+            </ul>
+            <div class="tool dish-tool">
+                <ul class="tool-play">
+                    <li class="pre-milestone"><i></i><span>上一里程碑</span></li>
+                    <li class="pre-frame"><i></i><span>上一帧</span></li>
+                    <li class="play" id="playBtn"><i></i><span>播放</span></li>
+                    <li class="next-frame"><i></i><span>下一帧</span></li>
+                    <li class="next-milestone"><i></i><span>下一里程碑</span></li>
+                </ul>
+                <ul class="tool-play tool-end" id="embryo_fate_type_ul">
+                    <li class="standard" name="standard" data-end="0"><i></i><span>基准</span></li>
+                    <!-- 
+                    <li class="transplant" name="transplant" data-end="1"><i></i><span>移植</span></li>
+                    <li class="freeze" name="freeze" data-end="2"><i></i><span>冷冻</span></li>
+                    <li class="abandon" name="abandon" data-end="3"><i></i><span>抛弃</span></li>
+                    <li class="hold" name="hold" data-end="4"><i></i><span>待定</span></li>
+                    -->
+                </ul>
+                <div class="tool-btn">
+                    <div class="layui-input-inline" style="margin-left: 0px;">
+                        <button class="layui-btn layui-bg-blue" id="cancelEnd" lay-filter="" >取消状态</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dish-info">
+            <h1>病历信息</h1>
+            <ul>
+                <li><span>甄美丽</span><span>28岁</span></li>
+                <li><strong>取卵时间：</strong><span>2018/07/12 10:10</span></li>
+                <li><strong>获卵数：</strong><span>2</span></li>
+                <li><strong>授精时间：</strong><span>2018/07/12 10:10</span></li>
+                <li><strong>IVF/ICSI：</strong><span>IVF</span></li>
+                <li><strong>阶段：</strong><span>day3</span></li>
+                <li><strong>胚胎数：</strong><span>3</span></li>
+                <li><strong>备注：</strong>
+                    <div class="layui-input-block dish-ttar">
+                      <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                      <button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >保存备注</button>
+                    </div>
+                </li>
+            </ul>
+            <div class="em-info">
+                <span class="em-grade"><i>胚胎评分表</i></span><span class="em-all"><i>胚胎总览表</i></span>
+            </div>
+        </div>
+    </div>    
+</div>
+<script src="/static/front/js/dish/dishView.js"></script>
+
+{% endblock %}

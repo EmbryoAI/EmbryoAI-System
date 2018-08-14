@@ -165,13 +165,13 @@ layui
 											field : 'xst',
 											title : '视图',
 											templet : function(d) {
-
-												if (d.xst != null
-														&& d.xst != '') {
+												console.log(d);
+												if (d.xst != null && d.xst != '') {
+													console.log(d.xst);
 													var arr = d.xst.split(",");
 													var url = "";
 													for (var i = 0; i < arr.length; i++) {
-														url += "<a href='javascript:void()' class='layui-table-link view' >皿"
+														url += "<a href='/front/dish?procedureId=&dishId=" + arr[i] + "&embryoId=' target='_blank' class='layui-table-link view' >皿"
 																+ (i + 1)
 																+ "</a> ";
 													}
