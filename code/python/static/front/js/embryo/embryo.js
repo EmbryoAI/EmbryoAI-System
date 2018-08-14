@@ -413,7 +413,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 }
             });
                
-	   })
+       })
+
+       
 	   
 	   // 画圆
 	   function drawCircle(e){
@@ -570,6 +572,29 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 
     });
 })
+
+function resetData(){
+    var hideOuterArea = $('#hideOuterArea').val();
+    if(hideOuterArea != ''){
+        $('#outerArea').val(hideOuterArea);
+    }
+    var hideOutDiameter = $('#hideOutDiameter').val();
+    if(hideOutDiameter != ''){
+        $('#outDiameter').val(hideOutDiameter);
+    }
+    var hideZonaThickness = $('#hideZonaThickness').val();
+    if(hideZonaThickness != ''){
+        $('#zonaThickness').val(hideZonaThickness);
+    }
+    var hideInnerDiameter = $('#hideInnerDiameter').val();
+    if(hideInnerDiameter != ''){
+        $('#innerDiameter').val(hideInnerDiameter);
+    }
+    var hideInnerArea = $('#hideInnerArea').val();
+    if(hideInnerArea != ''){
+        $('#innerArea').val(hideInnerArea);
+    }
+}
 
 function loadingZIndex(procedureId,dishId,wellId,timeSeries){
 
