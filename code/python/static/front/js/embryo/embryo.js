@@ -258,6 +258,13 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 $(this).removeClass('stop');
                 $(this).addClass('play');
                 console.log("暂停");
+                //截取出图片src中的时间序列
+                var imgsrc = $(".lg-img img:eq(" + n + ")").attr("src");
+                var timeSeries = imgsrc.substring(imgsrc.length-17,imgsrc.length-10);
+                if(timeSeries.indexOf("s")!=-1) {
+                }else {
+                	getBigImage(procedureId, dishId, wellId, timeSeries);//定位到对应的时间序列
+                }
                 clearInterval(textTime);
                 clearInterval(imgTime);
             }
@@ -1020,10 +1027,10 @@ function queryClearImageUrl() {
 		success : function(data) {
 			 if(data!=null) {
 				 clearImageUrlList = data;
-//		    	 for(var i=0;i<clearImageUrlList.length;i++) {
-//					 var image = "<img style='display:none' src='/api/v1/well/image?image_path="+clearImageUrlList[i]+"' />";
-//					 $("#imgDiv").append(image);
-//				 }
+		    	 for(var i=0;i<clearImageUrlList.length;i++) {
+					 var image = "<img style='display:none' src='/api/v1/well/image?image_path="+clearImageUrlList[i]+"' />";
+					 $("#imgDiv").append(image);
+				 }
 			 }
 		},
 		error : function(request) {
