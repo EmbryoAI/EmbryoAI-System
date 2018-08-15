@@ -323,71 +323,99 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             var self= $(this)
             var x1 = 0;
             var y1 = 0;
-			   $('canvas').mousedown(function(e){
-				   flag = true;
-				   x1,x = e.offsetX; // 鼠标落下时的X
-				   y1,y = e.offsetY; // 鼠标落下时的Y
-				   console.log(x,y)
-			   }).mouseup(function(e){
-				    flag = false;
-				    url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
-				    x = e.offsetX; // 鼠标落下时的X
-                    y = e.offsetY; // 鼠标落下时的Y
-                    console.log(x,y)
-                    if(drwaType == 'straight'){
-                       alert(1);
-                       layer.open({
-                        type: 1,
-                        area: ['300px', '280px'],
-                        shadeClose: true, 
-                        content: $("#dbox-l"),
-                        btn:["确认导入","取消"],
-                        yes: function(index, layero){
+            $('canvas').mousedown(function(e){
+                flag = true;
+                x1,x = e.offsetX; // 鼠标落下时的X
+                y1,y = e.offsetY; // 鼠标落下时的Y
+                console.log(x,y)
+            }).mouseup(function(e){
+                flag = false;
+                url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
+                x = e.offsetX; // 鼠标起时的X
+                y = e.offsetY; // 鼠标起下时的Y
+
+                console.log(x,y)
+                if(drwaType == 'straight'){
+                    var length = Math.round(Math.sqrt(Math.abs((x1 - x)* (x1 - x)+(y1 - y)* (y1 - y))));
+                    $('#length').text(length);
+
+                    layer.open({
+                    type: 1,
+                    area: ['300px', '280px'],
+                    shadeClose: true, 
+                    content: $("#dbox-l"),
+                    btn:["确认导入","取消"],
+                    yes: function(index, layero){
                         layer.closeAll();
                         layer.msg("导入成功！")
                         clearCanvas()
-                        }
-                        ,btn2: function(index, layero){
-                        clearCanvas()
-                        },
-                        btnAlign: 'c'
-                      });
-                    }else{
-                        alert(2);
-                        layer.open({
-                            type: 1,
-                            area: ['300px', '280px'],
-                            shadeClose: true, 
-                            content: $("#dbox-c"),
-                            btn:["确认导入","取消"],
-                            yes: function(index, layero){
-                            layer.closeAll();
-                            layer.msg("导入成功！")
-                            clearCanvas()
-                            }
-                            ,btn2: function(index, layero){
-                            clearCanvas()
-                            },
-                            btnAlign: 'c'
-                            });
-                        var rx = (e.offsetX-x1);
-                        var ry = (e.offsetY-y1);
-                        var r = Math.round(Math.sqrt(rx*rx+ry*ry));
-                        $('#diameter').text('直径:' + r + "um");
-                        var area = Math.round(Math.PI * r/2 * r/2);
-                        $('#area').text('面积:' + area + "um²");
+
+                        var zonaThickness = $('#zonaThickness').val();
+                        $('#hideZonaThickness').val(zonaThickness);
+                        $('#zonaThickness').val(length);
                     }
-			   }).mousemove(function(e){
-				    if(self.hasClass('straight')){
-                        drwaType = 'straight';
-					    drawLine(e); // 绘制方法
-				    }else{
-                        drwaType = 'circle';
-					    drawCircle(e); // 绘制方法	
-				    }
-               });
+                    ,btn2: function(index, layero){
+                        clearCanvas()
+                    },
+                    btnAlign: 'c'
+                });
+            }else{
+                var rx = (e.offsetX-x1);
+                var ry = (e.offsetY-y1);
+                var r = Math.round(Math.sqrt(rx*rx+ry*ry));
+                $('#diameter').text(r);
+                var area = Math.round(Math.PI * r/2 * r/2);
+                $('#area').text(area);
+                layer.open({
+                    type: 1,
+                    area: ['300px', '280px'],
+                    shadeClose: true, 
+                    content: $("#dbox-c"),
+                    btn:["确认导入","取消"],
+                    yes: function(index, layero){
+                        layer.closeAll();
+                        layer.msg("导入成功！")
+                        clearCanvas()
+                        var choseVal = $('#dbox-c input[name="2"]:checked ').val();
+                        if(choseVal == 'choseIn'){
+                            var innerArea = $('#innerArea').val();
+                            $('#hideInnerArea').val(innerArea);
+                            var innerDiameter = $('#innerDiameter').val();
+                            $('#hideInnerDiameter').val(innerDiameter);
+
+                            $('#innerArea').val(area);
+                            $('#innerDiameter').val(r);
+                        }
+                        if(choseVal == 'choseOut'){
+                            var outerArea = $('#outerArea').val();
+                            $('#hideOuterArea').val(outerArea);
+                            var outDiameter = $('#outDiameter').val();
+                            $('#hideOutDiameter').val(outDiameter);
+
+
+                            $('#outerArea').val(area);
+                            $('#outDiameter').val(r);
+                        }
+                    }
+                    ,btn2: function(index, layero){
+                        clearCanvas()
+                    },
+                    btnAlign: 'c'
+                });
+            }
+            }).mousemove(function(e){
+                if(self.hasClass('straight')){
+                    drwaType = 'straight';
+                    drawLine(e); // 绘制方法
+                }else{
+                    drwaType = 'circle';
+                    drawCircle(e); // 绘制方法	
+                }
+            });
                
-	   })
+       })
+
+       
 	   
 	   // 画圆
 	   function drawCircle(e){
@@ -423,7 +451,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				   ctx.clearRect(0,0,canvas.width,canvas.height);
 			   }
             function loadImage(){
-                alert(1);
                 var img = new Image();
                 img.src = url;
                 ctx.drawImage(img,0,0,canvas.width,canvas.height);
@@ -545,6 +572,29 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 
     });
 })
+
+function resetData(){
+    var hideOuterArea = $('#hideOuterArea').val();
+    if(hideOuterArea != ''){
+        $('#outerArea').val(hideOuterArea);
+    }
+    var hideOutDiameter = $('#hideOutDiameter').val();
+    if(hideOutDiameter != ''){
+        $('#outDiameter').val(hideOutDiameter);
+    }
+    var hideZonaThickness = $('#hideZonaThickness').val();
+    if(hideZonaThickness != ''){
+        $('#zonaThickness').val(hideZonaThickness);
+    }
+    var hideInnerDiameter = $('#hideInnerDiameter').val();
+    if(hideInnerDiameter != ''){
+        $('#innerDiameter').val(hideInnerDiameter);
+    }
+    var hideInnerArea = $('#hideInnerArea').val();
+    if(hideInnerArea != ''){
+        $('#innerArea').val(hideInnerArea);
+    }
+}
 
 function loadingZIndex(procedureId,dishId,wellId,timeSeries){
 
