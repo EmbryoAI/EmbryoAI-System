@@ -808,7 +808,8 @@ function check(index, data){
     return result;
 }
 
-function querySeriesList(wellId, seris){
+function querySeriesList(well_id, seris){
+    wellId = well_id;
     var procedureId = $("#procedureId").val();
     var dishId = $("#dishId").val();
     $.ajax({
