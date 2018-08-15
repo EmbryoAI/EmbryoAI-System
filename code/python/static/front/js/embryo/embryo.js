@@ -53,16 +53,16 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     var result = check(i, data);
                     if(result != ''){
                         if(i == data[0]){
-                            well = well + "<li class=\"active\"><span>well" + i + 
+                            well = well + "<li class=\"active\" id=\"li_" + i + "\" onclick=\"clickLi('" + i + "')\"><span>well" + i + 
                             "</span><img src=\"/api/v1/well/image?image_path=" + result +
                             "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie')\"><i></i></li>";
                         }else{
-                            well = well + "<li><span>well" + i + 
+                            well = well + "<li id=\"li_" + i + "\" onclick=\"clickLi('" + i + "')\"><span>well" + i + 
                             "</span><img src=\"/api/v1/well/image?image_path=" + result +
                             "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie')\"><i></i></li>";
                         }
                     }else{
-                        well = well + "<li><span>well" + i + 
+                        well = well + "<li id=\"li_" + i + "\"  onclick=\"clickLi('" + i + "')\"><span>well" + i + 
                         "</span><img src=\"/static/front/img/icon-wellnone.jpg\"><i></i></li>";
                     }
                 }
@@ -142,6 +142,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             $('#siteitem li').removeClass('active');
             $(this).addClass('active');
         });
+
+        
+
 		// // z轴点击样式
 		// $('.time-vertical li').click(function () {
 		// 	$('.time-vertical li').removeClass('active');
@@ -305,7 +308,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		var flag = false;
 		var x = 0; // 鼠标开始移动的位置X
 		var y = 0; // 鼠标开始移动的位置Y
-		var url = ''; // canvas图片的二进制格式转为dataURL格式
+        var url = ''; // canvas图片的二进制格式转为dataURL格式
+        
+        
 		
 		function canvasWidth(){
 			var embr = document.getElementById('embryo');
@@ -572,6 +577,11 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 
     });
 })
+
+function clickLi(id){
+    $('#siteitem li').removeClass('active');
+    $('#li_' + id).addClass('active');
+}
 
 function resetData(){
     var hideOuterArea = $('#hideOuterArea').val();
