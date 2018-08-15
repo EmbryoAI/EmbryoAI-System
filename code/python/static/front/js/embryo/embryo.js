@@ -335,6 +335,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             self.addClass("active"); 
             console.log(datali)
             if ( datali == 1) {
+                $('canvas').unbind();
                 $('canvas').mousedown(function(e){
                     flag = true;
                     x1,x = e.offsetX; // 鼠标落下时的X
@@ -372,6 +373,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 });
             }
             if ( datali == 2) {
+                $('canvas').unbind();
                 $('canvas').mousedown(function(e){
                     flag = true;
                     x1,x = e.offsetX; // 鼠标落下时的X
