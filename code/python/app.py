@@ -1,7 +1,7 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask
+from flask import Flask, g
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager,login_user, logout_user, login_required,current_user
 from yaml import load
@@ -26,14 +26,16 @@ def init_config(conf):
     # 数据库连接字符串
     app.config['SQLALCHEMY_DATABASE_URI'] = getdefault(conf, 'SQLALCHEMY_DATABASE_URI', 
         'mysql+pymysql://root:123456@localhost/embryoai_system?charset=utf8')
-    app.config['SQLALCHEMY_POOL_RECYCLE'] = getdefault(conf, 'SQLALCHEMY_POOL_RECYCLE', 300)
-    app.config['SQLALCHEMY_POOL_SIZE'] = getdefault(conf, 'SQLALCHEMY_POOL_SIZE', 300)
+    app.config['SQLALCHEMY_POOL_RECYCLE'] = getdefault(conf, 'SQLALCHEMY_POOL_RECYCLE', 3)
+    app.config['SQLALCHEMY_POOL_SIZE'] = getdefault(conf, 'SQLALCHEMY_POOL_SIZE', 10)
     app.config['SQLALCHEMY_POOL_TIMEOUT'] = getdefault(conf, 'SQLALCHEMY_POOL_TIMEOUT', 3)
+    app.config['SQLALCHEMY_MAX_OVERFLOW'] = getdefault(conf, 'SQLALCHEMY_MAX_OVERFLOW', 500)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SCHEDULER_API_ENABLED'] = getdefault(conf, 'SCHEDULER_API_ENABLED', True)
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(
         seconds = getdefault(conf, 'SEND_FILE_MAX_AGE_DEFAULT', 60))
     app.config['JOBS'] = getdefault(conf, 'JOBS')
+    app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = getdefault(conf, 'SQLALCHEMY_COMMIT_ON_TEARDOWN', True)
     # 返回的JSON数据保持原编码方式
     app.config['JSON_AS_ASCII'] = False
     app.config['SECRET_KEY'] = getdefault(conf, 'SECRET_KEY', '123456')
@@ -52,11 +54,18 @@ logger = app.logger
 conf['EMBRYOAI_IMAGE_ROOT'] = app_root + '..' + os.path.sep + 'captures' + os.path.sep
 
 @app.teardown_request
-def shutdown_session(response_or_exc):
+def shutdown_session(exc=None):
     if app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN']:
-        if response_or_exc is None:
+        if exc is None:
             db.session.commit()
+    elif exc:
+            db.session.rollback()
     db.session.remove()
+
+@app.after_request
+def shutdown_session(response):
+    db.session.remove()
+    return response
     
 
 @login_manager.user_loader
@@ -114,4 +123,4 @@ if __name__=='__main__':
     scheduler.init_app(app)
     scheduler.start()
     logger.info('服务器启动成功，侦听端口：%d' %port)
-    app.run(port=port, debug=debug, threaded=threaded, use_reloader=False, host="0.0.0.0") #启动app
+    app.run(port=port, debug=False, threaded=threaded, use_reloader=False, host="0.0.0.0") #启动app
