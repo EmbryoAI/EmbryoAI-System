@@ -10,14 +10,22 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		loadEmbryoResultTool("'embryo_fate_type'");
 
 		 $('#playBtn').click(function () {
+			var oVideo = document.getElementsByClassName('videoSource');
+			var i;
             if ($(this).hasClass('play')) {
                 $(this).removeClass('play');
                 $(this).addClass('stop');
-                $(this).children("span").text("暂停");
+				$(this).children("span").text("暂停");
+				for (i = 0; i < oVideo.length; i++) {
+					oVideo[i].play();
+				}
             } else {
                 $(this).removeClass('stop');
                 $(this).addClass('play');
-                $(this).children("span").text("播放");
+				$(this).children("span").text("播放");
+				for (i = 0; i < oVideo.length; i++) {
+					oVideo[i].pause();
+				}
             }
         })
 		// 胚胎评分表

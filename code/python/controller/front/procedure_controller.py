@@ -23,3 +23,9 @@ def detail(id):
 @login_required
 def return_visit(id):
     return render_template('front/procedure/return_visit.html', id=id)
+
+#去新建病理页面
+@procedure_controller.route('/add', methods=['GET'])
+@login_required
+def add():
+    return render_template('front/procedure/createCase.html')

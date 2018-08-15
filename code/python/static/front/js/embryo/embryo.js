@@ -275,7 +275,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             	$("#imgDiv").hide();
             	$("#zIndexDiv").hide();
             	$("#imgVideoDiv").show();
-                imgTime = setInterval(run, 5000);
+                imgTime = setInterval(run, 1000);
 
             } else {
             	$("#imgVideoDiv").hide();

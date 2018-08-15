@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+	#durationbar{
+		width: 500px;
+		height: 20px;
+	}
+	#durationbar progress{
+		width: 100%;
+		height: 100%;
+	}
+	</style>
+</head>
+<body>
+	<div>
+		<video id="videoSource" width="200px">
+			<source src="css/111.mp4" type="video/mp4">
+		</video>
+			<video id="videoSource" width="200px">
+			<source src="css/111.mp4" type="video/mp4">
+		</video>
+<!-- 		<div id="durationbar">
+			<progress id="positionBar" value="0" max="100"></progress>
+		</div> -->
+	</div>
+	<button id="start">播放</button>
+	<button id="pause">暂停</button>
+	<script type="text/javascript">
+		window.onload=function(){
+			var oStart = document.getElementById('start');
+			var oPause = document.getElementById('pause');
+			// var oEnd = document.getElementById('end');
+			// var oSpeed = document.getElementById('speed');
+			var oVideo = document.getElementsByTagName('video');
+			console.log(oVideo)
+			// 开始函数
+			oStart.onclick=function(){
+				oVideo.play();
+			}
+			// 暂停函数
+			oPause.onclick=function(){
+				oVideo.pause();
+			}
+			// 停止函数
+// 			oEnd.onclick=function(){
+// 				oVideo.pause();
+// 				oVideo.currentTime=0;
+// 			}
+			// 加速函数
+// 			oSpeed.onclick=function(){
+// 				oVideo.play();oVideo.playbackRate = 4;//注意这里速度大于4的时候，就没有声音了，声音得不到同步
+// 			}
+			// 这个事件是在视频播放中一直执行的事件
+// 			oVideo.ontimeupdate=function(){
+// 				var oPositionBar = document.getElementById('positionBar');
+// 				oPositionBar.value= (oVideo.currentTime/oVideo.duration*100);
+// 			}
+		}
+	</script>
+</body>
+</html>
