@@ -390,9 +390,11 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     y = e.offsetY; // 鼠标起下时的Y
                     var rx = (e.offsetX-x1);
                     var ry = (e.offsetY-y1);
-                    var r = Math.round(Math.sqrt(rx*rx+ry*ry));
+                    var r = Math.sqrt(rx*rx+ry*ry);
+                    r = Math.round(r*(960/612)/3.75);
                     $('#diameter').text(r);
-                    var area = Math.round(Math.PI * r/2 * r/2);
+                    var area = Math.PI * r/2 * r/2;
+                    area = Math.round(area*(960 / 612) ** 2 / (3.75**2));
                     $('#area').text(area);
                     layer.open({
                         type: 1,
@@ -993,12 +995,12 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 		type : "get",
 		url : "/api/v1/milestone/"+$("#embryoId").val(),
 		datatype : "json",
-		data:{"timeSeries":timeSeries},
+		data:{"timeSeries":timeSeries,"procedureId":procedureId,"dishId":dishId,"wellId":wellId},
 		cache:false,
 		success : function(data) {
 				if(data!=null) {//如果当前里程碑不为空则回显
 					var milestone = data.milestone;
-					var milestoneData = data.milestoneData;
+                    var milestoneData = data.milestoneData;
 					$("#milestoneCheckbox").prop('checked', true);
 	                $('#milestone').animate({
 	                    height: '90px'
