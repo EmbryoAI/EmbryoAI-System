@@ -25,3 +25,6 @@ EMBRYO_FOCUS_DIRNAME: "focus"
 ACTIVE_TIMEOUT: 3600
 CASCADE_TEMPLATE: "embryo_cascade.xml"
 NO_EMBRYO_IMAGE_URL: "cv/embryo_not_found.jpg"
+
+KERAS_MODEL_NAME: "embryo_model.h5"
+EMBRYO_PREDICT_SIZE: 200

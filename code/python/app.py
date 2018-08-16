@@ -10,7 +10,7 @@ from common import getdefault
 from logging import Formatter, DEBUG
 import logging
 import os
-
+from keras.models import load_model
 from flask_apscheduler import APScheduler
 
 app_root = os.path.dirname(__file__) + os.path.sep
@@ -113,6 +113,11 @@ def add_all_controller():
             logger.info('控制器 %s 蓝图注册成功，绑定地址前缀 %s' %(
                 controller_variable.name, prefix_variable))
 
+
+model_file = getdefault(conf, 'KERAS_MODEL_NAME', 'embryo_model.h5')
+model = load_model(app_root + 'cv' + os.path.sep + model_file)
+model._make_predict_function()
+
 if __name__=='__main__':
     init_logger(getdefault(conf, 'LOGGER_FILE', 'embryoai.log'))
     port = getdefault(conf, 'PORT', 5001) # app启动侦听的端口号
@@ -123,4 +128,4 @@ if __name__=='__main__':
     scheduler.init_app(app)
     scheduler.start()
     logger.info('服务器启动成功，侦听端口：%d' %port)
-    app.run(port=port, debug=False, threaded=threaded, use_reloader=False, host="0.0.0.0") #启动app
+    app.run(port=port, debug=debug, threaded=threaded, use_reloader=False, host="0.0.0.0") #启动app
