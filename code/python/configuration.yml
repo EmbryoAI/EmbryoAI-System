@@ -21,6 +21,7 @@ EMBRYOAI_IMAGE_ROOT: "/Users/wangying/git/repos/EmbryoAI-System/models/demo0"
 FINISHED_JSON_FILENAME: "finished_cycles.json"
 CYCLE_PROCESS_FILENAME: "process_state.json"
 DISH_STATE_FILENAME: "dish_state.json"
+FINISHED_CYCLES: "finished_cycles.json"
 EMBRYO_FOCUS_DIRNAME: "focus"
 ACTIVE_TIMEOUT: 3600
 CASCADE_TEMPLATE: "embryo_cascade.xml"

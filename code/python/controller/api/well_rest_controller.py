@@ -49,3 +49,15 @@ def getWellVideo():
     parser.add_argument('dish_id', type=str)
     parser.add_argument('well_id', type=str)
     return well_service.getWellVideo(parser.parse_args())
+
+#查询培养箱
+@well_rest_controller.route('/incubator', methods=['GET'])
+def queryIncubator():
+    return well_service.queryIncubator()
+
+#查询培养皿
+@well_rest_controller.route('/dish', methods=['GET'])
+def queryDish():
+    parser = reqparse.RequestParser()
+    parser.add_argument('incubatorName', type=str)
+    return well_service.queryDish(parser.parse_args())
