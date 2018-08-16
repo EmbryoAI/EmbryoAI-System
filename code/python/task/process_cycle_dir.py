@@ -50,9 +50,10 @@ def process_cycle(path):
             with open(dish_path+conf['DISH_STATE_FILENAME']) as fn:
                 jstr = json.load(fn)
                 dish_conf = DishConfig(jstr)
-        except:            
+        except:        
+            incubator_name = dish_ini['IncubatorInfo']['IncubatorName']
             dish_conf = DishConfig()
-            dish_conf.dishSetup(dish_index, dish_ini[f'Dish{dish_index}Info'], well_count)
+            dish_conf.dishSetup(dish_index, dish_ini[f'Dish{dish_index}Info'], well_count, incubator_name)
         checkpoint = process_dish(path, dish_conf) # 每个皿的目录为DISH+皿编号
         dish_conf.finished = checkpoint
         with open(dish_path+conf['DISH_STATE_FILENAME'], 'w') as fn:

@@ -40,9 +40,10 @@ class DishConfig():
             for w in d['wells']:
                 self.wells[w] = WellConfig(d['wells'][w])
 
-    def dishSetup(self, index, config, well_count):
+    def dishSetup(self, index, config, well_count, incubator_name):
         self.index = index # 皿序号 1-9
         self.avail = int(config['Avail']) # 是否有效标志 0 - 无效 1 - 有效
+        self.incubatorName = incubator_name
         self.patientName = config['PatientName'] # 在采集软件中登记的病人姓名，无法登记中文，因为编码为日文Shift_JIS
         self.pid = config['PID1'] # 在采集软件中登记的病人ID
         self.comment = config['Comment'] # 在采集软件中登记的备注

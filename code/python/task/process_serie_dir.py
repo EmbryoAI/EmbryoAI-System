@@ -8,6 +8,8 @@ from cv.embryo_detector import find_embryo
 from app import app
 from task.dish_config import SerieInfo
 from cv.embryo_common import outer_edge, cell_edge
+from skimage.transform import resize
+from common import getdefault
 
 logger = app.logger # 日志
 
@@ -21,6 +23,10 @@ logger = app.logger # 日志
 - 更新最后处理时间序列的里程碑标志（未完成）
 '''
 
+stage_labels = ['未分裂', '1PN', '8C', '>=8C', '囊胚', '扩张囊胚', 
+                '2PN', '3PN', '2C', '3C', '4C',
+                '5C', '6C', '7C']
+
 def process_serie(path, serie, dish_info):
     '''
     时间序列目录处理方法
@@ -29,7 +35,7 @@ def process_serie(path, serie, dish_info):
         @dish_info: 皿配置信息 DishConfig对象
         @returns serie: 处理完的时间序列字符串
     '''
-    from app import conf
+    from app import conf, model
     serie_path = path + serie + os.path.sep # 时间序列目录完整路径
     wells = dish_info.wells # 皿中所有的孔信息
     for c in wells:
@@ -50,6 +56,17 @@ def process_serie(path, serie, dish_info):
             # 定位胚胎位置
             left, top, right, bottom = find_embryo(img)
             img_focus = img[top:bottom, left:right]
+            img_size = getdefault(conf, 'EMBRYO_PREDICT_SIZE', 200)
+
+            # 下面使用keras的预训练模型，对胚胎图像阶段进行预测
+            img_predict = resize(img_focus, (img_size, img_size))
+            img_predict = img_predict[np.newaxis, ..., np.newaxis]
+            prediction = model.predict_classes(img_predict)
+            print(prediction, stage_labels[prediction[0]])
+            # img_class = prediction[0].argmax()
+            serie_info.stage = stage_labels[prediction[0]]
+            # print(prediction, stage_labels[prediction])
+
             focus_path = path + conf['EMBRYO_FOCUS_DIRNAME'] + os.path.sep
             if not os.path.exists(focus_path):
                 os.makedirs(focus_path)

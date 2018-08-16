@@ -76,6 +76,17 @@
 .lg-img img{
 	width: 100%;
 }
+
+.lg-video-img{
+	width: 100%;
+	padding: 2px;
+	border: 2px solid #e0e2e6;
+	min-height: 600px;
+}
+.lg-video-img img{
+	width: 100%;
+}
+
 .tool{
 	margin-top: 10px;
 	background-color: #eef1f8;
