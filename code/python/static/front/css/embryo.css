@@ -76,6 +76,17 @@
 .lg-img img{
 	width: 100%;
 }
+
+.lg-video-img{
+	width: 100%;
+	padding: 2px;
+	border: 2px solid #e0e2e6;
+	min-height: 600px;
+}
+.lg-video-img img{
+	width: 100%;
+}
+
 .tool{
 	margin-top: 10px;
 	background-color: #eef1f8;
@@ -443,6 +454,8 @@
 }
 .tool-metrical li{
 	width: 86px;
+		-webkit-filter: grayscale(80%);
+	filter: grayscale(80%);
 }
 .tool-metrical li.straight i{
 	background: url(../img/tool-measure1.png) no-repeat center;
@@ -455,6 +468,10 @@
 }
 .tool-metrical li.roundness3 i{
 	background: url(../img/tool-measure4.png) no-repeat center;
+}
+.tool-metrical li.active{
+	transform:scale(1.2);
+	filter: none;
 }
 .tool-btn{
 	float: left;

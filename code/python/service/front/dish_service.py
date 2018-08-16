@@ -38,7 +38,6 @@ def querySeriesList(agrs):
 
         well_json = dishJson['wells'][well_id]
         last_seris = well_json['lastEmbryoSerie']
-        print(last_seris)
 
         if seris != 'lastEmbryoSerie':
             last_seris = seris
@@ -47,6 +46,15 @@ def querySeriesList(agrs):
         ts = TimeSeries()
         last_index = len(ts.range(last_seris)) + 5
         begin_index = len(ts.range(last_seris)) - 4
+
+        if begin_index < 0:
+            begin_index = 0
+            last_index = 9
+
+        if last_index - len(ts.range(dishJson['lastSerie'])) > 0:
+            last_index = len(ts.range(dishJson['lastSerie']))
+            begin_index = last_index - 9
+
         list=[]
         for i in ts[begin_index:last_index]:
             list.append(i)
@@ -88,17 +96,30 @@ def queryScrollbarSeriesList(agrs):
         well_json = dishJson['wells'][well_id]
 
         ts = TimeSeries()
-        last_index = len(ts.range(current_seris)) + 5
-        begin_index = len(ts.range(current_seris)) - 4
+
+        last_serie = dishJson['lastSerie']
 
         if direction == 'left':
-            current_seris = ts[len(ts.range(current_seris)) - 9]
-            last_index = last_index - 9
-            begin_index = begin_index - 9
+            if len(ts.range(current_seris)) < 9:
+                begin_index = 0
+                last_index = 9
+                current_seris = ts[4]
+            else:
+                print(len(ts.range(current_seris)))
+                current_seris = ts[len(ts.range(current_seris)) - 9]
+                begin_index = len(ts.range(current_seris)) - 4
+                last_index = begin_index + 9
+
         if direction == 'right':
+            
             current_seris = ts[len(ts.range(current_seris)) + 9]
-            last_index = last_index + 9
-            begin_index = begin_index + 9
+            begin_index = len(ts.range(current_seris)) - 4
+            last_index = begin_index + 9
+
+            if last_index >= len(ts.range(last_serie)):
+                last_index = len(ts.range(last_serie))
+                begin_index = last_index - 9
+                current_seris = ts[len(ts.range(last_serie)) - 4]
 
         list=[]
         for i in ts[begin_index:last_index]:

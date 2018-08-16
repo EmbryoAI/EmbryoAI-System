@@ -15,6 +15,7 @@ var seris = "";
 var drwaType = "";
 var clearImageUrlList="";
 var current_seris_image_path = "";
+var imgVideoZt = "";
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     form = layui.form;
     var $ = layui.jquery;
@@ -39,6 +40,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     	//获取孔
         procedureId = $("#procedureId").val();
         dishId = $("#dishId").val();
+    
         $.ajax({
             cache : false,
             type : "GET",
@@ -53,22 +55,25 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     var result = check(i, data);
                     if(result != ''){
                         if(i == data[0]){
-                            well = well + "<li class=\"active\"><span>well" + i + 
+                            well = well + "<li class=\"active\" id=\"li_" + i + "\" onclick=\"clickLi('" + i + "')\"><span>well" + i + 
                             "</span><img src=\"/api/v1/well/image?image_path=" + result +
-                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie')\"><i></i></li>";
+                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie',0)\"><i></i></li>";
                         }else{
-                            well = well + "<li><span>well" + i + 
+                            well = well + "<li id=\"li_" + i + "\" onclick=\"clickLi('" + i + "')\"><span>well" + i + 
                             "</span><img src=\"/api/v1/well/image?image_path=" + result +
-                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie')\"><i></i></li>";
+                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie',0)\"><i></i></li>";
                         }
                     }else{
-                        well = well + "<li><span>well" + i + 
+                        well = well + "<li id=\"li_" + i + "\"  onclick=\"clickLi('" + i + "')\"><span>well" + i + 
                         "</span><img src=\"/static/front/img/icon-wellnone.jpg\"><i></i></li>";
                     }
                 }
                 $("#siteitem").html(well);
                 wellId = data[0];
-                querySeriesList(wellId,'lastEmbryoSerie');//获取每个孔下面的时间序列
+                querySeriesList(wellId,'lastEmbryoSerie',0);//获取每个孔下面的时间序列
+                if(clearImageUrlList=="") {
+                	queryClearImageUrl();//初始化所有图片
+                }
             }
         });
 
@@ -142,6 +147,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             $('#siteitem li').removeClass('active');
             $(this).addClass('active');
         });
+
+        
+
 		// // z轴点击样式
 		// $('.time-vertical li').click(function () {
 		// 	$('.time-vertical li').removeClass('active');
@@ -162,7 +170,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     data : {"path":path,"imageName":imageName,"timeSeries":currentSeris,"wellId":wellId},
                     async : false,
                     error : function(request) {
-                        alert(request.responseText);
+                    	layer.alert(request.responseText);
                     },
                     success : function(data) {
                         console.info(data);
@@ -172,6 +180,20 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                             layer.msg('已标注为最清晰的图片');
                             var url = $("#"+currentSeris).prop("src") + "&random=" + Math.random() ;
                             $("#"+currentSeris).prop("src",url);
+                            if(imgVideoZt=="") {//如果没有播放过则更新全部图片
+                            	queryClearImageUrl();
+                            }else {//如果播放过则替换当前位置的图片
+                            	//把当前设置为最清晰图的URL替换到 图片播放的DIV层中  首先拼接当前设置为最清晰图的URL
+                            	var qximgUrl = path+currentSeris+"\\"+imageName;//拼接当前设置为最清晰图的URL
+                            	//替换div中的img为 当前设置为最清晰图
+                            	$("#imageVideo"+currentSeris).prop("src","/api/v1/well/image?image_path="+qximgUrl);
+                            	//替换播放图片集合的值为 当前设置为最清晰图
+                            	for (var int = 0; int < clearImageUrlList.length; int++) {
+                            		if(currentSeris==clearImageUrlList[int].timeSeries) {//替换时间序列相等的图片URL
+                            			clearImageUrlList[int].clearImageUrl = qximgUrl;
+                            		}
+								}
+                            }
                         } else {
                             layer.msg('标注为最清晰的图片失败');
                         }
@@ -230,35 +252,47 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
         })
 
         // 滚动效果
-        var textTime;
+       
         var imgTime;
         // 点击播放暂停
         $('#playBtn').click(function () {
             if ($(this).hasClass('play')) {
+            
                 $(this).removeClass('play');
                 $(this).addClass('stop');
                 console.log("播放");
-                function showText() {
-                    n = n + 1;
-                }
-                textTime = setInterval(showText, 2500);
-
+                $(".lg-video-img img:eq(" + n + ")").show();
                 function run() {
-                    if (n < $(".lg-img img").length) {
+                    if (n < $(".lg-video-img img").length) {
                         n = n;
                     } else {
-                        n = 0
+                        n = 0;
                     }
-                    $(".lg-img img").hide();
-                    $(".lg-img img:eq(" + n + ")").show();
+                    n++;
+                    $(".lg-video-img img").hide();
+                    $(".lg-video-img img:eq(" + n + ")").show();
                 }
-                imgTime = setInterval(run, 2500);
+            	$("#imgDiv").hide();
+            	$("#zIndexDiv").hide();
+            	$("#imgVideoDiv").show();
+                imgTime = setInterval(run, 1000);
 
             } else {
+            	$("#imgVideoDiv").hide();
+            	$("#imgDiv").show();
+            	$("#zIndexDiv").show();
                 $(this).removeClass('stop');
                 $(this).addClass('play');
                 console.log("暂停");
-                clearInterval(textTime);
+                //截取出图片src中的时间序列
+                var imgsrc = $(".lg-video-img img:eq(" + n + ")").attr("src");
+			    var image = "<img src='"+imgsrc+"' />";
+                $("#imgDiv").html(image);
+                var timeSeries = imgsrc.substring(imgsrc.length-17,imgsrc.length-10);
+                getBigImage(procedureId, dishId, wellId, timeSeries,1);//定位到对应的时间序列
+                //记录一下当前暂停图片的URL
+                imgVideoZt = $(".lg-video-img img:eq(" + n + ")").attr("id");
+                
                 clearInterval(imgTime);
             }
         })
@@ -305,7 +339,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		var flag = false;
 		var x = 0; // 鼠标开始移动的位置X
 		var y = 0; // 鼠标开始移动的位置Y
-		var url = ''; // canvas图片的二进制格式转为dataURL格式
+        var url = ''; // canvas图片的二进制格式转为dataURL格式
+        
+        
 		
 		function canvasWidth(){
 			var embr = document.getElementById('embryo');
@@ -323,95 +359,196 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             var self= $(this)
             var x1 = 0;
             var y1 = 0;
-            $('canvas').mousedown(function(e){
-                flag = true;
-                x1,x = e.offsetX; // 鼠标落下时的X
-                y1,y = e.offsetY; // 鼠标落下时的Y
-                console.log(x,y)
-            }).mouseup(function(e){
-                flag = false;
-                url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
-                x = e.offsetX; // 鼠标起时的X
-                y = e.offsetY; // 鼠标起下时的Y
-
-                console.log(x,y)
-                if(drwaType == 'straight'){
-                    var length = Math.round(Math.sqrt(Math.abs((x1 - x)* (x1 - x)+(y1 - y)* (y1 - y))));
-                    $('#length').text(length);
-
-                    layer.open({
-                    type: 1,
-                    area: ['300px', '280px'],
-                    shadeClose: true, 
-                    content: $("#dbox-l"),
-                    btn:["确认导入","取消"],
-                    yes: function(index, layero){
-                        layer.closeAll();
-                        layer.msg("导入成功！")
-                        clearCanvas()
-
-                        var zonaThickness = $('#zonaThickness').val();
-                        $('#hideZonaThickness').val(zonaThickness);
-                        $('#zonaThickness').val(length);
-                    }
-                    ,btn2: function(index, layero){
-                        clearCanvas()
-                    },
-                    btnAlign: 'c'
-                });
-            }else{
-                var rx = (e.offsetX-x1);
-                var ry = (e.offsetY-y1);
-                var r = Math.round(Math.sqrt(rx*rx+ry*ry));
-                $('#diameter').text(r);
-                var area = Math.round(Math.PI * r/2 * r/2);
-                $('#area').text(area);
-                layer.open({
-                    type: 1,
-                    area: ['300px', '280px'],
-                    shadeClose: true, 
-                    content: $("#dbox-c"),
-                    btn:["确认导入","取消"],
-                    yes: function(index, layero){
-                        layer.closeAll();
-                        layer.msg("导入成功！")
-                        clearCanvas()
-                        var choseVal = $('#dbox-c input[name="2"]:checked ').val();
-                        if(choseVal == 'choseIn'){
-                            var innerArea = $('#innerArea').val();
-                            $('#hideInnerArea').val(innerArea);
-                            var innerDiameter = $('#innerDiameter').val();
-                            $('#hideInnerDiameter').val(innerDiameter);
-
-                            $('#innerArea').val(area);
-                            $('#innerDiameter').val(r);
+            var datali = $(this).attr('data-li');
+			$(".tool-metrical li").removeClass("active");
+            self.addClass("active"); 
+            console.log(datali)
+            if ( datali == 1) {
+                $('canvas').unbind();
+                $('canvas').mousedown(function(e){
+                    flag = true;
+                    x1,x = e.offsetX; // 鼠标落下时的X
+                    y1,y = e.offsetY; // 鼠标落下时的Y
+                }).mouseup(function(e){
+                    flag = false;
+                    url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
+                    x = e.offsetX; // 鼠标起时的X
+                    y = e.offsetY; // 鼠标起下时的Y
+                        var length = Math.round(Math.sqrt(Math.abs((x1 - x)* (x1 - x)+(y1 - y)* (y1 - y))));
+                        $('#length').text(length);
+    
+                        layer.open({
+                        type: 1,
+                        area: ['300px', '280px'],
+                        shadeClose: true, 
+                        content: $("#dbox-l"),
+                        btn:["确认导入","取消"],
+                        yes: function(index, layero){
+                            layer.closeAll();
+                            layer.msg("导入成功！")
+                            clearCanvas()
+    
+                            var zonaThickness = $('#zonaThickness').val();
+                            $('#hideZonaThickness').val(zonaThickness);
+                            $('#zonaThickness').val(length);
                         }
-                        if(choseVal == 'choseOut'){
-                            var outerArea = $('#outerArea').val();
-                            $('#hideOuterArea').val(outerArea);
-                            var outDiameter = $('#outDiameter').val();
-                            $('#hideOutDiameter').val(outDiameter);
-
-
-                            $('#outerArea').val(area);
-                            $('#outDiameter').val(r);
-                        }
-                    }
-                    ,btn2: function(index, layero){
-                        clearCanvas()
-                    },
-                    btnAlign: 'c'
+                        ,btn2: function(index, layero){
+                            clearCanvas()
+                        },
+                        btnAlign: 'c'
+                    });
+                }).mousemove(function(e){
+                        drawLine(e); // 直线绘制方法
                 });
             }
-            }).mousemove(function(e){
-                if(self.hasClass('straight')){
-                    drwaType = 'straight';
-                    drawLine(e); // 绘制方法
-                }else{
-                    drwaType = 'circle';
-                    drawCircle(e); // 绘制方法	
-                }
-            });
+            if ( datali == 2) {
+                $('canvas').unbind();
+                $('canvas').mousedown(function(e){
+                    flag = true;
+                    x1,x = e.offsetX; // 鼠标落下时的X
+                    y1,y = e.offsetY; // 鼠标落下时的Y
+                }).mouseup(function(e){
+                    flag = false;
+                    url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
+                    x = e.offsetX; // 鼠标起时的X
+                    y = e.offsetY; // 鼠标起下时的Y
+                    var rx = (e.offsetX-x1);
+                    var ry = (e.offsetY-y1);
+                    var r = Math.sqrt(rx*rx+ry*ry);
+                    r = Math.round(r*(960/612)/3.75);
+                    $('#diameter').text(r);
+                    var area = Math.PI * r/2 * r/2;
+                    area = Math.round(area*(960 / 612) ** 2 / (3.75**2));
+                    $('#area').text(area);
+                    layer.open({
+                        type: 1,
+                        area: ['300px', '280px'],
+                        shadeClose: true, 
+                        content: $("#dbox-c"),
+                        btn:["确认导入","取消"],
+                        yes: function(index, layero){
+                            layer.closeAll();
+                            layer.msg("导入成功！")
+                            clearCanvas()
+                            var choseVal = $('#dbox-c input[name="2"]:checked ').val();
+                            if(choseVal == 'choseIn'){
+                                var innerArea = $('#innerArea').val();
+                                $('#hideInnerArea').val(innerArea);
+                                var innerDiameter = $('#innerDiameter').val();
+                                $('#hideInnerDiameter').val(innerDiameter);
+    
+                                $('#innerArea').val(area);
+                                $('#innerDiameter').val(r);
+                            }
+                            if(choseVal == 'choseOut'){
+                                var outerArea = $('#outerArea').val();
+                                $('#hideOuterArea').val(outerArea);
+                                var outDiameter = $('#outDiameter').val();
+                                $('#hideOutDiameter').val(outDiameter);
+    
+    
+                                $('#outerArea').val(area);
+                                $('#outDiameter').val(r);
+                            }
+                        }
+                        ,btn2: function(index, layero){
+                            clearCanvas()
+                        },
+                        btnAlign: 'c'
+                    });
+                }).mousemove(function(e){
+                        drawCircle(e); // 圆形绘制方法	
+                });
+            }
+            // $('canvas').mousedown(function(e){
+            //     flag = true;
+            //     x1,x = e.offsetX; // 鼠标落下时的X
+            //     y1,y = e.offsetY; // 鼠标落下时的Y
+            //     console.log(x,y)
+            // }).mouseup(function(e){
+            //     flag = false;
+            //     url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
+            //     x = e.offsetX; // 鼠标起时的X
+            //     y = e.offsetY; // 鼠标起下时的Y
+
+            //     console.log(x,y)
+            //     if(drwaType == 'straight'){
+            //         var length = Math.round(Math.sqrt(Math.abs((x1 - x)* (x1 - x)+(y1 - y)* (y1 - y))));
+            //         $('#length').text(length);
+
+            //         layer.open({
+            //         type: 1,
+            //         area: ['300px', '280px'],
+            //         shadeClose: true, 
+            //         content: $("#dbox-l"),
+            //         btn:["确认导入","取消"],
+            //         yes: function(index, layero){
+            //             layer.closeAll();
+            //             layer.msg("导入成功！")
+            //             clearCanvas()
+
+            //             var zonaThickness = $('#zonaThickness').val();
+            //             $('#hideZonaThickness').val(zonaThickness);
+            //             $('#zonaThickness').val(length);
+            //         }
+            //         ,btn2: function(index, layero){
+            //             clearCanvas()
+            //         },
+            //         btnAlign: 'c'
+            //     });
+            // }else{
+            //     var rx = (e.offsetX-x1);
+            //     var ry = (e.offsetY-y1);
+            //     var r = Math.round(Math.sqrt(rx*rx+ry*ry));
+            //     $('#diameter').text(r);
+            //     var area = Math.round(Math.PI * r/2 * r/2);
+            //     $('#area').text(area);
+            //     layer.open({
+            //         type: 1,
+            //         area: ['300px', '280px'],
+            //         shadeClose: true, 
+            //         content: $("#dbox-c"),
+            //         btn:["确认导入","取消"],
+            //         yes: function(index, layero){
+            //             layer.closeAll();
+            //             layer.msg("导入成功！")
+            //             clearCanvas()
+            //             var choseVal = $('#dbox-c input[name="2"]:checked ').val();
+            //             if(choseVal == 'choseIn'){
+            //                 var innerArea = $('#innerArea').val();
+            //                 $('#hideInnerArea').val(innerArea);
+            //                 var innerDiameter = $('#innerDiameter').val();
+            //                 $('#hideInnerDiameter').val(innerDiameter);
+
+            //                 $('#innerArea').val(area);
+            //                 $('#innerDiameter').val(r);
+            //             }
+            //             if(choseVal == 'choseOut'){
+            //                 var outerArea = $('#outerArea').val();
+            //                 $('#hideOuterArea').val(outerArea);
+            //                 var outDiameter = $('#outDiameter').val();
+            //                 $('#hideOutDiameter').val(outDiameter);
+
+
+            //                 $('#outerArea').val(area);
+            //                 $('#outDiameter').val(r);
+            //             }
+            //         }
+            //         ,btn2: function(index, layero){
+            //             clearCanvas()
+            //         },
+            //         btnAlign: 'c'
+            //     });
+            // }
+            // }).mousemove(function(e){
+            //     if(self.hasClass('straight')){
+            //         drwaType = 'straight';
+            //         drawLine(e); // 绘制方法
+            //     }else{
+            //         drwaType = 'circle';
+            //         drawCircle(e); // 绘制方法	
+            //     }
+            // });
                
        })
 
@@ -573,6 +710,11 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     });
 })
 
+function clickLi(id){
+    $('#siteitem li').removeClass('active');
+    $('#li_' + id).addClass('active');
+}
+
 function resetData(){
     var hideOuterArea = $('#hideOuterArea').val();
     if(hideOuterArea != ''){
@@ -605,7 +747,7 @@ function loadingZIndex(procedureId,dishId,wellId,timeSeries){
         url : "/api/v1/image/findAllZIndex",
         data : {"procedureId":procedureId,"dishId":dishId,"wellId":wellId,"timeSeries":timeSeries},
         error : function(request) {
-            alert(request.responseText);
+        	layer.alert(request.responseText);
         },
         success : function(data) {
             var zLi = "";
@@ -690,7 +832,7 @@ function check(index, data){
     return result;
 }
 
-function querySeriesList(wellId, seris){
+function querySeriesList(wellId, seris,type){
     var procedureId = $("#procedureId").val();
     var dishId = $("#dishId").val();
     $.ajax({
@@ -715,19 +857,28 @@ function querySeriesList(wellId, seris){
                 seris = seris + active + "<span><img id='" + data[i] + "' src=\"" + 
                                     imagePath +"\" onclick=\"getBigImage('" 
                                     + procedureId + "','" + dishId + 
-                                    "','" + wellId + "','" + data[i] + "')\"><b>" + 
+                                    "','" + wellId + "','" + data[i] + "',0)\"><b>" + 
                                     data[i+2] + "</b></div>";
             }
             $("#myscrollboxul").html(seris);
             currentSeris = data[data.length-1];
-            loadingImage(procedureId,dishId,wellId,currentSeris,'');
+            if(type==0) {
+            	loadingImage(procedureId,dishId,wellId,currentSeris,'');
+            }
             loadingZIndex(procedureId,dishId,wellId,currentSeris);
         }
     });
 }
-
-function getBigImage(procedureId, dishId, wellId, seris){
-    querySeriesList(wellId, seris);
+/**
+ * 整体页面初始化
+ * @param procedureId
+ * @param dishId
+ * @param wellId
+ * @param seris
+ * @param type 0默认方式 1播放暂停
+ */
+function getBigImage(procedureId, dishId, wellId, seris,type){
+    querySeriesList(wellId, seris,type);
 //    loadingImage(procedureId,dishId,wellId,seris,'');
 //    loadingZIndex(procedureId,dishId,wellId,seris);
 }
@@ -747,7 +898,7 @@ function preFrame(){
             parent.layer.alert(request.responseText);
         },
         success : function(data) {
-            getBigImage(procedureId, dishId, wellId, data);
+            getBigImage(procedureId, dishId, wellId, data,0);
         }
     });
 }
@@ -765,7 +916,7 @@ function nextFrame(){
             if(data == null){
                 parent.layer.alert("已经是最后一张了!");
             }else{
-                getBigImage(procedureId, dishId, wellId, data);
+                getBigImage(procedureId, dishId, wellId, data,0);
             }
         }
     });
@@ -820,7 +971,7 @@ function arrow(direction){
                 seris = seris + active + "<span><img id='" + data[i] + "' src=\"" + 
                                     imagePath +"\" onclick=\"getBigImage('" 
                                     + procedureId + "','" + dishId + 
-                                    "','" + wellId + "','" + data[i] + "')\"><b>" + 
+                                    "','" + wellId + "','" + data[i] + "',0)\"><b>" + 
                                     data[i+2] + "</b></div>";
             }
             $("#myscrollboxul").html(seris);
@@ -877,12 +1028,12 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 		type : "get",
 		url : "/api/v1/milestone/"+$("#embryoId").val(),
 		datatype : "json",
-		data:{"timeSeries":timeSeries},
+		data:{"timeSeries":timeSeries,"procedureId":procedureId,"dishId":dishId,"wellId":wellId},
 		cache:false,
 		success : function(data) {
 				if(data!=null) {//如果当前里程碑不为空则回显
 					var milestone = data.milestone;
-					var milestoneData = data.milestoneData;
+                    var milestoneData = data.milestoneData;
 					$("#milestoneCheckbox").prop('checked', true);
 	                $('#milestone').animate({
 	                    height: '90px'
@@ -941,7 +1092,7 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 		}
 	});
 		
-	queryClearImageUrl();
+	
 }
 
 function showHide(value) {
@@ -1011,6 +1162,8 @@ function showHide(value) {
 
 //根据周期id、皿ID、孔ID、获取孔的时间序列对应最清晰的URL
 function queryClearImageUrl() {
+	//首先清空一次播放环境
+	$("#imgVideoDiv").html("");
 	$.ajax({
 		type : "get",
 		url : "/api/v1/image/pay/queryClearImageUrl",
@@ -1020,10 +1173,10 @@ function queryClearImageUrl() {
 		success : function(data) {
 			 if(data!=null) {
 				 clearImageUrlList = data;
-//		    	 for(var i=0;i<clearImageUrlList.length;i++) {
-//					 var image = "<img style='display:none' src='/api/v1/well/image?image_path="+clearImageUrlList[i]+"' />";
-//					 $("#imgDiv").append(image);
-//				 }
+		    	 for(var i=0;i<clearImageUrlList.length;i++) {
+					 var image = "<img style='display:none'   id='imageVideo"+clearImageUrlList[i].timeSeries+"' src='/api/v1/well/image?image_path="+clearImageUrlList[i].clearImageUrl+"' />";
+					 $("#imgVideoDiv").append(image);
+				 }
 			 }
 		},
 		error : function(request) {
@@ -1041,7 +1194,7 @@ function node(upOrdown) {
 		cache:false,
 		success : function(data) {
 			 if(data!=null) {
-				 getBigImage(procedureId, dishId, wellId, data.milestoneTime);
+				 getBigImage(procedureId, dishId, wellId, data.milestoneTime,0);
 			 }else {
 				 if("up"==upOrdown) {
 					 layer.alert("当前已经是第一个里程碑了!");

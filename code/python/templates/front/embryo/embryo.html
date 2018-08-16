@@ -78,6 +78,11 @@ body {
 				<img src="/static/front/img/20180713153221.png"> -->
 				<!-- <img src="/api/v1/image/findImage?procedureId=1&dishId=1&wellId=1&timeSeries=0000000"> -->
 			</div>
+			
+			<div class="lg-video-img" id="imgVideoDiv" style="display: none;">
+			 
+			</div>
+			
 			<!--胚胎信息-->
 			<ul class="eminfo">
 				<li><span>甄美丽</span><span>23岁</span></li>
@@ -129,8 +134,8 @@ body {
 				<ul class="tool-play tool-end" id="embryo_fate_typeIdDiv">
 				</ul>
 				<ul class="tool-play tool-metrical">
-					<li class="straight"><i></i><span>直线测量</span></li>
-					<li class="roundness"><i></i><span>圆形测量</span></li>
+					<li class="straight" data-li='1'><i></i><span>直线测量</span></li>
+					<li class="roundness" data-li='2'><i></i><span>圆形测量</span></li>
 					<!-- <li class="roundness2"><i></i><span>外周测量</span></li> -->
 					<!-- <li class="roundness3"><i></i><span>囊腔面积</span></li> -->
 				</ul>
@@ -152,7 +157,7 @@ body {
 				<div class="site" id="site">
 					<h1>孔位选择</h1>
 					<ul id="siteitem">
-							<li class="active"><span>well1</span><img src="/static/front/img/20180725183944.jpg"><i></i></li>
+							
 					</ul>
 				</div>
 			</div>
@@ -235,15 +240,6 @@ body {
 						</div>
 						<label class="unit">um</label>
 					</div>
-					
-					<div class="layui-inline">
-						<label class="layui-form-label">胚胎内周直径</label>
-						<div class="layui-input-inline">
-							<input type="text" id="innerDiameter" name="innerDiameter" autocomplete="off" class="layui-input">
-							<input type="hidden" id="hideInnerDiameter">
-						</div>
-						<label class="unit">um</label>
-					</div>
 					<div class="layui-inline">
 						<label class="layui-form-label">胚胎内周面积</label>
 						<div class="layui-input-inline">
@@ -252,6 +248,15 @@ body {
 						</div>
 						<label class="unit">um²</label>
 					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">胚胎内周直径</label>
+						<div class="layui-input-inline">
+							<input type="text" id="innerDiameter" name="innerDiameter" autocomplete="off" class="layui-input">
+							<input type="hidden" id="hideInnerDiameter">
+						</div>
+						<label class="unit">um</label>
+					</div>
+					
 					
 					<!-- <div class="measuredata">
 						测量数据—面积:<span>123456</span>&nbsp;um²&nbsp;直径:<span>123456</span>&nbsp;um&nbsp;长度:<span>123456</span>&nbsp;um&nbsp;

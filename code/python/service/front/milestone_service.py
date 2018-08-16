@@ -142,7 +142,7 @@ def insertMilestone(request):
         return 400, '设置里程碑时异常!'
     return 200, milestone.to_dict()
 
-def getMilestoneByEmbryoId(embryoId, timeSeries):
+def getMilestoneByEmbryoId(embryoId, timeSeries, procedureId, dishId, wellId):
     if not timeSeries:
         return 400, '初始化里程碑节点出错，图片路径不能为空!'
     sql = "AND embryo_id = :embryoId and milestone_time = :milestoneTime "
