@@ -11,7 +11,7 @@
 .incubator span{
 	margin-right: 30px;
 	display: inline-block;
-	width: 56px;
+	width: 60px;
 	line-height: 28px;
 	height: 28px;
 	background-color: #ffffff;
@@ -35,7 +35,7 @@
 }
 .dish span{
 	display: inline-block;
-	width: 24px;
+	width: 60px;
 	height: 24px;
 	text-align: center;
 	line-height: 24px;
@@ -76,7 +76,7 @@
 
 @-webkit-keyframes activemove
 {
-	from {	background-color: #ffffff;	border: solid 3px #d7dae0;}}
+	from {	background-color: #ffffff;	border: solid 3px #d7dae0;}
 	to {	background-color: #1c7eff;	border: solid 3px #1c7eff;}
 }
 
