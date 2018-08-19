@@ -17,3 +17,4 @@ flask-restful>=0.3.6
 flask-login
 tensorflow>=1.9.0
 Keras>2.2.0
+scikit-image>=0.13.0

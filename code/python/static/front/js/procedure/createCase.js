@@ -2,8 +2,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
     var form = layui.form;
     var $ = layui.jquery;
     var layer = layui.layer;
-	var laydate = layui.laydate;
-	var address = layui.address();
+		var laydate = layui.laydate;
+		var address = layui.address();
 
 	// 培养箱选择
 	$('.incubator').on('click','span',function(){
@@ -55,5 +55,47 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
         return '身份证号长度应为18位';
       }
     }    
-  });
+	});
+	
+		$(function(){
+				$.ajax({
+						type : "get",
+						url : "/api/v1/well/incubator",
+						datatype : "json",
+						success : function(data) {
+								var child = "";
+								for(var i=0;i<data.length;i++){
+										child = child + "<span onclick=\"queryDish('" + data[i] + "')\">" +
+										data[i] + "</span>";
+								}
+								$('#incubatorNameDiv').append(child);
+						},
+						error : function(request) {
+								layer.alert(request.responseText);
+						}
+				});
+		});
 })
+
+function queryDish(incubatorName){
+		$.ajax({
+				type : "get",
+				url : "/api/v1/well/dish?incubatorName=" + incubatorName,
+				datatype : "json",
+				success : function(data) {
+						$('#dishDiv').empty();
+						var child = "<strong>培养箱选择：</strong>";
+						for(var i=0;i<data.length;i++){
+								child = child + "<span>" + data[i] + "</span>";
+						}
+						child = child + "<i>* 最多只能选择2个皿</i>";
+						$('#dishDiv').append(child);
+				},
+				error : function(request) {
+						layer.alert(request.responseText);
+				}
+		});
+}
+
+
+

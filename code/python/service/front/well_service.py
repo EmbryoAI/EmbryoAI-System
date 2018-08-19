@@ -100,4 +100,58 @@ def getWellVideo(agrs):
 
     cap = open(video_name,'rb').read()
     return cap
-        
+
+#查询培养箱
+def queryIncubator():
+    json_path = conf['EMBRYOAI_IMAGE_ROOT'] + conf['FINISHED_CYCLES']
+    with open(f'{json_path}', 'r') as fn :
+        catalog_json = json.loads(fn.read())
+
+    list = []
+    for catalog in catalog_json:
+        catalog_path = conf['EMBRYOAI_IMAGE_ROOT'] + catalog
+        dirs = os.listdir(catalog_path)
+        for dir in dirs:
+            dish_path = catalog_path + os.path.sep + dir
+            if os.path.isdir(dish_path):  
+                if dir[0] == '.':  
+                    pass  
+                else:  
+                    dish_json_path = dish_path + os.path.sep + conf['DISH_STATE_FILENAME']
+                    with open(f'{dish_json_path}', 'r') as dn :
+                        dish_json = json.loads(dn.read())
+                    incubator_name = dish_json['incubatorName']
+                    list.append(incubator_name)
+                    list.append('INCUB1')
+                    print(incubator_name) 
+    result_list = []
+    for i in list:
+        if i not in result_list:
+            result_list.append(i)
+    return jsonify(result_list)
+
+#查询培养皿
+def queryDish(agrs):
+    incubatorName = agrs['incubatorName']
+
+    json_path = conf['EMBRYOAI_IMAGE_ROOT'] + conf['FINISHED_CYCLES']
+    with open(f'{json_path}', 'r') as fn :
+        catalog_json = json.loads(fn.read())
+
+    list = []
+    for catalog in catalog_json:
+        catalog_path = conf['EMBRYOAI_IMAGE_ROOT'] + catalog
+        dirs = os.listdir(catalog_path)
+        for dir in dirs:
+            dish_path = catalog_path + os.path.sep + dir
+            if os.path.isdir(dish_path):  
+                if dir[0] == '.':  
+                    pass  
+                else:  
+                    dish_json_path = dish_path + os.path.sep + conf['DISH_STATE_FILENAME']
+                    with open(f'{dish_json_path}', 'r') as dn :
+                        dish_json = json.loads(dn.read())
+                    incubator_name = dish_json['incubatorName']
+                    if incubator_name == incubatorName:
+                        list.append(dir)
+    return jsonify(list)
