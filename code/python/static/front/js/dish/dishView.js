@@ -8,17 +8,31 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     $(function () {
 		// 加载胚胎标记状态
 		loadEmbryoResultTool("'embryo_fate_type'");
+		
 
+		 var bfwc = false;
+		 var thisObj = null;
 		 $('#playBtn').click(function () {
 			var oVideo = document.getElementsByClassName('videoSource');
 			var i;
+			thisObj = $(this);
             if ($(this).hasClass('play')) {
                 $(this).removeClass('play');
                 $(this).addClass('stop');
 				$(this).children("span").text("暂停");
 				for (i = 0; i < oVideo.length; i++) {
+					if(!bfwc) {
+				        oVideo[i].addEventListener("ended",function(){
+			        	  console.log(new Date().getTime());
+			        	  thisObj.removeClass('stop');
+			        	  thisObj.addClass('play');
+			        	  thisObj.children("span").text("播放");
+				        });
+				      
+					}
 					oVideo[i].play();
 				}
+				bfwc = true;
             } else {
                 $(this).removeClass('stop');
                 $(this).addClass('play');
@@ -148,4 +162,51 @@ function signEmbryoResult(obj,appendData,embryoId,embryoFateId){
 			layer.alert(request.responseText);
 		}
 	});
+}
+
+//var bfzt =0;//播放狀態  0未播放  1播放
+//var oVideo = document.getElementsByClassName('videoSource');
+//function playVideo(videoNum) {
+//	if(oVideo[videoNum]!=null && oVideo[videoNum]!=undefined) {
+//		bofang(oVideo[videoNum]);
+//	}
+//}
+//function bofang(oVideo) {
+////    if ($(this).hasClass('play')) {
+////        $(this).removeClass('play');
+////        $(this).addClass('stop');
+////        $(this).children("span").text("暂停");
+//        oVideo.addEventListener("ended",function(){
+//        	  var myDate = new Date();//获取系统当前时间
+//        	  console.log(myDate.getTime());
+////	          $(this).removeClass('stop');
+////	          $(this).addClass('play');
+////	          $(this).children("span").text("播放");
+//		 });
+//         oVideo.play();
+////    } else {
+////        $(this).removeClass('stop');
+////        $(this).addClass('play');
+////        $(this).children("span").text("播放");
+////        oVideo.pause();
+////    }
+//}
+
+
+function getNowFormatDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + date.getHours() + seperator2 + date.getMinutes()
+            + seperator2 + date.getSeconds();
+    return currentdate;
 }
