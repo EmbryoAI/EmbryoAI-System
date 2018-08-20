@@ -1,0 +1,151 @@
+{% extends 'front/header-footer.html' %} {% block mianDiv %}
+    <link rel="stylesheet" type="text/css" href="/static/front/css/createCase.css" />
+	<link rel="stylesheet" type="text/css" href="/static/front/css/incubator.css">	
+	<style type="text/css">
+		body{
+			width: 1366px;
+			margin: auto;
+		}
+	</style>
+
+    <div class="main">
+        <div class="title">
+            <h1>培养箱视图</h1>
+			<h6>Incubator</h6>
+			<input type="hidden" id="incubatorCode" value="{{ incubatorId }}" />
+        </div>
+		<!--选择皿-->
+			<div class="choice incubator" id="incubatorDiv">
+				<strong>培养箱选择：</strong>
+				<!-- <span class="active" id="">001</span><span>002</span><span>003</span> -->
+			</div>
+			<div class="layui-row layui-col-space30" id="dishDiv">
+					<!-- <div class="layui-col-md4">
+						<div class="in-dish">
+							<div class="dish-num"><span>1</span><a>查看皿</a></div>
+							<ul class="dish-info">
+								<li>Dish # <span>1</span></li>
+								<li>本皿胚胎数<span>2</span></li>
+								<li>胚胎总数<span>2</span></li>
+							</ul>
+							<div class="patient-info" id="lookCaseDiv_1">
+								<span>查看病历</span>
+								<div class="case-details">
+									<dl>
+										<dt><strong>姓名</strong><span>甄美丽</span></dt>
+										<dt><strong>授精时间</strong><span>2018/12/12 10:10</span></dt>
+										<dt><strong>首次拍照时间</strong><span>2018/12/12 10:10</span></dt>
+										<dt><strong>年龄</strong><span>25</span></dt>
+										<dt><strong>授精方式</strong><span>ICSC</span></dt>
+									    <dt><strong>阶段</strong><span>DAY03</span></dt>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="in-dish">
+							<div class="dish-num"><span>2</span><a>查看皿</a></div>
+							<ul class="dish-info">
+								<li>Dish # <span>2</span></li>
+								<li>本皿胚胎数<span>无</span></li>
+								<li>胚胎总数<span>无</span></li>
+							</ul>
+							<div class="patient-info">
+								<span>查看病历</span>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="in-dish">
+							<div class="dish-num"><span>3</span><a>查看皿</a></div>
+							<ul class="dish-info">
+								<li>Dish # <span>3</span></li>
+								<li>本皿胚胎数<span>无</span></li>
+								<li>胚胎总数<span>无</span></li>
+							</ul>
+							<div class="patient-info">
+								<span>查看病历</span>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="in-dish">
+							<div class="dish-num"><span>4</span><a>查看皿</a></div>
+							<ul class="dish-info">
+								<li>Dish # <span>4</span></li>
+								<li>本皿胚胎数<span>无</span></li>
+								<li>胚胎总数<span>无</span></li>
+							</ul>
+							<div class="patient-info">
+								<span>查看病历</span>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="in-dish">
+							<div class="dish-num"><span>5</span><a>查看皿</a></div>
+							<ul class="dish-info">
+								<li>Dish # <span>5</span></li>
+								<li>本皿胚胎数<span>无</span></li>
+								<li>胚胎总数<span>无</span></li>
+							</ul>
+							<div class="patient-info">
+								<span>查看病历</span>
+							</div>
+						</div>
+					</div><div class="layui-col-md4">
+						<div class="in-dish">
+							<div class="dish-num"><span>6</span><a>查看皿</a></div>
+							<ul class="dish-info">
+								<li>Dish # <span>6</span></li>
+								<li>本皿胚胎数<span>无</span></li>
+								<li>胚胎总数<span>无</span></li>
+							</ul>
+							<div class="patient-info">
+								<span>查看病历</span>
+							</div>
+						</div>
+					</div><div class="layui-col-md4">
+						<div class="in-dish">
+							<div class="dish-num"><span>7</span><a>查看皿</a></div>
+							<ul class="dish-info">
+								<li>Dish # <span>7</span></li>
+								<li>本皿胚胎数<span>无</span></li>
+								<li>胚胎总数<span>无</span></li>
+							</ul>
+							<div class="patient-info">
+								<span>查看病历</span>
+							</div>
+						</div>
+					</div><div class="layui-col-md4">
+						<div class="in-dish">
+							<div class="dish-num"><span>8</span><a>查看皿</a></div>
+							<ul class="dish-info">
+								<li>Dish # <span>8</span></li>
+								<li>本皿胚胎数<span>无</span></li>
+								<li>胚胎总数<span>无</span></li>
+							</ul>
+							<div class="patient-info">
+								<span>查看病历</span>
+							</div>
+						</div>
+					</div><div class="layui-col-md4">
+						<div class="in-dish">
+							<div class="dish-num"><span>9</span><a>查看皿</a></div>
+							<ul class="dish-info">
+								<li>Dish # <span>9</span></li>
+								<li>本皿胚胎数<span>无</span></li>
+								<li>胚胎总数<span>无</span></li>
+							</ul>
+							<div class="patient-info" id="lookCaseDiv_12">
+								<span>查看病历</span>
+							</div>
+						</div>
+					</div> -->
+			</div>
+    </div>
+
+	<script src="/static/front/js/incubator/incubator.js"></script>	
+	
+{% endblock %}

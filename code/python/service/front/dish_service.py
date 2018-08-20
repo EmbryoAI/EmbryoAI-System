@@ -134,3 +134,23 @@ def queryScrollbarSeriesList(agrs):
     except : 
         logger().info("读取dishState.json文件出现异常")
         return None
+
+
+
+def loadDishByIncubatorId(agrs):
+    incubatorId = agrs["incubatorId"]
+    try :
+        if incubatorId :
+            params = {'incubatorId': incubatorId}
+        result = dish_mapper.findDishByIncubatorId(params)
+        dishList = list(map(dict, result))
+
+        embryoSum = dish_mapper.findEmbryoSum(params)
+        print(embryoSum)
+        restResult = RestResult(200, "OK", int(embryoSum), dishList)
+        return jsonify(restResult.__dict__)
+    except :
+        logger().info("根据培养箱id查询皿信息失败")
+        return 400, '根据培养箱id查询皿信息失败!'
+    
+

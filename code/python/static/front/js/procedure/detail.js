@@ -49,16 +49,17 @@ function queryEmbryo(procedureId){
 		},
 		success : function(data) {
             var table = $("#embryo_table");
+            console.log(data);
 			for(var i=0;i<data.data.length;i++){
                 table.append("<tr><td>"
                  + data.data[i].embryo_index + 
-                 "</td><td><a href=\"#\" onclick=\"showIncubator()\" class=\"layui-table-link\">"
+                 "</td><td><a href='/front/incubator?incubatorId=" + data.data[i].incubator_code + "' target='_blank' class='layui-table-link'>"
                   + data.data[i].incubator_code +
-                 "</a></td><td><a href=\"#\" onclick=\"showDish()\" class=\"layui-table-link\">"
+                 "</a></td><td><a href='#' onclick='showDish()' class='layui-table-link'>"
                   + data.data[i].dish_code 
-                  + "</a></td><td><a href=\"/front/embryo?procedureId=" + procedureId + "&dishId=" + 
+                  + "</a></td><td><a href='/front/embryo?procedureId=" + procedureId + "&dishId=" + 
                   data.data[i].dish_id + "&embryoId=" + data.data[i].id + 
-                  "\" target=\"_blank\" class=\"layui-table-link\">"
+                  "' target='_blank' class='layui-table-link'>"
                   + data.data[i].cell_code + "</a></td></tr>")
             }
 		}

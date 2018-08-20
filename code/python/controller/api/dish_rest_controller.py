@@ -32,3 +32,10 @@ def queryScrollbarSeriesList():
     parser.add_argument('current_seris', type=str)
     parser.add_argument('direction', type=str)
     return dish_service.queryScrollbarSeriesList(parser.parse_args())
+
+''' 根据培养箱id查询培养箱里所有皿的信息 '''
+@dish_rest_controller.route('/loadDishList',methods=['GET'])
+def loadDishList():
+    parser = reqparse.RequestParser()
+    parser.add_argument('incubatorId', type=str)
+    return dish_service.loadDishByIncubatorId(parser.parse_args())
