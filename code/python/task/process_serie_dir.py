@@ -56,6 +56,7 @@ def process_serie(path, serie, dish_info):
             # 定位胚胎位置
             left, top, right, bottom = find_embryo(img)
             img_focus = img[top:bottom, left:right]
+            img_out = cv2.resize(img_focus, (200, 200), cv2.INTER_NEAREST)
             img_size = getdefault(conf, 'EMBRYO_PREDICT_SIZE', 200)
 
             # 下面使用keras的预训练模型，对胚胎图像阶段进行预测
@@ -72,12 +73,12 @@ def process_serie(path, serie, dish_info):
                 os.makedirs(focus_path)
             focus_file = f'{wells[c].index:02d}_{serie}_focus.jpg'
             # 保存缩略图
-            cv2.imwrite(focus_path + focus_file, img_focus, [int(cv2.IMWRITE_JPEG_QUALITY), 50])
-            outer_cnt, outer_area, outer_diameter = outer_edge(img_focus)
+            cv2.imwrite(focus_path + focus_file, img_out, [int(cv2.IMWRITE_JPEG_QUALITY), 50])
+            outer_cnt, outer_area, outer_diameter = outer_edge(img)
             if len(outer_cnt):
                 serie_info.outerArea = outer_area
                 serie_info.outerDiameter = outer_diameter
-            cell_result = cell_edge(img_focus)
+            cell_result = cell_edge(img)
             if len(cell_result) == 1:
                 serie_info.innerArea = cell_result[0][1]
                 serie_info.innerDiameter = cell_result[0][2]
