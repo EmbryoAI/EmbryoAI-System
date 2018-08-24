@@ -7,25 +7,89 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 
     $(function () {
         // 点击播放暂停
+//         $('#playBtn').click(function () {
+// 					var oVideo = document.getElementsByClassName('videoSource');
+// 					var i;
+//             if ($(this).hasClass('play')) {
+//                 $(this).removeClass('play');
+//                 $(this).addClass('stop');
+//                 $(this).children("span").text("暂停");
+// 								for (i = 0; i < oVideo.length; i++) {
+// 									oVideo[i].play();
+// 								}
+//             } else {
+//                 $(this).removeClass('stop');
+//                 $(this).addClass('play');
+//                 $(this).children("span").text("播放");
+// 								for (i = 0; i < oVideo.length; i++) {
+// 									oVideo[i].pause();
+// 								}
+//             }
+//         })
+		
+			var n = 0;
+			var imgLen = $('.active img').length  // 已基准孔的图片张数为标准
+			var all = $(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img")
+				// 上一张
+        $(".pre-frame").click(function () {
+            if (n > 0) {
+                n = n - 1;
+            } else {
+                n < imgLen - 1;
+                layer.msg("已经是第一张了")
+            }
+            all.hide();
+            $(".dishbox1 img:eq(" + n + "),.dishbox2 img:eq(" + n + "),.dishbox3 img:eq(" + n + "),.dishbox4 img:eq(" + n + "),.dishbox5 img:eq(" + n + "),.dishbox6 img:eq(" + n + "),.dishbox7 img:eq(" + n + "),.dishbox8 img:eq(" + n + "),.dishbox9 img:eq(" + n + "),.dishbox10 img:eq(" + n + "),.dishbox11 img:eq(" + n + "),.dishbox12 img:eq(" + n + ")").show();
+
+        });
+        // 下一张
+        $(".next-frame").click(function () {
+            if (n < imgLen - 1) {
+                n = n + 1;
+
+            } else {
+                n = imgLen - 1;
+                layer.msg("已经是最后一张了")
+            }
+            all.hide();
+            $(".dishbox1 img:eq(" + n + "),.dishbox2 img:eq(" + n + "),.dishbox3 img:eq(" + n + "),.dishbox4 img:eq(" + n + "),.dishbox5 img:eq(" + n + "),.dishbox6 img:eq(" + n + "),.dishbox7 img:eq(" + n + "),.dishbox8 img:eq(" + n + "),.dishbox9 img:eq(" + n + "),.dishbox10 img:eq(" + n + "),.dishbox11 img:eq(" + n + "),.dishbox12 img:eq(" + n + ")").show();
+
+        })
+        // 滚动效果
+        var textTime;
+        var imgTime;
+        // 点击播放暂停
         $('#playBtn').click(function () {
-					var oVideo = document.getElementsByClassName('videoSource');
-					var i;
             if ($(this).hasClass('play')) {
                 $(this).removeClass('play');
                 $(this).addClass('stop');
                 $(this).children("span").text("暂停");
-								for (i = 0; i < oVideo.length; i++) {
-									oVideo[i].play();
-								}
+
+                function showText() {
+                    n = n + 1;
+                }
+                textTime = setInterval(showText, 200);
+
+                function run() {
+                    if (n < imgLen) {
+                        n = n;
+                    } else {
+                        n = 0
+                    }
+                    all.hide();
+                    $(".dishbox1 img:eq(" + n + "),.dishbox2 img:eq(" + n + "),.dishbox3 img:eq(" + n + "),.dishbox4 img:eq(" + n + "),.dishbox5 img:eq(" + n + "),.dishbox6 img:eq(" + n + "),.dishbox7 img:eq(" + n + "),.dishbox8 img:eq(" + n + "),.dishbox9 img:eq(" + n + "),.dishbox10 img:eq(" + n + "),.dishbox11 img:eq(" + n + "),.dishbox12 img:eq(" + n + ")").show();
+                }
+                imgTime = setInterval(run, 200);
+								
             } else {
                 $(this).removeClass('stop');
                 $(this).addClass('play');
                 $(this).children("span").text("播放");
-								for (i = 0; i < oVideo.length; i++) {
-									oVideo[i].pause();
-								}
+                clearInterval(textTime);
+                clearInterval(imgTime);
             }
         })
+		
 		
 		// 胚胎评分表
 		 $('.em-grade').on('click', function(){
