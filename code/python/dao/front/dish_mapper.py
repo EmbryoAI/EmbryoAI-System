@@ -10,7 +10,7 @@ def queryById(dishId):
     except Exception as e:
         return dish
     finally:
-        db.session.close()
+        db.session.remove()
     return dish
 
 def findDishByIncubatorId(params):

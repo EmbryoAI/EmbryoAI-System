@@ -16,6 +16,8 @@ def updatePassword(params):
         db.session.rollback()
         print_exc()
         raise DatabaseError('修改用户密码时发生错误', e.message, e)
+    finally:
+        db.session.remove()
 
 def updateUser(params):
     try :
@@ -27,6 +29,8 @@ def updateUser(params):
         db.session.rollback()
         print_exc()
         raise DatabaseError('修改用户数据时发生错误', e.message, e)
+    finally:
+        db.session.remove()
 
 def insertUser(user):
     try :
@@ -36,6 +40,8 @@ def insertUser(user):
         db.session.rollback()
         print_exc()
         raise DatabaseError('插入用户数据时发生错误', e.message, e)
+    finally:
+        db.session.remove()
 
 def findUserById(id):
     # return db.session.query(User).filter(User.id == id).one_or_none()
@@ -78,3 +84,5 @@ def updateUserLoginTime(params):
         db.session.rollback()
         print_exc()
         raise DatabaseError("修改用户登录时间发生错误",e.message,e)
+    finally:
+        db.session.remove()

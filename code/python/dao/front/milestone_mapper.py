@@ -17,7 +17,7 @@ def insertMilestone(milestone,milestoneData):
         print_exc()
         raise DatabaseError('设置里程碑时发生错误!', e.message, e)
     finally:
-        db.session.close()
+        db.session.remove()
     
 def updateMilestone(milestone,milestoneData):
     try :
@@ -63,7 +63,7 @@ def updateMilestone(milestone,milestoneData):
         print_exc()
         raise DatabaseError('设置里程碑时发生错误!', e.message, e)
     finally:
-        db.session.close()
+        db.session.remove()
 
 #动态条件查询里程碑对象
 def getMilestoneByEmbryoId(sqlCondition,filters):
@@ -93,7 +93,7 @@ def getMilestoneByEmbryoId(sqlCondition,filters):
     except Exception as e:
         return reslt
     finally:
-        db.session.close()
+        db.session.remove()
     return reslt
 
 #根据胚胎ID获取它的所有里程碑节点
@@ -104,5 +104,5 @@ def queryMilestoneList(embryoId):
     except Exception as e:
         return milestoneList
     finally:
-         db.session.close()
+         db.session.remove()
     return milestoneList
