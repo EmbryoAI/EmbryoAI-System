@@ -189,4 +189,11 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 
 		})
     });
+		
+		// 时间轴
+		$('.time-list').on('click','span',function(){
+				$(this).siblings('span').removeClass('active');
+				$(this).addClass('active');
+		})
+		
 })

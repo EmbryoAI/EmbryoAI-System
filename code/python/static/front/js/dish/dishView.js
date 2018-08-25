@@ -261,6 +261,11 @@ function signEmbryoResult(obj,appendData,embryoId,embryoFateId){
 ////    }
 //}
 
+		// 时间轴
+		$('.time-list').on('click','span',function(){
+				$(this).siblings('span').removeClass('active');
+				$(this).addClass('active');
+		})
 
 function getNowFormatDate() {
     var date = new Date();
