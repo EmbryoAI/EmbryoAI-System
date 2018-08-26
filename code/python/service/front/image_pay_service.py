@@ -37,3 +37,30 @@ def queryClearImageUrl(agrs):
 def fenye(datas,pagenum,pagesize):
     if datas and isinstance(pagenum,int) and isinstance(pagesize,int):
         return datas[((pagenum-1)*pagesize):((pagenum-1)*pagesize)+pagesize]
+    
+def queryThumbnailImageUrl(agrs):
+    procedureId = agrs['procedureId']
+    dishId = agrs['dishId']
+    wellId = agrs['wellId']
+    zData = {}
+    try:
+        #获取JSON文件
+        imagePath,path,dishJson = image_service.readDishState(procedureId,dishId)
+        thumbnailUrlList=[]
+        
+        if dishJson['finished'] & dishJson['avail'] == 1 : 
+            wells = dishJson['wells']
+            oneWell = wells[f'{wellId}']
+            series = oneWell['series']
+            for key in series:
+                imageObj={}
+                thumbnailUrl = path + series[key]['focus']
+                imageObj['thumbnailUrl'] = thumbnailUrl
+                imageObj['timeSeries'] = key
+                thumbnailUrlList.append(imageObj)
+        if not thumbnailUrlList:
+            return 200, None
+        else: 
+            return 200, thumbnailUrlList
+    except:
+        return 200, None

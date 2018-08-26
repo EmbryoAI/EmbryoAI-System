@@ -10,6 +10,8 @@
 
 <!--主体内容都放在这个div里-->
 <div class="main">
+	<input type="hidden" id="procedureId" value="{{procedure_id}}"/>
+	<input type="hidden" id="dishId" value="{{dish_id}}"/>
     <div class="title">
         <h1>皿视图</h1>
         <h6>Dish View</h6>
@@ -19,76 +21,40 @@
         <div class="dish-box">
             <ul class="dishimg" id="dishImageUl">
                 <li class="dishbox1 active">
-                    <img src="img/icon-noembryo.jpg" >
-                    <img src="img/icon-wellnone.jpg" >
-                    <img src="img/20180725183944.jpg" >
-                    <img src="img/1530082825.png" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
                 <li class="dishbox2">
-                    <img src="img/icon-noembryo.jpg" >
-                    <img src="img/icon-wellnone.jpg" >
-                    <img src="img/20180725183944.jpg" >
-                    <img src="img/1530082825.png" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
                 <li class="dishbox3">
-                    <img src="img/icon-noembryo.jpg" >
-                    <img src="img/icon-wellnone.jpg" >
-                    <img src="img/20180725183944.jpg" >
-                    <img src="img/1530082825.png" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
                 <li class="dishbox4">
-                    <img src="img/icon-noembryo.jpg" >
-                    <img src="img/icon-wellnone.jpg" >
-                    <img src="img/20180725183944.jpg" >
-                    <img src="img/1530082825.png" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
                 <li class="dishbox5">
-                    <img src="img/icon-noembryo.jpg" >
-                    <img src="img/icon-wellnone.jpg" >
-                    <img src="img/20180725183944.jpg" >
-                    <img src="img/1530082825.png" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
                 <li class="dishbox6">
-                    <img src="img/icon-noembryo.jpg" >
-                    <img src="img/icon-wellnone.jpg" >
-                    <img src="img/20180725183944.jpg" >
-                    <img src="img/1530082825.png" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
                 <li class="dishbox7">
-                    <img src="img/icon-noembryo.jpg" >
-                    <img src="img/icon-wellnone.jpg" >
-                    <img src="img/20180725183944.jpg" >
-                    <img src="img/1530082825.png" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
                 <li class="dishbox8">
-                    <img src="img/icon-noembryo.jpg" >
-                    <img src="img/icon-wellnone.jpg" >
-                    <img src="img/20180725183944.jpg" >
-                    <img src="img/1530082825.png" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
                 <li class="dishbox9">
-                    <img src="img/icon-noembryo.jpg" >
-                    <img src="img/icon-wellnone.jpg" >
-                    <img src="img/20180725183944.jpg" >
-                    <img src="img/1530082825.png" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
                 <li class="dishbox10">
-                    <img src="img/icon-noembryo.jpg" >
-                    <img src="img/icon-wellnone.jpg" >
-                    <img src="img/20180725183944.jpg" >
-                    <img src="img/1530082825.png" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
                 <li class="dishbox11">
-                    <img src="img/icon-noembryo.jpg" >
-                    <img src="img/icon-wellnone.jpg" >
-                    <img src="img/20180725183944.jpg" >
-                    <img src="img/1530082825.png" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
                 <li class="dishbox12">
-                    <img src="img/icon-noembryo.jpg" >
-                    <img src="img/icon-wellnone.jpg" >
-                    <img src="img/20180725183944.jpg" >
-                    <img src="img/1530082825.png" >
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
             </ul>
 						
@@ -113,7 +79,7 @@
                 <ul class="tool-play">
                     <li class="pre-milestone"><i></i><span>上一里程碑</span></li>
                     <li class="pre-frame"><i></i><span>上一帧</span></li>
-                    <li class="play" onclick="playVideo(0);playVideo(1);playVideo(2);playVideo(3);playVideo(4);playVideo(5);playVideo(6);playVideo(7);playVideo(8);playVideo(9);playVideo(10);playVideo(11);" ><i></i><span>播放</span></li>
+                    <li class="play" id="playBtn"><i></i><span>播放</span></li>
                     <li class="next-frame"><i></i><span>下一帧</span></li>
                     <li class="next-milestone"><i></i><span>下一里程碑</span></li>
                 </ul>

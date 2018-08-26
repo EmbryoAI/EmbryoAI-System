@@ -9,7 +9,10 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		// 加载胚胎标记状态
 		loadEmbryoResultTool("'embryo_fate_type'");
 		
-
+		//加载12个孔的缩略图
+		for(var i=1;i<=12;i++) {
+			queryThumbnailImageUrl(i);
+		}
 		//  var bfwc = false;
 		//  var thisObj = null;
 		//  $('#playBtn').click(function () {
@@ -44,8 +47,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		// })
 		
 		var n = 0;
-		var imgLen = $('.active img').length  // 已基准孔的图片张数为标准
-		var all = $(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img")
+		var imgLen = 1  // 已基准孔的图片张数为标准
 			// 上一张
 	$(".pre-frame").click(function () {
 		if (n > 0) {
@@ -54,7 +56,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			n < imgLen - 1;
 			layer.msg("已经是第一张了")
 		}
-		all.hide();
+		$(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
 		$(".dishbox1 img:eq(" + n + "),.dishbox2 img:eq(" + n + "),.dishbox3 img:eq(" + n + "),.dishbox4 img:eq(" + n + "),.dishbox5 img:eq(" + n + "),.dishbox6 img:eq(" + n + "),.dishbox7 img:eq(" + n + "),.dishbox8 img:eq(" + n + "),.dishbox9 img:eq(" + n + "),.dishbox10 img:eq(" + n + "),.dishbox11 img:eq(" + n + "),.dishbox12 img:eq(" + n + ")").show();
 
 	});
@@ -67,12 +69,11 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			n = imgLen - 1;
 			layer.msg("已经是最后一张了")
 		}
-		all.hide();
+		$(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
 		$(".dishbox1 img:eq(" + n + "),.dishbox2 img:eq(" + n + "),.dishbox3 img:eq(" + n + "),.dishbox4 img:eq(" + n + "),.dishbox5 img:eq(" + n + "),.dishbox6 img:eq(" + n + "),.dishbox7 img:eq(" + n + "),.dishbox8 img:eq(" + n + "),.dishbox9 img:eq(" + n + "),.dishbox10 img:eq(" + n + "),.dishbox11 img:eq(" + n + "),.dishbox12 img:eq(" + n + ")").show();
 
 	})
 	// 滚动效果
-	var textTime;
 	var imgTime;
 	// 点击播放暂停
 	$('#playBtn').click(function () {
@@ -80,32 +81,30 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			$(this).removeClass('play');
 			$(this).addClass('stop');
 			$(this).children("span").text("暂停");
-
-			function showText() {
-				n = n + 1;
-			}
-			textTime = setInterval(showText, 200);
-
 			function run() {
 				if (n < imgLen) {
 					n = n;
 				} else {
-					n = 0
+					n = 0;
+					payWc();//播放完成或者暂停时调用
 				}
-				all.hide();
+				n++;
+				$(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
 				$(".dishbox1 img:eq(" + n + "),.dishbox2 img:eq(" + n + "),.dishbox3 img:eq(" + n + "),.dishbox4 img:eq(" + n + "),.dishbox5 img:eq(" + n + "),.dishbox6 img:eq(" + n + "),.dishbox7 img:eq(" + n + "),.dishbox8 img:eq(" + n + "),.dishbox9 img:eq(" + n + "),.dishbox10 img:eq(" + n + "),.dishbox11 img:eq(" + n + "),.dishbox12 img:eq(" + n + ")").show();
 			}
-			imgTime = setInterval(run, 200);
+			imgTime = setInterval(run, 5000);
 							
 		} else {
-			$(this).removeClass('stop');
-			$(this).addClass('play');
-			$(this).children("span").text("播放");
-			clearInterval(textTime);
-			clearInterval(imgTime);
+			payWc();//播放完成或者暂停时调用
 		}
 	})
-
+	
+	function payWc() {
+		$('#playBtn').removeClass('stop');
+		$('#playBtn').addClass('play');
+		$('#playBtn').children("span").text("播放");
+		clearInterval(imgTime);
+	}
 
 
 
@@ -181,6 +180,41 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			$('.dish-box').css("cursor","auto")
 
 		})
+		
+		//初始化12个孔的缩略图
+		function queryThumbnailImageUrl(wellId) {
+			$.ajax({
+				type : "get",
+				url : "/api/v1/image/pay/queryThumbnailImageUrl",
+				datatype : "json",
+				cache:false,
+				data : {"procedureId":$("#procedureId").val(),"dishId":$("#dishId").val(),"wellId":wellId},
+				success : function(data) {
+					 if(data!=null) {
+						 thumbnailImageUrlList = data;
+			    		 if(imgLen==1) {
+			    			 imgLen = thumbnailImageUrlList.length;
+			    		 }
+			    		 $(".dishbox"+wellId).html("");
+				    	 for(var i=0;i<thumbnailImageUrlList.length;i++) {
+				    		 var image = "";
+				    		 if(i==0) {
+								 var image = "<img  id='imageVideo"+thumbnailImageUrlList[i].timeSeries+"'  src='/api/v1/well/image?image_path="+thumbnailImageUrlList[i].thumbnailUrl+"' />";
+				    		 }else {
+								 var image = "<img id='imageVideo"+thumbnailImageUrlList[i].timeSeries+"'  src='/api/v1/well/image?image_path="+thumbnailImageUrlList[i].thumbnailUrl+"' />";
+								 $("imageVideo"+thumbnailImageUrlList[i].timeSeries).hide();
+				    		 }
+							 $(".dishbox"+wellId).append(image);
+						 }
+					 }else {
+						 
+					 }
+				},
+				error : function(request) {
+					layer.alert(request.responseText);
+				}
+			});
+		}
     });
 })
 
@@ -283,4 +317,28 @@ function getNowFormatDate() {
             + " " + date.getHours() + seperator2 + date.getMinutes()
             + seperator2 + date.getSeconds();
     return currentdate;
+}
+
+//上下里程碑   根据胚胎ID 和 当前时间序列 获取上下里程碑节点ID
+function node(upOrdown,embryoId,currentSeris) {
+	$.ajax({
+		type : "get",
+		url : "/api/v1/milestone/node/"+embryoId+"/"+currentSeris+"/"+upOrdown,
+		datatype : "json",
+		cache:false,
+		success : function(data) {
+			 if(data!=null) {
+				 
+			 }else {
+				 if("up"==upOrdown) {
+					 layer.alert("当前已经是第一个里程碑了!");
+				 }else {
+					 layer.alert("当前已经是最后一个里程碑了!");
+				 }
+			 }
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
 }
