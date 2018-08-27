@@ -1,10 +1,17 @@
+var currentSeris = "";//基准的胚胎的时间序列
+var n = 0;
+var imgLen = 1  // 已基准孔的图片张数为标准
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     var form = layui.form;
     var $ = layui.jquery;
     var laydate = layui.laydate;
     var table = layui.table;
     var layer = layui.layer;
-
+	//增加加载层 LYZ
+	jaindex = layer.msg('渲染皿视图中，请耐心等待', {
+		  icon: 16
+		  ,shade: 0.3,time:0
+	});
     $(function () {
 		// 加载胚胎标记状态
 		loadEmbryoResultTool("'embryo_fate_type'");
@@ -46,38 +53,20 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
         //     }
 		// })
 		
-		var n = 0;
-		var imgLen = 1  // 已基准孔的图片张数为标准
-			// 上一张
-	$(".pre-frame").click(function () {
-		if (n > 0) {
-			n = n - 1;
-		} else {
-			n < imgLen - 1;
-			layer.msg("已经是第一张了")
-		}
-		$(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
-		$(".dishbox1 img:eq(" + n + "),.dishbox2 img:eq(" + n + "),.dishbox3 img:eq(" + n + "),.dishbox4 img:eq(" + n + "),.dishbox5 img:eq(" + n + "),.dishbox6 img:eq(" + n + "),.dishbox7 img:eq(" + n + "),.dishbox8 img:eq(" + n + "),.dishbox9 img:eq(" + n + "),.dishbox10 img:eq(" + n + "),.dishbox11 img:eq(" + n + "),.dishbox12 img:eq(" + n + ")").show();
 
-	});
-	// 下一张
-	$(".next-frame").click(function () {
-		if (n < imgLen - 1) {
-			n = n + 1;
 
-		} else {
-			n = imgLen - 1;
-			layer.msg("已经是最后一张了")
-		}
-		$(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
-		$(".dishbox1 img:eq(" + n + "),.dishbox2 img:eq(" + n + "),.dishbox3 img:eq(" + n + "),.dishbox4 img:eq(" + n + "),.dishbox5 img:eq(" + n + "),.dishbox6 img:eq(" + n + "),.dishbox7 img:eq(" + n + "),.dishbox8 img:eq(" + n + "),.dishbox9 img:eq(" + n + "),.dishbox10 img:eq(" + n + "),.dishbox11 img:eq(" + n + "),.dishbox12 img:eq(" + n + ")").show();
-
-	})
 	// 滚动效果
 	var imgTime;
 	// 点击播放暂停
 	$('#playBtn').click(function () {
 		if ($(this).hasClass('play')) {
+			var flag = isStandard();
+			if(!flag){
+				layer.msg("请先选择一个孔的胚胎为基准胚胎!")
+				return;
+			}
+			imgLen = $('.active img').length;
+			
 			$(this).removeClass('play');
 			$(this).addClass('stop');
 			$(this).children("span").text("暂停");
@@ -103,6 +92,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		$('#playBtn').removeClass('stop');
 		$('#playBtn').addClass('play');
 		$('#playBtn').children("span").text("播放");
+		
+		var imageVideoId = $("#dishImageUl .active img:eq(" + n + ")").attr("id");
+		currentSeris = imageVideoId.substring(10,imageVideoId.length-1);;//设置基准胚胎的时间序列
 		clearInterval(imgTime);
 	}
 
@@ -161,6 +153,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 					$('#dishImageUl li span').remove('.standard');
 					self.addClass('active');
 					self.append("<span class='standard' ></span>")
+					
+					var imageVideoId = $("#dishImageUl .active img:eq(" + n + ")").attr("id");
+					currentSeris = imageVideoId.substring(10,imageVideoId.length-1);;//设置基准胚胎的时间序列
 				} else {	
 					//胚胎结果标记
 					self.children('i').remove();
@@ -192,9 +187,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				success : function(data) {
 					 if(data!=null) {
 						 thumbnailImageUrlList = data;
-			    		 if(imgLen==1) {
-			    			 imgLen = thumbnailImageUrlList.length;
-			    		 }
 			    		 $(".dishbox"+wellId).html("");
 			    		 var embryoId = "";
 				    	 for(var i=0;i<thumbnailImageUrlList.length;i++) {
@@ -214,12 +206,32 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 					 }else {
 						 
 					 }
+					 
+					 if(wellId==12) {
+						 setTimeout(function(){layer.close(jaindex);},5000);
+					 }
 				},
 				error : function(request) {
 					layer.alert(request.responseText);
 				}
 			});
 		}
+		
+		
+		$(document).keydown(function(event){
+		    if(event.which == "37"){
+		        preFrame();
+		    }
+		    if(event.which == "39"){
+		        nextFrame();
+		    }
+		    if(event.which == "38"){
+		    	node("up");
+		    }
+		    if(event.which == "40"){
+		    	node("down");
+		    }
+		});
     });
 })
 
@@ -325,7 +337,18 @@ function getNowFormatDate() {
 }
 
 //根据当前基准的胚胎ID，切换12孔的里程碑
-function node(upOrdown,embryoId,currentSeris) {
+function node(upOrdown) {
+	if(!$('#playBtn').hasClass('play')){
+		layer.msg("请先暂停播放后，再操作!")
+		return;
+	}
+	
+	var flag = isStandard();
+	if(!flag){
+		layer.msg("请先选择一个孔的胚胎为基准胚胎!")
+		return;
+	}
+	var embryoId = getStandardEmbryoId();
 	$.ajax({
 		type : "get",
 		url : "/api/v1/milestone/node/"+embryoId+"/"+currentSeris+"/"+upOrdown,
@@ -341,6 +364,7 @@ function node(upOrdown,embryoId,currentSeris) {
 						 $("#imageVideo"+data.milestoneTime+i).show();
 					 }
 				 }
+				 currentSeris = data.milestoneTime;//设置基准胚胎的时间序列
 			 }else {
 				 if("up"==upOrdown) {
 					 layer.alert("当前已经是第一个里程碑了!");
@@ -370,4 +394,52 @@ function isStandard(){
 function getStandardEmbryoId(){
 	var embryoId = $("#dishImageUl .active").attr("embryoId");
 	return embryoId;
+}
+
+// 上一张
+function preFrame() {
+	if(!$('#playBtn').hasClass('play')){
+		layer.msg("请先暂停播放后，再操作!")
+		return;
+	}
+	
+	var flag = isStandard();
+	if(!flag){
+		layer.msg("请先选择一个孔的胚胎为基准胚胎!")
+		return;
+	}
+	imgLen = $('.active img').length;
+	if (n > 0) {
+		n = n - 1;
+	} else {
+		n < imgLen - 1;
+		layer.msg("已经是第一张了")
+	}
+	$(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
+	$(".dishbox1 img:eq(" + n + "),.dishbox2 img:eq(" + n + "),.dishbox3 img:eq(" + n + "),.dishbox4 img:eq(" + n + "),.dishbox5 img:eq(" + n + "),.dishbox6 img:eq(" + n + "),.dishbox7 img:eq(" + n + "),.dishbox8 img:eq(" + n + "),.dishbox9 img:eq(" + n + "),.dishbox10 img:eq(" + n + "),.dishbox11 img:eq(" + n + "),.dishbox12 img:eq(" + n + ")").show();
+}
+
+// 下一张
+function nextFrame() {
+	if(!$('#playBtn').hasClass('play')){
+		layer.msg("请先暂停播放后，再操作!")
+		return;
+	}
+	
+	var flag = isStandard();
+	if(!flag){
+		layer.msg("请先选择一个孔的胚胎为基准胚胎!")
+		return;
+	}
+	imgLen = $('.active img').length;
+	if (n < imgLen - 1) {
+		n = n + 1;
+
+	} else {
+		n = imgLen - 1;
+		layer.msg("已经是最后一张了")
+	}
+	$(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
+	$(".dishbox1 img:eq(" + n + "),.dishbox2 img:eq(" + n + "),.dishbox3 img:eq(" + n + "),.dishbox4 img:eq(" + n + "),.dishbox5 img:eq(" + n + "),.dishbox6 img:eq(" + n + "),.dishbox7 img:eq(" + n + "),.dishbox8 img:eq(" + n + "),.dishbox9 img:eq(" + n + "),.dishbox10 img:eq(" + n + "),.dishbox11 img:eq(" + n + "),.dishbox12 img:eq(" + n + ")").show();
+
 }
