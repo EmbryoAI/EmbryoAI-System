@@ -157,10 +157,10 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			if(isActive){
 				if(type === "standard"){
 					// 设置为基准胚胎
-					$('.dishimg li').removeClass('active');
-					$('.dishimg li span').remove('.standard');
+					$('#dishImageUl li').removeClass('active');
+					$('#dishImageUl li span').remove('.standard');
 					self.addClass('active');
-					self.append("<span class='standard'></span>")
+					self.append("<span class='standard' ></span>")
 				} else {	
 					//胚胎结果标记
 					self.children('i').remove();
@@ -346,4 +346,21 @@ function node(upOrdown,embryoId,currentSeris) {
 			layer.alert(request.responseText);
 		}
 	});
+}
+
+//判断是否已选择基准胚胎
+// true:表示已选中；false：表示未选中
+function isStandard(){
+	var isActive = $("#dishImageUl li").hasClass("active");
+	if(isActive){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+//获取选中的基准胚胎id
+function getStandardEmbryoId(){
+	var embryoId = $("#dishImageUl .active").attr("embryoId");
+	return embryoId;
 }
