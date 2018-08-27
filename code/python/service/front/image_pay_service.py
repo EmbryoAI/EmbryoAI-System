@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 from entity.RestResult import RestResult
 import service.front.image_service as image_service
+import dao.front.embryo_mapper as embryo_mapper
 from flask import request, jsonify
 from common import uuid,logger
 from app import conf
@@ -47,7 +48,7 @@ def queryThumbnailImageUrl(agrs):
         #获取JSON文件
         imagePath,path,dishJson = image_service.readDishState(procedureId,dishId)
         thumbnailUrlList=[]
-        
+        embryoId = None
         if dishJson['finished'] & dishJson['avail'] == 1 : 
             wells = dishJson['wells']
             oneWell = wells[f'{wellId}']
@@ -57,6 +58,13 @@ def queryThumbnailImageUrl(agrs):
                 thumbnailUrl = path + series[key]['focus']
                 imageObj['thumbnailUrl'] = thumbnailUrl
                 imageObj['timeSeries'] = key
+                """根据皿ID和孔序号获取孔ID ，再根据周期ID和孔ID 获取 胚胎ID"""
+                if embryoId == None:
+                    sql = " t.procedure_id = :procedureId AND sc.dish_id = :dishId AND sc.cell_code = :cellCode "
+                    filters = {'procedureId': procedureId,'dishId':dishId,'cellCode':wellId}
+                    embryoId = embryo_mapper.getEmbryoByCondition(sql,filters)
+                
+                imageObj['embryoId'] = dict(embryoId)["id"]
                 thumbnailUrlList.append(imageObj)
         if not thumbnailUrlList:
             return 200, None

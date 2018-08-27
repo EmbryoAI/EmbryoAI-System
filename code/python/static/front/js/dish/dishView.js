@@ -92,7 +92,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				$(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
 				$(".dishbox1 img:eq(" + n + "),.dishbox2 img:eq(" + n + "),.dishbox3 img:eq(" + n + "),.dishbox4 img:eq(" + n + "),.dishbox5 img:eq(" + n + "),.dishbox6 img:eq(" + n + "),.dishbox7 img:eq(" + n + "),.dishbox8 img:eq(" + n + "),.dishbox9 img:eq(" + n + "),.dishbox10 img:eq(" + n + "),.dishbox11 img:eq(" + n + "),.dishbox12 img:eq(" + n + ")").show();
 			}
-			imgTime = setInterval(run, 5000);
+			imgTime = setInterval(run, 1000);
 							
 		} else {
 			payWc();//播放完成或者暂停时调用
@@ -196,16 +196,21 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			    			 imgLen = thumbnailImageUrlList.length;
 			    		 }
 			    		 $(".dishbox"+wellId).html("");
+			    		 var embryoId = "";
 				    	 for(var i=0;i<thumbnailImageUrlList.length;i++) {
 				    		 var image = "";
+				    		 var obj = thumbnailImageUrlList[i];
+				    		 embryoId = obj.embryoId;
 				    		 if(i==0) {
-								 var image = "<img  id='imageVideo"+thumbnailImageUrlList[i].timeSeries+"'  src='/api/v1/well/image?image_path="+thumbnailImageUrlList[i].thumbnailUrl+"' />";
+								 var image = "<img embryoId='"+embryoId+"' id='imageVideo"+obj.timeSeries+"'  src='/api/v1/well/image?image_path="+obj.thumbnailUrl+"' />";
 				    		 }else {
-								 var image = "<img id='imageVideo"+thumbnailImageUrlList[i].timeSeries+"'  src='/api/v1/well/image?image_path="+thumbnailImageUrlList[i].thumbnailUrl+"' />";
-								 $("imageVideo"+thumbnailImageUrlList[i].timeSeries).hide();
+								 var image = "<img embryoId='"+embryoId+"' id='imageVideo"+obj.timeSeries+"'  src='/api/v1/well/image?image_path="+obj.thumbnailUrl+"' />";
+								 $("imageVideo"+obj.timeSeries).hide();
 				    		 }
 							 $(".dishbox"+wellId).append(image);
 						 }
+				    	 //给孔的li增加embryoId
+				    	 $(".dishbox"+wellId).attr("embryoId",embryoId);
 					 }else {
 						 
 					 }
@@ -319,7 +324,7 @@ function getNowFormatDate() {
     return currentdate;
 }
 
-//上下里程碑   根据胚胎ID 和 当前时间序列 获取上下里程碑节点ID
+//根据当前基准的胚胎ID，切换12孔的里程碑
 function node(upOrdown,embryoId,currentSeris) {
 	$.ajax({
 		type : "get",
