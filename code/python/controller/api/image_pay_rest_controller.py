@@ -19,3 +19,18 @@ def queryClearImageUrl():
     parser.add_argument('wellId', type=str)
     code, clearImageUrlList = image_pay_service.queryClearImageUrl(parser.parse_args())
     return make_response(jsonify(clearImageUrlList), code)
+
+
+''' 根据周期id、皿ID、孔ID、获取孔的时间序列对应缩略图的URL
+    @param procedureId: 周期id
+    @param dishId ： 皿id
+    @param wellId ： 孔编号
+'''
+@image_pay_rest_controller.route('/queryThumbnailImageUrl', methods=['POST','GET'])
+def queryThumbnailImageUrl():
+    parser = reqparse.RequestParser()
+    parser.add_argument('procedureId', type=str)
+    parser.add_argument('dishId', type=str)
+    parser.add_argument('wellId', type=str)
+    code, thumbnailImageUrlList = image_pay_service.queryThumbnailImageUrl(parser.parse_args())
+    return make_response(jsonify(thumbnailImageUrlList), code)

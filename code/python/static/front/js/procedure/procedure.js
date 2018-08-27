@@ -171,7 +171,7 @@ layui
 													var arr = d.xst.split(",");
 													var url = "";
 													for (var i = 0; i < arr.length; i++) {
-														url += "<a href='/front/dish?procedureId=&dishId=" + arr[i] + "&embryoId=' target='_blank' class='layui-table-link view' >皿"
+														url += "<a href='/front/dish?procedureId="+ d.id +"&dishId=" + arr[i] + "&embryoId=' target='_blank' class='layui-table-link view' >皿"
 																+ (i + 1)
 																+ "</a> ";
 													}
