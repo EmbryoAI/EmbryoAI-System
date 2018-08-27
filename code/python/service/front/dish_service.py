@@ -139,18 +139,28 @@ def queryScrollbarSeriesList(agrs):
 
 def loadDishByIncubatorId(agrs):
     incubatorId = agrs["incubatorId"]
+    procedureId = agrs["procedureId"]
     try :
-        if incubatorId :
-            params = {'incubatorId': incubatorId}
+        if not incubatorId :
+            return 401, '培养箱id不能为空!'
+        imagePath = getImagePath(incubatorId,procedureId)
+        params = {'incubatorId': incubatorId,'imagePath': imagePath}
         result = dish_mapper.findDishByIncubatorId(params)
         dishList = list(map(dict, result))
-
-        embryoSum = dish_mapper.findEmbryoSum(params)
-        print(embryoSum)
-        restResult = RestResult(200, "OK", int(embryoSum), dishList)
+        restResult = RestResult(200, "OK", len(dishList), dishList)
         return jsonify(restResult.__dict__)
     except :
         logger().info("根据培养箱id查询皿信息失败")
         return 400, '根据培养箱id查询皿信息失败!'
     
-
+'''
+    根据周期id或培养箱id获取采集目录：
+    周期id不为空时，根据周期id查询采集目录。一个周期id只有一个采集目录
+    周期id为空时，根据培养箱id获取最新的采集目录
+'''
+def getImagePath(incubatorId,procedureId):
+    if not procedureId.strip():
+        imagePath = dish_mapper.findLatestImagePath(incubatorId)
+    else :
+        imagePath = dish_mapper.findImagePathByProcedureId(procedureId)
+    return imagePath                                                                                                                                                                                                                                                                                                                                  

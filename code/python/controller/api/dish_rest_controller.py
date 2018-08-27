@@ -38,4 +38,5 @@ def queryScrollbarSeriesList():
 def loadDishList():
     parser = reqparse.RequestParser()
     parser.add_argument('incubatorId', type=str)
+    parser.add_argument('procedureId', type=str)
     return dish_service.loadDishByIncubatorId(parser.parse_args())
