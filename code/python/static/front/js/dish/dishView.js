@@ -202,9 +202,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				    		 var obj = thumbnailImageUrlList[i];
 				    		 embryoId = obj.embryoId;
 				    		 if(i==0) {
-								 var image = "<img embryoId='"+embryoId+"' id='imageVideo"+obj.timeSeries+"'  src='/api/v1/well/image?image_path="+obj.thumbnailUrl+"' />";
+								 var image = "<img index='"+(i+1)+"' embryoId='"+embryoId+"' id='imageVideo"+obj.timeSeries+wellId+"'  src='/api/v1/well/image?image_path="+obj.thumbnailUrl+"' />";
 				    		 }else {
-								 var image = "<img embryoId='"+embryoId+"' id='imageVideo"+obj.timeSeries+"'  src='/api/v1/well/image?image_path="+obj.thumbnailUrl+"' />";
+								 var image = "<img index='"+(i+1)+"' embryoId='"+embryoId+"' id='imageVideo"+obj.timeSeries+wellId+"'  src='/api/v1/well/image?image_path="+obj.thumbnailUrl+"' />";
 								 $("imageVideo"+obj.timeSeries).hide();
 				    		 }
 							 $(".dishbox"+wellId).append(image);
@@ -333,7 +333,14 @@ function node(upOrdown,embryoId,currentSeris) {
 		cache:false,
 		success : function(data) {
 			 if(data!=null) {
-				 
+				 $(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
+				 //把12个孔的都设置为对应基准胚胎里程碑时间序列的缩略图
+				 for (var i = 1; i <= 12; i++) {
+					 //把这个张图显示
+					 if($("#imageVideo"+data.milestoneTime+i)!=undefined) {
+						 $("#imageVideo"+data.milestoneTime+i).show();
+					 }
+				 }
 			 }else {
 				 if("up"==upOrdown) {
 					 layer.alert("当前已经是第一个里程碑了!");
