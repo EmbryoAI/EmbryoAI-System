@@ -28,3 +28,11 @@ def signEmbryo(id,embryoFateId):
 @login_required
 def getEmbryoById(id):
     return embryo_service.getEmbryoById(id)
+
+#根据皿读取ini文件获取胚胎数量
+@embryo_rest_controller.route('/number', methods=['GET'])
+@login_required
+def quertEmbryoNumber():
+    parser = reqparse.RequestParser()
+    parser.add_argument('dishCode', type=str)
+    return embryo_service.quertEmbryoNumber(parser.parse_args())

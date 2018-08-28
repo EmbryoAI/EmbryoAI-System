@@ -21,7 +21,13 @@ $(function(){
             $("#new_email").val(procedure.email);
             $("#birthdate").html(procedure.birthdate);
             $("#new_address").val(procedure.address);
+            if(procedure.is_smoking == 0){
+                procedure.is_smoking = '';
+            }
             $("#is_smoking").html(procedure.is_smoking);
+            if(procedure.is_drinking == 0){
+                procedure.is_drinking = '';
+            }
             $("#is_drinking").html(procedure.is_drinking);
             $("#patient_age").html(procedure.patient_age);
             $("#patient_height").html(procedure.patient_height);

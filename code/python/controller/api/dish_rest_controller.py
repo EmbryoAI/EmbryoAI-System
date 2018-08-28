@@ -35,8 +35,20 @@ def queryScrollbarSeriesList():
 
 ''' 根据培养箱id查询培养箱里所有皿的信息 '''
 @dish_rest_controller.route('/loadDishList',methods=['GET'])
+@login_required
 def loadDishList():
     parser = reqparse.RequestParser()
     parser.add_argument('incubatorId', type=str)
     parser.add_argument('procedureId', type=str)
     return dish_service.loadDishByIncubatorId(parser.parse_args())
+
+
+#根据procedureId,皿ID查询某个孔的时间序列，不包含缩略图路径
+@dish_rest_controller.route('/loadSeriesList', methods=['GET'])
+@login_required
+def loadSeriesList():
+    parser = reqparse.RequestParser()
+    parser.add_argument('procedureId', type=str)
+    parser.add_argument('dishId', type=str)
+    parser.add_argument('wellId', type=str)
+    return dish_service.getSeriesList(parser.parse_args())

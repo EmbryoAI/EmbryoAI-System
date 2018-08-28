@@ -27,3 +27,13 @@ def getEmbryoById(id):
         return jsonify(restResult.__dict__)
     except:
         return 400, '查询单个胚胎时发生错误!'
+
+def quertEmbryoNumber(agrs):
+    dishCode = agrs['dishCode']
+    print(dishCode)
+    import ConfigParser
+    config = ConfigParser.ConfigParser()
+    config.readfp(open('D:\EmbryoAI-System\code\captures\20180621183500\DishInfo.ini'))
+    result = config.get("Dish6Info","Well1Avail")
+    print(result)
+    return result

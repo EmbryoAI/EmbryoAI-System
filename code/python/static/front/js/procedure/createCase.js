@@ -1,3 +1,4 @@
+var dishName = "";
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], function () {
     var form = layui.form;
     var $ = layui.jquery;
@@ -13,6 +14,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 			$(this).siblings('span').removeClass('active');
 			$(this).addClass('active');
 		}
+		$('#incubator').val($(this).html());
 	})
 	// 培养皿选择
 	$('.dish').on('click','span',function(){
@@ -29,6 +31,17 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 		}else{
 			$(this).addClass('active');
 		}
+
+		var dishCatalog = $('#dish_' + this.id).val();
+		if(dishName == ''){
+			dishName = $(this).html() + "," + dishCatalog;
+		}else{
+			dishName = dishName + "|" + $(this).html() + "," + dishCatalog;
+		}
+		$('#dish').empty();
+		$('#dish').val(dishName);
+
+		quertEmbryoNumber($(this).html());
 	})	
 	
 	//日期
@@ -78,23 +91,65 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 })
 
 function queryDish(incubatorName){
-		$.ajax({
-				type : "get",
-				url : "/api/v1/well/dish?incubatorName=" + incubatorName,
-				datatype : "json",
-				success : function(data) {
-						$('#dishDiv').empty();
-						var child = "<strong>培养箱选择：</strong>";
-						for(var i=0;i<data.length;i++){
-								child = child + "<span>" + data[i] + "</span>";
-						}
-						child = child + "<i>* 最多只能选择2个皿</i>";
-						$('#dishDiv').append(child);
-				},
-				error : function(request) {
-						layer.alert(request.responseText);
+	$.ajax({
+		type : "get",
+		url : "/api/v1/well/dish?incubatorName=" + incubatorName,
+		datatype : "json",
+		success : function(data) {
+				$('#dishDiv').empty();
+				var child = "<strong>培养箱选择：</strong>";
+				for(var i=0;i<data.length;i=i+2){
+					child = child + "<span id=\"" + i + "\">" + data[i] + "</span>" + 
+									"<input type=\"hidden\" id=\"dish_" + i + "\" value=\"" + data[i+1] + "\"/>";
 				}
-		});
+				child = child + "<i>* 最多只能选择2个皿</i>";
+				$('#dishDiv').append(child);
+		},
+		error : function(request) {
+				layer.alert(request.responseText);
+		}
+	});
+}
+
+function addCase(){
+	var cubActive = $('#incubatorNameDiv').children("span").hasClass("active");
+	if(cubActive == false){
+		layer.alert('请选择培养箱!');
+		return;
+	}
+	var dishActive = $('#dishDiv').children("span").hasClass("active");
+	if(dishActive == false){
+		layer.alert('请选择培养皿!');
+		return;
+	}
+
+	$.ajax({
+		cache : false,
+		type : "post",
+		url : "/api/v1/procedure/add",
+		data : $('#procedureForm').serialize(),// 你的formid
+		error : function(request) {
+			layer.alert(request.responseText);
+		},
+		success : function(data) {
+			layer.alert(data);
+			layer.closeAll();
+		}
+	});
+}
+
+function quertEmbryoNumber(dishCode){
+	$.ajax({
+		type : "get",
+		url : "/api/v1/embryo/number?dishCode=" + dishCode,
+		datatype : "json",
+		success : function(data) {
+			alert(JSON.stringify(data));
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
 }
 
 

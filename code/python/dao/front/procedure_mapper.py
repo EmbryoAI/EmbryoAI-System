@@ -147,3 +147,14 @@ def getProcedure(id):
         return None
     finally:
         db.session.remove()
+
+def save(procedure):
+    try :
+        db.session.add(procedure)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('新增周期数据时发生错误', e.message, e)
+    finally:
+        db.session.remove()

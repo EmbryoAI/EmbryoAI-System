@@ -48,3 +48,10 @@ def deleteProcedure(id):
         abort(404)
     code, msg = procedure_service.deleteProcedure(id)
     return make_response(jsonify(msg), code)
+
+#新建病历
+@procedure_rest_controller.route('/add', methods=['POST'])
+@login_required
+def add():
+    code, msg = procedure_service.addProcedure(request)
+    return make_response(jsonify(msg), code)
