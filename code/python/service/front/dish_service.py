@@ -11,6 +11,7 @@ import dao.front.dish_mapper as dish_mapper
 import dao.front.procedure_dish_mapper as procedure_dish_mapper
 from common import logger
 from task.TimeSeries import TimeSeries,serie_to_time
+import service.front.image_service as image_service
 
 
 def querySeriesList(agrs):
@@ -163,4 +164,26 @@ def getImagePath(incubatorId,procedureId):
         imagePath = dish_mapper.findLatestImagePath(incubatorId)
     else :
         imagePath = dish_mapper.findImagePathByProcedureId(procedureId)
-    return imagePath                                                                                                                                                                                                                                                                                                                                  
+    return imagePath    
+
+def getSeriesList(agrs):
+    procedureId = agrs['procedureId']
+    dishId = agrs['dishId']
+    wellId = agrs['wellId']
+
+    try :
+        imagePath,path,dishJson = image_service.readDishState(procedureId,dishId)
+        list=[]
+        if dishJson is not None:
+            well_json = dishJson['wells'][wellId]
+            series = well_json["series"]
+            for key in series:
+                obj = {}
+                obj["serie"] = key
+                hour, minute = serie_to_time(key)
+                obj["showTime"] = f'{hour:02d}H{minute:02d}M'
+                list.append(obj)
+        return jsonify(list)
+    except : 
+        logger().info("读取dishState.json文件出现异常")
+        return None                                                                                                                                                                                                                                                                                                                         

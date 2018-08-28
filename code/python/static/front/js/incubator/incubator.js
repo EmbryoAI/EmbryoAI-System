@@ -85,47 +85,69 @@ function loadDishData(incubatorId,procedureId){
         },
         success : function(data) {
 			var divHtml = "";
-			if(data.code == 200 && data.count > 0 && data.data !== null){
-				for (let i = 0; i < data.data.length; i++) {
-					const obj = data.data[i];
-					divHtml = divHtml + '<div class="layui-col-md4">' +
-						'<div class="in-dish">' + 
-							'<div class="dish-num"><span>' + obj.dishCode + '</span><a href="/front/dish?procedureId=&dishId=' + obj.dishId + '&embryoId=" target="_blank">查看皿</a></div>' +
-							'<ul class="dish-info">' +
-								'<li>Dish # <span>' + obj.dishCode + '</span></li>' + 
-								'<li>本皿胚胎数<span>' + obj.embryoCount + '</span></li>' +
-								'<li>胚胎总数<span>' + obj.embryoSum + '</span></li>' +
-							'</ul>' ;
-					if(obj.embryoCount > 0){
-						divHtml = divHtml + '<div class="patient-info" dishId=' + obj.dishId + ' onclick="lookCase('+ obj.procedureId +')">' + 
-						'<span>查看病历</span>' +
-						'<div class="case-details" id="caseDiv_' + obj.dishId + '" style="display:none;">' +  
-							'<dl>' + 
-								'<dt><strong>姓名</strong><span>' + obj.name + '</span></dt>' +
-								'<dt><strong>授精时间</strong><span>' + obj.insemiTime + '</span></dt>' +
-								'<dt><strong>开始采集时间</strong><span>' + obj.imagePath + '</span></dt>' +
-								'<dt><strong>年龄</strong><span>' + obj.age + '</span></dt>' + 
-								'<dt><strong>授精方式</strong><span>' + obj.insemiType + '</span></dt>' + 
-								'<dt><strong>阶段</strong><span>' + obj.stage + '</span></dt>' +
-							'</dl>' +
-						'</div></div>';
-					} else {
-						divHtml = divHtml + '<div class="patient-info" dishId=' + obj.dishId + '><span>查看病历</span><div class="case-details" id="caseDiv_' + obj.dishId + '" style="display:none;"> <dl><dt><span>暂无病历信息</span></dt></dl> </div></div>';
+			if(data.code == 200){
+				if(data.count > 0 && data.data !== null){
+					for (let i = 0; i < data.data.length; i++) {
+						const obj = data.data[i];
+						divHtml = divHtml + '<div class="layui-col-md4">' +
+							'<div class="in-dish">' + 
+								'<div class="dish-num"><span>' + obj.dishCode + '</span><a href="/front/dish?procedureId=' + obj.procedureId + '&dishId=' + obj.dishId + '&embryoId=" target="_blank">查看皿</a></div>' +
+								'<ul class="dish-info">' +
+									'<li>Dish # <span>' + obj.dishCode + '</span></li>' + 
+									'<li>本皿胚胎数<span>' + obj.embryoCount + '</span></li>' +
+									'<li>胚胎总数<span>' + obj.embryoSum + '</span></li>' +
+								'</ul>' ;
+						if(obj.embryoCount > 0){
+							// divHtml = divHtml + '<div class="patient-info" index=' + i + ' onclick="lookCase('+ obj.procedureId +')">' + 
+							divHtml = divHtml + '<div class="patient-info" index=' + i + ' >' + 
+							'<span>查看病历</span>' +
+							'<div class="case-details" id="caseDiv_' + i + '" style="display:none;">' +  
+								'<dl>' + 
+									'<dt><strong>姓名</strong><span>' + obj.name + '</span></dt>' +
+									'<dt><strong>授精时间</strong><span>' + obj.insemiTime + '</span></dt>' +
+									'<dt><strong>开始采集时间</strong><span>' + obj.imagePath + '</span></dt>' +
+									'<dt><strong>年龄</strong><span>' + obj.age + '</span></dt>' + 
+									'<dt><strong>授精方式</strong><span>' + obj.insemiType + '</span></dt>' + 
+									'<dt><strong>阶段</strong><span>' + obj.stage + '</span></dt>' +
+								'</dl>' +
+							'</div></div>';
+						} else {
+							divHtml = divHtml + '<div class="patient-info" index=' + i + ' ><span>查看病历</span><div class="case-details" id="caseDiv_' + i + '" style="display:none;"> <dl><dt><span>暂无病历信息</span></dt></dl> </div></div>';
+						}
+						divHtml = divHtml + '</div></div>';
 					}
-					divHtml = divHtml + '</div></div>';
 				}
-			} else {
-				var divHtml = '<div class="layui-col-md4">此培养箱暂未存放培养皿</div>';
+				if(data.count < 9){
+					for (let i = data.count; i < 9; i++) {
+						divHtml = divHtml + '<div class="layui-col-md4">' +
+							'<div class="in-dish">' + 
+								'<div class="dish-num"><span> 空 </span><a>查看皿</a></div>' +
+								'<ul class="dish-info">' +
+									'<li>Dish # <span> 空 </span></li>' + 
+									'<li>本皿胚胎数<span> 0 </span></li>' +
+									'<li>胚胎总数<span> 0 </span></li>' +
+								'</ul>' + 
+								'<div class="patient-info" index=' + i + ' >' + 
+									'<span>查看病历</span>' + 
+									'<div class="case-details" id="caseDiv_' + i + '" style="display:none;"> ' + 
+										'<dl><dt><span>暂无病历信息</span></dt></dl>' + 
+									'</div>' +
+								'</div>' + 
+							'</div>' +
+						'</div>';
+					}
+				}
 			}
+			
 			$("#dishDiv").html(divHtml);
 
 			// 查看病历
 			$('#dishDiv .patient-info').hover(function(){
-				const dishId = $(this).attr('dishId');
-				$('#caseDiv_'+dishId).show();
+				const index = $(this).attr('index');
+				$('#caseDiv_'+index).show();
 			},function(){
-				const dishId = $(this).attr('dishId');
-				$('#caseDiv_'+dishId).hide();
+				const index = $(this).attr('index');
+				$('#caseDiv_'+index).hide();
 			});
         }
     });
