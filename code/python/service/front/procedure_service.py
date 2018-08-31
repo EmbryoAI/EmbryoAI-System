@@ -133,6 +133,8 @@ def addProcedure(request):
     import dao.front.incubator_mapper as incubator_mapper
     import dao.front.dish_mapper as dish_mapper
     import dao.front.procedure_dish_mapper as procedure_dish_mapper
+    from entity.Embryo import Embryo
+    import dao.front.embryo_mapper as embryo_mapper
 
     id = uuid()
     patientName = request.form.get('patientName')
@@ -182,6 +184,7 @@ def addProcedure(request):
     patientWeight = request.form.get('patient_weight')
     ecTime = request.form.get('ec_time')
     ecCount = request.form.get('ec_count')
+    well_id = request.form.get('well_id')
     state = 1 #病历已登记完善：2；结束采集：3；已回访：
 
     createTime = updateTime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 
@@ -229,6 +232,14 @@ def addProcedure(request):
                     pd = ProcedureDish(id=procedureDishId, procedureId=procedureId, dishId=code,
                                     imagePath=imagePath)
                     procedure_dish_mapper.save(pd)
+        #胚胎表新增记录
+        well_id = well_id.split(',')
+        for i in well_id:
+            print(i)
+            embryoId = uuid()
+            embryo = Embryo(id=embryoId, embryoIndex=i, procedureId=procedureId, cellId=i)
+            embryo_mapper.save(embryo)
+
     except:
         return 500, '新增病历失败!'
 

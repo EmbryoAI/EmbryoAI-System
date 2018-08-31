@@ -36,14 +36,13 @@ def quertEmbryoNumber(agrs):
     import json,os
     config = ConfigParser()
 
+    list=[]
     dishCodeList = dishCode.split('|')
     for dishCodeStr in dishCodeList:
         catalog = dishCodeStr.split(',')[1]
-        config.readfp(open('D:/EmbryoAI-System/code/captures/' + catalog + '/DishInfo.ini'))
+        config.readfp(open(conf['EMBRYOAI_IMAGE_ROOT'] + catalog + os.path.sep + 'DishInfo.ini'))
         catalog_path = conf['EMBRYOAI_IMAGE_ROOT'] + catalog
         dirs = os.listdir(catalog_path)
-
-        embryo_number = 0
 
         for dir in dirs:
             dish_path = catalog_path + os.path.sep + dir
@@ -63,5 +62,5 @@ def quertEmbryoNumber(agrs):
                         result = config.get(f'{dir}Info',well)
                         print(result)
                         if result == '1':
-                            embryo_number = embryo_number + 1
-    return jsonify(embryo_number)
+                            list.append(i)
+    return jsonify(list)

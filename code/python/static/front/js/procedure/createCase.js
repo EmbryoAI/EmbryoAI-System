@@ -1,4 +1,3 @@
-var dishName = "";
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], function () {
     var form = layui.form;
     var $ = layui.jquery;
@@ -31,7 +30,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 		}else{
 			$(this).addClass('active');
 		}
-
+		var dishName = "";
 		var dishCatalog = $('#dish_' + this.id).val();
 		if(dishName == ''){
 			dishName = $(this).html() + "," + dishCatalog;
@@ -133,7 +132,6 @@ function addCase(){
 		},
 		success : function(data) {
 			layer.alert(data);
-			layer.closeAll();
 		}
 	});
 }
@@ -144,7 +142,8 @@ function quertEmbryoNumber(dishCode){
 		url : "/api/v1/embryo/number?dishCode=" + dishCode,
 		datatype : "json",
 		success : function(data) {
-			$('#embryo_number').val(data);
+			$('#embryo_number').val(data.length);
+			$('#well_id').val(data);
 		},
 		error : function(request) {
 			layer.alert(request.responseText);
