@@ -41,7 +41,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 		$('#dish').empty();
 		$('#dish').val(dishName);
 
-		quertEmbryoNumber($(this).html());
+		quertEmbryoNumber(dishName);
 	})	
 	
 	//日期
@@ -144,7 +144,7 @@ function quertEmbryoNumber(dishCode){
 		url : "/api/v1/embryo/number?dishCode=" + dishCode,
 		datatype : "json",
 		success : function(data) {
-			alert(JSON.stringify(data));
+			$('#embryo_number').val(data);
 		},
 		error : function(request) {
 			layer.alert(request.responseText);
