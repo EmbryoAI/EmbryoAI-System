@@ -131,7 +131,9 @@ function addCase(){
 			layer.alert(request.responseText);
 		},
 		success : function(data) {
-			layer.alert(data);
+			parent.layer.alert(data);
+			var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+			parent.layer.close(index);
 		}
 	});
 }
