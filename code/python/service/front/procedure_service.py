@@ -237,7 +237,7 @@ def addProcedure(request):
         for i in well_id:
             print(i)
             embryoId = uuid()
-            embryo = Embryo(id=embryoId, embryoIndex=i, procedureId=procedureId, cellId=i)
+            embryo = Embryo(id=embryoId, embryoIndex=i, procedureId=procedureId, cellId=i, embryoFateId=4)
             embryo_mapper.save(embryo)
 
     except:
