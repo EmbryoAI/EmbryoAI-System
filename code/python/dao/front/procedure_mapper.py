@@ -147,3 +147,74 @@ def getProcedure(id):
         return None
     finally:
         db.session.remove()
+        
+#根据病历号查询周期下朋友胚胎的里程碑  -  周期综合视图
+def queryProcedureViewList(medicalRecordNo):
+    try:
+        sql = text("""
+        SELECT CONCAT(i.incubator_code,'-',d.dish_code,'-',e.embryo_index) AS code_index, 
+            GROUP_CONCAT(dict1.dict_value,"#",m.milestone_path,"#",m.milestone_time ORDER BY m.milestone_time) lcb,
+            e.embryo_score AS score ,dict2.dict_value AS embryo_fate
+            FROM t_embryo e
+            LEFT JOIN t_procedure t
+            ON e.procedure_id = t.id
+            LEFT JOIN t_milestone m
+            ON m.embryo_id = e.id
+            LEFT JOIN t_procedure_dish td
+            ON t.id=td.procedure_id
+            LEFT JOIN sys_dish d
+            ON td.dish_id=d.id
+            LEFT JOIN sys_incubator i
+            ON d.incubator_id = i.id
+        LEFT JOIN sys_dict dict1
+        ON m.milestone_id = dict1.dict_key AND dict1.dict_class='milestone' 
+        LEFT JOIN sys_dict dict2
+        ON e.embryo_fate_id = dict2.dict_key AND dict2.dict_class='embryo_fate_type' 
+            WHERE t.medical_record_no = :medicalRecordNo
+            GROUP BY e.id       
+        """)
+        return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo}).fetchall()
+    except Exception as e:
+        raise DatabaseError('根据主键ID查询病历时异常', e.message, e)
+        return None
+    finally:
+        db.session.remove()
+
+
+#根据病历号查询患者信息  -  周期综合视图
+def getPatientByMedicalRecordNo(medicalRecordNo):
+    try:
+        sql = text("""
+            select
+              p.patient_name as patient_name,
+              t.patient_age as patient_age,
+              CONCAT(t.insemi_time) as insemi_time
+            from t_procedure t
+              left join t_patient p
+                on t.patient_id = p.id
+            WHERE t.medical_record_no = :medicalRecordNo
+        """)
+        return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo}).fetchone()
+    except Exception as e:
+        raise DatabaseError('根据根据病历号查询患者信息异常', e.message, e)
+        return None
+    finally:
+        db.session.remove()
+
+#根据病历号和胚胎结局查询对应的结局数  -  周期综合视图
+def getEmbryoFateCount(medicalRecordNo,embryoFateId):
+    try:
+        sql = text("""
+            SELECT
+              COUNT(e.id) pts
+            FROM t_procedure t
+              LEFT JOIN t_embryo e
+                ON e.procedure_id = t.id
+            WHERE t.medical_record_no = :medicalRecordNo AND e.embryo_fate_id=:embryoFateId
+        """)
+        return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo,'embryoFateId':embryoFateId}).fetchone()[0]
+    except Exception as e:
+        raise DatabaseError('根据主键ID查询病历时异常', e.message, e)
+        return None
+    finally:
+        db.session.remove()

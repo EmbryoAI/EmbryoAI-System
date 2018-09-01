@@ -8,11 +8,14 @@ import service.front.procedure_service as procedure_service
 from entity.User import User
 import time
 from app import login_required 
+from collections import OrderedDict
+import json
+
 
 procedure_rest_controller = Blueprint('procedure_rest_controller', __name__)
 url_prefix = '/api/v1/procedure'
 
-#查询所有培养箱
+#病历列表查询
 @procedure_rest_controller.route('/list', methods=['GET'])
 @login_required
 def queryProcedureList():
@@ -48,3 +51,10 @@ def deleteProcedure(id):
         abort(404)
     code, msg = procedure_service.deleteProcedure(id)
     return make_response(jsonify(msg), code)
+
+@procedure_rest_controller.route('/list/view', methods=['GET'])
+@login_required
+def queryProcedureViewList():
+    logger().info('进入procedure_controller.queryProcedureViewList查询周期综合视图列表')
+    code, msg = procedure_service.queryProcedureViewList(request)
+    return make_response(json.dumps(msg, ensure_ascii=False), code)

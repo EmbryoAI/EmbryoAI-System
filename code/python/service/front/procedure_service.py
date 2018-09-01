@@ -8,6 +8,9 @@ from flask import request, jsonify
 from common import parse_date
 import re
 import time
+import dao.front.dict_dao as dict_dao
+from task.TimeSeries import TimeSeries,serie_to_time
+from collections import OrderedDict
 
 def queryProcedureList(request):
     try:
@@ -116,3 +119,69 @@ def deleteProcedure(id):
     except:
         return 400, {'msg': '删除病历时发生错误'}
     return 204, None
+
+def queryProcedureViewList(request):
+    try:
+        medicalRecordNo = request.args.get('medicalRecordNo')
+        if medicalRecordNo==None:
+            return 400, '病历号不能为空!'
+        
+        #查询字典表里程碑的节点
+        result = dict_dao.queryDictListByClass("milestone")
+        dictList = list(map(lambda x: x.to_dict(),result))
+        
+        #查询字典表的胚胎结局
+        result = dict_dao.queryDictListByClass("embryo_fate_type")
+        embryoFateList = list(map(lambda x: x.to_dict(),result))
+        
+        procedureViewList=[]
+        #表格的动态头
+        tableObj=OrderedDict()
+        tableObj["code_index"] = "箱皿胚胎"
+        for key in dictList:
+            tableObj[key['dictValue']] = key['dictValue']
+        tableObj["score"] = "评分"
+        tableObj["embryo_fate"] = "结局"
+        procedureViewList.append(tableObj)
+        #查詢列表
+        procedureList = procedure_mapper.queryProcedureViewList(medicalRecordNo)
+     
+        #循环查询出来的值
+        for key in procedureList:
+            tableObj=OrderedDict()
+            tableObj["code_index"] = key["code_index"]
+            #如果里程碑字段不为空
+            if key['lcb']!=None:
+                #由于使用mysql GROUP_CONCAT函数 行转列 需要截取
+                lcbstr = key['lcb'].split(",")
+                for dictObj in dictList:
+                    value = ""
+                    for lcbjd in lcbstr:
+                        lcb = lcbjd.split("#")
+                        if dictObj['dictValue'] == lcb[0]: #如果相等的话
+                            hour, minute = serie_to_time(lcb[2])
+                            value = lcb[1]+","+ f'{hour:02d}H{minute:02d}M'
+                            break
+                    tableObj[dictObj['dictValue']] = value
+            else:
+                for dictObj in dictList:
+                    tableObj[dictObj['dictValue']] = ""
+            tableObj["score"] = key["score"]
+            tableObj["embryo_fate"] = key["embryo_fate"]
+            procedureViewList.append(tableObj)
+            
+        #根据病历号查询患者信息
+        patientRes = procedure_mapper.getPatientByMedicalRecordNo(medicalRecordNo)
+  
+        patient = dict(patientRes)
+        for embryoFate in embryoFateList:
+            count = procedure_mapper.getEmbryoFateCount(medicalRecordNo,embryoFate['dictKey'])
+            patient[embryoFate['dictValue']] = count
+        
+        resObj=OrderedDict()
+        resObj["patient"] = patient
+        resObj["procedureViewList"] = procedureViewList
+            
+        return 200,resObj
+    except:
+        return 400, '查询周期综合视图列表时发生错误!'

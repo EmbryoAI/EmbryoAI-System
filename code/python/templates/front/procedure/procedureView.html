@@ -1,0 +1,52 @@
+{% extends 'front/header-footer.html' %}
+{% block mianDiv %}
+ 	<link rel="stylesheet" type="text/css" href="/static/front/css/cycleView.css"/>
+	<style type="text/css">
+		.layui-table-view{
+				margin-top: 0;
+		}
+		.layui-table-cell {
+			height: 34px;
+			line-height: 34px;
+			font-weight: bolder;
+		}
+		tbody tr td .layui-table-cell {
+			height: 144px;
+			line-height: 134px;
+		}
+	</style>
+	<div class="container">
+		<div class="main">
+			<div class="title">
+				<h1>周期综合视图</h1>
+				<h6>Cycle View</h6>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-inline">
+					<label class="layui-form-label">病历号</label>
+					<div class="layui-input-inline">
+						<div class="field">
+							<input type="text"  name="nope" id="nope" class="layui-input">
+						</div>
+					</div>
+				</div>
+				<div class="layui-inline btn-box">
+					<button  class="layui-btn layui-bg-blue" >查询</button>
+				</div>
+			</div>
+			<div class="det-box">
+				<ul class="info-top">
+					<li><span>甄美丽</span><span>29 岁</span><strong>授精时间：</strong><span>2019/08/08 10:10</span></li>
+					<li class="emb"><strong>胚胎个数：</strong><span>2</span></li>
+					<li class="tran"><strong>移植个数：</strong><span>2</span></li>
+					<li class="freez"><strong>冷冻个数：</strong><span>2</span></li>
+				</ul>
+				<table id="cycle-table" lay-filter="" class="cycle-table"></table>
+			</div>
+		</div>
+    </div>
+		
+	<!--公共js引入-->
+<script src="/static/front/js/procedure/cycleView.js"></script>
+<script src="/static/front/autocompleter/jquery.autocompleter.js"></script>
+{% endblock %}
