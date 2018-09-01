@@ -13,3 +13,12 @@ def queryByProcedureIdAndDishId(procedureId,dishId):
     finally:
         db.session.remove()
     return procedureDish
+
+def save(procedureDish):
+    try :
+        db.session.merge(procedureDish)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('新增周期与培养皿关联数据时发生错误', e.message, e)

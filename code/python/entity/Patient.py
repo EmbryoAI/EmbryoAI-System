@@ -20,4 +20,6 @@ class Patient(db.Model, mixin):
     createTime = db.Column("create_time", db.DateTime)
     updateTime = db.Column("update_time", db.DateTime)
     delFlag = db.Column("del_flag", db.Integer, default=0)
+    isDrinking = db.Column("is_drinking", db.Integer, default=0)
+    isSmoking = db.Column("is_smoking", db.Integer, default=0)
 

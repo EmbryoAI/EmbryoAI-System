@@ -73,3 +73,17 @@ def findLatestImagePath(incubatorId):
     else :
         imagePath = data[0]
     return imagePath
+
+def getByDishCode(dishCode):
+    rs = db.session.query(Dish).filter(Dish.dishCode == dishCode).one_or_none()
+    db.session.remove()
+    return rs
+
+def save(dish):
+    try :
+        db.session.merge(dish)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('新增培养皿数据时发生错误', e.message, e)

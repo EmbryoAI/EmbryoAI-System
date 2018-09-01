@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="lib/layui/css/layui.css" />
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<link rel="stylesheet" type="text/css" href="css/scheme.css" />
+	<style type="text/css">
+		html,
+		body {
+			background-color: #fff;
+			margin: auto;
+			padding: 20px;
+			width: 800px;
+		}
+		.layui-form-label{
+			width: 84px;
+		}
+	</style>
+</head>
+
+<body>
+	<!--主体内容都放在这个div里-->
+	<div class="layui-form-item">
+		<label class="layui-form-label">新增标准名称</label>
+		<div class="layui-input-block" style="width: 200px; margin-left: 116px;">
+		  <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+		</div>
+   </div>
+	<div class="stage stage-add" id="stage">
+		<strong>阶段选择：</strong>
+		<span class="active" data-tab="0">全部</span>
+		<a>
+			<span data-tab="1">PN</span>
+			<span data-tab="2">2C</span>
+			<span data-tab="3">3C</span>
+			<span data-tab="4">4C</span>
+			<span data-tab="5">5C</span>
+			<span data-tab="6">8C</span>
+			<span data-tab="7">囊胚</span>
+			<span data-tab="8">扩张囊胚</span>
+		</a>
+	</div>
+	<div id="tableSec">
+		<div class="node" data-index="1">
+			<h2>PN</h2>
+			<table class="cycle-table" id="pn" lay-filter="pn"></table>
+			<p class="addbtn">
+				<button type="button">新增条件行</button>
+			</p>
+		</div>
+		<div class="node" data-index="2">
+			<h2>2C</h2>
+			<table class="cycle-table" id="2C" lay-filter="2C"></table>
+			<p class="addbtn">
+				<button type="button">新增条件行</button>
+			</p>
+		</div>
+		<div class="node" data-index="3">
+			<h2>3C</h2>
+			<table class="cycle-table" id="3C" lay-filter="3C"></table>
+			<p class="addbtn">
+				<button type="button">新增条件行</button>
+			</p>
+		</div>
+		<div class="node" data-index="4">
+			<h2>4C</h2>
+			<table class="cycle-table" id="4C" lay-filter="4C"></table>
+			<p class="addbtn">
+				<button type="button">新增条件行</button>
+			</p>
+		</div>
+		<div class="node" data-index="5">
+			<h2>5C</h2>
+			<table class="cycle-table" id="5C" lay-filter="5C"></table>
+			<p class="addbtn">
+				<button type="button">新增条件行</button>
+			</p>
+		</div>
+		<div class="node" data-index="6">
+			<h2>8C</h2>
+			<table class="cycle-table" id="8C" lay-filter="8C"></table>
+			<p class="addbtn">
+				<button type="button">新增条件行</button>
+			</p>
+		</div>
+		<div class="node" data-index="7">
+			<h2>囊胚</h2>
+			<table class="cycle-table" id="nangp" lay-filter="nangp"></table>
+			<p class="addbtn">
+				<button type="button">新增条件行</button>
+			</p>
+		</div>
+		<div class="node" data-index="8">
+			<h2>扩张囊胚</h2>
+			<table class="cycle-table" id="kuo" lay-filter="kuo"></table>
+			<p class="addbtn">
+				<button type="button">新增条件行</button>
+			</p>
+		</div>
+	</div>
+
+
+
+	<script type="text/html" id="operation">
+		<a class="layui-table-link edit-btn" lay-event="edit">编辑</a>
+		<a class="layui-table-link del-btn" lay-event="del">删除</a>
+	</script>
+
+	<script src="lib/layui/layui.js"></script>
+	<script src="js/scheme.js"></script>
+</body>
+
+</html>

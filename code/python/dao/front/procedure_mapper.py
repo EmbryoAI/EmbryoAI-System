@@ -216,5 +216,14 @@ def getEmbryoFateCount(medicalRecordNo,embryoFateId):
     except Exception as e:
         raise DatabaseError('根据主键ID查询病历时异常', e.message, e)
         return None
+
+def save(procedure):
+    try :
+        db.session.add(procedure)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('新增周期数据时发生错误', e.message, e)
     finally:
         db.session.remove()

@@ -91,3 +91,14 @@ def getEmbryoByCondition(sqlCondition,filters):
         return None
     finally:
         db.session.remove()
+
+def save(embryo):
+    try :
+        db.session.add(embryo)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('新增胚胎数据时发生错误', e.message, e)
+    finally:
+        db.session.remove()

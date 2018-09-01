@@ -58,3 +58,10 @@ def queryProcedureViewList():
     logger().info('进入procedure_controller.queryProcedureViewList查询周期综合视图列表')
     code, msg = procedure_service.queryProcedureViewList(request)
     return make_response(json.dumps(msg, ensure_ascii=False), code)
+
+#新建病历
+@procedure_rest_controller.route('/add', methods=['POST'])
+@login_required
+def add():
+    code, msg = procedure_service.addProcedure(request)
+    return make_response(jsonify(msg), code)
