@@ -152,9 +152,9 @@ def getProcedure(id):
 def queryProcedureViewList(medicalRecordNo):
     try:
         sql = text("""
-        SELECT CONCAT(i.incubator_code,'-',d.dish_code,'-',e.embryo_index) AS code_index, 
+        SELECT CONCAT(i.incubator_code,'-',d.dish_code,'-',e.embryo_index) AS codeIndex, 
             GROUP_CONCAT(dict1.dict_value,"#",m.milestone_path,"#",m.milestone_time ORDER BY m.milestone_time) lcb,
-            e.embryo_score AS score ,dict2.dict_value AS embryo_fate
+            e.embryo_score AS score ,dict2.dict_value AS embryoFate
             FROM t_embryo e
             LEFT JOIN t_procedure t
             ON e.procedure_id = t.id
@@ -185,14 +185,18 @@ def queryProcedureViewList(medicalRecordNo):
 def getPatientByMedicalRecordNo(medicalRecordNo):
     try:
         sql = text("""
-            select
-              p.patient_name as patient_name,
-              t.patient_age as patient_age,
-              CONCAT(t.insemi_time) as insemi_time
-            from t_procedure t
-              left join t_patient p
-                on t.patient_id = p.id
+            SELECT
+              p.patient_name AS patientName,
+              t.patient_age AS patientAge,
+              CONCAT(t.insemi_time) AS insemiTime,
+              COUNT(e.id) AS '胚胎总数'
+            FROM t_procedure t
+              LEFT JOIN t_patient p
+                ON t.patient_id = p.id
+              LEFT JOIN  t_embryo e
+               ON e.procedure_id = t.id
             WHERE t.medical_record_no = :medicalRecordNo
+            GROUP BY t.id
         """)
         return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo}).fetchone()
     except Exception as e:

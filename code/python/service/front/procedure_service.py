@@ -145,11 +145,11 @@ def queryProcedureViewList(request):
         procedureViewList=[]
         #表格的动态头
         tableObj=OrderedDict()
-        tableObj["code_index"] = "箱皿胚胎"
+        tableObj["codeIndex"] = "箱皿胚胎"
         for key in dictList:
             tableObj[key['dictValue']] = key['dictValue']
         tableObj["score"] = "评分"
-        tableObj["embryo_fate"] = "结局"
+        tableObj["embryoFate"] = "结局"
         procedureViewList.append(tableObj)
         #查詢列表
         procedureList = procedure_mapper.queryProcedureViewList(medicalRecordNo)
@@ -157,7 +157,7 @@ def queryProcedureViewList(request):
         #循环查询出来的值
         for key in procedureList:
             tableObj=OrderedDict()
-            tableObj["code_index"] = key["code_index"]
+            tableObj["codeIndex"] = key["codeIndex"]
             #如果里程碑字段不为空
             if key['lcb']!=None:
                 #由于使用mysql GROUP_CONCAT函数 行转列 需要截取
@@ -175,22 +175,24 @@ def queryProcedureViewList(request):
                 for dictObj in dictList:
                     tableObj[dictObj['dictValue']] = ""
             tableObj["score"] = key["score"]
-            tableObj["embryo_fate"] = key["embryo_fate"]
+            tableObj["embryoFate"] = key["embryoFate"]
             procedureViewList.append(tableObj)
             
         #根据病历号查询患者信息
         patientRes = procedure_mapper.getPatientByMedicalRecordNo(medicalRecordNo)
-  
-        patient = dict(patientRes)
-        for embryoFate in embryoFateList:
-            count = procedure_mapper.getEmbryoFateCount(medicalRecordNo,embryoFate['dictKey'])
-            patient[embryoFate['dictValue']] = count
-        
-        resObj=OrderedDict()
-        resObj["patient"] = patient
-        resObj["procedureViewList"] = procedureViewList
+        if patientRes!=None:
+            patient = dict(patientRes)
+            for embryoFate in embryoFateList:
+                count = procedure_mapper.getEmbryoFateCount(medicalRecordNo,embryoFate['dictKey'])
+                patient[embryoFate['dictValue']] = count
             
-        return 200,resObj
+            resObj=OrderedDict()
+            resObj["patient"] = patient
+            resObj["procedureViewList"] = procedureViewList
+                
+            return 200,resObj
+        else:
+            return 200,None
     except:
         return 400, '查询周期综合视图列表时发生错误!'
     
