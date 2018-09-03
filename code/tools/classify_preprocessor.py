@@ -20,7 +20,7 @@ if __name__=='__main__':
     test_ratio = float(args.test)
     val_ratio = float(args.validation)
     # 设置一个幸运数字作为随记种子，方便后续重复性实验
-    np.random.seed(1978)
+    np.random.seed(19880520)
     # 如果输出目录不存在，创建它
     if not os.path.exists(args.output):
         os.makedirs(args.output)
@@ -40,7 +40,7 @@ if __name__=='__main__':
                 else:
                     output_path = args.output + os.path.sep + 'train' 
             img_file = str(img_array[i][0], encoding='utf8')
-            img_tag = str(img_array[i][1], encoding='utf8')
+            img_tag = f'{int(str(img_array[i][1], encoding="utf8")):02d}'
             output_tag = output_path + os.path.sep + img_tag
             if not os.path.exists(output_tag):
                 os.makedirs(output_tag)

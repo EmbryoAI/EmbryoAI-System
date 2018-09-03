@@ -56,12 +56,12 @@ def process_serie(path, serie, dish_info):
             # 定位胚胎位置
             left, top, right, bottom = find_embryo(img)
             img_focus = img[top:bottom, left:right]
-            img_out = cv2.resize(img_focus, (200, 200), cv2.INTER_NEAREST)
+            img_out = cv2.resize(img_focus, (200, 200), cv2.INTER_LINEAR)
             img_size = getdefault(conf, 'EMBRYO_PREDICT_SIZE', 200)
 
             # 下面使用keras的预训练模型，对胚胎图像阶段进行预测
-            img_predict = resize(img_focus, (img_size, img_size))
-            img_predict = img_predict[np.newaxis, ..., np.newaxis]
+            # img_predict = resize(img_focus, (img_size, img_size))
+            img_predict = img_out[np.newaxis, ..., np.newaxis]
             prediction = model.predict_classes(img_predict)
             print(prediction, stage_labels[prediction[0]])
             # img_class = prediction[0].argmax()
