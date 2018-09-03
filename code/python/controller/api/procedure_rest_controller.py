@@ -24,7 +24,6 @@ def queryProcedureList():
 
 #查询病历详情
 @procedure_rest_controller.route('/<string:id>', methods=['GET'])
-@login_required
 def procedureDetail(id):
     return procedure_service.getProcedureDetail(id)
 
@@ -65,3 +64,10 @@ def queryProcedureViewList():
 def add():
     code, msg = procedure_service.addProcedure(request)
     return make_response(jsonify(msg), code)
+
+#修改病历周期备注
+@procedure_rest_controller.route('/memo', methods=['POST'])
+@login_required
+def memo():
+    code, msg = procedure_service.memo(request)
+    return make_response(msg, code)
