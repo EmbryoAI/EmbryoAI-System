@@ -1,0 +1,60 @@
+.det-box{
+	width: 98%;
+	margin: auto;
+	background-color: #fff
+}
+.info-top{
+	width: 100%;
+	height: 64px;
+	line-height: 64px;
+}
+.info-top li{
+	float: left;
+	margin-left: 20px;
+	background: url(../img/icon-cycle1.png) no-repeat left center;
+	padding-left: 40px;
+	font-weight: bold;
+	font-size: 16px
+}
+.info-top li span{
+	margin-right: 20px;
+}
+.info-top li.emb{
+	background: url(../img/icon-cycle2.png) no-repeat left center;
+}
+.info-top li.tran{
+	background: url(../img/icon-cycle3.png) no-repeat left center;
+}
+.info-top li.freez{
+	background: url(../img/icon-cycle4.png) no-repeat left center;
+}
+.grade,.paoq,.lengd,.daid,.yiz{
+	font-weight: bolder;
+}
+.grade{
+	color: #457cdb;
+}
+.paoq{
+	color: #f81c1c;
+}
+.lengd{
+	color: #0dbfb5;
+}
+.daid{
+	color: #ff8429;
+}
+.yiz{
+	color: #45ac51;
+}
+.cycle-img{
+	width: 100px;
+	height: auto;
+	line-height: 0;
+}
+.cycle-t{
+	display: block;
+	width: 100%;
+	text-align: center;
+	line-height: 0;
+	font-weight: normal;
+}

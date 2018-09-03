@@ -3,6 +3,7 @@ from entity.Procedure import Procedure
 from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
 from traceback import print_exc
+from entity.Patient import Patient
 
 
 def update(id, mobile, email):
@@ -26,3 +27,19 @@ def queryPatientNameList(sqlCondition,filters):
         result = db.session.execute(sql,filters) 
         sql_result = result.fetchall()
         return sql_result
+
+def save(patient):
+    try :
+        db.session.add(patient)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('新增患者数据时发生错误', e.message, e)
+    finally:
+        db.session.remove()
+
+def getByPatientId(id):
+    rs = db.session.query(Patient).filter(Patient.id == id).one_or_none()
+    db.session.remove()
+    return rs

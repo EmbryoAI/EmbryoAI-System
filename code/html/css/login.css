@@ -28,7 +28,7 @@
 	width: 140px;
 	float: left;
 }
-.login-container p span{
+.login-container p a{
 	font-size: 16px;
 	color: #087fd4;
 	display: inline-block;

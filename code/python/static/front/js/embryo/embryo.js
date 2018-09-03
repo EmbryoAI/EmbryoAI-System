@@ -260,13 +260,15 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             
                 $(this).removeClass('play');
                 $(this).addClass('stop');
-                console.log("播放");
+                $(this).children("span").text("暂停");
                 $(".lg-video-img img:eq(" + n + ")").show();
                 function run() {
                     if (n < $(".lg-video-img img").length) {
                         n = n;
                     } else {
                         n = 0;
+                    	//播放完成 或者 暂停调用
+                    	payWc();
                     }
                     n++;
                     $(".lg-video-img img").hide();
@@ -278,24 +280,31 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 imgTime = setInterval(run, 1000);
 
             } else {
-            	$("#imgVideoDiv").hide();
-            	$("#imgDiv").show();
-            	$("#zIndexDiv").show();
-                $(this).removeClass('stop');
-                $(this).addClass('play');
-                console.log("暂停");
-                //截取出图片src中的时间序列
-                var imgsrc = $(".lg-video-img img:eq(" + n + ")").attr("src");
-			    var image = "<img src='"+imgsrc+"' />";
-                $("#imgDiv").html(image);
-                var timeSeries = imgsrc.substring(imgsrc.length-17,imgsrc.length-10);
-                getBigImage(procedureId, dishId, wellId, timeSeries,1);//定位到对应的时间序列
-                //记录一下当前暂停图片的URL
-                imgVideoZt = $(".lg-video-img img:eq(" + n + ")").attr("id");
-                
-                clearInterval(imgTime);
+            	//播放完成 或者 暂停调用
+            	payWc();
             }
         })
+        
+        function payWc() {
+        	$("#imgVideoDiv").hide();
+        	$("#imgDiv").show();
+        	$("#zIndexDiv").show();
+        	$('#playBtn').removeClass('stop');
+        	$('#playBtn').addClass('play');
+        	$('#playBtn').children("span").text("播放");
+            //截取出图片src中的时间序列
+            var imgsrc = $(".lg-video-img img:eq(" + n + ")").attr("src");
+		    var image = "<img src='"+imgsrc+"' />";
+            $("#imgDiv").html(image);
+            var imageVideoId = $(".lg-video-img img:eq(" + n + ")").attr("id");
+            var timeSeries =  imageVideoId.substring(10,imageVideoId.length);
+            
+            getBigImage(procedureId, dishId, wellId, timeSeries,1);//定位到对应的时间序列
+            //记录一下当前暂停图片的URL
+            imgVideoZt = $(".lg-video-img img:eq(" + n + ")").attr("id");
+            
+            clearInterval(imgTime);
+        }
         
         //记录最新的标记状态值
         var embryoFateIdQj = "";
@@ -884,6 +893,11 @@ function getBigImage(procedureId, dishId, wellId, seris,type){
 }
 
 function preFrame(){
+	if(!$('#playBtn').hasClass('play')){
+		layer.msg("请先暂停播放后，再操作!")
+		return;
+	}
+	
     if(currentSeris == "0000000"){
         parent.layer.alert("已经是第一张了!");
         return;
@@ -904,6 +918,11 @@ function preFrame(){
 }
 
 function nextFrame(){
+	if(!$('#playBtn').hasClass('play')){
+		layer.msg("请先暂停播放后，再操作!")
+		return;
+	}
+	
     $.ajax({
         cache : false,
         type : "GET",
@@ -1187,6 +1206,11 @@ function queryClearImageUrl() {
 
 //上下里程碑   根据胚胎ID 和 当前时间序列 获取上下里程碑节点ID
 function node(upOrdown) {
+	if(!$('#playBtn').hasClass('play')){
+		layer.msg("请先暂停播放后，再操作!")
+		return;
+	}
+	
 	$.ajax({
 		type : "get",
 		url : "/api/v1/milestone/node/"+$("#embryoId").val()+"/"+currentSeris+"/"+upOrdown,

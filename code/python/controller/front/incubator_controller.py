@@ -15,8 +15,15 @@ def incubator():
 
     parser = reqparse.RequestParser()
     parser.add_argument('incubatorId', type=str)
+    parser.add_argument('procedureId', type=str)
 
     agrs = parser.parse_args()
     incubatorId = agrs['incubatorId']
+    procedureId = agrs['procedureId']
 
-    return render_template('front/incubator/incubator.html', incubatorId=incubatorId)
+    if incubatorId is None:
+        incubatorId = ''
+    if procedureId is None:
+        procedureId = ''
+
+    return render_template('front/incubator/incubator.html', incubatorId=incubatorId,procedureId=procedureId)

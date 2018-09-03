@@ -14,12 +14,26 @@ def insertIncubator(incubator):
         db.session.rollback()
         print_exc()
         raise DatabaseError('插入培养箱数据时发生错误', e.message, e)
+    finally:
+        db.session.remove()
 
 def findIncubatorById(id):
-    return db.session.query(Incubator).filter(Incubator.id == id).one_or_none()
+    try:
+        return db.session.query(Incubator).filter(Incubator.id == id).one_or_none()
+    except Exception as e:
+        raise DatabaseError('根据培养箱ID获取培养箱失败！', e.message, e)
+        return None
+    finally:
+        db.session.remove()
 
 def findIncubatorByCode(incubatorCode):
-    return db.session.query(Incubator).filter(Incubator.incubatorCode == incubatorCode).one_or_none()
+    try:
+        return db.session.query(Incubator).filter(Incubator.incubatorCode == incubatorCode).one_or_none()
+    except Exception as e:
+        raise DatabaseError('根据培养箱并编码获取培养箱失败！', e.message, e)
+        return None
+    finally:
+        db.session.remove()
 
 
 def queryIncubatorList(page,limit,filters):
@@ -40,6 +54,8 @@ def updateIncubator(params):
         db.session.rollback()
         print_exc()
         raise DatabaseError('编辑培养箱异常', e.message, e)
+    finally:
+        db.session.remove()
     
 def deleteIncubator(params):
     try :
@@ -52,3 +68,5 @@ def deleteIncubator(params):
         db.session.rollback()
         print_exc()
         raise DatabaseError('删除培养箱异常', e.message, e)
+    finally:
+        db.session.remove()

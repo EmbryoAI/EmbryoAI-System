@@ -86,3 +86,17 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
         }
     });
 })
+
+function openAddCase() {
+	layer.open({
+		title : "病历详情",
+		type : 2,
+		area : [ '1400px', '700px' ],
+		maxmin : true,
+		shadeClose : false,
+        content : '/front/procedure/add',
+        end:function(index,layero){
+            reload();
+        }
+	});
+}

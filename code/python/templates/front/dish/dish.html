@@ -10,6 +10,8 @@
 
 <!--主体内容都放在这个div里-->
 <div class="main">
+	<input type="hidden" id="procedureId" value="{{procedure_id}}"/>
+	<input type="hidden" id="dishId" value="{{dish_id}}"/>
     <div class="title">
         <h1>皿视图</h1>
         <h6>Dish View</h6>
@@ -18,74 +20,68 @@
     <div class="dish-sec">
         <div class="dish-box">
             <ul class="dishimg" id="dishImageUl">
-                <li embryoId="1">
-                    <video class="videoSource">
-                        <source src="/static/front/img/111.mp4" type="video/mp4"></source>
-                    </video>
+                <li class="dishbox1">
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
-                <li embryoId="2">
-                        <video class="videoSource">
-                                <source src="/static/front/img/111.mp4" type="video/mp4"></source>
-                            </video>
+                <li class="dishbox2">
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
-                <li embryoId="3"> 
-                    <video class="videoSource">
-                        <source src="/static/front/img/111.mp4" type="video/mp4"></source>
-                    </video>
+                <li class="dishbox3">
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
-                <li embryoId="1">
-                        <video class="videoSource">
-                                <source src="/static/front/img/111.mp4" type="video/mp4"></source>
-                            </video>
+                <li class="dishbox4">
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
-                <li embryoId="1">
-                        <video class="videoSource">
-                                <source src="/static/front/img/111.mp4" type="video/mp4"></source>
-                            </video>
+                <li class="dishbox5">
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
-                <li embryoId="1">
-                        <video class="videoSource">
-                                <source src="/static/front/img/111.mp4" type="video/mp4"></source>
-                            </video>
+                <li class="dishbox6">
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
-                <li embryoId="1">
-                        <video class="videoSource">
-                                <source src="/static/front/img/111.mp4" type="video/mp4"></source>
-                            </video>
+                <li class="dishbox7">
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
-                <li embryoId="1">
-                        <video class="videoSource">
-                                <source src="/static/front/img/111.mp4" type="video/mp4"></source>
-                            </video>
+                <li class="dishbox8">
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
-          <li embryoId="1">
-                        <video class="videoSource">
-                                <source src="/static/front/img/111.mp4" type="video/mp4"></source>
-                            </video>
+                <li class="dishbox9">
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
-                <li embryoId="1">
-                        <video class="videoSource">
-                                <source src="/static/front/img/111.mp4" type="video/mp4"></source>
-                            </video>
+                <li class="dishbox10">
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
-                <li embryoId="1">
-                        <video class="videoSource">
-                                <source src="/static/front/img/111.mp4" type="video/mp4"></source>
-                            </video>
+                <li class="dishbox11">
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
-                <li embryoId="1">
-                        <video class="videoSource">
-                                <source src="/static/front/img/111.mp4" type="video/mp4"></source>
-                            </video>
+                <li class="dishbox12">
+                    <img src="/static/front/img/icon-wellnone.jpg" >
                 </li>
             </ul>
+						
+			<div class="time-box" id="time_box_div">
+				<h3>时间节点快捷查看</h3>
+				<div class="time-list" id="timelineDiv">
+				    <!-- <span>0</span>
+				    <span>15min</span>
+				    <span>5h30min</span>
+				    <span>15min</span>
+				    <span>5h30min</span>
+				    <span>15min</span>
+				    <span>5h30min</span>
+				    <span>15min</span>
+				    <span>5h30min</span>
+				    <span>15min</span>
+				    <span>5h30min</span> -->
+			    </div>
+		    </div>
+						
             <div class="tool dish-tool">
                 <ul class="tool-play">
-                    <li class="pre-milestone"><i></i><span>上一里程碑</span></li>
-                    <li class="pre-frame"><i></i><span>上一帧</span></li>
-                    <li class="play" onclick="playVideo(0);playVideo(1);playVideo(2);playVideo(3);playVideo(4);playVideo(5);playVideo(6);playVideo(7);playVideo(8);playVideo(9);playVideo(10);playVideo(11);" ><i></i><span>播放</span></li>
-                    <li class="next-frame"><i></i><span>下一帧</span></li>
-                    <li class="next-milestone"><i></i><span>下一里程碑</span></li>
+                    <li class="pre-milestone" onclick="node('up');" ><i></i><span>上一里程碑</span></li>
+                    <li class="pre-frame" onclick="preFrame();"><i></i><span>上一帧</span></li>
+                    <li class="play" id="playBtn"><i></i><span>播放</span></li>
+                    <li class="next-frame" onclick="nextFrame();"><i></i><span>下一帧</span></li>
+                    <li class="next-milestone" onclick="node('down');"><i></i><span>下一里程碑</span></li>
                 </ul>
                 <ul class="tool-play tool-end" id="embryo_fate_type_ul">
                     <li class="standard" name="standard" data-end="0"><i></i><span>基准</span></li>
@@ -103,21 +99,23 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" id="mobile"/>
+        <input type="hidden" id="email"/>
         <div class="dish-info">
             <h1>病历信息</h1>
             <ul>
-                <li><span>甄美丽</span><span>28岁</span></li>
-                <li><strong>取卵时间：</strong><span>2018/07/12 10:10</span></li>
-                <li><strong>获卵数：</strong><span>2</span></li>
-                <li><strong>授精时间：</strong><span>2018/07/12 10:10</span></li>
-                <li><strong>IVF/ICSI：</strong><span>IVF</span></li>
+                <li><span id="patienName"></span><span id="patientAge"></span></li>
+                <li><strong>取卵时间：</strong><span id="ecTime"></span></li>
+                <li><strong>获卵数：</strong><span id="ecCount"></span></li>
+                <li><strong>授精时间：</strong><span id="insemiTime"></span></li>
+                <li><strong>IVF/ICSI：</strong><span id="insemiType"></span></li>
                 <li><strong>阶段：</strong><span>day3</span></li>
-                <li><strong>胚胎数：</strong><span>3</span></li>
+                <li><strong>胚胎数：</strong><span id="embryoNum"></span></li>
                 <li><strong>备注：</strong>
-                    <div class="layui-input-block dish-ttar">
-                      <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
-                      <button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >保存备注</button>
-                    </div>
+                <div class="layui-input-block dish-ttar">
+                <textarea name="desc" placeholder="请输入内容" class="layui-textarea" id="memo"></textarea>
+                <button class="layui-btn layui-bg-blue" lay-submit lay-filter="" onclick="updateMemo()">保存备注</button>
+                </div>
                 </li>
             </ul>
             <div class="em-info">

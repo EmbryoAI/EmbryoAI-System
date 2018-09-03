@@ -24,23 +24,28 @@
             <h1>新建病历</h1>
             <h6>New Cases</h6>
         </div>
-        <form class="layui-form" action="">
+        <form class="layui-form" id="procedureForm" action="">
+            {% if current_user.is_authenticated %}
+                <input type="hidden" name="userId" id="userId" value="{{current_user.id}}">
+            {% endif %}
             <!--选择皿-->
             <div class="choice incubator" id="incubatorNameDiv">
                 <strong>培养箱选择：</strong>
                 <!--<span class="active">001</span><span>002</span><span>003</span>-->
             </div>
+            <input type="hidden" name="incubator" id="incubator"/>
             <div class="choice dish" id="dishDiv">
                 <strong>培养皿选择：</strong>
                 <!--<span class="active">1</span><span>2</span><span>3</span><span>4</span><i>* 最多只能选择2个皿</i>-->
             </div>
+            <input type="hidden" name="dish" id="dish"/>
             <!--基本信息-->
             <h1 class="details-title">基本信息</h1>
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label"><i>*</i>姓名</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="" required lay-verify="required" class="layui-input">
+                        <input type="text" name="patientName" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -48,26 +53,26 @@
                     <div class="layui-input-inline">
                         <!--<input type="text" name="" required lay-verify="card" class="layui-input">-->
 						<div class="field">
-							<input type="text" name="nope" id="nope" placeholder="" class="layui-input" required lay-verify="card" />
+							<input type="text" name="nope" id="nope" placeholder="" class="layui-input" />
 						</div>
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label"><i>*</i>出生日期</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input" id="birth" required lay-verify="required">
+                        <input type="text" class="layui-input" id="birth" name="birthdate">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label"><i>*</i>移动电话</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="" required lay-verify="required" class="layui-input">
+                        <input type="text" name="mobile" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">电子邮箱</label>
                     <div class="layui-input-inline">
-                        <input type="text" name=""  class="layui-input">
+                        <input type="text" name="email"  class="layui-input">
                     </div>
                 </div>
 				
@@ -89,45 +94,51 @@
                     	</select>
                     </div>
 					<div class="layui-input-inline">
-						<input type="text" name=""  class="layui-input">
+						<input type="text" name="address"  class="layui-input">
 					</div>
                 </div>
 				<div class="layui-inline" style="margin-top: -8px; margin-left: 36px;">
-					<input type="checkbox" name="" title="吸烟史" lay-skin="primary">
-					<input type="checkbox" name="" title="酗酒史" lay-skin="primary"> 
+					<input type="checkbox" name="is_drinking" title="吸烟史" lay-skin="primary">
+					<input type="checkbox" name="is_smoking" title="酗酒史" lay-skin="primary"> 
 				</div>
             </div>
             <!--基本信息-->
             <h1 class="details-title">周期信息</h1>
             <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label"><i>*</i>病历号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="medical_record_no" class="layui-input">
+                    </div>
+                </div>
 				<div class="layui-inline">
                     <label class="layui-form-label"><i>*</i>年龄</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="" required lay-verify="required" class="layui-input">
+                        <input type="text" name="patient_age" class="layui-input">
                     </div>
                 </div>
 				<div class="layui-inline">
 					<label class="layui-form-label">身高(cm)</label>
 					<div class="layui-input-inline">
-						<input type="number" name=""  class="layui-input">
+						<input type="number" name="patient_height"  class="layui-input">
 					</div>
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label">体重(kg)</label>
 					<div class="layui-input-inline">
-						<input type="number" name=""  class="layui-input">
+						<input type="number" name="patient_weight"  class="layui-input">
 					</div>
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label">取卵时间</label>
 					<div class="layui-input-inline">
-						<input type="text" class="layui-input" id="get" required lay-verify="required">
+						<input type="text" class="layui-input" name="ec_time" id="get">
 					</div>
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label">取卵个数</label>
 					<div class="layui-input-inline">
-						<input type="number" name=""  class="layui-input">
+						<input type="number" name="ec_count"  class="layui-input">
 					</div>
 				</div>
 				<div class="layui-inline">
@@ -140,19 +151,20 @@
 				<div class="layui-inline">
 					<label class="layui-form-label"><i>*</i>授精时间</label>
 					<div class="layui-input-inline">
-						<input type="text" class="layui-input" id="iui" required lay-verify="required">
+						<input type="text" name="insemi_time" class="layui-input" id="iui">
 					</div>
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label"><i>*</i>胚胎个数</label>
 					<div class="layui-input-inline">
-						<input type="number" name="" required lay-verify="required"   class="layui-input">
+                        <input type="number" name="embryo_number" id="embryo_number"  class="layui-input">
+                        <input type="hidden" name="well_id" id="well_id">
 					</div>
 				</div>
 				<div class="layui-inline">
 					<label class="layui-form-label"><i>*</i>评分标准</label>
 					<div class="layui-input-inline">
-							<select name="">
+							<select name="embryo_score">
 								<option value="1">111</option>
 								<option value="2">222</option>
 								<option value="3">333</option>
@@ -164,12 +176,12 @@
 					</div>
 				</div>
             </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn layui-bg-blue" lay-submit lay-filter="">创建病历</button>
-				</div>
-            </div>
         </form>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-bg-blue" lay-filter="" onclick="addCase()">创建病历</button>
+            </div>
+        </div>
     </div>
 
     <script src="/static/admin/layui/layui.js"></script>

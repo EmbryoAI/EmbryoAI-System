@@ -16,7 +16,7 @@
 	width: 1046px;
 	padding: 10px;
 	background-color: #fff;
-	height: 500px;
+	height: 550px;
 	border-radius: 4px;
 	border: #ced2d5 1px solid;
 	box-shadow:0px 0px 8px rgba(0,0,0,0.08) ;
@@ -205,4 +205,38 @@
 	font-weight: bolder;
 	-webkit-filter: none;
 	filter: none;
+}
+/* 时间轴 */
+.time-box{
+	width: 99%;
+	margin: auto;
+	margin-bottom: 20px;
+}
+.time-box h3{
+	margin-bottom: 5px;
+	padding-left: 8px;
+	font-size: 14px
+}
+.time-list{
+	width: 99%;
+	margin: auto;
+	background: #dfe3ea;
+	border-radius: 20px;
+	padding:4px 10px;
+}
+.time-list span{
+	display: inline-block;
+	padding: 2px 6px;
+	border-radius: 20px;
+	margin: 4px 2px;
+	font-size: 12px;
+	color: #a0a8af;
+	cursor: pointer;
+}
+.time-list span.active{
+	background-color: #fff;
+	color: #10aefc;
+}
+.time-list span:hover{
+	opacity: 0.8;
 }

@@ -21,7 +21,13 @@ $(function(){
             $("#new_email").val(procedure.email);
             $("#birthdate").html(procedure.birthdate);
             $("#new_address").val(procedure.address);
+            if(procedure.is_smoking == 0){
+                procedure.is_smoking = '';
+            }
             $("#is_smoking").html(procedure.is_smoking);
+            if(procedure.is_drinking == 0){
+                procedure.is_drinking = '';
+            }
             $("#is_drinking").html(procedure.is_drinking);
             $("#patient_age").html(procedure.patient_age);
             $("#patient_height").html(procedure.patient_height);
@@ -53,7 +59,7 @@ function queryEmbryo(procedureId){
 			for(var i=0;i<data.data.length;i++){
                 table.append("<tr><td>"
                  + data.data[i].embryo_index + 
-                 "</td><td><a href='/front/incubator?incubatorId=" + data.data[i].incubator_code + "' target='_blank' class='layui-table-link'>"
+                 "</td><td><a href='/front/incubator?procedureId=" + procedureId + "&incubatorId=" + data.data[i].incubator_code + "' target='_blank' class='layui-table-link'>"
                   + data.data[i].incubator_code +
                  "</a></td><td><a href='#' onclick='showDish()' class='layui-table-link'>"
                   + data.data[i].dish_code 

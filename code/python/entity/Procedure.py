@@ -27,4 +27,5 @@ class Procedure(db.Model, mixin):
     zSlice = db.Column("z_slice", db.Integer)
     state = db.Column("state", db.String(255))
     memo = db.Column("memo", db.String(500))
-
+    delFlag = db.Column("del_flag", db.Integer, default=0)
+    medicalRecordNo = db.Column("medical_record_no", db.String(255))

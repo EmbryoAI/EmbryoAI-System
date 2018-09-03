@@ -1,0 +1,152 @@
+.mbox{
+	width: 610px;
+	height: 700px;
+	background-color: #fff;
+	border-radius:10px ;
+	box-shadow: 0px 0px 35px rgba(0,0,0,0.35);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+}
+.mbox-logo{
+	padding: 20px;
+}
+.mbox-logo img{
+	width: 136px;
+}
+.mbox-logo a{
+	display: inline-block;
+	float: right;
+	color: #087fd4;
+	font-size: 16px;
+	border-bottom: 1px solid #087fd4;
+}
+.mbox h1{
+	text-align: center;
+	font-size: 18px;
+	color: #393d47;
+	font-weight: bolder;
+}
+.mbox h1 i{
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	margin: 0 10px;
+	background: url(../img/home-icon.png) no-repeat center;
+}
+.mbox h6{
+	text-align: center;
+	font-size: 14px;
+	color: #087fd4;
+	padding: 12px 0;
+}
+.step{
+	width: 500px;
+	margin: auto;
+	height: 70px;
+}
+.step li{
+	float: left;
+	width: 33.33%;
+	text-align: center;
+	position: relative;
+	color: #c9cedc;
+}
+.diamond {
+	display: inline-block;
+	width: 34px;
+	height: 34px;
+	line-height: 34px;
+	background: url(../img/icon-step1.png) no-repeat center;
+	color: #fff;
+}
+.line{
+	display: inline-block;
+	width: 45%;
+	height: 2px;
+	background: #c9cedc;
+	position: absolute;
+	right: 0;
+	top: 16px;
+}
+.on .line{
+	background: #4169d3;
+}
+.on .diamond{
+	background: url(../img/icon-step2.png) no-repeat center;
+}
+.step li.on{
+	color: #4169d3;
+}
+.step li p{
+	padding-top: 10px;
+}
+.part{
+	width: 400px;
+	margin: 50px 50px 0;
+}
+.part i{
+	color: #ec3135;
+	margin-right: 4px;
+}
+.part .layui-form-label{
+	width: 106px;
+}
+.part .layui-input-inline{
+	width: 250px;
+}
+.part .addr .layui-input-inline{
+	width: 120px;
+}
+.part .addr{
+	margin-bottom: 0;
+}
+.regbtn .layui-input-block{
+	margin-left: 136px;
+	margin-top: 40px;
+}
+.regbtn .layui-input-block button{
+	width: 250px;
+}
+.small-btn{
+	position: relative;
+}
+.small-btn button{
+	position: absolute;
+	right: 1px;
+	top: 1px;
+	padding-right: 10px;
+	background-color: #fff;
+	border: 0;
+	line-height: 30px;
+	color:#4169d3 ;
+	cursor:pointer;
+}
+.wechatimg{
+	text-align: center;
+}
+.wechatimg img{
+	width: 160px;
+}
+.part4{
+	margin: auto;
+	text-align: center;
+	margin-top: 60px;
+}
+.part4 h2{
+	font-size: 24px;
+	font-weight: bolder;
+	margin-bottom: 20px;
+}
+.part4 p{
+	font-size: 16px
+}
+.part4 p a{
+	color:#4169d3 ;
+	margin-left: 5px;
+	text-decoration: underline;
+}
+.part4 p span{
+	color: #4169D3;
+}

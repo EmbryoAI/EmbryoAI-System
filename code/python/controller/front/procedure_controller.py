@@ -13,6 +13,12 @@ def main():
     logger().info('进入procedure_controller.procedure病历页面')
     return render_template('front/procedure/procedure.html',htmlType="incubator")
 
+@procedure_controller.route('/view', methods=['GET'])
+@login_required
+def view():
+    logger().info('进入procedure_controller.procedureView胚胎周期视图页面')
+    return render_template('front/procedure/procedureView.html',htmlType="incubator")
+
 @procedure_controller.route('/<string:id>', methods=['GET'])
 @login_required
 def detail(id):

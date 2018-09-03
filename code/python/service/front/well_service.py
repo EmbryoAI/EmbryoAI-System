@@ -122,7 +122,6 @@ def queryIncubator():
                         dish_json = json.loads(dn.read())
                     incubator_name = dish_json['incubatorName']
                     list.append(incubator_name)
-                    list.append('INCUB1')
                     print(incubator_name) 
     result_list = []
     for i in list:
@@ -140,6 +139,7 @@ def queryDish(agrs):
 
     list = []
     for catalog in catalog_json:
+        print(catalog)
         catalog_path = conf['EMBRYOAI_IMAGE_ROOT'] + catalog
         dirs = os.listdir(catalog_path)
         for dir in dirs:
@@ -154,4 +154,5 @@ def queryDish(agrs):
                     incubator_name = dish_json['incubatorName']
                     if incubator_name == incubatorName:
                         list.append(dir)
+                        list.append(catalog)
     return jsonify(list)
