@@ -45,8 +45,14 @@ def parse_date(date_str, type):
     import datetime
 
     contrast_date = time.strptime(date_str,"%Y-%m-%d %H:%M:%S")
-    current_date = datetime.datetime.now()
-    days = int(current_date.day) - int(contrast_date[2])
+    contrast_date = datetime.date(contrast_date[0], contrast_date[1], contrast_date[2])
+    current_date = datetime.date(datetime.datetime.now().year, datetime.datetime.now().month, datetime.datetime.now().day)
+
+    days = current_date - contrast_date
+    if str(days) == '0:00:00':
+        days = 0
+    else:
+        days = int(str(days)[0:1])
 
     if days == 0:
         return '今天'

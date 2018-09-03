@@ -220,6 +220,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				}
 			});
 		}
+
+		//查询病例信息
+		getProcedureInfo($("#procedureId").val());
 		
 		
 		$(document).keydown(function(event){
@@ -483,4 +486,49 @@ function loadTimeline(wellCode){
 		}
 	});
 	
+}
+
+function getProcedureInfo(procedureId){
+	$.ajax({
+		type : "get",
+		url : "/api/v1/procedure/" + procedureId,
+		datatype : "json",
+		cache:false,
+		success : function(data) {
+			var procedure = data.data;
+			$('#patienName').html(procedure.patient_name);
+			$('#patientAge').html(procedure.patient_age + '岁');
+			$('#ecTime').html(procedure.ec_time);
+			$('#ecCount').html(procedure.ec_count);
+			$('#insemiTime').html(procedure.insemi_time);
+			$('#insemiType').html(procedure.insemi_type);
+			$('#embryoNum').html(procedure.embryo_num);
+			$('#memo').html(procedure.memo);
+			$('#mobile').val(procedure.mobile);
+			$('#email').val(procedure.email);
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
+}
+
+function updateMemo(){
+	var procedureId = $("#procedureId").val();
+	var mobile = $("#mobile").val();
+	var email = $("#email").val();
+	var memo = $("#memo").val();
+	$.ajax({
+		type : "POST",
+		url : "/api/v1/procedure/info",
+		data : {"id":procedureId,"mobile":mobile,"email":email,"memo":memo},
+		datatype : "json",
+		cache:false,
+		success : function(data) {
+			alert(JSON.stringify(data));
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
 }

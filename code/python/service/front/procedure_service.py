@@ -79,12 +79,13 @@ def getProcedureDetail(id):
 
     if result.ec_time != '0000-00-00 00:00:00':
         ec_time = parse_date(str(result.ec_time), 1)
-    if result.insemi_time:
+    if result.insemi_time != '0000-00-00 00:00:00':
         insemi_time = parse_date(str(result.insemi_time), 1)
 
     result = dict(result)
     result['ec_time'] = ec_time
     result['insemi_time'] = insemi_time
+    
 
     if result:
         restResult = RestResult(0, "OK", 1, result)
@@ -99,6 +100,15 @@ def updateProcedure(request):
     try:
         procedure_mapper.update(id, memo)
         patient_mapper.update(id, mobile, email)
+    except:
+        return 500, '修改病历详情时发生错误!'
+    return 200, '修改病历详情成功!'
+
+def memo(request):
+    id = request.args.get('procedureId')
+    memo = request.args.get('memo')
+    try:
+        procedure_mapper.update(id, memo)
     except:
         return 500, '修改病历详情时发生错误!'
     return 200, '修改病历详情成功!'
