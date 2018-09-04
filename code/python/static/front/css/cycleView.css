@@ -10,9 +10,9 @@
 }
 .info-top li{
 	float: left;
-	margin-left: 20px;
+	margin-left: 8px;
 	background: url(../img/icon-cycle1.png) no-repeat left center;
-	padding-left: 40px;
+	padding-left: 30px;
 	font-weight: bold;
 	font-size: 16px
 }
@@ -22,11 +22,17 @@
 .info-top li.emb{
 	background: url(../img/icon-cycle2.png) no-repeat left center;
 }
-.info-top li.tran{
+.info-top li.emb:nth-child(3){
 	background: url(../img/icon-cycle3.png) no-repeat left center;
 }
-.info-top li.freez{
+.info-top li:nth-child(4){
 	background: url(../img/icon-cycle4.png) no-repeat left center;
+}
+.info-top li:nth-child(5){
+	background: url(../img/icon-cycle5.png) no-repeat left center;
+}
+.info-top li:nth-child(6){
+	background: url(../img/icon-cycle6.png) no-repeat left center;
 }
 .grade,.paoq,.lengd,.daid,.yiz{
 	font-weight: bolder;
@@ -57,4 +63,16 @@
 	text-align: center;
 	line-height: 0;
 	font-weight: normal;
+}
+.layui-table tbody tr:hover, .layui-table thead tr, .layui-table-click, .layui-table-header, .layui-table-hover, .layui-table-mend, .layui-table-patch, .layui-table-tool, .layui-table[lay-even] tr:nth-child(even){
+		background-color: #f2f2f2;
+	}
+.layui-table td, .layui-table th, .layui-table-fixed-r, .layui-table-header, .layui-table-page, .layui-table-tips-main, .layui-table-tool, .layui-table-view, .layui-table[lay-skin=line], .layui-table[lay-skin=row]{
+	border-color: #e6e6e6;
+}	
+.layui-table td, .layui-table th{
+	line-height: 34px;
+}
+.layui-table td{
+	line-height: 120px;
 }

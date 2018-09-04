@@ -75,7 +75,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			  icon: 16
 			  ,shade: 0.3,time:0
 		});
-		$("#qts").html("");
+		// $("#qts").html("");
 		$("#theadView").html("");
 		$("#tbodyView").html("");
 		$("#patientView").hide();
