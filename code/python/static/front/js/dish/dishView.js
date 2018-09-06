@@ -320,6 +320,9 @@ function signEmbryoResult(obj,appendData,embryoId,embryoFateId){
 //}
 
 		// 时间轴
+
+
+
 		$('#timelineDiv').on('click','span',function(){
 			$(this).siblings('span').removeClass('active');
 			$(this).addClass('active');
@@ -332,7 +335,20 @@ function signEmbryoResult(obj,appendData,embryoId,embryoFateId){
 			}
 
 		})
-
+		// 时间轴新修改	
+	$('.time-page').on('click','i',function(){
+			$(this).siblings('i').removeClass('active');
+			$(this).addClass('active');
+	})
+	$('.time-list span').hover(function(){
+			const that = this;
+			const text = $(this).find("i").text();
+			layer.tips(text, that,{tips: [1]}); 
+	})
+	$('.time-list').on('click','span',function(){
+			$(this).siblings('span').removeClass('active');
+			$(this).addClass('active');
+	})	
 function getNowFormatDate() {
     var date = new Date();
     var seperator1 = "-";

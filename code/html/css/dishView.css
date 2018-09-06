@@ -215,28 +215,78 @@
 .time-box h3{
 	margin-bottom: 5px;
 	padding-left: 8px;
-	font-size: 14px
+	font-size: 14px;
+	font-weight: bolder;
 }
-.time-list{
-	width: 99%;
-	margin: auto;
-	background: #dfe3ea;
+.time-page{
+	display: inline-block;
+	background: #3c83f7;
 	border-radius: 20px;
 	padding:4px 10px;
+	color: #bfd8ff;
+	margin-left: 6px;
+}
+.time-page i{
+	display: inline-block;
+	padding: 0px 4px;
+	border-radius: 20px;
+	margin:0px;
+	font-size: 12px;
+	cursor: pointer;
+	font-style: normal;
+}
+.time-page i.active{
+	background-color: #fff;
+	color: #3c83f7;
+}
+.time-page i:hover{
+	background-color: #fff;
+	color: #3c83f7;
+	opacity: 0.8;
+}
+.time-lbox{
+	width: 100%;
+	height: 56px;
+}
+.time-list{
+	display: inline-block;
+	margin-top: 20px;
+	margin-left: 10px;
+	border-top: #bbd3ff 2px solid;
 }
 .time-list span{
-	display: inline-block;
-	padding: 2px 6px;
-	border-radius: 20px;
-	margin: 4px 2px;
 	font-size: 12px;
-	color: #a0a8af;
+	text-align: center;
+	display: inline-block;
+	padding-top: 14px;
+	min-width: 11px;
+	height: 16px;
+	margin: 0 19px;
+	margin-top: -6px;
+	line-height: 22px;
 	cursor: pointer;
+	background: url(../img/icon-timel1.png) no-repeat top center;
+	position: relative;
+	transition: all 0.3s;
 }
-.time-list span.active{
-	background-color: #fff;
-	color: #10aefc;
+.time-list span:first-child{
+	margin-left: 0;
 }
-.time-list span:hover{
-	opacity: 0.8;
+.time-list span:last-child{
+	margin-right: 0;
+}
+.time-list span i{
+	display: none;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	
+}
+.time-list span.active i{
+	display: inline-block;
+	color: #3c83f7;
+}
+.time-list span.active,.time-list span:hover{
+	transform:scale(1.1);
+	background: url(../img/icon-timel.png) no-repeat top center;
 }

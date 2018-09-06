@@ -75,7 +75,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			  icon: 16
 			  ,shade: 0.3,time:0
 		});
-		// $("#qts").html("");
+		$("#qts").html("");
 		$("#theadView").html("");
 		$("#tbodyView").html("");
 		$("#patientView").hide();
@@ -94,7 +94,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 					 for(var key in patient){
 						 $("#"+key).html(patient[key]);
 						 num++;
-						 if(num>=4) {
+						 if(num>4) {
 							 var str = '<li class="emb"><strong>'+key+'个数：</strong><span>'+patient[key]+'</span></li>';
 							 $("#qts").append(str);
 						 }
