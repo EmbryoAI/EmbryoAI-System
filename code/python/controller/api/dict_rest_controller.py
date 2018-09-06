@@ -3,7 +3,6 @@
 from flask import Blueprint, jsonify,render_template,request, make_response, abort,session
 from flask_restful import reqparse
 from common import logger
-from app import db
 import service.front.dict_service as dict_service
 import time
 

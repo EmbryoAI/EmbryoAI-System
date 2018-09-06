@@ -13,5 +13,6 @@ class Rule(db.Model, mixin):
     description = db.Column("description", db.String(300))
     createTime = db.Column("create_time", db.DateTime)
     updateTime = db.Column("update_time", db.DateTime)
-    delFlag = db.Column("del_flag", db.String(255))
-
+    delFlag = db.Column("del_flag", db.String(1))
+    isDefault = db.Column("is_default", db.String(1))
+    dataJson = db.Column("data_json", db.String(2048))

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="lib/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="/static/front/css/rule.css" />
+	<style type="text/css">
+		html{
+			background-color: #fff;
+		}
+		body{
+			background-color: #fff;
+			padding: 20px 20px 0  20px;
+			height: auto;
+		}
+		.edit{
+			width: 400px;
+			/* margin: auto; */
+			/* height: 300px; */
+		}
+		.layui-form-label{
+			width: 100px;
+		}
+		.layui-input-block{
+			margin-left: 134px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="edit">
+		<form class="layui-form" action="">
+			<div class="layui-form-item">
+				<label class="layui-form-label">条件</label>
+				<div class="layui-input-block">
+					<select name="interest" lay-filter="aihao">
+						<option value="a">时间</option>
+						<option value="b">大小</option>
+						<option value="c">碎片率</option>
+						<option value="d">评级</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">符号</label>
+				<div class="layui-input-block">
+					<select name="interest" lay-filter="aihao">
+						<option value="0">=</option>
+						<option value="1">></option>
+						<option value="2"><</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">判断值</label>
+				<div class="layui-input-block">
+					 <input type="text" name="p" lay-verify="p" autocomplete="off" placeholder="请输入" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">分值</label>
+				<div class="layui-input-block">
+					<input type="text" name="f" lay-verify="f" autocomplete="off" placeholder="请输入" class="layui-input">
+				</div>
+			</div>
+		</form>
+	</div>
+		
+    <script src="lib/layui/layui.js"></script>
+	<script src="js/scheme.js"></script>
+</body>
+
+</html>

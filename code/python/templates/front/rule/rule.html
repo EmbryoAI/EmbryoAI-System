@@ -1,0 +1,53 @@
+{% extends 'front/header-footer.html' %} {% block mianDiv %}
+<link rel="stylesheet" type="text/css" href="/static/front/css/rule.css" />
+<style type="text/css">
+body {
+	width: 1400px;
+	margin: auto;
+}
+</style>
+<div class="main">
+	<div class="title">
+		<h1>评分标准设置</h1>
+		<h6>Scheme</h6>
+	</div>
+	<div class="layui-form-item">
+		<input id="dictStr" type="hidden" value="{{dictStr}}" />
+		<div class="layui-inline">
+			<label class="layui-form-label" style="width: 100px;">评分标准名称</label>
+			<div class="layui-input-inline">
+				<select class="scheme-sel" id="ruleId">
+					<option value="">请选择</option>
+					 {% for rule in ruleList %}
+						<option value="{{rule.id}}">{{rule.ruleName}}</option>
+					 {% endfor %}
+				</select>
+			</div>
+		</div>
+		<div class="layui-inline btn-box">
+			<button class="layui-btn layui-bg-blue" id="search" type="button">查询</button>
+			<button class="layui-btn layui-bg-blue" id="alter" type="button">修改标题</button>
+			<button class="layui-btn layui-bg-blue" id="setDefault" type="button">设为默认</button>
+			<button class="layui-btn layui-bg-green" id="addScheme" type="button">新增标准</button>
+		</div>
+	</div>
+
+	<div class="stage" id="stage">
+		<strong>阶段选择：</strong> <span class="active" data-tab="0">全部</span> <a>
+			{% for dict in dictList %}
+				<span data-tab="{{dict.dictKey}}">{{dict.dictValue}}</span>
+			{% endfor %}
+		</a>
+	</div>
+	<div id="tableSec">
+		 
+	</div>
+</div>
+
+<script type="text/html" id="operation">
+		<a class="layui-table-link edit-btn" lay-event="edit">编辑</a>
+		<a class="layui-table-link del-btn" lay-event="del">删除</a>
+</script>
+
+<script src="/static/front/js/rule/rule.js"></script>
+{% endblock %}

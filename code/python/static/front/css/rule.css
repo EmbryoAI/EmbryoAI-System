@@ -1,0 +1,88 @@
+.layui-table, .layui-table-view{
+	margin: 0;
+}
+.addbtn{
+	width: 110px;
+}
+.addbtn button{
+	border:0;
+	padding: 6px 10px;
+	padding-left: 24px;
+	color: #3c83f7;
+	background: url(../img/icon-create.png) no-repeat left center;
+	cursor: pointer;
+}
+.addbtn button:hover{
+	opacity: 0.8;
+}
+h2{
+	padding-left: 10px;
+	border-left: 3px solid #3c83f7;
+	height: 16px;
+	line-height: 16px;
+	font-size: 16px;
+	color: #3c83f7;
+	margin-bottom: 10px;
+}
+.node{
+	margin-bottom: 30px;
+	/* display: none; */
+}
+.edit-btn,.del-btn{
+	cursor: pointer;
+	margin-right: 20px;
+	padding-left: 20px;
+	background: url(../img/table-icon5.png) no-repeat left center;
+}
+.del-btn{
+	background: url(../img/table-icon1.png) no-repeat left center;
+
+}
+.layui-table-cell .layui-table-link{
+	color: #3c64f7;
+}
+.scheme-sel{
+	width: 100%;
+	border: 1px solid #e0e0e0;
+	height: 30px;
+	color: #434446;
+}
+.stage{
+	font-size: 14px;
+	font-weight: bold;
+	margin-left: 14px;
+	line-height: 28px;
+	margin-bottom: 20px;
+}
+.stage strong{
+	margin-right: 20px;
+}
+.stage span{
+	margin-right: 30px;
+	display: inline-block;
+	width: 60px;
+	line-height: 28px;
+	height: 28px;
+	background-color: #ffffff;
+	border: solid 3px #d7dae0;
+	text-align: center;
+	color: #7a7e80;
+	font-size: 14px;
+	cursor:pointer;
+	transition: all 0.5s;
+}
+.stage-add span{
+	margin-right: 24px;
+	margin-bottom: 20px;
+}
+.stage span:hover{
+	box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.2);
+}
+.stage .active{
+	background-color: #1c7eff;
+	color: #fff;
+	border: solid 3px #1c7eff;
+	box-shadow: 0px 2px 10px 0px rgba(28, 126, 255, 0.26);
+	animation:activemove 1s;
+	-webkit-animation:activemove 1s;
+}
