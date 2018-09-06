@@ -29,7 +29,7 @@ function loginToFront(){
             $(".verify").html(result.msg);
             $(".verify").animate({right:'20px'});
             if(result.code == 200){
-                location = "/front/procedure";
+                location = "/front/home";
             }
         });
     }

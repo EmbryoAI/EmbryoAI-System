@@ -24,6 +24,7 @@ def queryProcedureList():
 
 #查询病历详情
 @procedure_rest_controller.route('/<string:id>', methods=['GET'])
+@login_required
 def procedureDetail(id):
     return procedure_service.getProcedureDetail(id)
 

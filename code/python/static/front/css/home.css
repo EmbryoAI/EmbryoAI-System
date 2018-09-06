@@ -60,3 +60,44 @@
     padding-bottom: 8px;
 	margin-left: 16px;
 }
+.img-list{
+	background-color: #fff;
+	box-shadow: 0px 0px 8px rgba(0,0,0,0.06);
+	/*padding: 10px;*/
+}
+.imgrow{
+	width: 99%;
+	margin: auto;
+}
+.imgrow h6{
+	color: #3c83f7;
+	font-size: 14px;
+	padding-left: 16px;
+	background: url(../img/home-icon.png) no-repeat left center;
+	margin-bottom: 8px;
+}
+.img-list p{
+	font-size: 12px;
+	padding: 6px;
+}
+.img-list p span:first-child{
+	margin-right: 10px;
+}
+.img-list a{
+	display: block;
+	width: 23%;
+	height: auto;
+	padding: 1%;
+	float: left;
+	cursor: pointer;
+}
+.img-list a img{
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+.img-list .clear{
+	clear: both;
+	height: 1px;
+	width: 100%;
+}

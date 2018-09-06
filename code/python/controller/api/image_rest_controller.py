@@ -56,3 +56,22 @@ def markDistinct():
     parser.add_argument('wellId', type=str)
 
     return image_service.markDistinct(parser.parse_args())
+
+'''
+    根据周期id、皿编码获取病历下的某个胚胎的最新时间序列下的缩略图
+'''
+@image_rest_controller.route('/findImageFouce', methods=['POST','GET'])
+# @login_required
+def findImageFouce():
+    parser = reqparse.RequestParser()
+    parser.add_argument('procedureId', type=str)
+    parser.add_argument('dishCode', type=str)
+    imageData = image_service.getImageFouce(parser.parse_args())
+    if imageData is not None:
+        # print(1111111111111)
+        # response = make_response(imageData)
+        # response.headers['Content-Type'] = 'image/png'
+        # return response
+        return imageData
+    else :
+        return ""

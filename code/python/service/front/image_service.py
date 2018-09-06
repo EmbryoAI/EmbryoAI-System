@@ -162,3 +162,38 @@ def markDistinct(agrs):
     except:
         restResult = RestResult(404, "标记最清晰图片错误", 0, imageName)
     return jsonify(restResult.__dict__)
+
+
+def getImageFouce(agrs):
+    logger().info(agrs)
+    procedureId = agrs['procedureId']
+    dishCode = agrs['dishCode']
+    try:
+        wellCode,imagePath = dish_mapper.queryWellIdAndImagePath(procedureId,dishCode)
+        if wellCode is not None and imagePath is not None:
+            path = conf['EMBRYOAI_IMAGE_ROOT'] + imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
+            if not os.path.isdir(path) :
+                return ""
+            # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
+            jsonPath = path + conf['DISH_STATE_FILENAME']
+            print(jsonPath)
+            with open(f'{jsonPath}', 'r') as fn :
+                dishJson = json.loads(fn.read())
+            if dishJson['finished'] & dishJson['avail'] == 1 : 
+                wells = dishJson['wells']
+                oneWell = wells[f'{wellCode}']
+                timeSeries = oneWell['lastEmbryoSerie']
+                series = oneWell['series']
+                oneSeries = series[f'{timeSeries}']
+                jpgName = oneSeries['focus']
+                jpgPath = path + jpgName
+                print(jpgPath)
+                # image = cv2.imread(r'e:\EmbryoAI\EmbryoAI-System\code\python\..\captures\20180422152100\DISH8\7000000\00006.jpg')
+                image = open(jpgPath,'rb').read()
+            else :
+                logger("文件未处理完成或皿状态是无效的")
+                image = ""
+    except:
+        logger().info("获取图片文件出现异常")
+        image = ""
+    return image
