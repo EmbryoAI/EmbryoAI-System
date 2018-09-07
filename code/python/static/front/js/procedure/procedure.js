@@ -108,6 +108,9 @@ layui
 								elem : '#case-table',
 								page : true,
 								url : '/api/v1/procedure/list',
+								where : {
+									userName : $("#name").val()
+								},
 								cols : [ [
 										{
 											field : 'medical_record_no',

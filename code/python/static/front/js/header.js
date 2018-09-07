@@ -57,32 +57,35 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
 
     $('#caseSearch').on('click', function () {
         var caseIdOrName = $("#caseIdOrName").val();
+        location = "/front/procedure?name=" + caseIdOrName;
+
         // $("#userName").val(caseIdOrName);
         //执行重载
-        table.reload('case-table', {
-            page: {
-            curr: 1  //重新从第 1 页开始
-            }
-            ,where: {
-                userName: caseIdOrName
-            }
-        });
+        // table.reload('case-table', {
+        //     page: {
+        //     curr: 1  //重新从第 1 页开始
+        //     }
+        //     ,where: {
+        //         userName: caseIdOrName
+        //     }
+        // });
     });
 
     //搜索框监听回车事件
     $('#caseIdOrName').bind('keypress',function(event){
         if(event.keyCode == "13"){  
             var caseIdOrName = $("#caseIdOrName").val();
+            location = "/front/procedure?name=" + caseIdOrName;
             // $("#userName").val(caseIdOrName);
             //执行重载
-            table.reload('case-table', {
-                page: {
-                curr: 1  //重新从第 1 页开始
-                }
-                ,where: {
-                    userName: caseIdOrName
-                }
-            });
+            // table.reload('case-table', {
+            //     page: {
+            //     curr: 1  //重新从第 1 页开始
+            //     }
+            //     ,where: {
+            //         userName: caseIdOrName
+            //     }
+            // });
         }
     });
 })

@@ -18,8 +18,8 @@
 	<link rel="stylesheet" type="text/css" href="/static/front/autocompleter/jquery.autocompleter.css"/>
 		<!--公共js引入-->
 	<script src="/static/admin/layui/layui.js"></script>
-	<script src="/static/front/js/header.js"></script>
 	<script src="/static/admin/common/jquery.min.js" charset="utf-8"></script>
+	<script src="/static/front/js/header.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -61,7 +61,7 @@
 				</li>
 			</ul>
 			<div class="header-search right">
-				<input type="search" name="caseIdOrName" id="caseIdOrName" value="" placeholder="病历搜索"/>
+				<input type="search" name="caseIdOrName" id="caseIdOrName" value="{{ name }}" placeholder="病历搜索"/>
 				<span class="header-search-btn" id="caseSearch"></span>
 			</div>
 		</div>
