@@ -10,12 +10,21 @@ rule_rest_controller = Blueprint('rule_rest_controller', __name__)
 url_prefix = '/api/v1/rule'
 
 '''  
-    新增和修改规则
+    新增和修改标准
 '''
 @rule_rest_controller.route('/save', methods=['POST'])
 @login_required
 def save():
     code, rule = rule_service.save(request)
+    return make_response(jsonify(rule), code)
+
+'''
+    新增和修改规则JSON
+'''
+@rule_rest_controller.route('/saveRuleJson', methods=['POST'])
+@login_required
+def saveRuleJson():
+    code, rule = rule_service.saveRuleJson(request)
     return make_response(jsonify(rule), code)
 
 ''' 根据规则ID查询出对应的规则列表

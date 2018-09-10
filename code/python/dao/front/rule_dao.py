@@ -4,12 +4,40 @@ from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
 from traceback import print_exc
 
-def queryDictListByClass(dictClass):
-    try:
-        return db.session.query(Dict).filter(Dict.dictClass == dictClass).all()
+
+def insertRule(rule):
+    try :
+        db.session.add(rule)
+        db.session.commit()
     except Exception as e:
-        raise DatabaseError("根据字典类型获取对应的字典列表失败!",e.message,e)
-        return None
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('设置里程碑时发生错误!', e.message, e)
+    finally:
+        db.session.remove()
+    
+def updateRule(rule):
+    try :
+        sql = text("""
+            UPDATE t_rule 
+            SET
+            user_id =:userId, 
+            rule_name =:ruleName, 
+            description =:description, 
+            create_time =:createTime, 
+            update_time =:updateTime, 
+            del_flag =:delFlag, 
+            is_default =:isDefault, 
+            data_json =:dataJson
+            WHERE id =:id
+        """)
+        
+        db.session.execute(sql, rule.to_dict())
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('保存标准成功!', e.message, e)
     finally:
         db.session.remove()
 

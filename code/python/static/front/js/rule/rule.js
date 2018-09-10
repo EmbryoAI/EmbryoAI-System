@@ -7,7 +7,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
 $(function () {
 	$('#search').on('click', function () {//查询
 		if($("#ruleId").val()=="") {
-			layer.msg("请选择规则名称!")
+			layer.msg("请选择标准名称!")
 			return;
 		}
 		$("#tableSec").html("");
@@ -21,7 +21,7 @@ $(function () {
 				 var tableThead = '<thead id="theadView">'
 					 +"<tr>"
 						 +"<th>条件</th>"
-						 +"<th>符合</th>"
+						 +"<th>符号</th>"
 						 +"<th>判断值</th>"
 						 +"<th>分值</th>"
 						 +"<th>权重</th>"
@@ -33,11 +33,12 @@ $(function () {
 					//获取对应里程碑节点值的
 					var tableTbody = "<tbody id='"+dictList[i].dictValue+"'  >";
 					if(data!=null && data.dataJson!=null && data.dataJson!="") {
-						var obj = data.dataJson[dictList[i].dictValue];
+						var dataJson = JSON.parse(data.dataJson);
+						var obj = dataJson[dictList[i].dictValue];
 						for (var j = 0; j < obj.length; j++) {
 							tableTbody+="<tr>";
 								tableTbody+="<td>"+obj[j].condition+"</td>";
-								tableTbody+="<td>"+obj[j].accord+"</td>";
+								tableTbody+="<td>"+obj[j].symbol+"</td>";
 								tableTbody+="<td>"+obj[j].value+"</td>";
 								tableTbody+="<td>"+obj[j].score+"</td>";
 								tableTbody+="<td>"+obj[j].weight+"</td>";
@@ -52,7 +53,7 @@ $(function () {
 						+tableTbody
 						+'</table>'
 						+'<p class="addbtn">'
-							+"<button onclick='addRule(\""+dictList[i].dictValue+"\");'; type='button'>新增条件行</button>"
+							+"<button onclick='toRuleJsonSave(\""+dictList[i].dictValue+"\");'; type='button'>新增条件行</button>"
 						+'</p>'
 					+'</div>'
 					$("#tableSec").append(str);
@@ -114,26 +115,7 @@ $(function () {
 				
 			});
 	});
-	//新增标准
-	$('#addScheme').on('click', function(){
-		layer.open({
-			type: 2,
-			maxmin: true,
-			title: '新增标准',
-			area : ['900px' , '80%'],
-			content: 'scheme-add.html',
-			btnAlign: 'c',
-			btn: ['确定', '取消'],
-			yes: function(index, layero){
-				//按钮【按钮一】的回调
-				layer.msg("编辑成功！")
-				layer.close(index);//关闭窗口
-			},
-			btn2: function(index, layero){
-				//按钮【按钮二】的回调
-			}
-		});
-	})
+ 
  
  
 	 
@@ -142,26 +124,49 @@ $(function () {
 })
 
 /**
- * 添加规则
+ * 添加规则页面
+ * @param type 1.新增  2.修改
+ */
+function toRuleSave(type) {
+	var title = '新增标准';
+	var ruleId = null;
+	if(type==1) {
+		title = '新增标准';
+	}else {
+		title = '修改标准';
+		ruleId = $("#ruleId").val();
+		if(ruleId=="" || ruleId==null) {
+			layer.msg("请选择标准名称!")
+			return;
+		}
+	}
+	layer.open({
+		type: 2,
+		maxmin: true,
+		title: title,
+		area : ['560px' , '360px'],
+		content: "/front/rule/toRuleSave?ruleId="+ruleId,
+	    end:function(index,layero){
+	    	window.location.reload();
+	    }
+	});
+}
+
+/**
+ * 添加规则JSON串页面
  * @param type  添加的里程碑节点类型
  */
-function addRule(type) {
+function toRuleJsonSave(type) {
 	layer.open({
 		type: 2,
 		maxmin: true,
 		title: '添加'+type+'规则',
 		area : ['560px' , '360px'],
 		content: '/front/rule/toRuleJsonSave/'+$("#ruleId").val(),
-		btnAlign: 'c',
-		btn: ['确定', '取消'],
-		yes: function(index, layero){
-			//按钮【按钮一】的回调
-			layer.msg("新增成功")
-			layer.close(index);//关闭窗口
-			$('#search').trigger("click");
-		},
-		btn2: function(index, layero){
-			//按钮【按钮二】的回调
-		}
+	    end:function(index,layero){
+	    	$('#search').trigger("click");
+	    }
 	});
 }
+
+

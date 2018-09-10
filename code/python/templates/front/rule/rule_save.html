@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<link rel="stylesheet" href="/static/admin/layui/css/layui.css" />
+<link rel="stylesheet" type="text/css" href="/static/front/css/main.css" />
+<link rel="stylesheet" type="text/css" href="/static/front/css/rule.css" />
+<style type="text/css">
+html, body {
+	background-color: #fff;
+	margin: auto;
+	padding: 20px;
+	width: 800px;
+}
+
+.layui-form-label {
+	width: 84px;
+}
+</style>
+</head>
+
+<body>
+	
+	<form class="layui-form" name="ruleForm" id="ruleForm" action="">
+	 
+		<input type="hidden" name="ruleId" value="{{rule.id}}" id="ruleId">
+		<!--主体内容都放在这个div里-->
+		<div class="layui-form-item">
+			<label class="layui-form-label">新增标准名称</label>
+			<div class="layui-input-block"
+				style="width: 200px; margin-left: 116px;">
+				<input type="text" id="ruleName" value="{{rule.ruleName}}" name="ruleName" required lay-verify="required"
+					placeholder="请输入标题"   class="layui-input">
+			</div>
+		</div>
+	
+		<div class="layui-form-item">
+			<label class="layui-form-label">描述</label>
+			<div class="layui-input-block">
+				<textarea name="description" id="description" 
+					placeholder="请输入描述" class="layui-textarea">{{rule.description}}</textarea>
+			</div>
+		</div>
+	
+		<div class="layui-form-item" align="center">
+			<button type="button" class="layui-btn" onclick="save();">保存</button>
+		</div>
+	</form>
+	<script src="/static/admin/layui/layui.js"></script>
+	<script src="/static/admin/common/jquery.min.js" charset="utf-8"></script>
+	<script src="/static/front/js/rule/rule_save.js"></script>
+</body>
+
+</html>

@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify,render_template
+from flask import Blueprint, jsonify,render_template,request
 from common import logger
 from app import login_required
 from flask_restful import reqparse
@@ -25,9 +25,31 @@ def main():
     return render_template('front/rule/rule.html',ruleList=ruleList,dictStr=dictStr,dictList=dictList)
 
 """
+    跳转到新增标准 页面
+"""
+@rule_controller.route('/toRuleSave', methods=['GET'])
+@login_required
+def toRuleSave():
+    ruleId = request.args.get('ruleId')
+    print(ruleId)
+    rule = None
+    if ruleId!=None:
+        code,rule = rule_service.getRuleById(ruleId)
+    return render_template('front/rule/rule_save.html',rule=rule)
+
+
+"""
     跳转到新增规则JSON页面
 """
 @rule_controller.route('/toRuleJsonSave/<string:ruleId>', methods=['GET'])
 @login_required
 def toRuleJsonSave(ruleId):
-    return render_template('front/rule/rule_json_save.html',ruleId=ruleId)
+    #获取条件
+    result = dict_dao.queryDictListByClass("criteria_type")
+    conditionList = list(map(lambda x: x.to_dict(),result))
+    
+    #获取符号
+    result = dict_dao.queryDictListByClass("criteria_op")
+    symbolList = list(map(lambda x: x.to_dict(),result))
+    
+    return render_template('front/rule/rule_json_save.html',ruleId=ruleId,conditionList=conditionList,symbolList=symbolList)
