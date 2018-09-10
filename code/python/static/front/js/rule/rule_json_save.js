@@ -31,7 +31,7 @@ function save() {
 	$.ajax({
 		cache : false,
 		type : "post",
-		url : "/api/v1/rule/save",
+		url : "/api/v1/rule/saveRuleJson",
 		data : $('#ruleForm').serialize(),// 你的formid
 		async : false,
 		error : function(request) {
@@ -44,3 +44,6 @@ function save() {
 		}
 	});
 }
+
+$("#condition").val($("#conditionHide").val());
+$("#symbol").val($("#symbolHide").val());

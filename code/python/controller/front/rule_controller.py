@@ -41,9 +41,9 @@ def toRuleSave():
 """
     跳转到新增规则JSON页面
 """
-@rule_controller.route('/toRuleJsonSave/<string:ruleId>', methods=['GET'])
+@rule_controller.route('/toRuleJsonSave/<string:ruleId>/<string:jsonKey>/<string:index>', methods=['GET'])
 @login_required
-def toRuleJsonSave(ruleId):
+def toRuleJsonSave(ruleId,jsonKey,index):
     #获取条件
     result = dict_dao.queryDictListByClass("criteria_type")
     conditionList = list(map(lambda x: x.to_dict(),result))
@@ -52,4 +52,8 @@ def toRuleJsonSave(ruleId):
     result = dict_dao.queryDictListByClass("criteria_op")
     symbolList = list(map(lambda x: x.to_dict(),result))
     
-    return render_template('front/rule/rule_json_save.html',ruleId=ruleId,conditionList=conditionList,symbolList=symbolList)
+    #获取指定的规则 JSON
+    ruleJson = rule_service.getRuleJson(ruleId,jsonKey,index)
+    return render_template('front/rule/rule_json_save.html',ruleId=ruleId
+                           ,conditionList=conditionList,symbolList=symbolList
+                           ,jsonKey=jsonKey,index=index,ruleJson=ruleJson)

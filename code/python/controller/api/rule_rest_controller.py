@@ -27,6 +27,15 @@ def saveRuleJson():
     code, rule = rule_service.saveRuleJson(request)
     return make_response(jsonify(rule), code)
 
+'''
+    刪除规则JSON
+'''
+@rule_rest_controller.route('/delete/<string:ruleId>/<string:jsonKey>/<string:index>', methods=['GET'])
+@login_required
+def deleteRuleJson(ruleId,jsonKey,index):
+    code, rule = rule_service.deleteRuleJson(ruleId,jsonKey,index)
+    return make_response(jsonify(rule), code)
+
 ''' 根据规则ID查询出对应的规则列表
     @param ruleId: 规则id
 '''
