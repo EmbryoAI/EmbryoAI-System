@@ -35,6 +35,11 @@ body {
 <body>
 	<div class="edit">
 		<form class="layui-form" name="ruleForm" id="ruleForm" action="">
+			<input id="ruleId" name="ruleId" type="hidden" value="{{ruleId}}" />
+			<input id="jsonKey" name="jsonKey" type="hidden"  value="{{jsonKey}}" />
+			<input id="index" name="index" type="hidden" value="{{index}}" />
+			<input id="conditionHide" name="conditionHide" type="hidden" value="{{ruleJson.condition}}" />
+			<input id="symbolHide" name="symbolHide" type="hidden" value="{{ruleJson.symbol}}" />
 			<div class="layui-form-item">
 				<label class="layui-form-label">条件</label>
 				<div class="layui-input-block">
@@ -58,14 +63,14 @@ body {
 			<div class="layui-form-item">
 				<label class="layui-form-label">判断值</label>
 				<div class="layui-input-block">
-					<input type="text" name="value" id="value" placeholder="请输入"
+					<input type="text" name="value" id="value" value="{{ruleJson.value}}" placeholder="请输入"
 						class="layui-input">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">分值</label>
 				<div class="layui-input-block">
-					<input type="text" name="score" id="score" placeholder="请输入"
+					<input type="text" name="score" id="score" value="{{ruleJson.score}}" placeholder="请输入"
 						class="layui-input">
 				</div>
 			</div>
@@ -73,7 +78,7 @@ body {
 			<div class="layui-form-item">
 				<label class="layui-form-label">权重</label>
 				<div class="layui-input-block">
-					<input type="text" name="weight" id="weight" laceholder="请输入"
+					<input type="text" name="weight" id="weight" value="{{ruleJson.weight}}" laceholder="请输入"
 						class="layui-input">
 				</div>
 			</div>

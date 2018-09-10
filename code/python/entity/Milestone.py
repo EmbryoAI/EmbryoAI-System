@@ -14,5 +14,5 @@ class Milestone(db.Model, mixin):
     milestoneElapse = db.Column("milestone_elapse", db.Integer)
     userId = db.Column("user_id", db.String(32))
     milestoneType = db.Column("milestone_type", db.Integer)
-    milestonePath = db.Column("milestone_path", db.String(500))
-
+    milestonePath = db.Column("milestone_path", db.String(255))
+    thumbnailPath = db.Column("thumbnail_path", db.String(255))

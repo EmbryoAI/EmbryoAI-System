@@ -862,6 +862,7 @@ function querySeriesList(wellId, seris,type){
                 var active = "<div class=\"swiper-slide\">";
                 if(i == 16){
                     active = "<div class=\"swiper-slide active\">";
+                    $("#thumbnailPath").val(data[i+1]);
                 }
                 seris = seris + active + "<span><img id='" + data[i] + "' src=\"" + 
                                     imagePath +"\" onclick=\"getBigImage('" 
@@ -986,6 +987,7 @@ function arrow(direction){
                 var active = "<div class=\"swiper-slide\">";
                 if(i == 16){
                     active = "<div class=\"swiper-slide active\">";
+                    $("#thumbnailPath").val(data[i+1]);
                 }
                 seris = seris + active + "<span><img id='" + data[i] + "' src=\"" + 
                                     imagePath +"\" onclick=\"getBigImage('" 
@@ -1040,7 +1042,7 @@ function chushihua(dictClass) {
 function ini(acquisitionTime,timeSeries,path,imageName) {
     //由于使用的layUI的表单提交，需要把值复制到表单中
 	$("#milestoneStage").val(acquisitionTime);
-	$("#milestonePath").val(path+imageName);
+	$("#milestonePath").val(path+timeSeries+"\\"+imageName);
 	$("#timeSeries").val(timeSeries);
 	//根据胚胎ID查询该胚胎ID是否有里程碑，如果有则进行回显
 	$.ajax({

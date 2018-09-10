@@ -42,6 +42,14 @@ $(function () {
 								tableTbody+="<td>"+obj[j].value+"</td>";
 								tableTbody+="<td>"+obj[j].score+"</td>";
 								tableTbody+="<td>"+obj[j].weight+"</td>";
+								tableTbody+="<td>";
+								tableTbody+="<a class='layui-table-link edit-btn'" +
+										" onclick='toRuleJsonSave(\""+dictList[i].dictValue+"\",\""+obj[j].index+"\")'" +
+												" lay-event='edit'>编辑</a>";
+								tableTbody+="<a class='layui-table-link del-btn' " +
+										"onclick='deleteRuleJson(\""+dictList[i].dictValue+"\",\""+obj[j].index+"\")'" +
+												" lay-event='del'>删除</a>";
+								tableTbody+="</td>";
 							tableTbody+="</tr>";
 						}
 					}
@@ -53,7 +61,7 @@ $(function () {
 						+tableTbody
 						+'</table>'
 						+'<p class="addbtn">'
-							+"<button onclick='toRuleJsonSave(\""+dictList[i].dictValue+"\");'; type='button'>新增条件行</button>"
+							+"<button onclick='toRuleJsonSave(\""+dictList[i].dictValue+"\",null);'; type='button'>新增条件行</button>"
 						+'</p>'
 					+'</div>'
 					$("#tableSec").append(str);
@@ -154,19 +162,42 @@ function toRuleSave(type) {
 
 /**
  * 添加规则JSON串页面
- * @param type  添加的里程碑节点类型
+ * @param jsonKey  添加的里程碑节点类型
  */
-function toRuleJsonSave(type) {
+function toRuleJsonSave(jsonKey,index) {
+	var title = "";
+	if(index==null) {
+		title = "添加"+jsonKey+"规则";
+	}else {
+		title = "编辑"+jsonKey+"规则";
+	}
+	
 	layer.open({
 		type: 2,
 		maxmin: true,
-		title: '添加'+type+'规则',
+		title: title,
 		area : ['560px' , '360px'],
-		content: '/front/rule/toRuleJsonSave/'+$("#ruleId").val(),
+		content: '/front/rule/toRuleJsonSave/'+$("#ruleId").val()+'/'+jsonKey+'/'+index,
 	    end:function(index,layero){
 	    	$('#search').trigger("click");
 	    }
 	});
 }
 
-
+function deleteRuleJson(jsonKey,index) {
+    layer.confirm('确定删除该规则吗?', function(idx){
+    	$.ajax({
+    		cache : false,
+    		type : "get",
+    		url : "/api/v1/rule/delete/" + $("#ruleId").val()+"/"+jsonKey+"/"+index,
+    		async : false,
+    		error : function(request) {
+    			parent.layer.alert(request.responseText);
+    		},
+    		success : function(data) {
+    			layer.alert("删除成功!");
+    			$('#search').trigger("click");
+    		}
+    	});
+    });
+}

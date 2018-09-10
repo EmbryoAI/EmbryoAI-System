@@ -30,7 +30,8 @@ def updateMilestone(milestone,milestoneData):
             milestone_elapse =:milestoneElapse, 
             user_id =:userId, 
             milestone_type =:milestoneType, 
-            milestone_path =:milestonePath
+            milestone_path =:milestonePath, 
+            thumbnail_path =:thumbnailPath
             WHERE id =:id
         """)
         

@@ -50,6 +50,9 @@ def insertMilestone(request):
     milestonePath = request.form.get('milestonePath')
     if not milestonePath:
        return 400, '图片路径不能为空!'
+    #获取缩略图
+    thumbnailPath = request.form.get('thumbnailPath')
+    
     
     procedure = procedure_mapper.getProcedure(procedureId)
     #根据周期ID获取受精时间
@@ -112,7 +115,7 @@ def insertMilestone(request):
 #     create_time = update_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 
  
     milestone = Milestone(id=id, embryoId=embryoId,milestoneId=milestoneId,milestoneTime=milestoneTime,milestoneElapse=milestoneElapse,
-                          userId=userId,milestoneType=milestoneType,milestonePath=milestonePath)
+                          userId=userId,milestoneType=milestoneType,milestonePath=milestonePath,thumbnailPath=thumbnailPath)
     
     milestoneData = MilestoneData(milestoneId=id, milestoneStage=milestoneStage,pnId=pnId,cellCount=cellCount,evenId=evenId,
                       fragmentId=fragmentId,gradeId=gradeId,innerDiameter=innerDiameter,innerArea=innerArea,zonaThickness=zonaThickness,milestoneScore=milestoneScore
@@ -140,7 +143,7 @@ def insertMilestone(request):
             milestone_mapper.updateMilestone(milestone,milestoneData)
     except:
         return 400, '设置里程碑时异常!'
-    return 200, milestone.to_dict()
+    return 200, '设置里程碑时成功!'
 
 def getMilestoneByEmbryoId(embryoId, timeSeries, procedureId, dishId, wellId):
     if not timeSeries:

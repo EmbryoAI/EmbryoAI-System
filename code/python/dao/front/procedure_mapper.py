@@ -161,7 +161,7 @@ def queryProcedureViewList(medicalRecordNo):
     try:
         sql = text("""
         SELECT CONCAT(i.incubator_code,'-',d.dish_code,'-',e.embryo_index) AS codeIndex, 
-            GROUP_CONCAT(dict1.dict_value,"#",m.milestone_path,"#",m.milestone_time ORDER BY m.milestone_time) lcb,
+            GROUP_CONCAT(dict1.dict_value,"#",m.thumbnail_path,"#",m.milestone_time ORDER BY m.milestone_time) lcb,
             e.embryo_score AS score ,dict2.dict_value AS embryoFate
             FROM t_embryo e
             LEFT JOIN t_procedure t
