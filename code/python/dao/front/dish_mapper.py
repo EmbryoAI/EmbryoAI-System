@@ -129,3 +129,28 @@ def save(dish):
         db.session.rollback()
         print_exc()
         raise DatabaseError('新增培养皿数据时发生错误', e.message, e)
+
+def queryDishByIncubatorId(incubatorId,imagePath,pageNo,pageSize) :
+    try :
+        sql = text('''SELECT sd.id dishId,sd.dish_code dishCode
+        FROM sys_dish sd
+        LEFT JOIN t_procedure_dish tpd ON sd.id = tpd.dish_id AND tpd.image_path = :imagePath
+        WHERE sd.incubator_id = :incubatorId
+        LIMIT :index,:pageSize''')
+        print(sql)
+
+        index = 0
+        if pageNo > 0 :
+            index = (pageNo - 1) * pageSize
+        
+        params = {"incubatorId":incubatorId,"imagePath":imagePath,"index":index,"pageSize":pageSize}
+        print(params)
+        result = db.session.execute(sql,params)
+        data = result.fetchall()
+        print(data)
+        return data
+    except Exception as e :
+        raise DatabaseError("查询培养箱下的最新采集目录时发生错误",e.message,e)
+        return None,None
+    finally:
+        db.session.remove()

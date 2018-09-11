@@ -8,6 +8,7 @@ from flask import request, jsonify
 from common import uuid,logger
 from app import conf
 import json,os
+from task.TimeSeries import TimeSeries,serie_to_time
 
 def getImageByCondition(agrs):
     logger().info(agrs)
@@ -197,3 +198,59 @@ def getImageFouce(agrs):
         logger().info("获取图片文件出现异常")
         image = ""
     return image
+
+
+def findNewestImageUrl(agrs):
+    pageNo = agrs['pageNo']
+    pageSize = agrs['pageSize']
+    try:
+        #获取JSON文件
+        imagePath,incubatorId,incubatorCode = procedure_dish_mapper.queryNewestImagesInfo()
+        if not imagePath :
+            return RestResult(200, "暂无采集数据", 0, "")
+        result = dish_mapper.queryDishByIncubatorId(incubatorId,imagePath,pageNo,pageSize)
+        path = conf['EMBRYOAI_IMAGE_ROOT'] + imagePath + os.path.sep 
+        dishList = list(map(dict, result))
+
+        dataList = {"incubatorId":incubatorId,"incubatorCode":incubatorCode}
+        data = []
+        for dishMap in dishList : 
+            jsonPath = path + f'DISH{dishMap["dishCode"]}' + os.path.sep + conf['DISH_STATE_FILENAME'] 
+            print(jsonPath)
+            infoMap = {'imagePath':imagePath,"dishId":dishMap["dishId"],"dishCode":dishMap["dishCode"]}
+            print(infoMap)
+            if not os.path.exists(jsonPath) :
+                infoMap["wellUrls"] = ""
+            else :
+                imageUrlList = []
+                with open(f'{jsonPath}', 'r') as fn :
+                    dishJson = json.loads(fn.read())
+
+                if dishJson['finished'] & dishJson['avail'] == 1 : 
+                    # timeSeries = dishJson['lastSerie']
+                    hour, minute = serie_to_time(dishJson['lastSerie'])
+                    infoMap["times"] = f'{hour:02d}H{minute:02d}M'
+                    wells = dishJson['wells']
+                    for key in wells:
+                        imageObj={}
+                        oneWell = wells[f'{key}']
+                        series = oneWell['series']
+                        oneSeries = series[oneWell['lastEmbryoSerie']]
+                        jpgName = oneSeries['focus']
+
+                        imageUrl = path + f'DISH{dishMap["dishCode"]}' + os.path.sep + jpgName
+                        imageObj['url'] = imageUrl
+                        imageObj['wellId'] = key
+                        imageUrlList.append(imageObj)
+                    
+                    infoMap["wellUrls"] = imageUrlList
+                else :
+                    infoMap["wellUrls"] = ""
+            data.append(infoMap)
+        if not data:
+            dataList["dishInfo"] = ""
+        else: 
+            dataList["dishInfo"] = data
+        return RestResult(200, "查询最新采集目录下的皿信息成功", 1, dataList)
+    except:
+        return RestResult(400, "查询最新采集目录下的皿信息失败", 0, "")

@@ -61,7 +61,7 @@ def markDistinct():
     根据周期id、皿编码获取病历下的某个胚胎的最新时间序列下的缩略图
 '''
 @image_rest_controller.route('/findImageFouce', methods=['POST','GET'])
-# @login_required
+@login_required
 def findImageFouce():
     parser = reqparse.RequestParser()
     parser.add_argument('procedureId', type=str)
@@ -75,3 +75,17 @@ def findImageFouce():
         return imageData
     else :
         return ""
+
+
+''' 
+    查询最新的采集目录下的培养箱里的三个皿里的12张缩略图
+'''
+@image_rest_controller.route('/findNewestImageUrl', methods=['POST','GET'])
+def findNewestImageUrl():
+    parser = reqparse.RequestParser()
+    parser.add_argument('pageNo', type=int)
+    parser.add_argument('pageSize', type=int)
+    # code, imageUrlList = image_service.findNewestImageUrl(parser.parse_args())
+    # return make_response(jsonify(imageUrlList), code)
+    imageUrlList = image_service.findNewestImageUrl(parser.parse_args())
+    return jsonify(imageUrlList.__dict__)
