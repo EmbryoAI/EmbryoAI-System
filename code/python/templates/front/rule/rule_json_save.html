@@ -40,16 +40,28 @@ body {
 			<input id="index" name="index" type="hidden" value="{{index}}" />
 			<input id="conditionHide" name="conditionHide" type="hidden" value="{{ruleJson.condition}}" />
 			<input id="symbolHide" name="symbolHide" type="hidden" value="{{ruleJson.symbol}}" />
+			<input id="valueKeyHide" name="valueKeyHide" type="hidden" value="{{ruleJson.valueKey}}" />
+			
 			<div class="layui-form-item">
-				<label class="layui-form-label">条件</label>
+				<label class="layui-form-label">标准类型</label>
 				<div class="layui-input-block">
-					<select name="condition" id="condition">
+					<select lay-filter="conditionLay" name="condition" id="condition"  >
 						<option value="">请选择</option> {% for obj in conditionList %}
 						<option value="{{obj.dictKey}}">{{obj.dictValue}}</option> {%
 						endfor %}
 					</select>
 				</div>
 			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">条件</label>
+				<div class="layui-input-block">
+					<select name="value" id="value">
+						
+					</select>
+				</div>
+			</div>
+			
 			<div class="layui-form-item">
 				<label class="layui-form-label">符号</label>
 				<div class="layui-input-block">
@@ -60,13 +72,13 @@ body {
 					</select>
 				</div>
 			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">判断值</label>
-				<div class="layui-input-block">
-					<input type="text" name="value" id="value" value="{{ruleJson.value}}" placeholder="请输入"
-						class="layui-input">
-				</div>
-			</div>
+<!-- 			<div class="layui-form-item"> -->
+<!-- 				<label class="layui-form-label">判断值</label> -->
+<!-- 				<div class="layui-input-block"> -->
+<!-- 					<input type="text" name="value" id="value" value="{{ruleJson.value}}" placeholder="请输入" -->
+<!-- 						class="layui-input"> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
 			<div class="layui-form-item">
 				<label class="layui-form-label">分值</label>
 				<div class="layui-input-block">

@@ -71,14 +71,14 @@
 }
 .case-details strong{
 	display: inline-block;
-	width: 90px;
+	width: 85px;
 	text-align: left;
 	font-weight: bolder;
 }
 .case-details span{
-	width: 130px;
+	width: 140px;
 	display: inline-block;
 	text-align: left;
-	margin-left: 20px;
+	margin-left: 15px;
 	font-weight: normal;
 }

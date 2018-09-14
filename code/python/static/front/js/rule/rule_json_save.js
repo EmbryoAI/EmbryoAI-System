@@ -1,5 +1,40 @@
 layui.use('form', function(){
+	var form = layui.form;
+	form.on('select(conditionLay)', function(obj){
+		valueIni(obj.value);
+	});
+	$("#condition").val($("#conditionHide").val());
+	$("#symbol").val($("#symbolHide").val());
+	if($("#conditionHide").val()!="") {
+		valueIni($("#conditionHide").val());
+	}
 	
+	//显示 和 回显
+	function valueIni(value) {
+		$("#value").html('<option value="">请选择</option>');
+		$.ajax({
+			cache : false,
+			type : "get",
+			url : "/api/v1/dict/list/"+value,
+			async : false,
+			error : function(request) {
+				parent.layer.alert(request.responseText);
+			},
+			success : function(data) {
+				if (data.code == 0) {
+					for (var i = 0; i < data.data.length; i++) {
+						var obj = data.data[i];
+						$("#value").append("<option value='"+obj.dictKey+"'>"+obj.dictValue+"</option>");
+					}
+				} else {
+					parent.layer.alert(data.msg);
+				}
+			}
+		});
+		form.render();
+	}
+	$("#value").val($("#valueKeyHide").val());
+	form.render();
 });
 
 function save() {
@@ -8,13 +43,13 @@ function save() {
 		return false;
 	}
 	
-	if($("#symbol").val()=="") {
-		parent.layer.alert("请选择符号!");
+	if($("#value").val()=="") {
+		parent.layer.alert("请填写值!");
 		return false;
 	}
 	
-	if($("#value").val()=="") {
-		parent.layer.alert("请填写值!");
+	if($("#symbol").val()=="") {
+		parent.layer.alert("请选择符号!");
 		return false;
 	}
 	
@@ -45,5 +80,5 @@ function save() {
 	});
 }
 
-$("#condition").val($("#conditionHide").val());
-$("#symbol").val($("#symbolHide").val());
+ 
+
