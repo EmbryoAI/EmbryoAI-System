@@ -15,7 +15,6 @@ from keras.backend.tensorflow_backend import set_session
 
 NB_CLASSES = 14
 
-
 if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('-d', '--dataset', help='数据集目录', required=True)
@@ -25,6 +24,7 @@ if __name__ == '__main__':
     parser.add_argument('-e', '--epochs', help='EPOCHS批次', default='20')
     parser.add_argument('-b', '--batch', help='BATCH_SIZE每批图像数量', default='128')
     parser.add_argument('-t', '--optimizer', help='梯度优化函数名称', default='Adam')
+    parser.add_argument('-l', '--loss', help='损失函数名称', default='categorical_crossentropy')
     conf = parser.parse_args()
     tf_config = tf.ConfigProto()
     tf_config.gpu_options.allow_growth = True
@@ -58,7 +58,7 @@ if __name__ == '__main__':
         model = init_model((img_size[0], img_size[1], 1))
     else:
         model = ImageNetModel(weights=None, input_shape=(img_size[0], img_size[1], 1)).getModel(conf.model)
-    model.compile(optimizer=conf.optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer=conf.optimizer, loss=conf.loss, metrics=['accuracy'])
     model.summary()
     # model.fit(X_train, y_train, batch_size=BATCH_SIZE, epochs=EPOCHS, verbose=1, validation_split=0.25)
     model.fit_generator(train_gen, epochs=EPOCHS, validation_data=val_gen, verbose=1)

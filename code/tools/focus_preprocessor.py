@@ -24,7 +24,8 @@ def process_cycle(path):
             cycle_json[i] = False
     for dish_index in cycle_json:
         dish_conf = DishConfig()
-        dish_conf.dishSetup(dish_index, dish_ini[f'Dish{dish_index}Info'], int(dish_ini['Timelapse']['WellCount']))
+        dish_conf.dishSetup(dish_index, dish_ini[f'Dish{dish_index}Info'], int(dish_ini['Timelapse']['WellCount']), 
+            dish_ini['IncubatorInfo']['IncubatorName'])
         process_dish(path, dish_conf)
 
 def process_dish(path, dish_info):
@@ -69,6 +70,7 @@ def process_serie(path, serie, dish_info):
         @dish_info: 皿配置信息 DishConfig对象
         @returns serie: 处理完的时间序列字符串
     '''
+    global conf
     serie_path = path + serie + os.path.sep # 时间序列目录完整路径
     wells = dish_info.wells # 皿中所有的孔信息
     for c in wells:
@@ -90,10 +92,14 @@ def process_serie(path, serie, dish_info):
             # 定位胚胎位置
             left, top, right, bottom = find_embryo(img, cas)
             img_focus = img[top:bottom, left:right]
-            focus_path = path + 'focus' + os.path.sep
+            if conf.output:
+                focus_path = str(conf.output)
+            else:
+                focus_path = path + 'focus' + os.path.sep
             if not os.path.exists(focus_path):
                 os.makedirs(focus_path)
-            focus_file = f'{focus_path}Dish{dish_info.index:02d}_{wells[c].index:02d}_{serie}.jpg'
+            focus_file = f'{focus_path}{path.split("/")[-2]}_Dish{dish_info.index:02d}_{wells[c].index:02d}_{serie}.jpg'
+            print(focus_file)
             # 保存缩略图
             cv2.imwrite(focus_file, img_focus, [int(cv2.IMWRITE_JPEG_QUALITY), 50])
 
@@ -199,10 +205,12 @@ def find_suitable_box(rect, shape):
     return left, top, right, bottom
 
 cas = None
+conf = None
 if __name__=='__main__':
     parser = ArgumentParser()
     parser.add_argument('-i', '--image', help='采集图像目录路径', required=True)
     parser.add_argument('-c', '--cascade', help='Cascade分类器文件路径', required=True)
+    parser.add_argument('-o', '--output', help='缩略图存储路径', required=False)
     conf = parser.parse_args()
     cas = cv2.CascadeClassifier(conf.cascade)
     process_cycle(conf.image)
