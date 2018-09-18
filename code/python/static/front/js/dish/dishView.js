@@ -1,6 +1,8 @@
 var currentSeris = "";//基准的胚胎的时间序列
 var n = 0;
 var imgLen = 1  // 已基准孔的图片张数为标准
+var timelienData = null; //时间轴数据
+var pageSize = 20; //时间轴分页每页展示个数
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     var form = layui.form;
     var $ = layui.jquery;
@@ -319,10 +321,24 @@ function signEmbryoResult(obj,appendData,embryoId,embryoFateId){
 ////    }
 //}
 
-		// 时间轴
+		// 时间轴新修改	
+		$('#timePageDiv').on('click','i',function(){
+			$(this).siblings('i').removeClass('active');
+			$(this).addClass('active');
+			var pageNo = $(this).attr("page");
+			var divData = showTimeline(pageNo,pageSize);
+			$("#timelineDiv").html(divData);
 
-
-
+			$('#timelineDiv span').hover(function(){
+				const that = this;
+				const text = $(this).find("i").text();
+				layer.tips(text, that,{tips: [1],time: 0}); 
+			},function(){
+				const that = this;
+				layer.closeAll('tips');
+			});
+		});
+		
 		$('#timelineDiv').on('click','span',function(){
 			$(this).siblings('span').removeClass('active');
 			$(this).addClass('active');
@@ -334,21 +350,7 @@ function signEmbryoResult(obj,appendData,embryoId,embryoFateId){
 				}
 			}
 
-		})
-		// 时间轴新修改	
-	$('.time-page').on('click','i',function(){
-			$(this).siblings('i').removeClass('active');
-			$(this).addClass('active');
-	})
-	$('.time-list span').hover(function(){
-			const that = this;
-			const text = $(this).find("i").text();
-			layer.tips(text, that,{tips: [1]}); 
-	})
-	$('.time-list').on('click','span',function(){
-			$(this).siblings('span').removeClass('active');
-			$(this).addClass('active');
-	})	
+		});	
 function getNowFormatDate() {
     var date = new Date();
     var seperator1 = "-";
@@ -480,7 +482,7 @@ function nextFrame() {
 function loadTimeline(wellCode){
 	var dishId = $("#dishId").val();
 	var procedureId = $("#procedureId").val();
-
+	var pageNo = 1;
 	$.ajax({
 		type : "get",
 		url : "/api/v1/dish/loadSeriesList",
@@ -489,19 +491,57 @@ function loadTimeline(wellCode){
 		cache:false,
 		success : function(data) {
 			var divData = "";
+			var timePageDiv = "";
 			if(data !== null && data !== "" && data !== "[]"){
-				for (let i = 0; i < data.length; i++) {
-					const obj = data[i];
-					divData = divData + "<span serie=" + obj["serie"] + ">" + obj["showTime"] + "</span>";
+				timelienData = data;
+				var pageTotal = data.length%pageSize == 0 ? data.length/pageSize : data.length/pageSize + 1;
+				for (let i = 1; i <= pageTotal; i++) {
+					var index = (i - 1) * pageSize;
+					var end = i * pageSize > timelienData.length ? timelienData.length-1 : (i * pageSize) - 1;
+					if(i === pageNo){
+						timePageDiv = timePageDiv + "<i class='active' page=" + i + ">" + i + "<span> " + data[index]["showTime"] + " ~ " + data[end]["showTime"] + " </span></i>";
+					} else {
+						timePageDiv = timePageDiv + "<i page=" + i + ">" + i + "<span> " + data[index]["showTime"] + " ~ " + data[end]["showTime"] + " </span></i>";
+					}
 				}
+				divData = showTimeline(pageNo,pageSize);
 			}
 			$("#timelineDiv").html(divData);
+			$("#timePageDiv").html(timePageDiv);
+
+			$('#timePageDiv i').hover(function(){
+				const that = this;
+				const text = $(this).find("span").text();
+				layer.tips(text, that,{tips: [1],time: 0}); 
+			},function(){
+				const that = this;
+				layer.closeAll('tips');
+			});
+
+			$('#timelineDiv span').hover(function(){
+				const that = this;
+				const text = $(this).find("i").text();
+				layer.tips(text, that,{tips: [1],time: 0}); 
+			},function(){
+				const that = this;
+				layer.closeAll('tips');
+			});
 		},
 		error : function(request) {
 			layer.alert(request.responseText);
 		}
 	});
 	
+}
+
+function showTimeline(pageNo,pageSize) {
+	var divData = "";
+	var index = (pageNo - 1) * pageSize;
+	var end = pageNo * pageSize > timelienData.length ? timelienData.length : pageNo * pageSize;
+	for (let i = index; i < end; i++) {
+		divData = divData + "<span serie=" + timelienData[i]["serie"] + " pageNo=" + pageNo + "><i>" + timelienData[i]["showTime"] + "</i></span>";
+	}
+	return divData;
 }
 
 function getProcedureInfo(procedureId){

@@ -244,6 +244,9 @@
 	color: #3c83f7;
 	opacity: 0.8;
 }
+.time-page i span{
+	display: none;
+}
 .time-lbox{
 	width: 100%;
 	height: 56px;
@@ -281,6 +284,9 @@
 	left: 50%;
 	transform: translateX(-50%);
 	
+}
+.time-list span:first-child i,.time-list span:last-child i{
+	display: inline-block;
 }
 .time-list span.active i{
 	display: inline-block;
