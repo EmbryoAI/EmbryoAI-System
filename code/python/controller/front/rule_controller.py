@@ -46,8 +46,21 @@ def toRuleSave():
 def toRuleJsonSave(ruleId,jsonKey,index):
     #获取条件
     result = dict_dao.queryDictListByClass("criteria_type")
-    conditionList = list(map(lambda x: x.to_dict(),result))
+    criteriaList = list(map(lambda x: x.to_dict(),result))
     
+    conditionList=[]
+    
+    if jsonKey=="PN": #PN数
+       conditionList.append(criteriaList[0])
+    elif jsonKey=="2C" or jsonKey=="3C" or jsonKey=="4C" or jsonKey=="5C" or jsonKey=="8C":
+        conditionList.append(criteriaList[1])
+        conditionList.append(criteriaList[2])
+        if jsonKey=="3C" or jsonKey=="4C" or jsonKey=="5C" or jsonKey=="8C":
+           conditionList.append(criteriaList[3])
+        if jsonKey=="8C":
+           conditionList.append(criteriaList[4])
+    #else:
+    conditionList.append(criteriaList[len(criteriaList)-1])    
     #获取符号
     result = dict_dao.queryDictListByClass("criteria_op")
     symbolList = list(map(lambda x: x.to_dict(),result))

@@ -62,9 +62,9 @@ def pregnancyRate(sqlCondition,filters):
     try:
         sql = text("""
             SELECT 
-              CONCAT(FORMAT(SUM(CASE b.biochem_pregnancy WHEN '1' THEN 1 ELSE 0 END )/COUNT(a.id)*100,1),'%') AS shrsl,
-              CONCAT(FORMAT(SUM(CASE b.clinical_pregnancy WHEN '1' THEN 1 ELSE 0 END )/COUNT(a.id)*100,1),'%') AS lcrsl,
-              CONCAT(FORMAT(SUM(CASE c.embryo_fate_id WHEN '1' THEN 1 ELSE 0 END )/COUNT(a.id)*100,1),'%') AS  lczcl
+              FORMAT(SUM(CASE b.biochem_pregnancy WHEN '1' THEN 1 ELSE 0 END )/COUNT(a.id)*100,1) AS shrsl,
+              FORMAT(SUM(CASE b.clinical_pregnancy WHEN '1' THEN 1 ELSE 0 END )/COUNT(a.id)*100,1) AS lcrsl,
+              FORMAT(SUM(CASE c.embryo_fate_id WHEN '1' THEN 1 ELSE 0 END )/COUNT(a.id)*100,1) AS  lczcl
             FROM t_procedure a
             JOIN t_feedback  b
             ON a.id=b.procedure_id
