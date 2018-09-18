@@ -22,16 +22,16 @@
 .info-top li.emb{
 	background: url(../img/icon-cycle2.png) no-repeat left center;
 }
-.info-top li.emb:nth-child(3){
+.info-top p li.emb:nth-child(1){
 	background: url(../img/icon-cycle3.png) no-repeat left center;
 }
-.info-top li:nth-child(4){
+.info-top p li:nth-child(2){
 	background: url(../img/icon-cycle4.png) no-repeat left center;
 }
-.info-top li:nth-child(5){
+.info-top p li:nth-child(3){
 	background: url(../img/icon-cycle5.png) no-repeat left center;
 }
-.info-top li:nth-child(6){
+.info-top p li:nth-child(4){
 	background: url(../img/icon-cycle6.png) no-repeat left center;
 }
 .grade,.paoq,.lengd,.daid,.yiz{

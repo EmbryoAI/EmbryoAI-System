@@ -44,3 +44,12 @@ def deleteRuleJson(ruleId,jsonKey,index):
 def getRuleById(ruleId):
     code, rule = rule_service.getRuleById(ruleId)
     return make_response(jsonify(rule), code)
+
+''' 设置当前规则为默认
+    @param ruleId: 规则id
+'''
+@rule_rest_controller.route('/setDefault/<string:ruleId>', methods=['GET'])
+@login_required
+def setDefault(ruleId):
+    code, rule = rule_service.setDefault(ruleId)
+    return make_response(jsonify(rule), code)

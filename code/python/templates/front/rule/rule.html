@@ -1,7 +1,7 @@
 {% extends 'front/header-footer.html' %} {% block mianDiv %}
 <link rel="stylesheet" type="text/css" href="/static/front/css/rule.css" />
 <style type="text/css">
-body {
+.main {
 	width: 1400px;
 	margin: auto;
 }
@@ -26,9 +26,9 @@ body {
 		</div>
 		<div class="layui-inline btn-box">
 			<button class="layui-btn layui-bg-blue" id="search" type="button">查询</button>
-			<button class="layui-btn layui-bg-blue" id="setDefault" type="button">设为默认</button>
+			<button class="layui-btn layui-bg-blue" onclick="setDefault();" id="setDefault" type="button">设为默认</button>
+			<button class="layui-btn layui-bg-blue" onclick="toRuleSave(2);" type="button">修改标准</button>
 			<button class="layui-btn layui-bg-green" onclick="toRuleSave(1);" type="button">新增标准</button>
-			<button class="layui-btn layui-bg-green" onclick="toRuleSave(2);" type="button">修改标准</button>
 		</div>
 	</div>
 

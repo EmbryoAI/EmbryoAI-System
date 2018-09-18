@@ -107,22 +107,7 @@ $(function () {
         layer.close(index);//关闭窗口
       });
   });
-	//设置为默认
-	$('#setDefault').on('click', function(){
-		const  ruleId = document.getElementById("ruleId");
-		const  index = ruleId.selectedIndex ; 
-		const  Oindex= ruleId.options[index].text ;
-		
-		layer.confirm('是否将标准 “ '+Oindex+" ” 设置为默认？", {
-		btn: ['确认', '取消' ]},
-		 function(index, layero){
-				//确认按钮的回调
-				layer.msg("设置成功")
-				layer.close(index);//关闭窗口
-			}, function(index){
-				
-			});
-	});
+ 
  
  
  
@@ -152,7 +137,7 @@ function toRuleSave(type) {
 		type: 2,
 		maxmin: true,
 		title: title,
-		area : ['560px' , '360px'],
+		area : ['560px' , '400px'],
 		content: "/front/rule/toRuleSave?ruleId="+ruleId,
 	    end:function(index,layero){
 	    	window.location.reload();
@@ -176,7 +161,7 @@ function toRuleJsonSave(jsonKey,index) {
 		type: 2,
 		maxmin: true,
 		title: title,
-		area : ['660px' , '460px'],
+		area : ['560px' , '400px'],
 		content: '/front/rule/toRuleJsonSave/'+$("#ruleId").val()+'/'+jsonKey+'/'+index,
 	    end:function(index,layero){
 	    	$('#search').trigger("click");
@@ -200,4 +185,29 @@ function deleteRuleJson(jsonKey,index) {
     		}
     	});
     });
+}
+
+function setDefault() {
+	if ($("#ruleId").val() == "") {
+		layer.msg("请选择标准名称!")
+		return;
+	}
+	var ruleId = document.getElementById("ruleId");
+	var index = ruleId.selectedIndex;
+	var Oindex = ruleId.options[index].text;
+	layer.confirm('是否将标准 “ ' + Oindex + " ” 设置为默认？", function(idx) {
+		$.ajax({
+			cache : false,
+			type : "get",
+			url : "/api/v1/rule/setDefault/" + $("#ruleId").val(),
+			async : false,
+			error : function(request) {
+				parent.layer.alert(request.responseText);
+			},
+			success : function(data) {
+				layer.alert("设置成功!");
+			}
+		});
+	});
+
 }

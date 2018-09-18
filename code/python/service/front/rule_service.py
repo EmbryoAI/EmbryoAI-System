@@ -169,10 +169,22 @@ def getRuleById(ruleId):
     根据规则ID和jsonKey和index获取指定规则JSON
 """
 def getRuleJson(ruleId,jsonKey,index):
+    userId = current_user.id
+    rule = rule_dao.getRuleById(ruleId,userId)
+    data = json.loads(rule.dataJson)#把JSON字符串转为对象
+    objList = data[jsonKey]
+    for obj in objList:
+        if obj["index"]==index:
+           return obj
+
+''' 设置当前规则为默认
+    @param ruleId: 规则id
+'''
+def setDefault(ruleId):
+    try:
         userId = current_user.id
-        rule = rule_dao.getRuleById(ruleId,userId)
-        data = json.loads(rule.dataJson)#把JSON字符串转为对象
-        objList = data[jsonKey]
-        for obj in objList:
-            if obj["index"]==index:
-               return obj
+        rule_dao.setDefault(ruleId,userId)
+        return 200,"设置当前规则为默认成功"
+    except:
+        return 400,"设置当前规则为默认失败"
+    
