@@ -152,7 +152,7 @@ function toRuleSave(type) {
 		type: 2,
 		maxmin: true,
 		title: title,
-		area : ['560px' , '360px'],
+		area : ['560px' , '400px'],
 		content: "/front/rule/toRuleSave?ruleId="+ruleId,
 	    end:function(index,layero){
 	    	window.location.reload();
@@ -176,7 +176,7 @@ function toRuleJsonSave(jsonKey,index) {
 		type: 2,
 		maxmin: true,
 		title: title,
-		area : ['660px' , '460px'],
+		area : ['560px' , '400px'],
 		content: '/front/rule/toRuleJsonSave/'+$("#ruleId").val()+'/'+jsonKey+'/'+index,
 	    end:function(index,layero){
 	    	$('#search').trigger("click");

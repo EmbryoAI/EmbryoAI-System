@@ -8,9 +8,10 @@
 <style type="text/css">
 html, body {
 	background-color: #fff;
-	margin: auto;
+	/* margin: auto; */
 	padding: 20px;
-	width: 800px;
+	width: 450px;
+	height: 260px;
 }
 
 .layui-form-label {
@@ -36,14 +37,14 @@ html, body {
 	
 		<div class="layui-form-item">
 			<label class="layui-form-label">描述</label>
-			<div class="layui-input-block">
+			<div class="layui-input-block" style="margin-left:116px">
 				<textarea name="description" id="description" 
 					placeholder="请输入描述" class="layui-textarea">{{rule.description}}</textarea>
 			</div>
 		</div>
 	
-		<div class="layui-form-item" align="center">
-			<button type="button" class="layui-btn" onclick="save();">保存</button>
+		<div class="layui-form-item" style="margin-left:110px">
+			<button type="button" class="layui-btn layui-bg-blue" onclick="save();">保存</button>
 		</div>
 	</form>
 	<script src="/static/admin/layui/layui.js"></script>
