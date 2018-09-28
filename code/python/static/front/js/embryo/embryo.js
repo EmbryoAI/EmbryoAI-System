@@ -99,6 +99,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             e.preventDefault()
         
             slide = swiper.slides[swiper.clickedIndex]
+            if(typeof slide === "undefined"){
+                return
+             }
             slideLeft = slide.offsetLeft
             slideWidth = slide.clientWidth
             slideCenter = slideLeft + slideWidth / 2
@@ -986,7 +989,7 @@ function arrow(direction){
                 }
                 var active = "<div class=\"swiper-slide\">";
                 if(i == 16){
-                    active = "<div class=\"swiper-slide active\">";
+                    //active = "<div class=\"swiper-slide active\">";
                     $("#thumbnailPath").val(data[i+1]);
                 }
                 seris = seris + active + "<span><img id='" + data[i] + "' src=\"" + 
@@ -997,8 +1000,8 @@ function arrow(direction){
             }
             $("#myscrollboxul").html(seris);
             currentSeris = data[data.length-1];
-            loadingImage(procedureId,dishId,wellId,currentSeris,'');
-            loadingZIndex(procedureId,dishId,wellId,currentSeris);
+            //loadingImage(procedureId,dishId,wellId,currentSeris,'');
+            //loadingZIndex(procedureId,dishId,wellId,currentSeris);
 		},
 		error : function(request) {
 			layer.alert(request.responseText);

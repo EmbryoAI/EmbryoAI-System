@@ -23,16 +23,15 @@ logger = app.logger # 日志
 - 更新最后处理时间序列的里程碑标志（未完成）
 '''
 
-stage_labels = ['未分裂', '1PN', '8C', '>=8C', '囊胚', '扩张囊胚', 
-                '2PN', '3PN', '2C', '3C', '4C',
-                '5C', '6C', '7C']
+stage_labels = ['未分裂', '1PN', '2PN', '3PN', '2C', '3C', '4C',
+                '5C', '6C', '7C', '8C', '>=8C', '囊胚', '扩张囊胚']
 
 def process_serie(path, serie, dish_info):
     '''
     时间序列目录处理方法
         @param path: 皿目录完整路径
         @param serie: 时间序列字符串
-        @dish_info: 皿配置信息 DishConfig对象
+        @param dish_info: 皿配置信息 DishConfig对象
         @returns serie: 处理完的时间序列字符串
     '''
     from app import conf, model
