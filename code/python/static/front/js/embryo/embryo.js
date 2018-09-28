@@ -99,6 +99,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             e.preventDefault()
         
             slide = swiper.slides[swiper.clickedIndex]
+            if(typeof slide === "undefined"){
+                return
+             }
             slideLeft = slide.offsetLeft
             slideWidth = slide.clientWidth
             slideCenter = slideLeft + slideWidth / 2
