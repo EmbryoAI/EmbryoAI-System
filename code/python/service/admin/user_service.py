@@ -72,7 +72,7 @@ def insertUser(request):
         user_mapper.insertUser(user)
     except:
         return 400, '新增用户时发生错误!'
-    return 200, user.to_dict()
+    return 200, '新增用户成功!'
 
 def findUserById(id):
     return user_mapper.findUserById(id)
@@ -113,15 +113,10 @@ def findAllUsers(request):
     username = request.args.to_dict().get('username')
     page_number = request.args.to_dict().get('page')
     page_size = request.args.to_dict().get('limit')
-    
-    filters = {}
-    filters['delFlag'] = '0'
-    if username != None and username != "":
-        filters['username'] = username
 
     try:
-        count = user_mapper.count()
-        users = list(map(lambda x: x.to_dict(), user_mapper.findAllUsers(page_number, page_size, filters)))
+        count = user_mapper.count(username)
+        users = list(map(lambda x: x.to_dict(), user_mapper.findAllUsers(page_number, page_size, username)))
     except:
         return 400, '查询用户列表时发生错误!'
     restResult = RestResult(0, "OK", count, users)
