@@ -61,7 +61,13 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 //		]
 //    });
     
+    $('#medicalRecordNo').autocompleter({
+    	highlightMatches : true,
+    	minLength : 3,
+    	source : '/api/v1/procedure/no/list',
+    		cache : false
 
+    	});
 	
 })
 
@@ -149,3 +155,5 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			}
 		});
     }
+
+

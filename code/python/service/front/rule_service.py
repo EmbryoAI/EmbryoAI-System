@@ -95,13 +95,18 @@ def saveRuleJson(request):
         data = json.loads(rule.dataJson)#把JSON字符串转为对象
         objList = data[jsonKey]
         dictObj = dict_dao.getDictByClassAndKey(condition,value)#转换字典值存储
+        if dictObj is None:
+            dictValue  = value;
+        else:
+            dictValue = dictObj.dictValue#转换字典值存储
+        
         if index==None or index=="null":#如果为空则为新增
             index = uuid()
             jsonObj["index"] = index
             jsonObj["condition"] = condition
             jsonObj["symbol"] = symbol
             jsonObj["valueKey"] = value
-            jsonObj["value"] = dictObj.dictValue#转换字典值存储
+            jsonObj["value"] = dictValue#转换字典值存储
             jsonObj["score"] = score
             jsonObj["weight"] = weight
             objList.append(jsonObj)
@@ -112,7 +117,7 @@ def saveRuleJson(request):
                    obj["condition"] = condition
                    obj["symbol"] = symbol
                    obj["valueKey"] = value
-                   obj["value"] = dictObj.dictValue#转换字典值存储
+                   obj["value"] = dictValue#转换字典值存储
                    obj["score"] = score
                    obj["weight"] = weight
         data[jsonKey] = objList;

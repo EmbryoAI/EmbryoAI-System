@@ -29,6 +29,12 @@ def signEmbryo(id,embryoFateId):
 def getEmbryoById(id):
     return embryo_service.getEmbryoById(id)
 
+#根据胚胎ID查询患者相关信息
+@embryo_rest_controller.route('/patient/<string:id>', methods=['GET'])
+@login_required
+def getPatientByEmbryoId(id):
+    return embryo_service.getPatientByEmbryoId(id)
+
 #根据皿读取ini文件获取胚胎数量
 @embryo_rest_controller.route('/number', methods=['GET'])
 def quertEmbryoNumber():

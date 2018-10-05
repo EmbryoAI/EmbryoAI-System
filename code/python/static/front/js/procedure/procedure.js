@@ -172,10 +172,11 @@ layui
 												if (d.xst != null && d.xst != '') {
 													console.log(d.xst);
 													var arr = d.xst.split(",");
+													var arrCode = d.dishCode.split(",");
 													var url = "";
 													for (var i = 0; i < arr.length; i++) {
 														url += "<a href='/front/dish?procedureId="+ d.id +"&dishId=" + arr[i] + "&embryoId=' target='_blank' class='layui-table-link view' >皿"
-																+ (i + 1)
+																+ arrCode[i]
 																+ "</a> ";
 													}
 													return url;
