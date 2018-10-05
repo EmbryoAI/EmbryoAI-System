@@ -16,6 +16,7 @@ var drwaType = "";
 var clearImageUrlList="";
 var current_seris_image_path = "";
 var imgVideoZt = "";
+var embryoId = "";
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     form = layui.form;
     var $ = layui.jquery;
@@ -873,6 +874,11 @@ function querySeriesList(wellId, seris,type){
                                     "','" + wellId + "','" + data[i] + "',0)\"><b>" + 
                                     data[i+2] + "</b></div>";
             }
+
+            //胚胎id
+            embryoId = data[data.length-1]
+            alert(embryoId)
+
             $("#myscrollboxul").html(seris);
             currentSeris = data[data.length-1];
             if(type==0) {

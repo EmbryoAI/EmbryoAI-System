@@ -47,7 +47,7 @@ def insertIncubator(request):
         incubator_mapper.insertIncubator(incubator)
     except:
         return 400, '新增培养箱异常!'
-    return 200, incubator.to_dict()
+    return 200, "新增培养箱成功!"
 
 def updateIncubator(request):
     id = request.form.get('id')
@@ -75,8 +75,8 @@ def updateIncubator(request):
               
         incubator_mapper.updateIncubator(params)
     except:
-        return 400, '新增培养箱异常!'
-    return 200, ""
+        return 400, '编辑培养箱异常!'
+    return 200, "编辑培养箱成功"
 
 
 def findIncubatorById(id):

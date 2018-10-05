@@ -128,3 +128,14 @@ def save(embryo):
         raise DatabaseError('新增胚胎数据时发生错误', e.message, e)
     finally:
         db.session.remove()
+
+
+def queryByProcedureIdAndCellId(procedureId,cellId):
+    embryo = None
+    try:
+        embryo =  db.session.query(Embryo).filter(Embryo.procedureId == procedureId,Embryo.cellId == cellId).one_or_none()
+    except Exception as e:
+        return embryo
+    finally:
+        db.session.remove()
+    return embryo
