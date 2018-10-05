@@ -51,19 +51,28 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 	//日期
 	laydate.render({
 			elem: '#birth',
-			format: 'yyyy/MM/dd ',
-			max: 0
+			format: 'yyyy-MM-dd ',
+			max: 0,
+			done: function(){
+				var birthdate = $('#birth').val();
+				var year = birthdate.substring(0,4);
+				var today = new Date();
+				var now = today.getFullYear();
+				var result = parseInt(now) - parseInt(year);
+				$('#patientAge').val(result);
+			}
 	});
 	laydate.render({
 			elem: '#get',
-			format: 'yyyy/MM/dd ',
+			format: 'yyyy-MM-dd ',
 			max: 0
 	});
 	laydate.render({
 			elem: '#iui',
-			format: 'yyyy/MM/dd ',
+			format: 'yyyy-MM-dd ',
 			max: 0
 	});
+
 	
 	  //自定义验证规则例子
   form.verify({
@@ -113,6 +122,10 @@ function queryDish(incubatorName){
 				layer.alert(request.responseText);
 		}
 	});
+
+	form.on('input(birthdate)', function(data){
+		alert(1);
+     });  
 }
 
 function addCase(){
@@ -158,6 +171,7 @@ function quertEmbryoNumber(dishCode){
 		}
 	});
 }
+
 
 
 
