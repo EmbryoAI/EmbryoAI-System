@@ -53,3 +53,9 @@ def getRuleById(ruleId):
 def setDefault(ruleId):
     code, rule = rule_service.setDefault(ruleId)
     return make_response(jsonify(rule), code)
+
+#查询所有评分规则
+@rule_rest_controller.route('/list', methods=['GET'])
+@login_required
+def findAllRules():
+    return rule_service.findAllRules()

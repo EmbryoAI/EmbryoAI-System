@@ -33,4 +33,4 @@ def toAdmin():
 @login_controller.route('/front', methods=['GET', 'POST'])
 @login_required
 def toFront():
-    return render_template('front/procedure/procedure.html')
+    return render_template('front/home.html')
