@@ -18,6 +18,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		// 加载胚胎标记状态
 		loadEmbryoResultTool("'embryo_fate_type'");
 		
+		//加载左上角培养箱信息
+		loadIncubator();
+		
 		//加载12个孔的缩略图
 		for(var i=1;i<=12;i++) {
 			queryThumbnailImageUrl(i);
@@ -62,6 +65,11 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 	// 点击播放暂停
 	$('#playBtn').click(function () {
 		if ($(this).hasClass('play')) {
+			var flag = isStandard();
+			if(!flag){
+				layer.msg("请先选择一个孔的胚胎为基准胚胎!")
+				return;
+			}
 			imgLen = $('.active img').length;
 			
 			$(this).removeClass('play');
@@ -197,7 +205,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 								 var image = "<img index='"+(i+1)+"' embryoId='"+embryoId+"' id='imageVideo"+obj.timeSeries+wellId+"'  src='/api/v1/well/image?image_path="+obj.thumbnailUrl+"' />";
 				    		 }else {
 								 var image = "<img index='"+(i+1)+"' embryoId='"+embryoId+"' id='imageVideo"+obj.timeSeries+wellId+"'  src='/api/v1/well/image?image_path="+obj.thumbnailUrl+"' />";
-								 $("imageVideo"+obj.timeSeries).hide();
+								 $("#imageVideo"+obj.timeSeries+wellId).hide();
 				    		 }
 							 $(".dishbox"+wellId).append(image);
 						 }
@@ -217,7 +225,25 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				}
 			});
 		}
-
+		
+		//根据皿ID查询培养箱编码
+		function loadIncubator() {
+			$.ajax({
+				type : "get",
+				url : "/api/v1/incubator/get/"+$("#dishId").val(),
+				datatype : "json",
+				cache:false,
+				success : function(data) {
+					 if(data!=null) {
+						 $("#dish-nameDiv").html("<a>@培养箱 "+data+" ： Dish #"+$("#dishCode").val()+"</a>");
+					 }
+				},
+				error : function(request) {
+					layer.alert(request.responseText);
+				}
+			});
+		}
+		
 		//查询病例信息
 		getProcedureInfo($("#procedureId").val());
 		
