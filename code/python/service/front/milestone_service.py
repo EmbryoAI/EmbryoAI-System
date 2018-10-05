@@ -70,9 +70,7 @@ def insertMilestone(request):
 #     d = c+datetime.datetime.strptime("0160000", '%d%H:%M:%S')
 #
 #     print(c)
-    
-    
-    milestoneStage = ""
+
     #PN数量字典值ID -> sys_dict.id，字典值类型为pn，可能取值：0：0PN；1：1PN；2：2PN；3：>=3PN
     pnId = request.form.get('pnId')
     

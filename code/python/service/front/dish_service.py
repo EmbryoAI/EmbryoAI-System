@@ -12,6 +12,7 @@ import dao.front.procedure_dish_mapper as procedure_dish_mapper
 from common import logger
 from task.TimeSeries import TimeSeries,serie_to_time
 import service.front.image_service as image_service
+import dao.front.embryo_mapper as embryo_mapper
 
 
 def querySeriesList(agrs):
@@ -64,6 +65,11 @@ def querySeriesList(agrs):
             hour, minute = serie_to_time(i)
             list.append(f'{hour:02d}H{minute:02d}M')
             list.append(last_seris)
+
+        #查询胚胎id
+        #embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, well_id)
+        #print(embryo.id)
+        #list.append(embryo.id)
 
         return jsonify(list)
     except : 

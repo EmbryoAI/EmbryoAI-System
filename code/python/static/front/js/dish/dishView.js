@@ -65,11 +65,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 	// 点击播放暂停
 	$('#playBtn').click(function () {
 		if ($(this).hasClass('play')) {
-			var flag = isStandard();
-			if(!flag){
-				layer.msg("请先选择一个孔的胚胎为基准胚胎!")
-				return;
-			}
 			imgLen = $('.active img').length;
 			
 			$(this).removeClass('play');
