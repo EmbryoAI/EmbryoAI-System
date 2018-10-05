@@ -1,3 +1,5 @@
+var embryoNumber = 0;
+var embryoCount = 0;
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], function () {
     var form = layui.form;
     var $ = layui.jquery;
@@ -27,9 +29,12 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 		}
 		if($(this).hasClass('active')){
 			$(this).removeClass('active');
+			embryoCount = embryoCount - embryoNumber;
 		}else{
 			$(this).addClass('active');
+			embryoCount = embryoNumber + embryoCount;
 		}
+		$('#embryo_number').val(embryoCount);
 		var dishName = "";
 		var dishCatalog = $('#dish_' + this.id).val();
 		if(dishName == ''){
@@ -144,7 +149,8 @@ function quertEmbryoNumber(dishCode){
 		url : "/api/v1/embryo/number?dishCode=" + dishCode,
 		datatype : "json",
 		success : function(data) {
-			$('#embryo_number').val(data.length);
+			//$('#embryo_number').val(data.length);
+			embryoNumber = data.length;
 			$('#well_id').val(data);
 		},
 		error : function(request) {

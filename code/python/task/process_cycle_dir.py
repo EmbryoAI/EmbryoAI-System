@@ -58,9 +58,17 @@ def process_cycle(path):
         dish_conf.finished = checkpoint
         with open(dish_path+conf['DISH_STATE_FILENAME'], 'w') as fn:
             fn.write(json.dumps(nested_dict(dish_conf)))
+
+        # if checkpoint :
+        #     is_upload = upload_dish(path, dish_conf)
+
         # 设置皿目录是否结束采集标志，该标志checkpoint由process_dish方法返回
-        cycle_json[dish_index] = checkpoint
+        cycle_json[dish_index] = checkpoint 
         finished = finished & checkpoint # 所有皿目录处理完成标志
+
+        # 将处理完成的皿目录下的图像上传到minio
+
+
     # 写入JSON文件
     with open(path + conf['CYCLE_PROCESS_FILENAME'], 'w') as fn:
         fn.write(json.dumps(cycle_json))
