@@ -77,7 +77,7 @@ def getProcedureDetail(id):
     ec_time = None
     insemi_time = None
 
-    if result.ec_time != '0000-00-00 00:00:00':
+    if result.ec_time and result.ec_time != '0000-00-00 00:00:00':
         ec_time = parse_date(str(result.ec_time), 1)
     if result.insemi_time != '0000-00-00 00:00:00':
         insemi_time = parse_date(str(result.insemi_time), 1)
@@ -211,12 +211,14 @@ def addProcedure(request):
     from entity.Patient import Patient
     from entity.Incubator import Incubator
     from entity.Dish import Dish
+    from entity.Cell import Cell
     from entity.ProcedureDish import ProcedureDish
     import dao.front.incubator_mapper as incubator_mapper
     import dao.front.dish_mapper as dish_mapper
     import dao.front.procedure_dish_mapper as procedure_dish_mapper
     from entity.Embryo import Embryo
     import dao.front.embryo_mapper as embryo_mapper
+    import dao.front.cell_mapper as cell_mapper
 
     id = uuid()
     patientName = request.form.get('patientName')
@@ -263,8 +265,14 @@ def addProcedure(request):
     isSmoking = request.form.get('is_smoking')
     userId = request.form.get('userId')
     patientHeight = request.form.get('patient_height')
+    if not patientHeight:
+        patientHeight = None
     patientWeight = request.form.get('patient_weight')
+    if not patientWeight:
+        patientWeight = None
     ecTime = request.form.get('ec_time')
+    if not ecTime:
+        ecTime = None
     ecCount = request.form.get('ec_count')
     well_id = request.form.get('well_id')
     state = 1 #病历已登记完善：2；结束采集：3；已回访：
@@ -311,15 +319,19 @@ def addProcedure(request):
                 pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId, code)
                 if not pd:
                     procedureDishId = uuid()
-                    pd = ProcedureDish(id=procedureDishId, procedureId=procedureId, dishId=code,
+                    pd = ProcedureDish(id=procedureDishId, procedureId=procedureId, dishId=dishId,
                                     imagePath=imagePath)
                     procedure_dish_mapper.save(pd)
-        #胚胎表新增记录
+        
         well_id = well_id.split(',')
+        #孔表新增记录
         for i in well_id:
-            print(i)
+            cellId = uuid()
+            cell = Cell(id=cellId, dishId=dishId, cellCode=i, createTime=createTime, updateTime=updateTime)
+            cell_mapper.save(cell)
+            #胚胎表新增记录
             embryoId = uuid()
-            embryo = Embryo(id=embryoId, embryoIndex=i, procedureId=procedureId, cellId=i, embryoFateId=4)
+            embryo = Embryo(id=embryoId, embryoIndex=i, procedureId=procedureId, cellId=cellId, embryoFateId=4)
             embryo_mapper.save(embryo)
 
     except:
