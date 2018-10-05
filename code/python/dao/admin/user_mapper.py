@@ -49,11 +49,11 @@ def findUserById(id):
     db.session.remove()
     return rs
 
-def findAllUsers(page_number, page_size, filters):
-    return db.session.query(User).filter_by(**filters).limit(int(page_size)).offset((int(page_number)-1)*int(page_size))
+def findAllUsers(page_number, page_size, username):
+    return db.session.query(User).filter(User.username.like("%"+username+"%") if username is not None else "",User.delFlag=="0").limit(int(page_size)).offset((int(page_number)-1)*int(page_size))
 
-def count():
-    return db.session.query(User).count()
+def count(username):
+    return db.session.query(User).filter(User.username.like("%"+username+"%") if username is not None else "",User.delFlag=="0").count()
 
 def deleteUser(params):
     try:
