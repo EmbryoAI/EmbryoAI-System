@@ -9,7 +9,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
     $(function () {
         loadNewestCase(1,4);
         loadNewestDish(1,3);
-
     });
     
 })
@@ -35,7 +34,7 @@ function loadNewestCase(pageNo,pageSize){
                         dishCode = dishData.split(",");
                     }
 					divData = divData + '<div class="layui-col-md3">'
-                        + '<div class="case-list">';
+                        + '<div class="case-list" onclick="showDetail(' + obj.id + ')">';
                     if(dishCode !== null && dishCode.length > 0 && obj.pts > 0) {
                         divData = divData + '<div class="embryo-img">'
                         + '<img src="/api/v1/image/findImageFouce?procedureId=' + obj.id + '&dishCode=' + dishCode[0] + '" ></div>';
@@ -54,6 +53,19 @@ function loadNewestCase(pageNo,pageSize){
 			}
 			$("#caseListDiv").append(divData);
         }
+    });
+}
+
+function showDetail(id){
+    layer.open({
+
+        title : "病历详情",
+        type : 2,
+        area : [ '1020px', '610px' ],
+        maxmin : true,
+
+        shadeClose : false,
+        content : '/front/procedure/' + id
     });
 }
 
