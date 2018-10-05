@@ -71,7 +71,7 @@ def getEmbryoById(id):
         db.session.remove()
 
 """根据胚胎ID 获取患者姓名  年龄等数据"""
- def getPatientByEmbryoId(id):
+def getPatientByEmbryoId(id):
      try:
          sql = text("""
                  SELECT
