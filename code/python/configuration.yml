@@ -1,4 +1,5 @@
-SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@39.104.173.18:3306/embryoai_system_db?charset=utf8"
+# SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@39.104.173.18:3306/embryoai_system_db?charset=utf8"
+SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@192.168.31.73:3306/embryoai_system_db?charset=utf8"
 SQLALCHEMY_POOL_RECYCLE: 3
 SQLALCHEMY_POOL_SIZE: 100
 SQLALCHEMY_POOL_TIMEOUT: 3
@@ -29,3 +30,8 @@ NO_EMBRYO_IMAGE_URL: "cv/embryo_not_found.jpg"
 
 KERAS_MODEL_NAME: "embryo_model.h5"
 EMBRYO_PREDICT_SIZE: 200
+
+MINIO_IP_PORT: "39.104.173.18:9000"
+MINIO_ACCESS_KEY: "UV1NSZLV9V9IKT5KAPJX"
+MINIO_SECRET_KEY: "DuiZ4PTm5L+3LHt+aRyxblWk7fW6Hv2nsKtIJNal"
+ORGANIZATION_ID: "organization.json"
