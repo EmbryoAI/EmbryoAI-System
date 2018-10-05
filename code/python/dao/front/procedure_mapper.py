@@ -43,6 +43,7 @@ def queryProcedureList(page,limit,sqlCondition,filters):
       
         return sql_result
     except Exception as e:
+        print_exc();
         raise DatabaseError("获取病历列表异常!",e.message,e)
         return None
     finally:
@@ -76,6 +77,7 @@ def queryProcedureCount(sqlCondition,filters):
      
         return total_size
     except Exception as e:
+        print_exc();
         raise DatabaseError("获取病历总数异常!",e.message,e)
         return None
     finally:

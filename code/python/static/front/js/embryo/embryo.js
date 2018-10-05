@@ -879,6 +879,27 @@ function querySeriesList(wellId, seris,type){
             	loadingImage(procedureId,dishId,wellId,currentSeris,'');
             }
             loadingZIndex(procedureId,dishId,wellId,currentSeris);
+            
+            //由于切换孔了，需要根据胚胎ID加载一次患者信息
+        	$.ajax({
+        		type : "get",
+        		url : "/api/v1/embryo/patient/"+$("#embryoId").val(),
+        		datatype : "json",
+        		success : function(data) {
+        			if (data.code == 0) {
+        				$("#patientNameSpan").html(data.data.patient_name);
+        				$("#patientAge").html(data.data.patient_age);
+        				$("#embryoIndexSpan").html(data.data.embryo_index);
+        				$("#zzjdSpan").html(data.data.zzjd);
+        			} else {
+        				layer.alert(data.msg);
+        			}
+        		},
+        		error : function(request) {
+        			layer.alert(request.responseText);
+        		}
+        	});
+            
         }
     });
 }

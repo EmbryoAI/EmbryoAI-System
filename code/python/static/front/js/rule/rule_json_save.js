@@ -1,7 +1,14 @@
 layui.use('form', function(){
 	var form = layui.form;
 	form.on('select(conditionLay)', function(obj){
-		valueIni(obj.value);
+		if(obj.value=="time") {
+			var input = "<input type='text' class='layui-input' name='value' id='value' placeholder='请输入时间' />";
+			$("#valueDiv").html(input);
+		}else {
+			var input = "<select name='value' id='value'></select>";
+			$("#valueDiv").html(input);
+			valueIni(obj.value);
+		}
 	});
 	$("#condition").val($("#conditionHide").val());
 	$("#symbol").val($("#symbolHide").val());
