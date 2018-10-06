@@ -8,11 +8,9 @@ import base64
 import dao.front.dish_mapper as dish_mapper
 import dao.front.cell_mapper as cell_mapper
 import dao.front.procedure_dish_mapper as procedure_dish_mapper
-<<<<<<< HEAD
 import dao.front.incubator_mapper as incubator_mapper
-=======
 import dao.front.procedure_mapper as procedure_mapper
->>>>>>> 1a317544abf421d0ec0abb2c9c5d2bfed3b3f0af
+
 from common import logger
 from task.TimeSeries import TimeSeries
 
