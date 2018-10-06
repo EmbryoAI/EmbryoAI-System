@@ -48,22 +48,65 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 		$('#dish').empty();
 		$('#dish').val(dishName);
 
-		quertEmbryoNumber(dishName);
-
 		if(length>=2){
 			if($(this).hasClass('active')){
 				$(this).removeClass('active');
-				embryoCount = embryoCount - embryoNumber;
-				$('#embryo_number').val(embryoCount);
+
+				$.ajax({
+					type : "get",
+					url : "/api/v1/embryo/number?dishCode=" + dishName,
+					datatype : "json",
+					success : function(data) {
+						//$('#embryo_number').val(data.length);
+						embryoNumber = data.length;
+						embryoCount = embryoCount - embryoNumber;
+						$('#embryo_number').val(embryoCount);
+
+						$('#well_id').val(data);
+					},
+					error : function(request) {
+						layer.alert(request.responseText);
+					}
+				});
 			}
 			return
 		}
 		if($(this).hasClass('active')){
 			$(this).removeClass('active');
-			embryoCount = embryoCount - embryoNumber;
+			$.ajax({
+				type : "get",
+				url : "/api/v1/embryo/number?dishCode=" + dishName,
+				datatype : "json",
+				success : function(data) {
+					//$('#embryo_number').val(data.length);
+					embryoNumber = data.length;
+					embryoCount = embryoNumber + embryoCount;
+					$('#embryo_number').val(embryoCount);
+
+					$('#well_id').val(data);
+				},
+				error : function(request) {
+					layer.alert(request.responseText);
+				}
+			});
 		}else{
 			$(this).addClass('active');
-			embryoCount = embryoNumber + embryoCount;
+			$.ajax({
+				type : "get",
+				url : "/api/v1/embryo/number?dishCode=" + dishName,
+				datatype : "json",
+				success : function(data) {
+					//$('#embryo_number').val(data.length);
+					embryoNumber = data.length;
+					embryoCount = embryoNumber + embryoCount;
+					$('#embryo_number').val(embryoCount);
+
+					$('#well_id').val(data);
+				},
+				error : function(request) {
+					layer.alert(request.responseText);
+				}
+			});
 		}
 		$('#embryo_number').val(embryoCount);
 		

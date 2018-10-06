@@ -8,6 +8,7 @@ import base64
 import dao.front.dish_mapper as dish_mapper
 import dao.front.cell_mapper as cell_mapper
 import dao.front.procedure_dish_mapper as procedure_dish_mapper
+import dao.front.incubator_mapper as incubator_mapper
 import dao.front.procedure_mapper as procedure_mapper
 from common import logger
 from task.TimeSeries import TimeSeries
@@ -148,7 +149,17 @@ def queryIncubator():
                     with open(f'{dish_json_path}', 'r') as dn :
                         dish_json = json.loads(dn.read())
                     incubator_name = dish_json['incubatorName']
-                    list.append(incubator_name)
+                    #先查询该培养箱是否被关联，如果没被关联则直接返回
+                    incubator = incubator_mapper.getByIncubatorCode(incubator_name)
+                    if not incubator:
+                        list.append(incubator_name)
+                    #如果关联了则查询该培养箱下面的培养皿是否全部被关联
+                    else:
+                        dish_code = dir[4:5]
+                        print(dish_code) 
+                        dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, dish_code)
+                        if not dish:
+                            list.append(incubator_name)
                     print(incubator_name) 
     result_list = []
     for i in list:
@@ -180,6 +191,12 @@ def queryDish(agrs):
                         dish_json = json.loads(dn.read())
                     incubator_name = dish_json['incubatorName']
                     if incubator_name == incubatorName:
-                        list.append(dir)
-                        list.append(catalog)
+                        dish_code = dir[4:5]
+                        print(dish_code) 
+                        incubator = incubator_mapper.getByIncubatorCode(incubator_name)
+                        dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, dish_code)
+                        if not dish:
+                            list.append(dir)
+                            list.append(catalog)
+                        
     return jsonify(list)

@@ -893,7 +893,7 @@ function querySeriesList(wellId, seris,type, cellId){
             $("#embryoId").val(embryoId);
 
             $("#myscrollboxul").html(seris);
-            currentSeris = data[data.length-1];
+            currentSeris = data[data.length-2];
             if(type==0) {
             	loadingImage(procedureId,dishId,wellId,currentSeris,'');
             }
