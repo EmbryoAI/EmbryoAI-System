@@ -28,10 +28,8 @@ def save(procedureDish):
 def queryNewestImagesInfo():
     try:
         count_sql = text("""
-            SELECT tpd.image_path imagePath,si.id incubatorId,si.incubator_code incubatorCode
+            SELECT tpd.image_path imagePath
             FROM t_procedure_dish tpd
-            LEFT JOIN sys_dish sd ON tpd.dish_id = sd.id
-            LEFT JOIN sys_incubator si ON sd.incubator_id = si.id
             ORDER BY tpd.image_path DESC
             LIMIT 0,1
         """)
@@ -42,11 +40,43 @@ def queryNewestImagesInfo():
         print(data)
         if data is not None:
             imagePath = data[0]
-            incubatorId = data[1]
-            incubatorCode = data[2]
-        return imagePath,incubatorId,incubatorCode
+        return imagePath
     except Exception as e:
         raise DatabaseError("查询最新采集时间及培养箱信息!",e.message,e)
-        return None,None,None
+        return None
+    finally:
+        db.session.remove()
+
+def queryByImagePathAndDishId(imagePath,dishId):
+    procedureDish = None
+    try:
+        procedureDish =  db.session.query(ProcedureDish).filter(ProcedureDish.imagePath == imagePath,ProcedureDish.dishId == dishId).one_or_none()
+    except Exception as e:
+        return procedureDish
+    finally:
+        db.session.remove()
+    return procedureDish
+
+def queryEmbryoId(imagePath,dishId,cellCode):
+    try:
+        sql = text("""
+            SELECT tpd.procedure_id procedureId,te.id embryoId
+            FROM t_procedure_dish tpd
+            LEFT JOIN t_embryo te ON tpd.procedure_id = te.procedure_id
+            LEFT JOIN sys_cell sc ON te.cell_id = sc.id AND tpd.dish_id = sc.dish_id
+            WHERE tpd.image_path = :imagePath AND sc.dish_id = :dishId AND sc.cell_code = :cellCode
+        """)
+        print(sql)
+        # 计算总条数
+        count_result = db.session.execute(sql,{'imagePath':imagePath,'dishId':dishId,'cellCode':cellCode})
+        data = count_result.fetchone()
+        print(data)
+        if data is not None:
+            procedureId = data[0]
+            embryoId = data[0]
+        return procedureId,embryoId
+    except Exception as e:
+        raise DatabaseError("查询最新采集时间及培养箱信息!",e.message,e)
+        return None,None
     finally:
         db.session.remove()
