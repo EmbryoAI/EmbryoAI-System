@@ -228,13 +228,14 @@ def emAll(dishId):
         procedureViewList.append(tableObj)
         
                 #查詢列表
-        procedureList = procedure_mapper.queryProcedureViewList(medicalRecordNo)
+        procedureList = dish_mapper.emAll(dishId)
      
         #循环查询出来的值
         for key in procedureList:
             tableObj=OrderedDict()
             tableObj["codeIndex"] = key["codeIndex"]
-            tableObj["pnNum"] = key["pnNum"]
+            pnNum =  dict_dao.getDictByClassAndKey("pn",key["pnId"])
+            tableObj["pnNum"] = pnNum
             #如果里程碑字段不为空
             if key['lcb']!=None:
                 #由于使用mysql GROUP_CONCAT函数 行转列 需要截取

@@ -9,7 +9,7 @@ $.ajax({
 	success : function(data) {
 		if (data!=null) {
 			for (var i = 0; i < data.length; i++) {
-				$("#td"+data[i].cellCode).html(data[i].embryoScore);
+				$("#td"+data[i].cellCode).html(data[i].embryoScore==null?0:data[i].embryoScore);
 			}
 		}
 	}

@@ -174,3 +174,36 @@ def emGrade(dishId):
         return None
     finally:
         db.session.remove()
+        
+"""根据皿ID获取胚胎总览表"""
+def emAll(dishId):
+    try :
+        sql = text('''
+            SELECT e.embryo_index AS codeIndex, 
+            SUM(da.pn_id) AS pnId,
+                GROUP_CONCAT(m.milestone_time ORDER BY m.milestone_time) lcb,
+                e.embryo_score AS score ,dict2.dict_value AS embryoFate
+                FROM t_embryo e
+                LEFT JOIN t_procedure t
+                ON e.procedure_id = t.id
+                LEFT JOIN t_milestone m
+                ON m.embryo_id = e.id
+                LEFT JOIN t_milestone_data da
+                ON m.id = da.milestone_id AND da.pn_id IS NOT NULL
+                LEFT JOIN t_procedure_dish td
+                ON t.id=td.procedure_id
+            LEFT JOIN sys_dict dict2
+            ON e.embryo_fate_id = dict2.dict_key AND dict2.dict_class='embryo_fate_type' 
+                WHERE td.dish_id =:dishId
+                GROUP BY e.id
+        ''')
+        print(sql)
+        params = {"dishId":dishId}
+        result = db.session.execute(sql,params)
+        data = result.fetchall()
+        return data
+    except Exception as e :
+        raise DatabaseError("根据皿ID获取胚胎评分表时发生错误",e.message,e)
+        return None
+    finally:
+        db.session.remove()
