@@ -67,9 +67,8 @@ def querySeriesList(agrs):
             list.append(last_seris)
 
         #查询胚胎id
-        #embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, well_id)
-        #print(embryo.id)
-        #list.append(embryo.id)
+        embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, well_id)
+        print(embryo.id)
 
         return jsonify(list)
     except : 

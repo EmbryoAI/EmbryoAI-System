@@ -192,4 +192,14 @@ def setDefault(ruleId):
         return 200,"设置当前规则为默认成功"
     except:
         return 400,"设置当前规则为默认失败"
+
+def findAllRules():
+    from entity.RestResult import RestResult
+    try:
+        rules = list(map(lambda x: x.to_dict(), rule_dao.findAllRules()))
+    except:
+        restResult = RestResult(400, "fail", 0, None)
+        return jsonify(restResult.__dict__)
+    restResult = RestResult(0, "OK", len(rules), rules)
+    return jsonify(restResult.__dict__)
     

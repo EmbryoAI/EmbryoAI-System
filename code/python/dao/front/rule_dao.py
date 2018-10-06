@@ -90,3 +90,6 @@ def setDefault(ruleId,userId):
         raise DatabaseError('保存标准成功!', e.message, e)
     finally:
         db.session.remove()
+
+def findAllRules():
+    return db.session.query(Rule)

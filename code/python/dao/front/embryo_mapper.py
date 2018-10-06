@@ -130,9 +130,8 @@ def save(embryo):
 
 
 def queryByProcedureIdAndCellId(procedureId,cellId):
-    embryo = None
     try:
-        embryo =  db.session.query(Embryo).filter(Embryo.procedureId == procedureId,Embryo.cellId == cellId).one_or_none()
+        embryo = db.session.query(Embryo).filter(Embryo.procedureId == procedureId,Embryo.cellId == cellId).one_or_none()
     except Exception as e:
         return embryo
     finally:
