@@ -1,12 +1,27 @@
 var embryoNumber = 0;
 var embryoCount = 0;
-var form;
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], function () {
-    form = layui.form;
+    var form = layui.form;
     var $ = layui.jquery;
     var layer = layui.layer;
-		var laydate = layui.laydate;
-		var address = layui.address();
+	var laydate = layui.laydate;
+	var address = layui.address();
+
+	$.ajax({
+		type : "get",
+		url : "/api/v1/rule/list",
+		datatype : "json",
+		success : function(data) {
+			$("#rule").append("<option value=\"\">请选择</option>");
+			for(var i=0;i<data.data.length;i++){
+				$("#rule").append("<option value=\"" + i + "\">" + data.data[i].ruleName + "</option>");
+			}
+			form.render('select');
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
 
 	// 培养箱选择
 	$('.incubator').on('click','span',function(){
