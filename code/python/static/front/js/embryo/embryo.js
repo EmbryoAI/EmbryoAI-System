@@ -306,7 +306,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             var imageVideoId = $(".lg-video-img img:eq(" + n + ")").attr("id");
             var timeSeries =  imageVideoId.substring(10,imageVideoId.length);
             
-            getBigImage(procedureId, dishId, wellId, timeSeries,1);//定位到对应的时间序列
+            getBigImage(procedureId, dishId, wellId, timeSeries,1,cellId);//定位到对应的时间序列
             //记录一下当前暂停图片的URL
             imgVideoZt = $(".lg-video-img img:eq(" + n + ")").attr("id");
             
@@ -884,7 +884,7 @@ function querySeriesList(wellId, seris,type, cellId){
                 seris = seris + active + "<span><img id='" + data[i] + "' src=\"" + 
                                     imagePath +"\" onclick=\"getBigImage('" 
                                     + procedureId + "','" + dishId + 
-                                    "','" + wellId + "','" + data[i] + "',0)\"><b>" + 
+                                    "','" + wellId + "','" + data[i] + "',0,'" + cellId + "')\"><b>" + 
                                     data[i+2] + "</b></div>";
             }
 
@@ -930,8 +930,8 @@ function querySeriesList(wellId, seris,type, cellId){
  * @param seris
  * @param type 0默认方式 1播放暂停
  */
-function getBigImage(procedureId, dishId, wellId, seris,type){
-    querySeriesList(wellId, seris,type);
+function getBigImage(procedureId, dishId, wellId, seris,type, cellId){
+    querySeriesList(wellId, seris,type,cellId);
 //    loadingImage(procedureId,dishId,wellId,seris,'');
 //    loadingZIndex(procedureId,dishId,wellId,seris);
 }
@@ -956,7 +956,7 @@ function preFrame(){
             parent.layer.alert(request.responseText);
         },
         success : function(data) {
-            getBigImage(procedureId, dishId, wellId, data,0);
+            getBigImage(procedureId, dishId, wellId, data,0, cellId);
         }
     });
 }
@@ -979,7 +979,7 @@ function nextFrame(){
             if(data == null){
                 parent.layer.alert("已经是最后一张了!");
             }else{
-                getBigImage(procedureId, dishId, wellId, data,0);
+                getBigImage(procedureId, dishId, wellId, data,0,cellId);
             }
         }
     });
@@ -1035,7 +1035,7 @@ function arrow(direction){
                 seris = seris + active + "<span><img id='" + data[i] + "' src=\"" + 
                                     imagePath +"\" onclick=\"getBigImage('" 
                                     + procedureId + "','" + dishId + 
-                                    "','" + wellId + "','" + data[i] + "',0)\"><b>" + 
+                                    "','" + wellId + "','" + data[i] + "',0, '" + cellId + "')\"><b>" + 
                                     data[i+2] + "</b></div>";
             }
             $("#myscrollboxul").html(seris);
@@ -1273,7 +1273,7 @@ function node(upOrdown) {
 		cache:false,
 		success : function(data) {
 			 if(data!=null) {
-				 getBigImage(procedureId, dishId, wellId, data.milestoneTime,0);
+				 getBigImage(procedureId, dishId, wellId, data.milestoneTime,0, cellId);
 			 }else {
 				 if("up"==upOrdown) {
 					 layer.alert("当前已经是第一个里程碑了!");
