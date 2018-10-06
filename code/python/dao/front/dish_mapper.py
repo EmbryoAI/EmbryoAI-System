@@ -152,3 +152,8 @@ def queryDishByImagePath(imagePath) :
         return None,None
     finally:
         db.session.remove()
+
+def getByIncubatorIdDishCode(incubatorId, dishCode):
+    rs = db.session.query(Dish).filter(Dish.incubatorId == incubatorId, Dish.dishCode == dishCode).one_or_none()
+    db.session.remove()
+    return rs
