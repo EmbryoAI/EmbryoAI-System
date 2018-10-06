@@ -890,7 +890,7 @@ function querySeriesList(wellId, seris,type, cellId){
 
             //胚胎id
             embryoId = data[data.length-1];
-            alert(embryoId);
+            $("#embryoId").val(embryoId);
 
             $("#myscrollboxul").html(seris);
             currentSeris = data[data.length-1];
