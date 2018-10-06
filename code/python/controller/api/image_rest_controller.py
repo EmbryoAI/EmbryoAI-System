@@ -82,10 +82,5 @@ def findImageFouce():
 '''
 @image_rest_controller.route('/findNewestImageUrl', methods=['POST','GET'])
 def findNewestImageUrl():
-    parser = reqparse.RequestParser()
-    parser.add_argument('pageNo', type=int)
-    parser.add_argument('pageSize', type=int)
-    # code, imageUrlList = image_service.findNewestImageUrl(parser.parse_args())
-    # return make_response(jsonify(imageUrlList), code)
-    imageUrlList = image_service.findNewestImageUrl(parser.parse_args())
+    imageUrlList = image_service.findNewestImageUrl()
     return jsonify(imageUrlList.__dict__)

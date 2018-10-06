@@ -200,19 +200,20 @@ def getImageFouce(agrs):
     return image
 
 
-def findNewestImageUrl(agrs):
-    pageNo = agrs['pageNo']
-    pageSize = agrs['pageSize']
+def findNewestImageUrl():
     try:
         #获取JSON文件
-        imagePath,incubatorId,incubatorCode = procedure_dish_mapper.queryNewestImagesInfo()
+        imagePath = procedure_dish_mapper.queryNewestImagesInfo()
         if not imagePath :
             return RestResult(200, "暂无采集数据", 0, "")
-        result = dish_mapper.queryDishByIncubatorId(incubatorId,imagePath,pageNo,pageSize)
+        result = dish_mapper.queryDishByImagePath(imagePath)
         path = conf['EMBRYOAI_IMAGE_ROOT'] + imagePath + os.path.sep 
         dishList = list(map(dict, result))
 
-        dataList = {"incubatorId":incubatorId,"incubatorCode":incubatorCode}
+        if dishList is None :
+            return RestResult(200, "最新采集目录下暂无皿信息", 0, "")
+
+        dataList = {"incubatorId":dishList[0]["incubatorId"],"incubatorCode":dishList[0]["incubatorCode"]}
         data = []
         for dishMap in dishList : 
             jsonPath = path + f'DISH{dishMap["dishCode"]}' + os.path.sep + conf['DISH_STATE_FILENAME'] 

@@ -6,6 +6,7 @@ import json,os
 from app import conf
 import base64
 import dao.front.dish_mapper as dish_mapper
+import dao.front.cell_mapper as cell_mapper
 import dao.front.procedure_dish_mapper as procedure_dish_mapper
 from common import logger
 from task.TimeSeries import TimeSeries
@@ -34,6 +35,11 @@ def queryWellList(procedureId, dishId):
             last_seris = dishJson['wells'][key]['lastEmbryoSerie']
             image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + dishJson['wells'][key]['series'][last_seris]['focus']
             list.append(image_path)
+            cell = cell_mapper.getCellByDishIdAndCellCode(dishId, key)
+            if not cell:
+                logger().info("查询孔数据异常")
+                return None
+            list.append(cell.id)
         return jsonify(list)
     except : 
         logger().info("读取dishState.json文件出现异常")

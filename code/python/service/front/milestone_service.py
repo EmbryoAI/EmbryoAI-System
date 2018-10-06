@@ -70,9 +70,7 @@ def insertMilestone(request):
 #     d = c+datetime.datetime.strptime("0160000", '%d%H:%M:%S')
 #
 #     print(c)
-    
-    
-    milestoneStage = ""
+
     #PN数量字典值ID -> sys_dict.id，字典值类型为pn，可能取值：0：0PN；1：1PN；2：2PN；3：>=3PN
     pnId = request.form.get('pnId')
     
@@ -151,6 +149,7 @@ def getMilestoneByEmbryoId(embryoId, timeSeries, procedureId, dishId, wellId):
     sql = "AND embryo_id = :embryoId and milestone_time = :milestoneTime "
     filters = {'embryoId': embryoId,'milestoneTime':timeSeries}
     milestone = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
+    milestoneData = None
     result = {}
     if milestone!=None:
         milestoneData = milestone_data_mapper.getMilestoneData(milestone.id)
@@ -158,8 +157,8 @@ def getMilestoneByEmbryoId(embryoId, timeSeries, procedureId, dishId, wellId):
         result["milestone"] = dict(milestone)
         result["milestoneData"] = milestoneData.to_dict()
 
-        if milestoneData is None:
-            result["milestoneData"] = analysisMilestoneData(procedureId, dishId, timeSeries, wellId)
+    if milestoneData is None:
+        result["milestoneData"] = analysisMilestoneData(procedureId, dishId, timeSeries, wellId)
         
     if not result:
         return 200, None

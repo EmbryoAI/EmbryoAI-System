@@ -8,6 +8,7 @@ var path = null;
 var procedureId = "";
 var dishId = "";
 var wellId = "";
+var cellId = "";
 var lastSeris = "";
 var jaindex = "";
 var currentSeris = "";
@@ -41,7 +42,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     	//获取孔
         procedureId = $("#procedureId").val();
         dishId = $("#dishId").val();
-    
+
         $.ajax({
             cache : false,
             type : "GET",
@@ -53,16 +54,17 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             success : function(data) {
                 var well = "";
                 for(var i=1;i<=12;i++){
-                    var result = check(i, data);
-                    if(result != ''){
+                    var imagePath = getImage(i, data);
+                    var cellId = getCellId(i, data);
+                    if(imagePath != ''){
                         if(i == data[0]){
                             well = well + "<li class=\"active\" id=\"li_" + i + "\" onclick=\"clickLi('" + i + "')\"><span>well" + i + 
-                            "</span><img src=\"/api/v1/well/image?image_path=" + result +
-                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie',0)\"><i></i></li>";
+                            "</span><img src=\"/api/v1/well/image?image_path=" + imagePath +
+                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie',0,'" + cellId + "')\"><i></i></li>";
                         }else{
                             well = well + "<li id=\"li_" + i + "\" onclick=\"clickLi('" + i + "')\"><span>well" + i + 
-                            "</span><img src=\"/api/v1/well/image?image_path=" + result +
-                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie',0)\"><i></i></li>";
+                            "</span><img src=\"/api/v1/well/image?image_path=" + imagePath +
+                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie',0,'" + cellId + "')\"><i></i></li>";
                         }
                     }else{
                         well = well + "<li id=\"li_" + i + "\"  onclick=\"clickLi('" + i + "')\"><span>well" + i + 
@@ -71,7 +73,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 }
                 $("#siteitem").html(well);
                 wellId = data[0];
-                querySeriesList(wellId,'lastEmbryoSerie',0);//获取每个孔下面的时间序列
+                cellId = data[2];
+                querySeriesList(wellId,'lastEmbryoSerie',0, cellId);//获取每个孔下面的时间序列
                 if(clearImageUrlList=="") {
                 	queryClearImageUrl();//初始化所有图片
                 }
@@ -835,9 +838,9 @@ function loadingImage(procedureId,dishId,wellId,timeSeries,zIndex){
 }
 
 //羊城
-function check(index, data){
+function getImage(index, data){
     var result = '';
-    for(var i=0;i<data.length;i=i+2){
+    for(var i=0;i<data.length;i=i+3){
         if(index == data[i]){
             result = data[i+1];
         }
@@ -845,20 +848,30 @@ function check(index, data){
     return result;
 }
 
-function querySeriesList(wellId, seris,type){
+function getCellId(index, data){
+    var result = '';
+    for(var i=0;i<data.length;i=i+3){
+        if(index == data[i]){
+            result = data[i+2];
+        }
+    }
+    return result;
+}
+
+function querySeriesList(wellId, seris,type, cellId){
     var procedureId = $("#procedureId").val();
     var dishId = $("#dishId").val();
     $.ajax({
         cache : false,
         type : "GET",
-        url : "/api/v1/dish/list?procedure_id=" + procedureId + "&dish_id=" + dishId + "&well_id=" + wellId + "&seris=" + seris,
+        url : "/api/v1/dish/list?procedure_id=" + procedureId + "&dish_id=" + dishId + "&well_id=" + wellId + "&seris=" + seris + "&cell_id=" + cellId,
         data : "",
         error : function(request) {
             parent.layer.alert(request.responseText);
         },
         success : function(data) {
             var seris = "";
-            for(var i=0;i<data.length;i=i+4){
+            for(var i=0;i<data.length-1;i=i+4){
                 var imagePath = "/api/v1/well/image?image_path=" + data[i+1];
                 if(data[i+1].indexOf("embryo_not_found") != -1){
                     imagePath = "/static/front/img/icon-noembryo.jpg";
@@ -876,8 +889,8 @@ function querySeriesList(wellId, seris,type){
             }
 
             //胚胎id
-            embryoId = data[data.length-1]
-            alert(embryoId)
+            embryoId = data[data.length-1];
+            alert(embryoId);
 
             $("#myscrollboxul").html(seris);
             currentSeris = data[data.length-1];
@@ -1085,11 +1098,13 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 				if(data!=null) {//如果当前里程碑不为空则回显
 					var milestone = data.milestone;
                     var milestoneData = data.milestoneData;
-					$("#milestoneCheckbox").prop('checked', true);
-	                $('#milestone').animate({
-	                    height: '90px'
-	                });
-	                $("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").prop("checked",true);
+                    if(milestone!=null) {
+						$("#milestoneCheckbox").prop('checked', true);
+		                $('#milestone').animate({
+		                    height: '90px'
+		                });
+	                	$("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").prop("checked",true);
+	                }
 	                if(milestoneData.pnId!="") {
 	                	$("input:radio[name=pnId][value="+milestoneData.pnId+"]").prop("checked",true);
 	                }
@@ -1104,8 +1119,12 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
                     $("#expansionArea").val(Math.round(milestoneData.expansionArea));
 	                $("#zonaThickness").val(Math.round(milestoneData.zonaThickness));
 	                $("#memo").val(milestoneData.memo);
-	                $("#stageId").html("("+milestone.milestoneName+")");
-					showHide(milestone.milestoneId);
+	                if(milestone!=null) {
+		                $("#stageId").html("("+milestone.milestoneName+")");
+						showHide(milestone.milestoneId);
+	                }else {
+	                	showHide(null);
+	                }
 				}else {
 					showHide(null);
 				}
@@ -1185,12 +1204,14 @@ function showHide(value) {
 		$("#fragmentDiv").hide();
 		$("#gradeDiv").hide();
 		$("#pnDiv").show();
+		$("input:radio[name=pnId][value=0]").prop("checked",true);
 	}else if(value=="2") {//2C
 		$("#countDiv").show();
 		$("#evenDiv").show();
 		$("#fragmentDiv").hide();
 		$("#gradeDiv").hide();
 		$("#pnDiv").hide();
+		$("input:radio[name=count][value="+value+"]").prop("checked",true);
 	}else if(value=="3" || value=="4" || value=="5" || value=="6") {
 		$("#countDiv").show();
 		$("#evenDiv").show();
@@ -1201,6 +1222,7 @@ function showHide(value) {
 			$("#gradeDiv").hide();
 		}
 		$("#pnDiv").hide();
+		$("input:radio[name=count][value="+value+"]").prop("checked",true);
 	}else {
 		$("#pnDiv").hide();
 		$("#countDiv").hide();
@@ -1209,6 +1231,7 @@ function showHide(value) {
 		$("#gradeDiv").hide();
 		layer.alert("待确认");
 	}
+	form.render();
 }
 
 //根据周期id、皿ID、孔ID、获取孔的时间序列对应最清晰的URL

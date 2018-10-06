@@ -1,3 +1,4 @@
+// var layer = null;
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function () {
     var form = layui.form;
     var $ = layui.jquery;
@@ -8,7 +9,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
 
     $(function () {
         loadNewestCase(1,4);
-        loadNewestDish(1,3);
+        loadNewestDish();
     });
     
 })
@@ -34,12 +35,12 @@ function loadNewestCase(pageNo,pageSize){
                         dishCode = dishData.split(",");
                     }
 					divData = divData + '<div class="layui-col-md3">'
-                        + '<div class="case-list" onclick="showDetail(' + obj.id + ')">';
+                        + '<div class="case-list">';
                     if(dishCode !== null && dishCode.length > 0 && obj.pts > 0) {
-                        divData = divData + '<div class="embryo-img">'
+                        divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'")>'
                         + '<img src="/api/v1/image/findImageFouce?procedureId=' + obj.id + '&dishCode=' + dishCode[0] + '" ></div>';
                     } else {
-                        divData = divData + '<div class="embryo-img"><img src="/static/front/img/icon-noembryo.jpg" ></div>';
+                        divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'")><img src="/static/front/img/icon-noembryo.jpg" ></div>';
                     }
                     divData = divData + '<div class="case-info">'
                     + '<h1><span>培养箱 ' + obj.incubatorCode + ' </span>：<span>Dish #  ' + obj.dishCode + '</span></h1>'
@@ -56,25 +57,23 @@ function loadNewestCase(pageNo,pageSize){
     });
 }
 
-function showDetail(id){
-    layer.open({
+function lookCase(procedureId){
+	layer.open({
+		title : "病历详情",
+		type : 2,
+		area : [ '1020px', '610px' ],
+		maxmin : true,
 
-        title : "病历详情",
-        type : 2,
-        area : [ '1020px', '610px' ],
-        maxmin : true,
-
-        shadeClose : false,
-        content : '/front/procedure/' + id
-    });
+		shadeClose : false,
+		content : '/front/procedure/' + procedureId
+	});
 }
 
-function loadNewestDish(pageNo,pageSize){
+function loadNewestDish(){
     $.ajax({
         cache : false,
         type : "GET",
         url : "/api/v1/image/findNewestImageUrl",
-        data : {"pageNo":pageNo,"pageSize":pageSize},
         async : false,
         error : function(request) {
             alert(request.responseText);
@@ -91,7 +90,7 @@ function loadNewestDish(pageNo,pageSize){
                     if(wellUrls !== null && wellUrls !== ""){
                         divData = divData + '总时间: <span>' + data[i].times + '</span></p>';
                         for (let j = 0; j < wellUrls.length; j++) {
-                            divData = divData + '<a><img src="/api/v1/well/image?image_path=' + wellUrls[j].url + '"></a>';
+                            divData = divData + '<a href="/front/embryo/toEmbryo?imagePath=' + data[i].imagePath + '&dishId=' + data[i].dishId + '&wellCode=' + wellUrls[j].wellId + '" target="_blank"><img src="/api/v1/well/image?image_path=' + wellUrls[j].url + '"></a>';
                         }
                         if(wellUrls.length < 12){
                             for (let j = wellUrls.length; j < 12; j++) {

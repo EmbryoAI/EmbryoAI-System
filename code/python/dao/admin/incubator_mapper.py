@@ -70,3 +70,21 @@ def deleteIncubator(params):
         raise DatabaseError('删除培养箱异常', e.message, e)
     finally:
         db.session.remove()
+        
+#根据皿ID获取培养箱编码
+def getIncubatorCodeByDishId(dishId):
+    try:
+        sql = text("""
+            SELECT b.incubator_code as incubatorCode FROM sys_dish di
+            LEFT JOIN sys_incubator b 
+            ON di.incubator_id=b.id
+            WHERE di.id=:dishId
+            """)
+        count_result = db.session.execute(sql,{"dishId":dishId})
+        return count_result.fetchone()[0]
+    except Exception as e:
+        print_exc();
+        raise DatabaseError("根据皿ID获取培养箱编码异常!",e.message,e)
+        return None
+    finally:
+        db.session.remove()

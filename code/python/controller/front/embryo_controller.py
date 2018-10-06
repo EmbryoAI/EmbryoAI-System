@@ -3,6 +3,7 @@ from common import logger
 from app import login_required 
 from entity.Embryo import Embryo
 from flask_restful import reqparse
+import service.front.embryo_service as embryo_service
 
 ''' 胚胎视图 '''
 
@@ -23,4 +24,17 @@ def main():
     procedureId = agrs['procedureId']
     dishId = agrs['dishId']
     embryoId = agrs['embryoId']
+    return render_template('front/embryo/embryo.html', procedure_id=procedureId, dish_id=dishId, embryo_id=embryoId)
+
+@embryo_controller.route('/toEmbryo', methods=['GET'])
+@login_required
+def toEmbryo():
+    logger().info('embryo_controller.toEmbryo胚胎视图页面')
+
+    parser = reqparse.RequestParser()
+    parser.add_argument('imagePath', type=str)
+    parser.add_argument('dishId', type=str)
+    parser.add_argument('wellCode', type=str)
+    
+    procedureId,dishId,embryoId = embryo_service.findEmbroyoInfo(parser.parse_args())
     return render_template('front/embryo/embryo.html', procedure_id=procedureId, dish_id=dishId, embryo_id=embryoId)

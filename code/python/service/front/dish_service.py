@@ -20,6 +20,7 @@ def querySeriesList(agrs):
     dish_id = agrs['dish_id']
     well_id = agrs['well_id']
     seris = agrs['seris']
+    cell_id = agrs['cell_id']
 
     try :
         dish = dish_mapper.queryById(dish_id)
@@ -66,9 +67,16 @@ def querySeriesList(agrs):
             list.append(f'{hour:02d}H{minute:02d}M')
             list.append(last_seris)
 
+        print(procedure_id)
+        print(cell_id)
+
         #查询胚胎id
-        embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, well_id)
+        embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, cell_id)
         print(embryo.id)
+        #if not embryo:
+        #    logger().info("查询胚胎数据出现异常")
+        #    return None
+        list.append(embryo.id)
 
         return jsonify(list)
     except : 

@@ -116,4 +116,14 @@ def deleteIncubator(id):
         incubator_mapper.deleteIncubator(params)
     except:
         return 400, {'msg': '删除培养箱时发生错误'}
-    return 204, None
+    return 200, None
+
+#根据皿ID获取培养箱编码
+def getIncubatorCodeByDishId(dishId):
+    if dishId == "":
+       return 400, '皿ID不能为空!'
+    try:
+       incubatorCode = incubator_mapper.getIncubatorCodeByDishId(dishId)
+    except:
+       return 400, "根据皿ID获取培养箱编码异常"
+    return 200, incubatorCode
