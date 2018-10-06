@@ -102,6 +102,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		var imageVideoId = $("#dishImageUl .active img:eq(" + n + ")").attr("id");
 		currentSeris = imageVideoId.substring(10,imageVideoId.length-1);;//设置基准胚胎的时间序列
 		clearInterval(imgTime);
+		checkTimelien(currentSeris);
 	}
 
 
@@ -116,7 +117,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			  maxmin: true,
 			  shadeClose: true, 
 			  area : ['900px' , '220px'],
-			  content: 'emGrade.html'
+			  content: '/front/dish/emGrade/'+$("#dishId").val()
 			});
 		});
 		  
@@ -126,12 +127,13 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			  type: 2,
 			  title: '胚胎总览表',
 			  maxmin: true,
-			  shadeClose: true, 
+			  shadeClose: true,
 			  area : ['900px' , '520px'],
-			  content: 'emAll.html'
+			  content: '/front/dish/emAll/'+$("#dishId").val()
 			});
 		});
 
+		//点击基准标识
 		$("#embryo_fate_type_ul").on('click', 'li', function () {
 			const self = $(this),index = $(this).attr('data-end');
 			if (self.hasClass('active')) {
@@ -159,12 +161,16 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 					$('#dishImageUl li span').remove('.standard');
 					self.addClass('active');
 					self.append("<span class='standard' ></span>")
-					var wellCode = self.attr("wellCode");
-					$("#time_box_div").show();
-					loadTimeline(wellCode);
+					// var wellCode = self.attr("wellCode");
+					// $("#time_box_div").show();
+					// loadTimeline(wellCode);
 					
 					var imageVideoId = $("#dishImageUl .active img:eq(" + n + ")").attr("id");
 					currentSeris = imageVideoId.substring(10,imageVideoId.length-1);;//设置基准胚胎的时间序列
+
+					//取消基准标识选中状态
+					$("#embryo_fate_type_ul li").removeClass('active');
+					$('.dish-box').css("cursor","auto")
 				} else {	
 					//胚胎结果标记
 					self.children('i').remove();
@@ -194,7 +200,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				cache:false,
 				data : {"procedureId":$("#procedureId").val(),"dishId":$("#dishId").val(),"wellId":wellId},
 				success : function(data) {
-					 if(data!=null) {
+					if(data!=null) {
 						 thumbnailImageUrlList = data;
 			    		 $(".dishbox"+wellId).html("");
 			    		 var embryoId = "";
@@ -213,13 +219,31 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				    	 //给孔的li增加embryoId
 						 $(".dishbox"+wellId).attr("embryoId",embryoId);
 						 $(".dishbox"+wellId).attr("wellCode",wellId);
-					 }else {
+					}else {
 						 
-					 }
+					}
 					 
-					 if(wellId==12) {
-						 setTimeout(function(){layer.close(jaindex);},5000);
-					 }
+					if(wellId==12) {
+						var firstWellCode = 0;
+						for (let i = 1; i < 12; i++) {
+							var imgCount = $(".dishbox"+i).children("img").length
+							if(imgCount > 1){
+								firstWellCode = i;
+								break;
+							}
+						}
+						if(firstWellCode !== 0){
+							// 设置为基准胚胎
+							$('.dishbox'+firstWellCode).addClass('active');
+							$('.dishbox'+firstWellCode).append("<span class='standard' ></span>");
+					
+							var imageVideoId = $("#dishImageUl .active img:eq(" + n + ")").attr("id");
+							currentSeris = imageVideoId.substring(10,imageVideoId.length-1);;//设置基准胚胎的时间序列
+
+							loadTimeline(firstWellCode);
+						}
+						setTimeout(function(){layer.close(jaindex);},5000);
+					}
 				},
 				error : function(request) {
 					layer.alert(request.responseText);
@@ -364,7 +388,10 @@ function signEmbryoResult(obj,appendData,embryoId,embryoFateId){
 		$('#timelineDiv').on('click','span',function(){
 			$(this).siblings('span').removeClass('active');
 			$(this).addClass('active');
+
+			//选择时间轴切换12个孔的图
 			var activeTime = $(this).attr("serie");
+			currentSeris = activeTime;
 			$(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
 			for (let i = 1; i <= 12; i++) {
 				if($("#imageVideo"+activeTime+i) !== undefined){
@@ -411,15 +438,20 @@ function node(upOrdown) {
 		cache:false,
 		success : function(data) {
 			 if(data!=null) {
-				 $(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
-				 //把12个孔的都设置为对应基准胚胎里程碑时间序列的缩略图
-				 for (var i = 1; i <= 12; i++) {
-					 //把这个张图显示
-					 if($("#imageVideo"+data.milestoneTime+i)!=undefined) {
-						 $("#imageVideo"+data.milestoneTime+i).show();
-					 }
-				 }
-				 currentSeris = data.milestoneTime;//设置基准胚胎的时间序列
+				$(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
+				//把12个孔的都设置为对应基准胚胎里程碑时间序列的缩略图
+				console.info(data);
+				for (var i = 1; i <= 12; i++) {
+					//把这个张图显示
+					if($("#imageVideo"+data.milestoneTime+i)!=undefined) {
+						$("#imageVideo"+data.milestoneTime+i).show();
+					}
+				}
+				currentSeris = data.milestoneTime;//设置基准胚胎的时间序列
+
+				//切换里程碑，选中时间
+				checkTimelien(currentSeris);
+
 			 }else {
 				 if("up"==upOrdown) {
 					 layer.alert("当前已经是第一个里程碑了!");
@@ -472,6 +504,9 @@ function preFrame() {
 	}
 	$(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
 	$(".dishbox1 img:eq(" + n + "),.dishbox2 img:eq(" + n + "),.dishbox3 img:eq(" + n + "),.dishbox4 img:eq(" + n + "),.dishbox5 img:eq(" + n + "),.dishbox6 img:eq(" + n + "),.dishbox7 img:eq(" + n + "),.dishbox8 img:eq(" + n + "),.dishbox9 img:eq(" + n + "),.dishbox10 img:eq(" + n + "),.dishbox11 img:eq(" + n + "),.dishbox12 img:eq(" + n + ")").show();
+	var imageVideoId = $("#dishImageUl .active img:eq(" + n + ")").attr("id");
+	currentSeris = imageVideoId.substring(10,imageVideoId.length-1);
+	checkTimelien(currentSeris);
 }
 
 // 下一张
@@ -494,9 +529,12 @@ function nextFrame() {
 		n = imgLen - 1;
 		layer.msg("已经是最后一张了")
 	}
+	
 	$(".dishbox1 img,.dishbox2 img,.dishbox3 img,.dishbox4 img,.dishbox5 img,.dishbox6 img,.dishbox7 img,.dishbox8 img,.dishbox9 img,.dishbox10 img,.dishbox11 img,.dishbox12 img").hide();
 	$(".dishbox1 img:eq(" + n + "),.dishbox2 img:eq(" + n + "),.dishbox3 img:eq(" + n + "),.dishbox4 img:eq(" + n + "),.dishbox5 img:eq(" + n + "),.dishbox6 img:eq(" + n + "),.dishbox7 img:eq(" + n + "),.dishbox8 img:eq(" + n + "),.dishbox9 img:eq(" + n + "),.dishbox10 img:eq(" + n + "),.dishbox11 img:eq(" + n + "),.dishbox12 img:eq(" + n + ")").show();
-
+	var imageVideoId = $("#dishImageUl .active img:eq(" + n + ")").attr("id");
+	currentSeris = imageVideoId.substring(10,imageVideoId.length-1);
+	checkTimelien(currentSeris);
 }
 
 
@@ -521,14 +559,15 @@ function loadTimeline(wellCode){
 					var index = (i - 1) * pageSize;
 					var end = i * pageSize > timelienData.length ? timelienData.length-1 : (i * pageSize) - 1;
 					if(i === pageNo){
-						timePageDiv = timePageDiv + "<i class='active' page=" + i + ">" + i + "<span> " + data[index]["showTime"] + " ~ " + data[end]["showTime"] + " </span></i>";
+						timePageDiv = timePageDiv + "<i class='active' page=" + i + " beginSerie=" + data[index]["serie"] +">" + i + "<span> " + data[index]["showTime"] + " ~ " + data[end]["showTime"] + " </span></i>";
 					} else {
-						timePageDiv = timePageDiv + "<i page=" + i + ">" + i + "<span> " + data[index]["showTime"] + " ~ " + data[end]["showTime"] + " </span></i>";
+						timePageDiv = timePageDiv + "<i page=" + i + " beginSerie=" + data[index]["serie"] +" >" + i + "<span> " + data[index]["showTime"] + " ~ " + data[end]["showTime"] + " </span></i>";
 					}
 				}
 				divData = showTimeline(pageNo,pageSize);
 			}
 			$("#timelineDiv").html(divData);
+			$("#timelineDiv span:first").addClass('active');
 			$("#timePageDiv").html(timePageDiv);
 
 			$('#timePageDiv i').hover(function(){
@@ -609,4 +648,32 @@ function updateMemo(){
 			layer.alert(request.responseText);
 		}
 	});
+}
+
+//根据时间序列选中时间轴的位置
+function checkTimelien(serie){
+	var endPage = $("#timePageDiv i:last").attr("page");
+	var divData = "";
+	var showPage = 0;
+	for (let i = 1; i <= endPage ; i++) {
+		var pageSerie = $("#timePageDiv i[page='" + i + "'").attr("beginSerie");
+		if(parseInt(serie) === parseInt(pageSerie)){
+			showPage = i;
+			break;
+		} else if (parseInt(serie) < parseInt(pageSerie)){
+			showPage = i-1;
+			break;
+		}
+		
+	}
+	var nowPage = $("#timePageDiv i .active").attr("page");
+	if(showPage > 0 && showPage !== nowPage){
+		$("#timePageDiv i").siblings('i').removeClass('active');
+		$("#timePageDiv i[page='" + showPage + "']").addClass('active');
+		divData = showTimeline(showPage,pageSize);
+		$("#timelineDiv").html(divData);
+	}
+
+	$("#timelineDiv span").siblings('span').removeClass('active');
+	$("#timelineDiv span[serie='" + currentSeris + "']").addClass('active');
 }

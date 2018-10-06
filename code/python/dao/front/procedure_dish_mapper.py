@@ -73,7 +73,7 @@ def queryEmbryoId(imagePath,dishId,cellCode):
         print(data)
         if data is not None:
             procedureId = data[0]
-            embryoId = data[0]
+            embryoId = data[1]
         return procedureId,embryoId
     except Exception as e:
         raise DatabaseError("查询最新采集时间及培养箱信息!",e.message,e)

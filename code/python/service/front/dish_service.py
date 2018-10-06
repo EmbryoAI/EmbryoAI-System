@@ -11,9 +11,8 @@ import dao.front.dish_mapper as dish_mapper
 import dao.front.procedure_dish_mapper as procedure_dish_mapper
 from common import logger
 from task.TimeSeries import TimeSeries,serie_to_time
-import service.front.image_service as image_service
-import dao.front.embryo_mapper as embryo_mapper
-
+from collections import OrderedDict
+import dao.front.dict_dao as dict_dao
 
 def querySeriesList(agrs):
     procedure_id = agrs['procedure_id']
@@ -199,4 +198,63 @@ def getSeriesList(agrs):
         return jsonify(list)
     except : 
         logger().info("读取dishState.json文件出现异常")
-        return None                                                                                                                                                                                                                                                                                                                         
+        return None
+
+"""根据皿ID获取胚胎评分表"""
+def emGrade(dishId):
+    try:
+        emGradeList = dish_mapper.emGrade(dishId)
+        emGradeList = list(map(dict, emGradeList))
+        return 200,emGradeList
+    except:
+        return 400,"根据皿ID获取胚胎评分表失败"
+
+
+"""根据皿ID获取胚胎总览表"""
+def emAll(dishId):
+    try:
+         #查询字典表里程碑的节点
+        result = dict_dao.queryDictListByClass("milestone")
+        dictList = list(map(lambda x: x.to_dict(),result))
+        
+        procedureViewList=[]
+        #表格的动态头
+        tableObj=OrderedDict()
+        tableObj["codeIndex"] = "编号"
+        tableObj["pnNum"] = "PN数"
+        for key in dictList:
+            tableObj[key['dictValue']] = key['dictValue']
+        tableObj["embryoFate"] = "结局"
+        procedureViewList.append(tableObj)
+        
+                #查詢列表
+        procedureList = procedure_mapper.queryProcedureViewList(medicalRecordNo)
+     
+        #循环查询出来的值
+        for key in procedureList:
+            tableObj=OrderedDict()
+            tableObj["codeIndex"] = key["codeIndex"]
+            tableObj["pnNum"] = key["pnNum"]
+            #如果里程碑字段不为空
+            if key['lcb']!=None:
+                #由于使用mysql GROUP_CONCAT函数 行转列 需要截取
+                lcbstr = key['lcb'].split(",")
+                for dictObj in dictList:
+                    value = ""
+                    for lcbjd in lcbstr:
+                        lcb = lcbjd.split("#")
+                        if dictObj['dictValue'] == lcb[0]: #如果相等的话
+                            hour, minute = serie_to_time(lcb[2])
+                            value = lcb[1]+","+ f'{hour:02d}H{minute:02d}M'
+                            break
+                    tableObj[dictObj['dictValue']] = value
+            else:
+                for dictObj in dictList:
+                    tableObj[dictObj['dictValue']] = ""
+            tableObj["embryoFate"] = key["embryoFate"]
+        procedureViewList.append(tableObj)
+        
+        
+        return 200,procedureViewList
+    except:
+        return 400,"根据皿ID获取胚胎总览表失败"                                                                                               

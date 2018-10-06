@@ -145,11 +145,33 @@ def queryDishByImagePath(imagePath) :
         print(params)
         result = db.session.execute(sql,params)
         data = result.fetchall()
-        print(data)
         return data
     except Exception as e :
         raise DatabaseError("查询培养箱下的最新采集目录时发生错误",e.message,e)
-        return None,None
+        return None
+    finally:
+        db.session.remove()
+
+"""根据皿ID获取胚胎评分表"""
+def emGrade(dishId):
+    try :
+        sql = text('''
+          SELECT
+              c.cell_code    AS   cellCode,
+              e.embryo_score AS embryoScore
+            FROM t_embryo e
+              LEFT JOIN sys_cell c
+                ON e.cell_id = c.id
+            WHERE c.dish_id =:dishId
+        ''')
+        print(sql)
+        params = {"dishId":dishId}
+        result = db.session.execute(sql,params)
+        data = result.fetchall()
+        return data
+    except Exception as e :
+        raise DatabaseError("根据皿ID获取胚胎评分表时发生错误",e.message,e)
+        return None
     finally:
         db.session.remove()
 

@@ -8,7 +8,11 @@ import base64
 import dao.front.dish_mapper as dish_mapper
 import dao.front.cell_mapper as cell_mapper
 import dao.front.procedure_dish_mapper as procedure_dish_mapper
+<<<<<<< HEAD
 import dao.front.incubator_mapper as incubator_mapper
+=======
+import dao.front.procedure_mapper as procedure_mapper
+>>>>>>> 1a317544abf421d0ec0abb2c9c5d2bfed3b3f0af
 from common import logger
 from task.TimeSeries import TimeSeries
 
@@ -65,8 +69,13 @@ def getNextFrame(agrs):
 
 def getWellVideo(agrs):
     import cv2
+    import numpy as np
+    from PIL import Image, ImageDraw, ImageFont
+    from task.TimeSeries import serie_to_time
 
     procedure_id = agrs['procedure_id']
+    procedure_result = procedure_mapper.getProcedureById(procedure_id)
+    patient_name = procedure_result['patient_name']
     dish_id = agrs['dish_id']
     well_id = agrs['well_id']
 
@@ -89,6 +98,10 @@ def getWellVideo(agrs):
     video_name = video_path + os.path.sep + pd.imagePath + f'_DISH{dishCode}_{well_id}.mp4'
     print(video_name)
 
+    font_name = ImageFont.truetype('NotoSansCJK-Black.ttc', 30)
+    font_time = ImageFont.truetype('NotoSansCJK-Black.ttc', 20)
+    color = (0, 0, 0)
+
     fps = 5 #每秒几帧
     fourcc = cv2.VideoWriter_fourcc(*'DIVX')
     videoWriter = cv2.VideoWriter(video_name,fourcc,fps,(1280,960))
@@ -99,9 +112,20 @@ def getWellVideo(agrs):
     seris_json = dishJson['wells'][f'{well_id}']['series']
     for series in seris_json:
         image_name = seris_json[series]['sharp']
-        image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + series + os.path.sep + image_name 
+        image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep \
+            + f'DISH{dishCode}' + os.path.sep + series + os.path.sep + image_name 
         frame = cv2.imread(image_path)
-        frame = cv2.resize(frame,(1280,960))
+        img_pil = Image.fromarray(frame)
+        draw = ImageDraw.Draw(img_pil)
+        draw.text((50, 10), patient_name, font=font_name, fill=color)
+        hour, minute = serie_to_time(series)
+        draw.text((1150, 10), f'{hour:02d} H {minute:02d} M', font=font_time, fill=color)
+        # if seris_json[series]['stage']:
+            # draw.text((1150, 30), seris_json[series]['stage'], font=font_time, fill=color)
+        frame = np.asarray(img_pil)
+
+        # frame = cv2.resize(frame,(1280,960))
+
         videoWriter.write(frame)
     videoWriter.release()
 
