@@ -3,6 +3,7 @@
 from entity.RestResult import RestResult
 import dao.front.embryo_mapper as embryo_mapper
 from flask import request, jsonify
+import dao.front.procedure_dish_mapper as procedure_dish_mapper
 
 
 
@@ -75,3 +76,14 @@ def quertEmbryoNumber(agrs):
                         if result == '1':
                             list.append(i)
     return jsonify(list)
+
+
+def findEmbroyoInfo(args) :
+    imagePath = args["imagePath"]
+    dishId = args["dishId"]
+    wellCode = args["wellCode"]
+
+    procedureId,embryoId = procedure_dish_mapper.queryEmbryoId(imagePath,dishId,wellCode)
+
+    return procedureId,dishId,embryoId 
+

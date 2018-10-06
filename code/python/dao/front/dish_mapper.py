@@ -130,20 +130,18 @@ def save(dish):
         print_exc()
         raise DatabaseError('新增培养皿数据时发生错误', e.message, e)
 
-def queryDishByIncubatorId(incubatorId,imagePath,pageNo,pageSize) :
+def queryDishByImagePath(imagePath) :
     try :
-        sql = text('''SELECT sd.id dishId,sd.dish_code dishCode
-        FROM sys_dish sd
-        LEFT JOIN t_procedure_dish tpd ON sd.id = tpd.dish_id AND tpd.image_path = :imagePath
-        WHERE sd.incubator_id = :incubatorId
-        LIMIT :index,:pageSize''')
+        sql = text('''
+            SELECT si.id incubatorId,si.incubator_code incubatorCode, sd.id dishId,sd.dish_code dishCode
+            FROM sys_dish sd
+            LEFT JOIN t_procedure_dish tpd ON sd.id = tpd.dish_id
+            LEFT JOIN sys_incubator si ON sd.incubator_id = si.id
+            WHERE tpd.image_path = :imagePath
+        ''')
         print(sql)
-
-        index = 0
-        if pageNo > 0 :
-            index = (pageNo - 1) * pageSize
         
-        params = {"incubatorId":incubatorId,"imagePath":imagePath,"index":index,"pageSize":pageSize}
+        params = {"imagePath":imagePath}
         print(params)
         result = db.session.execute(sql,params)
         data = result.fetchall()
