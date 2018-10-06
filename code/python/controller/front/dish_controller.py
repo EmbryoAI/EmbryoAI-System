@@ -16,10 +16,10 @@ def dishView():
     parser = reqparse.RequestParser()
     parser.add_argument('procedureId', type=str)
     parser.add_argument('dishId', type=str)
-    parser.add_argument('embryoId', type=str)
+    parser.add_argument('dishCode', type=str)
 
     agrs = parser.parse_args()
     procedureId = agrs['procedureId']
     dishId = agrs['dishId']
-    embryoId = agrs['embryoId']
-    return render_template('front/dish/dish.html', procedure_id=procedureId, dish_id=dishId, embryo_id=embryoId)
+    dishCode = agrs['dishCode']
+    return render_template('front/dish/dish.html', procedure_id=procedureId, dish_id=dishId, dishCode=dishCode)

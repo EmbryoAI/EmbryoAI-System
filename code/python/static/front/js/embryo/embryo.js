@@ -1085,11 +1085,13 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 				if(data!=null) {//如果当前里程碑不为空则回显
 					var milestone = data.milestone;
                     var milestoneData = data.milestoneData;
-					$("#milestoneCheckbox").prop('checked', true);
-	                $('#milestone').animate({
-	                    height: '90px'
-	                });
-	                $("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").prop("checked",true);
+                    if(milestone!=null) {
+						$("#milestoneCheckbox").prop('checked', true);
+		                $('#milestone').animate({
+		                    height: '90px'
+		                });
+	                	$("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").prop("checked",true);
+	                }
 	                if(milestoneData.pnId!="") {
 	                	$("input:radio[name=pnId][value="+milestoneData.pnId+"]").prop("checked",true);
 	                }
@@ -1104,8 +1106,12 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
                     $("#expansionArea").val(Math.round(milestoneData.expansionArea));
 	                $("#zonaThickness").val(Math.round(milestoneData.zonaThickness));
 	                $("#memo").val(milestoneData.memo);
-	                $("#stageId").html("("+milestone.milestoneName+")");
-					showHide(milestone.milestoneId);
+	                if(milestone!=null) {
+		                $("#stageId").html("("+milestone.milestoneName+")");
+						showHide(milestone.milestoneId);
+	                }else {
+	                	showHide(null);
+	                }
 				}else {
 					showHide(null);
 				}
@@ -1185,12 +1191,14 @@ function showHide(value) {
 		$("#fragmentDiv").hide();
 		$("#gradeDiv").hide();
 		$("#pnDiv").show();
+		$("input:radio[name=pnId][value=0]").prop("checked",true);
 	}else if(value=="2") {//2C
 		$("#countDiv").show();
 		$("#evenDiv").show();
 		$("#fragmentDiv").hide();
 		$("#gradeDiv").hide();
 		$("#pnDiv").hide();
+		$("input:radio[name=count][value="+value+"]").prop("checked",true);
 	}else if(value=="3" || value=="4" || value=="5" || value=="6") {
 		$("#countDiv").show();
 		$("#evenDiv").show();
@@ -1201,6 +1209,7 @@ function showHide(value) {
 			$("#gradeDiv").hide();
 		}
 		$("#pnDiv").hide();
+		$("input:radio[name=count][value="+value+"]").prop("checked",true);
 	}else {
 		$("#pnDiv").hide();
 		$("#countDiv").hide();
@@ -1209,6 +1218,7 @@ function showHide(value) {
 		$("#gradeDiv").hide();
 		layer.alert("待确认");
 	}
+	form.render();
 }
 
 //根据周期id、皿ID、孔ID、获取孔的时间序列对应最清晰的URL
