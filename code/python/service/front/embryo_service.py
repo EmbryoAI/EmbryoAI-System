@@ -30,14 +30,14 @@ def getEmbryoById(id):
         return 400, '查询单个胚胎时发生错误!'
 
 def getPatientByEmbryoId(id):
-    try: 
-        embryo = embryo_mapper.getPatientByEmbryoId(id)
-        restResult = RestResult(0, "404", 0, None)
-        if embryo is not None:
-            restResult = RestResult(0, "OK", 1, dict(embryo))
-        return jsonify(restResult.__dict__)
-    except:
-        return 400, '查询单个胚胎时发生错误!'
+     try: 
+         embryo = embryo_mapper.getPatientByEmbryoId(id)
+         restResult = RestResult(0, "404", 0, None)
+         if embryo is not None:
+             restResult = RestResult(0, "OK", 1, dict(embryo))
+         return jsonify(restResult.__dict__)
+     except:
+         return 400, '查询单个胚胎时发生错误!'
 
 
 def quertEmbryoNumber(agrs):

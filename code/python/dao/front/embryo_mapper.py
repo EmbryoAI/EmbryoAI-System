@@ -72,29 +72,28 @@ def getEmbryoById(id):
 
 """根据胚胎ID 获取患者姓名  年龄等数据"""
 def getPatientByEmbryoId(id):
-    try:
-        sql = text("""
-                SELECT
-                  e.embryo_index AS embryo_index,
-                  pa.patient_name   AS patient_name,
-                  pr.patient_age    AS patient_age,
-                  CONCAT('D',DATEDIFF(IF(pr.cap_end_time,pr.cap_end_time,NOW()),pr.insemi_time)) AS zzjd
-                FROM t_embryo e
-                  LEFT JOIN t_procedure pr
-                    ON e.procedure_id = pr.id
-                  LEFT JOIN t_patient pa
-                    ON pr.patient_id = pa.id
-                where e.id=:id
-                GROUP BY pr.id
-            """)
-        print(sql)
-        return db.session.execute(sql,{'id':id}).fetchone()
-    except Exception as e:
-        raise DatabaseError("根据主键ID获取胚胎异常ID异常",e.message,e)
-        return None
-    finally:
-        db.session.remove()
-        
+     try:
+         sql = text("""
+                 SELECT
+                   e.embryo_index AS embryo_index,
+                   pa.patient_name   AS patient_name,
+                   pr.patient_age    AS patient_age,
+                   CONCAT('D',DATEDIFF(IF(pr.cap_end_time,pr.cap_end_time,NOW()),pr.insemi_time)) AS zzjd
+                 FROM t_embryo e
+                   LEFT JOIN t_procedure pr
+                     ON e.procedure_id = pr.id
+                   LEFT JOIN t_patient pa
+                     ON pr.patient_id = pa.id
+                 where e.id=:id
+                 GROUP BY pr.id
+             """)
+         print(sql)
+         return db.session.execute(sql,{'id':id}).fetchone()
+     except Exception as e:
+         raise DatabaseError("根据主键ID获取胚胎异常ID异常",e.message,e)
+         return None
+     finally:
+         db.session.remove()
 
 """
     根据皿ID和孔序号获取孔ID  ，再根据周期ID和孔ID 获取 胚胎ID
@@ -128,3 +127,14 @@ def save(embryo):
         raise DatabaseError('新增胚胎数据时发生错误', e.message, e)
     finally:
         db.session.remove()
+
+
+def queryByProcedureIdAndCellId(procedureId,cellId):
+    embryo = None
+    try:
+        embryo =  db.session.query(Embryo).filter(Embryo.procedureId == procedureId,Embryo.cellId == cellId).one_or_none()
+    except Exception as e:
+        return embryo
+    finally:
+        db.session.remove()
+    return embryo

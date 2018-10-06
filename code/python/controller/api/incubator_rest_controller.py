@@ -43,3 +43,9 @@ def deleteIncubator(id):
 def updateIncubator():
     code, incubator = incubator_service.updateIncubator(request)
     return make_response(jsonify(incubator), code)
+
+#根据皿ID获取培养箱编码
+@incubator_rest_controller.route('/get/<string:dishId>', methods=['GET'])
+def getIncubatorCodeByDishId(dishId):
+    code, incubatorCode = incubator_service.getIncubatorCodeByDishId(dishId)
+    return make_response(jsonify(incubatorCode), code)

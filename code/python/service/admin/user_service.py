@@ -52,6 +52,8 @@ def insertUser(request):
     if is_private == "":
         return 400, '病历权限不能为空!'
     birthday = request.form.get('birthday')
+    if not birthday:
+        birthday = None
     sex = request.form.get('sex')
 
     create_time = update_time = last_login_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 

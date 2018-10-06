@@ -175,7 +175,7 @@ layui
 													var arrCode = d.dishCode.split(",");
 													var url = "";
 													for (var i = 0; i < arr.length; i++) {
-														url += "<a href='/front/dish?procedureId="+ d.id +"&dishId=" + arr[i] + "&embryoId=' target='_blank' class='layui-table-link view' >皿"
+														url += "<a href='/front/dish?procedureId="+ d.id +"&dishId=" + arr[i] + "&dishCode="+arrCode[i]+"' target='_blank' class='layui-table-link view' >皿"
 																+ arrCode[i]
 																+ "</a> ";
 													}
