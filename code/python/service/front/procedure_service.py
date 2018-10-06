@@ -156,7 +156,7 @@ def queryProcedureViewList(request):
         tableObj=OrderedDict()
         tableObj["codeIndex"] = "箱皿胚胎"
         for key in dictList:
-            tableObj[key['dictValue']] = key['dictValue']
+            tableObj[key['dictValue']] = key['dictValue']+"时间"
         tableObj["score"] = "评分"
         tableObj["embryoFate"] = "结局"
         procedureViewList.append(tableObj)

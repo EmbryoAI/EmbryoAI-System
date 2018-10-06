@@ -116,7 +116,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			  maxmin: true,
 			  shadeClose: true, 
 			  area : ['900px' , '220px'],
-			  content: 'emGrade.html'
+			  content: '/front/dish/emGrade/'+$("#dishId").val()
 			});
 		});
 		  
@@ -126,9 +126,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			  type: 2,
 			  title: '胚胎总览表',
 			  maxmin: true,
-			  shadeClose: true, 
+			  shadeClose: true,
 			  area : ['900px' , '520px'],
-			  content: 'emAll.html'
+			  content: '/front/dish/emAll/'+$("#dishId").val()
 			});
 		});
 

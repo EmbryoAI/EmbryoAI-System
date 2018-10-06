@@ -52,3 +52,20 @@ def loadSeriesList():
     parser.add_argument('dishId', type=str)
     parser.add_argument('wellId', type=str)
     return dish_service.getSeriesList(parser.parse_args())
+
+
+"""根据皿ID获取胚胎评分表"""
+@dish_rest_controller.route('/emGrade/<string:dishId>', methods=['GET'])
+@login_required
+def emGrade(dishId):
+    logger().info('dish_controller.胚胎评分表')
+    code, emGradeList = dish_service.emGrade(dishId)
+    return make_response(jsonify(emGradeList), code)
+
+"""根据皿ID获取胚胎总览表"""
+@dish_rest_controller.route('/emAll/<string:dishId>', methods=['GET'])
+@login_required
+def emAll(dishId):
+    logger().info('dish_controller.胚胎总览表')
+    code, emAllList = dish_service.emAll(dishId)
+    return make_response(jsonify(emAllList), code)
