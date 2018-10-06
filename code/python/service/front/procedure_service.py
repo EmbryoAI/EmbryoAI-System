@@ -61,10 +61,9 @@ def queryProcedureList(request):
         procedureList = list(map(dict, result))
         #查询总数
         count = procedure_mapper.queryProcedureCount(sqlCondition,filters)
-        
+        restResult = RestResult(0, "OK", count, procedureList)
     except:
-        return 400, '查询病历列表时发生错误!'
-    restResult = RestResult(0, "OK", count, procedureList)
+        restResult = RestResult(400, "查询病历列表时发生错误!", 0, None)
     return jsonify(restResult.__dict__)
 
 def getProcedureDetail(id):

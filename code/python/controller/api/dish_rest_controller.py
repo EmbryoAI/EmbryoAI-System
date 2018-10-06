@@ -19,6 +19,7 @@ def querySeriesList():
     parser.add_argument('dish_id', type=str)
     parser.add_argument('well_id', type=str)
     parser.add_argument('seris', type=str)
+    parser.add_argument('cell_id', type=str)
     return dish_service.querySeriesList(parser.parse_args())
 
 #左右滚动

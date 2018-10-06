@@ -4,8 +4,24 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
     var form = layui.form;
     var $ = layui.jquery;
     var layer = layui.layer;
-		var laydate = layui.laydate;
-		var address = layui.address();
+	var laydate = layui.laydate;
+	var address = layui.address();
+
+	$.ajax({
+		type : "get",
+		url : "/api/v1/rule/list",
+		datatype : "json",
+		success : function(data) {
+			$("#rule").append("<option value=\"\">请选择</option>");
+			for(var i=0;i<data.data.length;i++){
+				$("#rule").append("<option value=\"" + i + "\">" + data.data[i].ruleName + "</option>");
+			}
+			form.render('select');
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
 
 	// 培养箱选择
 	$('.incubator').on('click','span',function(){
@@ -21,20 +37,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 	$('.dish').on('click','span',function(){
 		const length = $('.dish').children('.active').length;
 		const text = $(this).text();
-		if(length>=2){
-			if($(this).hasClass('active')){
-				$(this).removeClass('active');
-			}
-			return
-		}
-		if($(this).hasClass('active')){
-			$(this).removeClass('active');
-			embryoCount = embryoCount - embryoNumber;
-		}else{
-			$(this).addClass('active');
-			embryoCount = embryoNumber + embryoCount;
-		}
-		$('#embryo_number').val(embryoCount);
+
 		var dishName = "";
 		var dishCatalog = $('#dish_' + this.id).val();
 		if(dishName == ''){
@@ -46,6 +49,24 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 		$('#dish').val(dishName);
 
 		quertEmbryoNumber(dishName);
+
+		if(length>=2){
+			if($(this).hasClass('active')){
+				$(this).removeClass('active');
+				embryoCount = embryoCount - embryoNumber;
+				$('#embryo_number').val(embryoCount);
+			}
+			return
+		}
+		if($(this).hasClass('active')){
+			$(this).removeClass('active');
+			embryoCount = embryoCount - embryoNumber;
+		}else{
+			$(this).addClass('active');
+			embryoCount = embryoNumber + embryoCount;
+		}
+		$('#embryo_number').val(embryoCount);
+		
 	})	
 	
 	//日期
@@ -165,6 +186,24 @@ function quertEmbryoNumber(dishCode){
 			//$('#embryo_number').val(data.length);
 			embryoNumber = data.length;
 			$('#well_id').val(data);
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
+}
+
+function queryRules(){
+	$("#rule").empty();
+	$.ajax({
+		type : "get",
+		url : "/api/v1/rule/list",
+		datatype : "json",
+		success : function(data) {
+			for(var i=0;i<data.data.length;i++){
+				$("#rule").append("<option value=\"" + i + "\">" + data.data[i].ruleName + "</option>");
+			}
+			form.render('select');
 		},
 		error : function(request) {
 			layer.alert(request.responseText);
