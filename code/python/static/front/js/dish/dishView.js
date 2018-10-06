@@ -126,6 +126,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			});
 		});
 
+		//点击基准标识
 		$("#embryo_fate_type_ul").on('click', 'li', function () {
 			const self = $(this),index = $(this).attr('data-end');
 			if (self.hasClass('active')) {
@@ -153,12 +154,16 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 					$('#dishImageUl li span').remove('.standard');
 					self.addClass('active');
 					self.append("<span class='standard' ></span>")
-					var wellCode = self.attr("wellCode");
-					$("#time_box_div").show();
-					loadTimeline(wellCode);
+					// var wellCode = self.attr("wellCode");
+					// $("#time_box_div").show();
+					// loadTimeline(wellCode);
 					
 					var imageVideoId = $("#dishImageUl .active img:eq(" + n + ")").attr("id");
 					currentSeris = imageVideoId.substring(10,imageVideoId.length-1);;//设置基准胚胎的时间序列
+
+					//取消基准标识选中状态
+					$("#embryo_fate_type_ul li").removeClass('active');
+					$('.dish-box').css("cursor","auto")
 				} else {	
 					//胚胎结果标记
 					self.children('i').remove();
@@ -188,7 +193,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				cache:false,
 				data : {"procedureId":$("#procedureId").val(),"dishId":$("#dishId").val(),"wellId":wellId},
 				success : function(data) {
-					 if(data!=null) {
+					if(data!=null) {
 						 thumbnailImageUrlList = data;
 			    		 $(".dishbox"+wellId).html("");
 			    		 var embryoId = "";
@@ -207,13 +212,31 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				    	 //给孔的li增加embryoId
 						 $(".dishbox"+wellId).attr("embryoId",embryoId);
 						 $(".dishbox"+wellId).attr("wellCode",wellId);
-					 }else {
+					}else {
 						 
-					 }
+					}
 					 
-					 if(wellId==12) {
-						 setTimeout(function(){layer.close(jaindex);},5000);
-					 }
+					if(wellId==12) {
+						var firstWellCode = 0;
+						for (let i = 1; i < 12; i++) {
+							var imgCount = $(".dishbox"+i).children("img").length
+							if(imgCount > 1){
+								firstWellCode = i;
+								break;
+							}
+						}
+						if(firstWellCode !== 0){
+							// 设置为基准胚胎
+							$('.dishbox'+firstWellCode).addClass('active');
+							$('.dishbox'+firstWellCode).append("<span class='standard' ></span>");
+					
+							var imageVideoId = $("#dishImageUl .active img:eq(" + n + ")").attr("id");
+							currentSeris = imageVideoId.substring(10,imageVideoId.length-1);;//设置基准胚胎的时间序列
+
+							loadTimeline(firstWellCode);
+						}
+						setTimeout(function(){layer.close(jaindex);},5000);
+					}
 				},
 				error : function(request) {
 					layer.alert(request.responseText);
