@@ -5,7 +5,7 @@ from flask_restful import reqparse
 from common import logger
 from app import db, login_required
 import service.front.dish_service as dish_service
-import time
+import time,json
 
 dish_rest_controller = Blueprint('dish_rest_controller', __name__)
 url_prefix = '/api/v1/dish'
@@ -69,4 +69,4 @@ def emGrade(dishId):
 def emAll(dishId):
     logger().info('dish_controller.胚胎总览表')
     code, emAllList = dish_service.emAll(dishId)
-    return make_response(jsonify(emAllList), code)
+    return make_response(json.dumps(emAllList, ensure_ascii=False), code)

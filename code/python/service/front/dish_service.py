@@ -253,7 +253,7 @@ def emAll(dishId):
                 for dictObj in dictList:
                     tableObj[dictObj['dictValue']] = ""
             tableObj["embryoFate"] = key["embryoFate"]
-        procedureViewList.append(tableObj)
+            procedureViewList.append(tableObj)
         
         
         return 200,procedureViewList
