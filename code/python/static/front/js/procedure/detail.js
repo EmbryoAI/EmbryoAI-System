@@ -61,7 +61,7 @@ function queryEmbryo(procedureId){
                  + data.data[i].embryo_index + 
                  "</td><td><a href='/front/incubator?procedureId=" + procedureId + "&incubatorId=" + data.data[i].incubator_code + "' target='_blank' class='layui-table-link'>"
                   + data.data[i].incubator_code +
-                 "</a></td><td><a href='#' onclick='showDish()' class='layui-table-link'>"
+                 "</a></td><td><a href='/front/dish?procedureId="+ procedureId +"&dishId=" + data.data[i].dish_id + "&dishCode="+ data.data[i].dish_code +"' target='_blank' class='layui-table-link' >"
                   + data.data[i].dish_code 
                   + "</a></td><td><a href='/front/embryo?procedureId=" + procedureId + "&dishId=" + 
                   data.data[i].dish_id + "&embryoId=" + data.data[i].id + 
@@ -70,14 +70,6 @@ function queryEmbryo(procedureId){
             }
 		}
 	});
-}
-
-function showDish(){
-    alert("跳到皿视图");
-    
-}
-function showIncubator(){
-    alert("跳到培养箱视图");
 }
 
 function update(){

@@ -157,7 +157,6 @@ def queryIncubator():
                     #如果关联了则查询该培养箱下面的培养皿是否全部被关联
                     else:
                         dish_code = dir[4:5]
-                        print(dish_code) 
                         dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, dish_code)
                         if not dish:
                             list.append(incubator_name)
@@ -178,7 +177,6 @@ def queryDish(agrs):
 
     list = []
     for catalog in catalog_json:
-        print(catalog)
         catalog_path = conf['EMBRYOAI_IMAGE_ROOT'] + catalog
         dirs = os.listdir(catalog_path)
         for dir in dirs:
@@ -193,11 +191,14 @@ def queryDish(agrs):
                     incubator_name = dish_json['incubatorName']
                     if incubator_name == incubatorName:
                         dish_code = dir[4:5]
-                        print(dish_code) 
                         incubator = incubator_mapper.getByIncubatorCode(incubator_name)
-                        dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, dish_code)
-                        if not dish:
+                        if not incubator:
                             list.append(dir)
                             list.append(catalog)
+                        else:
+                            dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, dish_code)
+                            if not dish:
+                                list.append(dir)
+                                list.append(catalog)
                         
     return jsonify(list)
