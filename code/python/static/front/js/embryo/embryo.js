@@ -859,6 +859,8 @@ function getCellId(index, data){
 }
 
 function querySeriesList(wellId, seris,type, cellId){
+    $("#wellId").val(wellId);
+    $("#cellId").val(cellId);
     var procedureId = $("#procedureId").val();
     var dishId = $("#dishId").val();
     $.ajax({
@@ -1015,6 +1017,8 @@ function exportVideo(){
 }
 
 function arrow(direction){
+    cellId = $("#cellId").val();
+    wellId = $("#wellId").val();
     $.ajax({
 		type : "get",
         url : "/api/v1/dish/scroll?procedure_id=" + procedureId + "&dish_id=" + dishId + 
