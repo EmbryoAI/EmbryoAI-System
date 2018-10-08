@@ -13,6 +13,8 @@ from common import logger
 from task.TimeSeries import TimeSeries,serie_to_time
 from collections import OrderedDict
 import dao.front.dict_dao as dict_dao
+from entity.Series import Series
+from entity.SeriesResult import SeriesResult
 
 def querySeriesList(agrs):
     procedure_id = agrs['procedure_id']
@@ -57,30 +59,32 @@ def querySeriesList(agrs):
             last_index = len(ts.range(dishJson['lastSerie']))
             begin_index = last_index - 9
 
+        #list=[]
+        #for i in ts[begin_index:last_index]:
+        #    list.append(i)
+        #    image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + well_json['series'][i]['focus']
+        #    list.append(image_path)
+        #    hour, minute = serie_to_time(i)
+        #    list.append(f'{hour:02d}H{minute:02d}M')
+        #    list.append(last_seris)
+        
         list=[]
         for i in ts[begin_index:last_index]:
-            list.append(i)
             image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + well_json['series'][i]['focus']
-            list.append(image_path)
             hour, minute = serie_to_time(i)
-            list.append(f'{hour:02d}H{minute:02d}M')
-            list.append(last_seris)
-
-        print(procedure_id)
-        print(cell_id)
+            series = Series(i, f'{hour:02d}H{minute:02d}M', image_path)
+            list.append(series.__dict__)
 
         #查询胚胎id
         embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, cell_id)
-        print(embryo.id)
-        #if not embryo:
-        #    logger().info("查询胚胎数据出现异常")
-        #    return None
-        list.append(embryo.id)
 
-        return jsonify(list)
+        seriesResult = SeriesResult(200, 'OK', list, last_seris, embryo.id)
+
+        return jsonify(seriesResult.__dict__)
     except : 
         logger().info("读取dishState.json文件出现异常")
-        return None
+        seriesResult = SeriesResult(400, '获取序列出现异常', None, None, None)
+        return jsonify(seriesResult.__dict__)
 
 def queryScrollbarSeriesList(agrs):
     procedure_id = agrs['procedure_id']
@@ -136,17 +140,18 @@ def queryScrollbarSeriesList(agrs):
 
         list=[]
         for i in ts[begin_index:last_index]:
-            list.append(i)
             image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + well_json['series'][i]['focus']
-            list.append(image_path)
             hour, minute = serie_to_time(i)
-            list.append(f'{hour:02d}H{minute:02d}M')
-            list.append(current_seris)
+            series = Series(i, f'{hour:02d}H{minute:02d}M', image_path)
+            list.append(series.__dict__)
 
-        return jsonify(list)
+        seriesResult = SeriesResult(200, 'OK', list, current_seris, None)
+
+        return jsonify(seriesResult.__dict__)
     except : 
         logger().info("读取dishState.json文件出现异常")
-        return None
+        seriesResult = SeriesResult(400, '获取序列出现异常', None, None, None)
+        return jsonify(seriesResult.__dict__)
 
 
 

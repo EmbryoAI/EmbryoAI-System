@@ -53,18 +53,17 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             },
             success : function(data) {
                 var well = "";
+                var wellList = data.well_list;
                 for(var i=1;i<=12;i++){
-                    var imagePath = getImage(i, data);
-                    var cellId = getCellId(i, data);
-                    if(imagePath != ''){
-                        if(i == data[0]){
+                    if(wellList[i-1] != '' && wellList[i-1] != undefined){
+                        if(i == wellList[0].well_code){
                             well = well + "<li class=\"active\" id=\"li_" + i + "\" onclick=\"clickLi('" + i + "')\"><span>well" + i + 
-                            "</span><img src=\"/api/v1/well/image?image_path=" + imagePath +
-                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie',0,'" + cellId + "')\"><i></i></li>";
+                            "</span><img src=\"/api/v1/well/image?image_path=" + wellList[i-1].series_image_path +
+                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie',0,'" +  wellList[i-1].well_id + "')\"><i></i></li>";
                         }else{
                             well = well + "<li id=\"li_" + i + "\" onclick=\"clickLi('" + i + "')\"><span>well" + i + 
-                            "</span><img src=\"/api/v1/well/image?image_path=" + imagePath +
-                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie',0,'" + cellId + "')\"><i></i></li>";
+                            "</span><img src=\"/api/v1/well/image?image_path=" + wellList[i-1].series_image_path +
+                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie',0,'" +  wellList[i-1].well_id + "')\"><i></i></li>";
                         }
                     }else{
                         well = well + "<li id=\"li_" + i + "\"  onclick=\"clickLi('" + i + "')\"><span>well" + i + 
@@ -72,8 +71,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     }
                 }
                 $("#siteitem").html(well);
-                wellId = data[0];
-                cellId = data[2];
+                wellId = wellList[0].well_code;
+                cellId = wellList[0].well_id;
                 querySeriesList(wellId,'lastEmbryoSerie',0, cellId);//获取每个孔下面的时间序列
                 if(clearImageUrlList=="") {
                 	queryClearImageUrl();//初始化所有图片
@@ -858,7 +857,7 @@ function getCellId(index, data){
     return result;
 }
 
-function querySeriesList(wellId, seris,type, cellId){
+function querySeriesList(wellId, serisCode, type, cellId){
     $("#wellId").val(wellId);
     $("#cellId").val(cellId);
     var procedureId = $("#procedureId").val();
@@ -866,36 +865,35 @@ function querySeriesList(wellId, seris,type, cellId){
     $.ajax({
         cache : false,
         type : "GET",
-        url : "/api/v1/dish/list?procedure_id=" + procedureId + "&dish_id=" + dishId + "&well_id=" + wellId + "&seris=" + seris + "&cell_id=" + cellId,
+        url : "/api/v1/dish/list?procedure_id=" + procedureId + "&dish_id=" + dishId + "&well_id=" 
+            + wellId + "&seris=" + serisCode + "&cell_id=" + cellId,
         data : "",
         error : function(request) {
             parent.layer.alert(request.responseText);
         },
         success : function(data) {
             var seris = "";
-            for(var i=0;i<data.length-1;i=i+4){
-                var imagePath = "/api/v1/well/image?image_path=" + data[i+1];
-                if(data[i+1].indexOf("embryo_not_found") != -1){
+            var series = data.series;
+            for(var i=0;i<series.length;i++){
+                var imagePath = "/api/v1/well/image?image_path=" + series[i]["series_image_path"];
+                if(series[i]["series_image_path"].indexOf("embryo_not_found") != -1){
                     imagePath = "/static/front/img/icon-noembryo.jpg";
                 }
-                var active = "<div class=\"swiper-slide\">";
-                if(i == 16){
-                    active = "<div class=\"swiper-slide active\">";
-                    $("#thumbnailPath").val(data[i+1]);
-                }
-                seris = seris + active + "<span><img id='" + data[i] + "' src=\"" + 
-                                    imagePath +"\" onclick=\"getBigImage('" 
-                                    + procedureId + "','" + dishId + 
-                                    "','" + wellId + "','" + data[i] + "',0,'" + cellId + "')\"><b>" + 
-                                    data[i+2] + "</b></div>";
+                $("#thumbnailPath").val(series[i]["series_image_path"]);
+                var active = "<div class=\"swiper-slide\" id='" + series[i]["series_code"] + "_div'>";
+                seris = seris + active + "<span><img id='" + series[i]["series_code"] + "' src=\"" + 
+                                    imagePath +"\" onclick=\"getBigImage('" + procedureId + "','" + dishId + 
+                                    "','" + wellId + "','" + series[i]["series_code"] + "',0,'" + cellId + "')\"><b>" + 
+                                    series[i]["series_name"] + "</b></div>";
             }
+            $("#myscrollboxul").html(seris);
+            $("#" + serisCode + "_div").attr("class", "swiper-slide active");
 
             //胚胎id
-            embryoId = data[data.length-1];
+            embryoId = data.embryo_id;
             $("#embryoId").val(embryoId);
 
-            $("#myscrollboxul").html(seris);
-            currentSeris = data[data.length-2];
+            currentSeris = data.last_series;
             if(type==0) {
             	loadingImage(procedureId,dishId,wellId,currentSeris,'');
             }
@@ -933,6 +931,7 @@ function querySeriesList(wellId, seris,type, cellId){
  * @param type 0默认方式 1播放暂停
  */
 function getBigImage(procedureId, dishId, wellId, seris,type, cellId){
+    $("#" + seris + "_div").attr("class", "swiper-slide active");
     querySeriesList(wellId, seris,type,cellId);
 //    loadingImage(procedureId,dishId,wellId,seris,'');
 //    loadingZIndex(procedureId,dishId,wellId,seris);
@@ -1026,24 +1025,21 @@ function arrow(direction){
 		datatype : "json",
 		success : function(data) {
 			var seris = "";
-            for(var i=0;i<data.length;i=i+4){
-                var imagePath = "/api/v1/well/image?image_path=" + data[i+1];
-                if(data[i+1].indexOf("embryo_not_found") != -1){
+            var series = data.series;
+            for(var i=0;i<series.length;i++){
+                var imagePath = "/api/v1/well/image?image_path=" + series[i]["series_image_path"];
+                if(series[i]["series_image_path"].indexOf("embryo_not_found") != -1){
                     imagePath = "/static/front/img/icon-noembryo.jpg";
                 }
-                var active = "<div class=\"swiper-slide\">";
-                if(i == 16){
-                    //active = "<div class=\"swiper-slide active\">";
-                    $("#thumbnailPath").val(data[i+1]);
-                }
-                seris = seris + active + "<span><img id='" + data[i] + "' src=\"" + 
-                                    imagePath +"\" onclick=\"getBigImage('" 
-                                    + procedureId + "','" + dishId + 
-                                    "','" + wellId + "','" + data[i] + "',0, '" + cellId + "')\"><b>" + 
-                                    data[i+2] + "</b></div>";
+                $("#thumbnailPath").val(series[i]["series_image_path"]);
+                var active = "<div class=\"swiper-slide\" id='" + series[i]["series_code"] + "_div'>";
+                seris = seris + active + "<span><img id='" + series[i]["series_code"] + "' src=\"" + 
+                                    imagePath +"\" onclick=\"getBigImage('" + procedureId + "','" + dishId + 
+                                    "','" + wellId + "','" + series[i]["series_code"] + "',0,'" + cellId + "')\"><b>" + 
+                                    series[i]["series_name"] + "</b></div>";
             }
             $("#myscrollboxul").html(seris);
-            currentSeris = data[data.length-1];
+            currentSeris = data.last_series;
             //loadingImage(procedureId,dishId,wellId,currentSeris,'');
             //loadingZIndex(procedureId,dishId,wellId,currentSeris);
 		},
