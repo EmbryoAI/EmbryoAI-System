@@ -32,6 +32,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 			$(this).addClass('active');
 		}
 		$('#incubator').val($(this).html());
+		embryoCount = 0;
+		$('#embryo_number').val(embryoCount);
 	})
 	// 培养皿选择
 	$('.dish').on('click','span',function(){
@@ -80,7 +82,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 				success : function(data) {
 					//$('#embryo_number').val(data.length);
 					embryoNumber = data.length;
-					embryoCount = embryoNumber + embryoCount;
+					embryoCount = embryoNumber - embryoCount;
 					$('#embryo_number').val(embryoCount);
 
 					$('#well_id').val(data);
