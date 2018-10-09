@@ -372,6 +372,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		
 		$(".tool-metrical li").click(function(){
             var self= $(this)
+            var x = 0;
+            var y = 0;
             var x1 = 0;
             var y1 = 0;
             var datali = $(this).attr('data-li');
@@ -382,16 +384,19 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 $('canvas').unbind();
                 $('canvas').mousedown(function(e){
                     flag = true;
-                    x1,x = e.offsetX; // 鼠标落下时的X
-                    y1,y = e.offsetY; // 鼠标落下时的Y
+                    x = e.offsetX; // 鼠标落下时的X
+                    y = e.offsetY; // 鼠标落下时的Y
                 }).mouseup(function(e){
                     flag = false;
                     url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
-                    x = e.offsetX; // 鼠标起时的X
-                    y = e.offsetY; // 鼠标起下时的Y
-                        var length = Math.round(Math.sqrt(Math.abs((x1 - x)* (x1 - x)+(y1 - y)* (y1 - y))));
-                        $('#length').text(length);
-    
+                    x1 = e.offsetX; // 鼠标起时的X
+                    y1 = e.offsetY; // 鼠标起下时的Y
+                    var rx = (x1-x);
+                    var ry = (y1-y);
+                    var r = Math.sqrt(rx*rx+ry*ry);
+                    r = Math.round(r*(960/612)/3.75);
+                    $('#length').text(r);
+
                         layer.open({
                         type: 1,
                         area: ['300px', '280px'],
@@ -402,7 +407,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                             layer.closeAll();
                             layer.msg("导入成功！")
                             clearCanvas()
-    
+
                             var zonaThickness = $('#zonaThickness').val();
                             $('#hideZonaThickness').val(zonaThickness);
                             $('#zonaThickness').val(length);
@@ -420,15 +425,15 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 $('canvas').unbind();
                 $('canvas').mousedown(function(e){
                     flag = true;
-                    x1,x = e.offsetX; // 鼠标落下时的X
-                    y1,y = e.offsetY; // 鼠标落下时的Y
+                    x = e.offsetX; // 鼠标落下时的X
+                    y = e.offsetY; // 鼠标落下时的Y
                 }).mouseup(function(e){
                     flag = false;
                     url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
-                    x = e.offsetX; // 鼠标起时的X
-                    y = e.offsetY; // 鼠标起下时的Y
-                    var rx = (e.offsetX-x1);
-                    var ry = (e.offsetY-y1);
+                    x1 = e.offsetX; // 鼠标起时的X
+                    y1 = e.offsetY; // 鼠标起下时的Y
+                    var rx = (x1-x);
+                    var ry = (y1-y);
                     var r = Math.sqrt(rx*rx+ry*ry);
                     r = Math.round(r*(960/612)/3.75);
                     $('#diameter').text(r);
