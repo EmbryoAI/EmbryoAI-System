@@ -55,4 +55,17 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
         $(".layui-word-aux").html(" ");
     });
 
+
+	function nolist(){
+		var marginT = $(".layui-col-md4 h6").height()+8;
+		var listH = $(".img-list").height();
+		console.log(marginT,listH);
+		$(".no-list").css("margin-top",marginT+'px');
+		$(".no-list").css("height",listH-marginT);
+		$(".no-list").css("line-height",listH-marginT+'px');
+	}
+	nolist();
+	$(window).resize(function () {
+		nolist();
+	});
 })

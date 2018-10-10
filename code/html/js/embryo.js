@@ -30,13 +30,15 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
         mySwiper.on('tap', function(swiper, e) {
         
             e.preventDefault()
-        
             slide = swiper.slides[swiper.clickedIndex]
+            // console.log("slide"+slide)
+							if(typeof slide === "undefined"){
+						return
+            }
             slideLeft = slide.offsetLeft
             slideWidth = slide.clientWidth
-            slideCenter = slideLeft + slideWidth / 2
-            // 被点击slide的中心点
-        
+						slideCenter = slideLeft + slideWidth / 2
+					// 被点击slide的中心点
             mySwiper.setWrapperTransition(300)
         
             if (slideCenter < swiperWidth / 2) {
