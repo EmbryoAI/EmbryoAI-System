@@ -83,6 +83,10 @@
 .dishimg i.hold{
 	background: url(../img/icon-dish5.png) no-repeat center top;
 }
+.standard{
+	border-right: 1px solid #b4b6d5;
+	padding-right: 10px;
+}
 .dishimg li img{
 	width: 100%;
 }
@@ -95,10 +99,13 @@
 	padding: 0;
 }
 .dish-tool .tool-end{
-	width: 306px;
+	width: 350px;
 }
 .tool-end li.standard i{
 	background: url(../img/tool-end0.png) no-repeat center;
+}
+.tool-end{
+	/*border-right: none;*/
 }
 .dish-tool .tool-btn{
 	margin-top: 20px;

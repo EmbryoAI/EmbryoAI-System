@@ -95,7 +95,11 @@
 	padding: 0;
 }
 .dish-tool .tool-end{
-	width: 306px;
+	width: 320px;
+}
+.standard{
+	border-right: 1px solid #b4b6d5;
+	padding-right: 10px;
 }
 .tool-end li.standard i{
 	background: url(../img/tool-end0.png) no-repeat center;
@@ -296,4 +300,7 @@
 .time-list span.active,.time-list span:hover{
 	transform:scale(1.1);
 	background: url(../img/icon-timel.png) no-repeat top center;
+}
+.tool-btn{
+	margin-left: 60px
 }
