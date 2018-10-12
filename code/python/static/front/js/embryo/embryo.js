@@ -355,27 +355,24 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		var x = 0; // 鼠标开始移动的位置X
 		var y = 0; // 鼠标开始移动的位置Y
         var url = ''; // canvas图片的二进制格式转为dataURL格式
-        
+        var x1 ;
+        var y1 ;
         
 		
-		function canvasWidth(){
-			var embr = document.getElementById('embryo');
-			var canvasBox = document.getElementById('canvasBox');
-			canvasBox.style.width = embr.offsetWidth;
-			canvas.width = canvasBox.offsetWidth;
-			canvas.height = canvasBox.offsetHeight;
-		}
-		canvasWidth();
+		// function canvasWidth(){
+		// 	var embr = document.getElementById('embryo');
+		// 	var canvasBox = document.getElementById('canvasBox');
+		// 	canvasBox.style.width = embr.offsetWidth;
+		// 	canvas.width = canvasBox.offsetWidth;
+		// 	canvas.height = canvasBox.offsetHeight;
+		// }
+		// canvasWidth();
 		
 		/* 为canvas绑定mouse事件 */
 		
 		
 		$(".tool-metrical li").click(function(){
             var self= $(this)
-            var x = 0;
-            var y = 0;
-            var x1 = 0;
-            var y1 = 0;
             var datali = $(this).attr('data-li');
 			$(".tool-metrical li").removeClass("active");
             self.addClass("active"); 
@@ -386,11 +383,13 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     flag = true;
                     x = e.offsetX; // 鼠标落下时的X
                     y = e.offsetY; // 鼠标落下时的Y
+                    console.log("落下的坐标"+x,y)
                 }).mouseup(function(e){
                     flag = false;
                     url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
                     x1 = e.offsetX; // 鼠标起时的X
                     y1 = e.offsetY; // 鼠标起下时的Y
+                    console.log("放开的坐标"+x1,y1)
                     var rx = (x1-x);
                     var ry = (y1-y);
                     var r = Math.sqrt(rx*rx+ry*ry);
@@ -427,11 +426,14 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     flag = true;
                     x = e.offsetX; // 鼠标落下时的X
                     y = e.offsetY; // 鼠标落下时的Y
+                    console.log("落下的坐标"+x,y)
                 }).mouseup(function(e){
                     flag = false;
                     url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
                     x1 = e.offsetX; // 鼠标起时的X
                     y1 = e.offsetY; // 鼠标起下时的Y
+                    console.log("放开的坐标"+x1,y1)
+
                     var rx = (x1-x);
                     var ry = (y1-y);
                     var r = Math.sqrt(rx*rx+ry*ry);
@@ -480,95 +482,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                         drawCircle(e); // 圆形绘制方法	
                 });
             }
-            // $('canvas').mousedown(function(e){
-            //     flag = true;
-            //     x1,x = e.offsetX; // 鼠标落下时的X
-            //     y1,y = e.offsetY; // 鼠标落下时的Y
-            //     console.log(x,y)
-            // }).mouseup(function(e){
-            //     flag = false;
-            //     url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
-            //     x = e.offsetX; // 鼠标起时的X
-            //     y = e.offsetY; // 鼠标起下时的Y
-
-            //     console.log(x,y)
-            //     if(drwaType == 'straight'){
-            //         var length = Math.round(Math.sqrt(Math.abs((x1 - x)* (x1 - x)+(y1 - y)* (y1 - y))));
-            //         $('#length').text(length);
-
-            //         layer.open({
-            //         type: 1,
-            //         area: ['300px', '280px'],
-            //         shadeClose: true, 
-            //         content: $("#dbox-l"),
-            //         btn:["确认导入","取消"],
-            //         yes: function(index, layero){
-            //             layer.closeAll();
-            //             layer.msg("导入成功！")
-            //             clearCanvas()
-
-            //             var zonaThickness = $('#zonaThickness').val();
-            //             $('#hideZonaThickness').val(zonaThickness);
-            //             $('#zonaThickness').val(length);
-            //         }
-            //         ,btn2: function(index, layero){
-            //             clearCanvas()
-            //         },
-            //         btnAlign: 'c'
-            //     });
-            // }else{
-            //     var rx = (e.offsetX-x1);
-            //     var ry = (e.offsetY-y1);
-            //     var r = Math.round(Math.sqrt(rx*rx+ry*ry));
-            //     $('#diameter').text(r);
-            //     var area = Math.round(Math.PI * r/2 * r/2);
-            //     $('#area').text(area);
-            //     layer.open({
-            //         type: 1,
-            //         area: ['300px', '280px'],
-            //         shadeClose: true, 
-            //         content: $("#dbox-c"),
-            //         btn:["确认导入","取消"],
-            //         yes: function(index, layero){
-            //             layer.closeAll();
-            //             layer.msg("导入成功！")
-            //             clearCanvas()
-            //             var choseVal = $('#dbox-c input[name="2"]:checked ').val();
-            //             if(choseVal == 'choseIn'){
-            //                 var innerArea = $('#innerArea').val();
-            //                 $('#hideInnerArea').val(innerArea);
-            //                 var innerDiameter = $('#innerDiameter').val();
-            //                 $('#hideInnerDiameter').val(innerDiameter);
-
-            //                 $('#innerArea').val(area);
-            //                 $('#innerDiameter').val(r);
-            //             }
-            //             if(choseVal == 'choseOut'){
-            //                 var outerArea = $('#outerArea').val();
-            //                 $('#hideOuterArea').val(outerArea);
-            //                 var outDiameter = $('#outDiameter').val();
-            //                 $('#hideOutDiameter').val(outDiameter);
-
-
-            //                 $('#outerArea').val(area);
-            //                 $('#outDiameter').val(r);
-            //             }
-            //         }
-            //         ,btn2: function(index, layero){
-            //             clearCanvas()
-            //         },
-            //         btnAlign: 'c'
-            //     });
-            // }
-            // }).mousemove(function(e){
-            //     if(self.hasClass('straight')){
-            //         drwaType = 'straight';
-            //         drawLine(e); // 绘制方法
-            //     }else{
-            //         drwaType = 'circle';
-            //         drawCircle(e); // 绘制方法	
-            //     }
-            // });
                
        })
 
@@ -617,7 +530,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		$(window).resize(function () {
 			scroll();
 			site();
-			canvasWidth();
+			// canvasWidth();
 		});
 	   
 		form.on('radio(milestoneId)', function(data){
