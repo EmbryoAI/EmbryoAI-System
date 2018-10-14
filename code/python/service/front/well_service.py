@@ -32,21 +32,28 @@ def queryWellList(procedureId, dishId):
         logger().info(jsonPath)
         with open(f'{jsonPath}', 'r') as fn :
             dishJson = json.loads(fn.read())
+
+        
+        from entity.Well import Well
+        from entity.WellResult import WellResult
         list=[]
         for key in dishJson['wells']:
-            list.append(key)
             last_seris = dishJson['wells'][key]['lastEmbryoSerie']
             image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + dishJson['wells'][key]['series'][last_seris]['focus']
-            list.append(image_path)
             cell = cell_mapper.getCellByDishIdAndCellCode(dishId, key)
             if not cell:
                 logger().info("查询孔数据异常")
                 return None
-            list.append(cell.id)
-        return jsonify(list)
+            well = Well(key, image_path, cell.id)
+            list.append(well.__dict__)
+
+        wellResult = WellResult(200, 'OK', list)
+
+        return jsonify(wellResult.__dict__)
     except : 
         logger().info("读取dishState.json文件出现异常")
-        return None
+        wellResult = WellResult(400, 'FAIL', None)
+        return jsonify(wellResult.__dict__)
 
 def getWellImage(agrs):
     image_path = agrs['image_path']
@@ -157,7 +164,6 @@ def queryIncubator():
                     #如果关联了则查询该培养箱下面的培养皿是否全部被关联
                     else:
                         dish_code = dir[4:5]
-                        print(dish_code) 
                         dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, dish_code)
                         if not dish:
                             list.append(incubator_name)
@@ -178,7 +184,6 @@ def queryDish(agrs):
 
     list = []
     for catalog in catalog_json:
-        print(catalog)
         catalog_path = conf['EMBRYOAI_IMAGE_ROOT'] + catalog
         dirs = os.listdir(catalog_path)
         for dir in dirs:
@@ -193,11 +198,14 @@ def queryDish(agrs):
                     incubator_name = dish_json['incubatorName']
                     if incubator_name == incubatorName:
                         dish_code = dir[4:5]
-                        print(dish_code) 
                         incubator = incubator_mapper.getByIncubatorCode(incubator_name)
-                        dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, dish_code)
-                        if not dish:
+                        if not incubator:
                             list.append(dir)
                             list.append(catalog)
+                        else:
+                            dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, dish_code)
+                            if not dish:
+                                list.append(dir)
+                                list.append(catalog)
                         
     return jsonify(list)

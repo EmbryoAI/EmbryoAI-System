@@ -91,7 +91,7 @@ function loadDishData(incubatorId,procedureId){
 						const obj = data.data[i];
 						divHtml = divHtml + '<div class="layui-col-md4">' +
 							'<div class="in-dish">' + 
-								'<div class="dish-num"><span>' + obj.dishCode + '</span><a href="/front/dish?procedureId=' + obj.procedureId + '&dishId=' + obj.dishId + '&embryoId=" target="_blank">查看皿</a></div>' +
+								'<div class="dish-num"><span>' + obj.dishCode + '</span><a href="/front/dish?procedureId=' + obj.procedureId + '&dishId=' + obj.dishId + '&dishCode=' + obj.dishCode + '" target="_blank">查看皿</a></div>' +
 								'<ul class="dish-info">' +
 									'<li>Dish # <span>' + obj.dishCode + '</span></li>' + 
 									'<li>本皿胚胎数<span>' + obj.embryoCount + '</span></li>' +

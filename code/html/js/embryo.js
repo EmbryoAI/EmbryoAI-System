@@ -30,13 +30,15 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
         mySwiper.on('tap', function(swiper, e) {
         
             e.preventDefault()
-        
             slide = swiper.slides[swiper.clickedIndex]
+            // console.log("slide"+slide)
+							if(typeof slide === "undefined"){
+						return
+            }
             slideLeft = slide.offsetLeft
             slideWidth = slide.clientWidth
-            slideCenter = slideLeft + slideWidth / 2
-            // 被点击slide的中心点
-        
+						slideCenter = slideLeft + slideWidth / 2
+					// 被点击slide的中心点
             mySwiper.setWrapperTransition(300)
         
             if (slideCenter < swiperWidth / 2) {
@@ -257,8 +259,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		
 		$(".tool-metrical li").click(function(){
             var self= $(this)
-            var x1 = 0;
-            var y1 = 0;
+            var x = 0;
+            var y = 0;
             var datali = $(this).attr('data-li');
 			$(".tool-metrical li").removeClass("active");
             self.addClass("active"); 
@@ -267,14 +269,16 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 $('canvas').unbind();
                 $('canvas').mousedown(function(e){
                     flag = true;
-                    x1,x = e.offsetX; // 鼠标落下时的X
-                    y1,y = e.offsetY; // 鼠标落下时的Y
+                    x = e.offsetX; // 鼠标落下时的X
+                    y = e.offsetY; // 鼠标落下时的Y
+                    console.log('x1='+x,y)
                 }).mouseup(function(e){
                     flag = false;
                     url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
                     x = e.offsetX; // 鼠标起时的X
                     y = e.offsetY; // 鼠标起下时的Y
-                        var length = Math.round(Math.sqrt(Math.abs((x1 - x)* (x1 - x)+(y1 - y)* (y1 - y))));
+                    console.log('x2='+x,y)
+//                      var length = Math.round(Math.sqrt(Math.abs((x1 - x)* (x1 - x)+(y1 - y)* (y1 - y))));
                         $('#length').text(length);
     
                         layer.open({
