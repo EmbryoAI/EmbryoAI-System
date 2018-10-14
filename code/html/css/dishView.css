@@ -83,6 +83,10 @@
 .dishimg i.hold{
 	background: url(../img/icon-dish5.png) no-repeat center top;
 }
+.standard{
+	border-right: 1px solid #b4b6d5;
+	padding-right: 10px;
+}
 .dishimg li img{
 	width: 100%;
 }
@@ -95,10 +99,13 @@
 	padding: 0;
 }
 .dish-tool .tool-end{
-	width: 306px;
+	width: 350px;
 }
 .tool-end li.standard i{
 	background: url(../img/tool-end0.png) no-repeat center;
+}
+.tool-end{
+	/*border-right: none;*/
 }
 .dish-tool .tool-btn{
 	margin-top: 20px;
@@ -210,10 +217,10 @@
 .time-box{
 	width: 99%;
 	margin: auto;
-	margin-bottom: 20px;
+	margin-bottom: 15px;
 }
 .time-box h3{
-	margin-bottom: 5px;
+	margin-bottom: 12px;
 	padding-left: 8px;
 	font-size: 14px;
 	font-weight: bolder;
@@ -261,7 +268,7 @@
 	padding-top: 14px;
 	min-width: 11px;
 	height: 16px;
-	margin: 0 19px;
+	margin: 0 3px;
 	margin-top: -6px;
 	line-height: 22px;
 	cursor: pointer;
@@ -281,6 +288,14 @@
 	left: 50%;
 	transform: translateX(-50%);
 	
+}
+.time-list span.active i{
+	display: inline-block;
+	color: #3c83f7;
+}
+.time-list span:first-child i,.time-list span:last-child i{
+	display: inline-block;
+	top: -22px;
 }
 .time-list span.active i{
 	display: inline-block;

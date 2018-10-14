@@ -208,6 +208,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				    		 var image = "";
 				    		 var obj = thumbnailImageUrlList[i];
 				    		 embryoId = obj.embryoId;
+//				    		 var thumbnailUrl = obj.thumbnailUrl.substring(obj.thumbnailUrl.length-57,obj.thumbnailUrl.length);
+//				    		 console.log(thumbnailUrl);
 				    		 if(i==0) {
 								 var image = "<img index='"+(i+1)+"' embryoId='"+embryoId+"' id='imageVideo"+obj.timeSeries+wellId+"'  src='/api/v1/well/image?image_path="+obj.thumbnailUrl+"' />";
 				    		 }else {

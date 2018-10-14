@@ -63,12 +63,12 @@
 }
 .embryo{
 	float: left;
-	width: 60%;
+	width: 864px;
 	position: relative;
 }
 
 .lg-img{
-	width: 100%;
+	width: 856px;
 	padding: 2px;
 	border: 2px solid #e0e2e6;
 	min-height: 600px;
@@ -499,6 +499,7 @@
 #canvas{
 	cursor: pointer;
 	background-color: transparent;
+	margin: 4px 0 0 4px;
 }
 .elect label {
 	font-size: 14px;

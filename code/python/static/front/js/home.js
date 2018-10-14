@@ -10,9 +10,24 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
     $(function () {
         loadNewestCase(1,4);
         loadNewestDish();
-    });
-    
+
+        // nolist();s
+        $(window).resize(function () {
+            nolist();
+        });
+
+        });
 })
+
+    //培养箱空白填充自适应
+    function nolist(){
+        var marginT = $(".layui-col-md4 h6").height()+8;
+        var listH = $(".img-list").height()-20;
+        console.log(marginT,listH);
+        $(".no-list").css("margin-top",marginT+'px');
+        $(".no-list").css("height",listH);
+        $(".no-list").css("line-height",listH-marginT+'px');
+    }
 
 function loadNewestCase(pageNo,pageSize){
     $.ajax({
@@ -106,7 +121,8 @@ function loadNewestDish(){
                     divData = divData + '<div class="clear"></div></div></div>';
 				}
 			}
-			$("#homeImageRow").append(divData);
+            $("#homeImageRow").append(divData);
+            nolist();
         }
     });
     
