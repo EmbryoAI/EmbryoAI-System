@@ -43,6 +43,7 @@
 	margin-right: 10px;
 	overflow: hidden;
 	position: relative;
+	background:  url(../img/icon-noemb.jpg) no-repeat center;
 }
 .dishimg li video{
 	width: 160px;

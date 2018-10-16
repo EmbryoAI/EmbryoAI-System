@@ -291,7 +291,7 @@ function showDetail(id) {
 	layer.open({
 		title : "病历详情",
 		type : 2,
-		area : [ '1020px', '610px' ],
+		area : [ '1030px', '640px' ],
 		maxmin : true,
 		shadeClose : false,
 		content : '/front/procedure/' + id
