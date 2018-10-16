@@ -16,118 +16,88 @@
 	<link rel="stylesheet" type="text/css" href="css/embryo.css"/>
 	<link rel="stylesheet" href="css/swiper.min.css">
 	<style type="text/css">
-		body{
-			width: 1400px;
-			background-color: #fff;
-			margin: auto;
-
-		}
-		.container{
-			background-color: #fff;
-		}
-		.main{
-			/*width: 1440px;*/
-			margin: auto;
-		}
-		.layui-form-checkbox[lay-skin=primary] span{
-			font-size: 14px;
-			font-weight: bold;
-			color: #1b2437;
-		}
-		
-			.button-next, .button-prev {
-			position: absolute;
-			top: -2px;
-			width: 34px;
-			height: 154px;
-			z-index: 10;
-			cursor: pointer;
-			background-size: initial;
-			background-position: center;
-			background-repeat: no-repeat;
-		}
-		
-		
-		.button-prev {
-    background-image: url(img/arrowR.png);
-    right: -42px;
-    left: auto;
-		}
-		.button-next {
-    background-image: url(img/arrowL.png);
-		left: -42px;
-    right: auto;
+	body {
+		margin: auto;
 	}
-	
+	.container {
+	}
+	.main {
+		width: 1440px;
+		margin: auto;
+		background-color: #fff;
+		padding-top: 30px;
+	}
+	.layui-form-checkbox[lay-skin=primary] span {
+		font-size: 16px;
+		font-weight: bold;
+		color: #1b2437;
+	}
+	.footer{
+		background-color: #f3f4f8;
+	}
+	.layui-form-radio *{
+		font-size: 12px
+	}
+	.button-next, .button-prev {
+				position: absolute;
+				top: -2px;
+				width: 34px;
+				height: 154px;
+				z-index: 10;
+				cursor: pointer;
+				background-size: initial;
+				background-position: center;
+				background-repeat: no-repeat;
+			}
+			
+			
+			.button-prev {
+		background-image: url(/static/front/img/arrowR.png);
+		right: -42px;
+		left: auto;
+			}
+			.button-next {
+		background-image: url(/static/front/img/arrowL.png);
+			left: -42px;
+		right: auto;
+		}
 	</style>
 </head>
 <body>
 	<div class="container">
 		<div class="main">
+			<div class="choice incubator">
+				<strong>培养箱选择：</strong>
+				<span class="active">well1</span><span>well12</span><span>well3</span>
+			</div>
+			
 			<!--滚动图-->
 			<div class="scrollpic" id="scrollpic">
 				<div id="myscroll">
-						<div id="topNav" class="swiper-container">
-							 <div class="swiper-wrapper">
-										<div class="swiper-slide active"><span><img src="img/icon-noembryo.jpg"><b>1h2min</></b></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>2h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>3h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>4h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>5h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>6h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>7h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>8h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>9h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>10h2min</b></span></div>
-								</div>
-						</div>
 						<!--左右按钮-->
-						<div class="button-prev"></div>
-						<div class="button-next"></div>
 				</div>
 			</div>
 
 			<!--大图信息部分-->
 			<div class="viewbox">
-				<!--左边胚胎大图-->
 				<div class="embryo" id="embryo">
-					<!--图片区域-->
 					<div class="lg-img">
 						<img src="img/20180725183944.jpg" >
-						<!-- <img src="img/20180725183945.jpg" > -->
-						<!-- <img src="img/20180725183946.jpg" > -->
 					</div>
-					<!--胚胎信息-->
-					<ul class="eminfo">
 						<li><span>甄美丽</span><span>23岁</span></li>
 						<li><span>胚胎编号：</span><span>A565323</span></li>
 						<li><span>阶段：</span><span>DAY 2</span></li>
 					</ul>
-					<!--测量的信息-->
 					<div class="metrical">
 						<span>长度：20px</span>
 						<span>长度：20px</span>
 					</div>
-					<!--标记结局-->
 					<div class="mark">
 						<i class="" data-mark=""></i>
-					<!--	<i class="transplant" data-mark='1'></i>
-						<i class="freeze"  data-mark='2'></i>
-						<i class="abandon" data-mark='3'></i>
-						<i class="hold" data-mark='4'></i>-->
 					</div>
-					<!--选为最清晰-->
 					<div class="elect">
-						<!-- <form action="" class="layui-form">
-							<div class="layui-form-item" pane="">
-								<div class="layui-input-block">
-								<input type="checkbox" name="distinct" lay-skin="primary" lay-filter="clear" title="标记为最清晰">
-								</div>
-							</div>
-						</form> -->
 						<label><input type="checkbox"><i>✓</i>标注为最清晰</label>
 					</div>
-					<!--z轴滚动-->
 					<div class="shaft">
 						<ul class="time-vertical">
 								<li><b></b></li>
@@ -139,11 +109,9 @@
 						</ul>
 						<h6>z轴</h6>
 					</div>
-					<!--测量canvas-->
 					<div class="canvas-box" id="canvasBox">
 						<canvas id="canvas" width="" height=""></canvas>
 					</div>
-					<!--工具栏-->
 					<div class="tool">
 						<ul class="tool-play">
 							<li class="pre-milestone"><i></i><span>上一里程碑</span></li>
@@ -161,12 +129,10 @@
 						<ul class="tool-play tool-metrical">
 							<li class="straight" data-li='1'><i></i><span>直线测量</span></li>
 							<li class="roundness" data-li='2'><i></i><span>圆形测量</span></li>
-							<!-- <li class="roundness2"><i></i><span>胚胎外周测量</span></li> -->
 
 						</ul>
 					</div>
 				</div>
-				<!--右边信息-->
 				<div class="info">
 					<div style="width:100%; height: 130px;">
 					<div class="export-btn">
@@ -177,7 +143,6 @@
 							<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >导出当前图像</button>
 						</div>
 					</div>
-					<!--孔位选择-->
 					<div class="site" id="site">
 						<h1>孔位选择</h1>
 						<ul id="siteitem">
@@ -196,16 +161,6 @@
 						</ul>
 					</div>
 					</div>
-					<!--备注-->
-					<!-- <div class="comment">
-						<h1>备注</h1>
-							<div class="layui-input-inline" style="width: 70%;">
-							  <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
-							</div>
-							<div class="layui-input-inline" style="padding-top: 60px;margin-left: 20px;">
-								<button class="layui-btn layui-bg-blue" lay-submit lay-filter="">保存</button>
-							</div>
-					</div> -->
 					<div id="milestone">
 						<form action="" class="layui-form">
 							<div class="layui-input-block" style="margin: 6px 8px 6px;min-height: 0;">
@@ -221,9 +176,6 @@
 									  <input type="radio" name="sex" value=" " title="5C">
 									  <input type="radio" name="sex" value=" " title="8C">
 									  <input type="radio" name="sex" value=" " title="囊胚">
-									 <!-- <div class="layui-input-inline" style="margin-left: 20px;padding: 10px 0;">
-									  	<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" style="height: 28px;line-height: 28px;">确认</button>
-									  </div>-->
 									</div>
 							</div>
 						</form>

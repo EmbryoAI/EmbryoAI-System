@@ -71,7 +71,7 @@
 	width: 856px;
 	padding: 2px;
 	border: 2px solid #e0e2e6;
-	min-height: 600px;
+	min-height: 642px;
 }
 .lg-img img{
 	width: 100%;
@@ -90,7 +90,7 @@
 .tool{
 	margin-top: 10px;
 	background-color: #eef1f8;
-	width: 100%;
+	width: 856px;
 	height: 70px;
 	padding: 2px;
 	border: 2px solid #eef1f8;
@@ -601,4 +601,39 @@
 }
 .info h2 .reset:hover{
 	opacity: 0.8;
+}
+.choice{
+	font-size: 14px;
+	font-weight: bold;
+	margin-left: 14px;
+	line-height: 28px;
+	margin-bottom: 20px;
+}
+.choice strong{
+	margin-right: 20px;
+}
+.incubator span{
+	margin-right: 18px;
+	display: inline-block;
+	width: 52px;
+	line-height: 26px;
+	height: 26px;
+	background-color: #ffffff;
+	border: solid 3px #d7dae0;
+	text-align: center;
+	color: #7a7e80;
+	font-size: 14px;
+	cursor:pointer;
+	transition: all 0.5s;
+}
+.choice span:hover{
+	box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.2);
+}
+.choice .active{
+	background-color: #1c7eff;
+	color: #fff;
+	border: solid 3px #1c7eff;
+	box-shadow: 0px 2px 10px 0px rgba(28, 126, 255, 0.26);
+	animation:activemove 1s;
+	-webkit-animation:activemove 1s;
 }

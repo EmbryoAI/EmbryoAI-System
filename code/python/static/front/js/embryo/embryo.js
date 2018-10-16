@@ -81,76 +81,68 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
         });
 
         // 上部图片滚动设置
-		var mySwiper = new Swiper('#topNav', {
-            freeMode: true,
-            freeModeMomentumRatio: 0.5,
-            slidesPerView: 'auto',
-			prevButton:'.swiper-button-prev',
-			nextButton:'.swiper-button-next',
-        });
+		// var mySwiper = new Swiper('#topNav', {
+        //     freeMode: true,
+        //     freeModeMomentumRatio: 0.5,
+        //     slidesPerView: 'auto',
+		// 	prevButton:'.swiper-button-prev',
+		// 	nextButton:'.swiper-button-next',
+        // });
         
-        swiperWidth = mySwiper.container[0].clientWidth
-        maxTranslate = mySwiper.maxTranslate();
-        maxWidth = -maxTranslate + swiperWidth / 2
+        // swiperWidth = mySwiper.container[0].clientWidth
+        // maxTranslate = mySwiper.maxTranslate();
+        // maxWidth = -maxTranslate + swiperWidth / 2
         
-        $(".swiper-container").on('touchstart', function(e) {
-            e.preventDefault()
-        })
+        // $(".swiper-container").on('touchstart', function(e) {
+        //     e.preventDefault()
+        // })
         
-        mySwiper.on('tap', function(swiper, e) {
+        // mySwiper.on('tap', function(swiper, e) {
         
-            e.preventDefault()
+        //     e.preventDefault()
         
-            slide = swiper.slides[swiper.clickedIndex]
-            if(typeof slide === "undefined"){
-                return
-             }
-            slideLeft = slide.offsetLeft
-            slideWidth = slide.clientWidth
-            slideCenter = slideLeft + slideWidth / 2
-            // 被点击slide的中心点
+        //     slide = swiper.slides[swiper.clickedIndex]
+        //     if(typeof slide === "undefined"){
+        //         return
+        //      }
+        //     slideLeft = slide.offsetLeft
+        //     slideWidth = slide.clientWidth
+        //     slideCenter = slideLeft + slideWidth / 2
+        //     // 被点击slide的中心点
         
-            mySwiper.setWrapperTransition(300)
+        //     mySwiper.setWrapperTransition(300)
         
-            if (slideCenter < swiperWidth / 2) {
+        //     if (slideCenter < swiperWidth / 2) {
                 
-                mySwiper.setWrapperTranslate(0)
+        //         mySwiper.setWrapperTranslate(0)
         
-            } else if (slideCenter > maxWidth) {
+        //     } else if (slideCenter > maxWidth) {
                 
-                mySwiper.setWrapperTranslate(maxTranslate)
+        //         mySwiper.setWrapperTranslate(maxTranslate)
         
-            } else {
+        //     } else {
         
-                nowTlanslate = slideCenter - swiperWidth / 2
+        //         nowTlanslate = slideCenter - swiperWidth / 2
         
-                mySwiper.setWrapperTranslate(-nowTlanslate)
+        //         mySwiper.setWrapperTranslate(-nowTlanslate)
         
-            }
+        //     }
         
-            $("#topNav  .active").removeClass('active')
+        //     $("#topNav  .active").removeClass('active')
         
-            $("#topNav .swiper-slide").eq(swiper.clickedIndex).addClass('active')
+        //     $("#topNav .swiper-slide").eq(swiper.clickedIndex).addClass('active')
         
-        })
-
-
-
-        function site() {
-            var site = document.getElementById('site');
-            var siteItem = document.getElementById('siteitem');
-            siteItem.style.width = (site.offsetWidth - 44) + "px";
-        }
-        site();
+        // })
 
         // 点击切换样式
-        $('#myscrollboxul li').click(function () {
-            $('#myscrollboxul li').removeClass('active');
+        $('.swiper-wrapper .swiper-slide').click(function () {
+            $('.swiper-wrapper .swiper-slide').removeClass('active');
             $(this).addClass('active');
+            $(this)
         });
 
-        $('#siteitem li').click(function () {
-            $('#siteitem li').removeClass('active');
+        $('.siteitem li').click(function () {
+            $('.siteitem li').removeClass('active');
             $(this).addClass('active');
         });
 
@@ -528,9 +520,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		
 		// 跟随屏幕改变的设定	
 		$(window).resize(function () {
-			scroll();
-			site();
-			// canvasWidth();
+		
+	
+			
 		});
 	   
 		form.on('radio(milestoneId)', function(data){
