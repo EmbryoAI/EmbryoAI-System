@@ -80,59 +80,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             }
         });
 
-        // 上部图片滚动设置
-		// var mySwiper = new Swiper('#topNav', {
-        //     freeMode: true,
-        //     freeModeMomentumRatio: 0.5,
-        //     slidesPerView: 'auto',
-		// 	prevButton:'.swiper-button-prev',
-		// 	nextButton:'.swiper-button-next',
-        // });
-        
-        // swiperWidth = mySwiper.container[0].clientWidth
-        // maxTranslate = mySwiper.maxTranslate();
-        // maxWidth = -maxTranslate + swiperWidth / 2
-        
-        // $(".swiper-container").on('touchstart', function(e) {
-        //     e.preventDefault()
-        // })
-        
-        // mySwiper.on('tap', function(swiper, e) {
-        
-        //     e.preventDefault()
-        
-        //     slide = swiper.slides[swiper.clickedIndex]
-        //     if(typeof slide === "undefined"){
-        //         return
-        //      }
-        //     slideLeft = slide.offsetLeft
-        //     slideWidth = slide.clientWidth
-        //     slideCenter = slideLeft + slideWidth / 2
-        //     // 被点击slide的中心点
-        
-        //     mySwiper.setWrapperTransition(300)
-        
-        //     if (slideCenter < swiperWidth / 2) {
-                
-        //         mySwiper.setWrapperTranslate(0)
-        
-        //     } else if (slideCenter > maxWidth) {
-                
-        //         mySwiper.setWrapperTranslate(maxTranslate)
-        
-        //     } else {
-        
-        //         nowTlanslate = slideCenter - swiperWidth / 2
-        
-        //         mySwiper.setWrapperTranslate(-nowTlanslate)
-        
-        //     }
-        
-        //     $("#topNav  .active").removeClass('active')
-        
-        //     $("#topNav .swiper-slide").eq(swiper.clickedIndex).addClass('active')
-        
-        // })
 
         // 点击切换样式
         $('.swiper-wrapper .swiper-slide').click(function () {
@@ -391,7 +338,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                         layer.open({
                         type: 1,
                         area: ['300px', '280px'],
-                        shadeClose: true, 
+                        shadeClose: false, 
                         content: $("#dbox-l"),
                         btn:["确认导入","取消"],
                         yes: function(index, layero){
@@ -437,7 +384,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     layer.open({
                         type: 1,
                         area: ['300px', '280px'],
-                        shadeClose: true, 
+                        shadeClose: false, 
                         content: $("#dbox-c"),
                         btn:["确认导入","取消"],
                         yes: function(index, layero){
