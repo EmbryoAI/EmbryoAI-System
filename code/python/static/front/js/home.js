@@ -11,7 +11,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
         loadNewestCase(1,4);
         loadNewestDish();
 
-        // nolist();s
         $(window).resize(function () {
             nolist();
         });
@@ -40,8 +39,10 @@ function loadNewestCase(pageNo,pageSize){
             alert(request.responseText);
         },
         success : function(data) {
-			var divData = "";
+            var divData = "";
+            var dataCount = 0;
 			if(data !== null && data.count !== null & data.count > 0){
+                dataCount = data.data.length;
 				for (let i = 0; i < data.data.length; i++) {
                     const obj = data.data[i];
                     var dishData = obj.dishCode;
@@ -65,8 +66,13 @@ function loadNewestCase(pageNo,pageSize){
                         + '<li><span>阶&nbsp;&nbsp;&nbsp; 段：</span><span>'+obj.zzjd+'</span></li>'
                     + '</ul>'
                     + '</div></div></div>';
-				}
-			}
+                }
+            }
+            if(dataCount < 4){
+                for (let i = dataCount; i < 4; i++) {
+                    divData = divData + '<div class="layui-col-md3"><div class="no-case"><h1>无病历</h1></div></div>';
+                }
+            }
 			$("#caseListDiv").append(divData);
         }
     });
@@ -95,9 +101,11 @@ function loadNewestDish(){
         },
         success : function(res) {
             var divData = "";
+            var dataCount = 0;
 			if(res.code === 200 && res.data !== null && res.count !== null && res.count > 0){
                 $("#incubatorSpan").html(res.data.incubatorCode);
                 data = res.data.dishInfo;
+                dataCount = data.length;
 				for (let i = 0; i < data.length; i++) {
                     divData = divData + '<div class="layui-col-md4" dishId=' + data[i].dishId + '><h6>Dish #' + data[i].dishCode + '</h6>'
                         + '<div class="img-list"><p>拍照时间: <span>' + data[i].imagePath + '</span>';
@@ -119,8 +127,13 @@ function loadNewestDish(){
                         }
                     }
                     divData = divData + '<div class="clear"></div></div></div>';
-				}
-			}
+                }
+            }
+            if(dataCount < 3){
+                for (let i = dataCount; i < 3; i++) {
+                    divData = divData + '<div class="layui-col-md4"><div class="no-list"><img src="/static/front/img/hnoimg.png" alt=""></div></div>';
+                }
+            }
             $("#homeImageRow").append(divData);
             nolist();
         }
