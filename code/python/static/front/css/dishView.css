@@ -239,6 +239,7 @@
 	font-size: 12px;
 	cursor: pointer;
 	font-style: normal;
+	text-transform:lowercase;
 }
 .time-page i.active{
 	background-color: #fff;
@@ -288,6 +289,7 @@
 	position: absolute;
 	left: 50%;
 	transform: translateX(-50%);
+	text-transform:lowercase;
 	
 }
 .time-list span:first-child i,.time-list span:last-child i{

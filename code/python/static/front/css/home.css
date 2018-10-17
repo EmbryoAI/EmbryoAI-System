@@ -26,9 +26,11 @@
 }
 .case-list{
 	background-color: #fff;
-	box-shadow: 0px 0px 8px rgba(0,0,0,0.06);
+	box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.08);
 	height: 116px;
 	padding: 10px;
+	border: 1px solid #e2e2e2;
+	transition:all .3s ease;
 }
 .no-case{
 	background-color: #f9fbff;
@@ -37,7 +39,6 @@
 	padding: 10px;
 	border: 1px #d7d8d9 dashed;
 }
-
 .no-case h1{
 	font-style: 40px;
 	line-height: 116px;
@@ -52,13 +53,15 @@
 	border: 1px solid #e6e6e6;
 	float: left;
 	margin-right: 16px;
+	cursor: pointer;
 }
 .case-list .embryo-img img{
 	width: 100%;
 }
 .case-info h1{
-	font-size: 16px;
+	font-size: 14px;
 	color: #3c83f7;
+	font-weight: bolder;
 }
 .case-info ul{
 	padding-top: 10px;
@@ -70,25 +73,29 @@
 	font-weight: bold;
     font-size: 18px;
     color: #47a41e;
-    width: 114px;
+    width: 156px;
     border-bottom: 3px solid;
     padding-bottom: 8px;
 	margin-left: 16px;
 }
 .img-list{
 	background-color: #fff;
-	box-shadow: 0px 0px 8px rgba(0,0,0,0.06);
-	/*padding: 10px;*/
-	min-height: 330px
+	box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.08);;
+	min-height: 330px;
+	border: 1px solid #e2e2e2;
+	transition:all .3s ease;
+}
+.case-list:hover,.img-list:hover{
+	box-shadow: 0px 4px 22px rgba(0, 0, 0, 0.16);
 }
 .no-list{
 	background-color: #f9fbff;
-	height: 116px;
+	height: 344px;
 	padding: 10px;
 	border: 1px #d7d8d9 dashed;
 	text-align: center;
 	vertical-align: middle;
-	min-height: 300px;
+	min-height: 344px;
 }
 .no-list img{
 	margin: auto;

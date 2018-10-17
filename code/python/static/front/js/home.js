@@ -53,7 +53,7 @@ function loadNewestCase(pageNo,pageSize){
 					divData = divData + '<div class="layui-col-md3">'
                         + '<div class="case-list">';
                     if(dishCode !== null && dishCode.length > 0 && obj.pts > 0) {
-                        divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'")>'
+                        divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'") title="查看病历详情">'
                         + '<img src="/api/v1/image/findImageFouce?procedureId=' + obj.id + '&dishCode=' + dishCode[0] + '" ></div>';
                     } else {
                         divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'")><img src="/static/front/img/icon-noembryo.jpg" ></div>';
@@ -82,7 +82,7 @@ function lookCase(procedureId){
 	layer.open({
 		title : "病历详情",
 		type : 2,
-		area : [ '1020px', '610px' ],
+		area : [ '1040px', '650px' ],
 		maxmin : true,
 
 		shadeClose : false,
