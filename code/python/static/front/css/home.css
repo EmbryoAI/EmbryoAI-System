@@ -88,6 +88,7 @@
 	border: 1px #d7d8d9 dashed;
 	text-align: center;
 	vertical-align: middle;
+	min-height: 300px;
 }
 .no-list img{
 	margin: auto;
