@@ -274,6 +274,8 @@
 .info{
 	float: right;
 	width: 470px;
+	min-height: 418px;
+	background: url(../img/icon-nolcb.png) no-repeat bottom center;
 }
 .info .layui-form-radio{
 	margin-right: 0px;
