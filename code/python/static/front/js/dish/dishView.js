@@ -644,7 +644,7 @@ function updateMemo(){
 		datatype : "json",
 		cache:false,
 		success : function(data) {
-			alert(JSON.stringify(data));
+			layer.alert(JSON.stringify(data));
 		},
 		error : function(request) {
 			layer.alert(request.responseText);
