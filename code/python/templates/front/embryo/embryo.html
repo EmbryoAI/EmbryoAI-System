@@ -35,11 +35,7 @@ body {
 				<li><span>well2</span><img src=""><i></i></li>
 				<li><span>well3</span><img src=""><i></i></li>
 		</ul> -->
-		<ul class="siteitem">
-			<li class="active"><span>well1</span></li>	
-			<li><span>well2</span></li>	
-			<li><span>well3</span></li>	
-			<li><span>well4</span></li>	
+		<ul class="siteitem" id="siteitem">
 		</ul>
 	</div>
 	<!--滚动图-->
@@ -58,26 +54,15 @@ body {
 	</div> --> 
 	<div class="scrollpic">
 		<div class="btn-prev" onclick="arrow('left')"><img src="/static/front/img/prev.svg" alt="上一页"></div>
-		<div class="swiper-wrapper">
-			<div class="swiper-slide active">
-				<img src="/static/front/img/loc-emb.png" alt="胚胎图"> <span>2c</span><b>165H25M</b>
-			</div>
-			<div class="swiper-slide">
-				<img src="/static/front/img/loc-emb.png" alt="胚胎图">
-			</div>
-			<div class="swiper-slide">
-					<img src="/static/front/img/loc-emb.png" alt="胚胎图">
-			</div>
-			<div class="swiper-slide">
-					<img src="/static/front/img/loc-emb.png" alt="胚胎图">
-			</div>	
+		<div class="swiper-wrapper" id="myscrollboxul">
+			
 		</div>
 		<div class="btn-next" onclick="arrow('right')"><img src="/static/front/img/next.svg" alt="下一页"></div>
 	</div>
 
 
 	<!--大图信息部分-->
-	<div class="curtime">当前序列：<span id="xltext">15H25M</span></div>
+	<div class="curtime">当前序列：<span id="xltext"></span></div>
 	<div class="viewbox">
 		<!--左边胚胎大图-->
 		<div class="embryo" id="embryo">

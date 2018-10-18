@@ -33,6 +33,7 @@ def queryScrollbarSeriesList():
     parser.add_argument('well_id', type=str)
     parser.add_argument('current_seris', type=str)
     parser.add_argument('direction', type=str)
+    parser.add_argument('cell_id', type=str)
     return dish_service.queryScrollbarSeriesList(parser.parse_args())
 
 ''' 根据培养箱id查询培养箱里所有皿的信息 '''
