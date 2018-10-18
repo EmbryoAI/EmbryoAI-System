@@ -332,7 +332,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     var rx = (x1-x);
                     var ry = (y1-y);
                     var r = Math.sqrt(rx*rx+ry*ry);
-                    r = Math.round(r*(960/612)/3.75);
+                    r = Math.round(r*(1280 / 932)/3.75);
                     $('#length').text(r);
 
                         layer.open({
@@ -341,14 +341,14 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                         shadeClose: false, 
                         content: $("#dbox-l"),
                         btn:["确认导入","取消"],
-                        yes: function(index, layero){
+                        yes: function(index, layero){;
                             layer.closeAll();
                             layer.msg("导入成功！")
                             clearCanvas()
 
                             var zonaThickness = $('#zonaThickness').val();
                             $('#hideZonaThickness').val(zonaThickness);
-                            $('#zonaThickness').val(length);
+                            $('#zonaThickness').val(r);
                         }
                         ,btn2: function(index, layero){
                             clearCanvas()
@@ -379,7 +379,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     r = Math.round(r*(960/612)/3.75);
                     $('#diameter').text(r);
                     var area = Math.PI * r/2 * r/2;
-                    area = Math.round(area*(960 / 612) ** 2 / (3.75**2));
+                    area = Math.round(area*(1280 / 932) ** 2 / (3.75**2));
                     $('#area').text(area);
                     layer.open({
                         type: 1,
