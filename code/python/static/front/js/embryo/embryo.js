@@ -737,7 +737,7 @@ function querySeriesList(wellId, serisCode, type, cellId){
                 }
                 var imagePath = "/api/v1/well/image?image_path=" + series[i]["series_image_path"];
                 if(series[i]["series_image_path"].indexOf("embryo_not_found") != -1){
-                    imagePath = "/static/front/img/icon-noembryo.jpg";
+                    imagePath = "/static/front/img/loc-emb.png";
                 }
                 $("#thumbnailPath").val(series[i]["series_image_path"]);
                 var active = "<div class=\"swiper-slide\" id='" + series[i]["series_code"] + "_div'>";
@@ -899,7 +899,7 @@ function arrow(direction){
                 }
                 var imagePath = "/api/v1/well/image?image_path=" + series[i]["series_image_path"];
                 if(series[i]["series_image_path"].indexOf("embryo_not_found") != -1){
-                    imagePath = "/static/front/img/icon-noembryo.jpg";
+                    imagePath = "/static/front/img/loc-emb.png";
                 }
                 $("#thumbnailPath").val(series[i]["series_image_path"]);
                 var active = "<div class=\"swiper-slide\" id='" + series[i]["series_code"] + "_div'>";

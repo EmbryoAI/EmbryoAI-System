@@ -117,7 +117,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 	//日期
 	laydate.render({
 			elem: '#birth',
-			format: 'yyyy-MM-dd ',
+			format: 'yyyy-MM-dd',
 			max: 0,
 			done: function(){
 				var birthdate = $('#birth').val();
@@ -130,12 +130,12 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 	});
 	laydate.render({
 			elem: '#get',
-			format: 'yyyy-MM-dd ',
+			format: 'yyyy-MM-dd',
 			max: 0
 	});
 	laydate.render({
 			elem: '#iui',
-			format: 'yyyy-MM-dd ',
+			format: 'yyyy-MM-dd',
 			max: 0
 	});
 
