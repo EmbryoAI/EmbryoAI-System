@@ -331,7 +331,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     console.log("放开的坐标"+x1,y1)
                     var rx = (x1-x);
                     var ry = (y1-y);
-                    var r = Math.sqrt(rx*rx+ry*ry);
+                    var r = Math.sqrt(rx*rx+ry*ry); 
                     r = Math.round(r*(1280 / 932)/3.75);
                     $('#length').text(r);
 
@@ -376,10 +376,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     var rx = (x1-x);
                     var ry = (y1-y);
                     var r = Math.sqrt(rx*rx+ry*ry);
-                    r = Math.round(r*(960/612)/3.75);
+                    r = Math.round(r*(1280/932)/3.75);
                     $('#diameter').text(r);
-                    var area = Math.PI * r/2 * r/2;
-                    area = Math.round(area*(1280 / 932) ** 2 / (3.75**2));
+                    var area = Math.round(Math.PI * r/2 * r/2);
                     $('#area').text(area);
                     layer.open({
                         type: 1,
@@ -737,7 +736,7 @@ function querySeriesList(wellId, serisCode, type, cellId){
                 }
                 var imagePath = "/api/v1/well/image?image_path=" + series[i]["series_image_path"];
                 if(series[i]["series_image_path"].indexOf("embryo_not_found") != -1){
-                    imagePath = "/static/front/img/icon-noembryo.jpg";
+                    imagePath = "/static/front/img/loc-emb.png";
                 }
                 $("#thumbnailPath").val(series[i]["series_image_path"]);
                 var active = "<div class=\"swiper-slide\" id='" + series[i]["series_code"] + "_div'>";
@@ -899,7 +898,7 @@ function arrow(direction){
                 }
                 var imagePath = "/api/v1/well/image?image_path=" + series[i]["series_image_path"];
                 if(series[i]["series_image_path"].indexOf("embryo_not_found") != -1){
-                    imagePath = "/static/front/img/icon-noembryo.jpg";
+                    imagePath = "/static/front/img/loc-emb.png";
                 }
                 $("#thumbnailPath").val(series[i]["series_image_path"]);
                 var active = "<div class=\"swiper-slide\" id='" + series[i]["series_code"] + "_div'>";
