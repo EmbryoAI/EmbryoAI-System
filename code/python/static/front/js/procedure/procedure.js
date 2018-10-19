@@ -19,7 +19,7 @@ layui
 					laydate.render({
 						elem : '#ecTime',
 						range : '~',
-						format : 'yyyy/MM/dd ',
+						format : 'yyyy/MM/dd',
 						max : 0,
 						extrabtns: [{
 										id: 'today',
@@ -62,7 +62,7 @@ layui
 					laydate.render({
 						elem : '#insemiTime',
 						range : '~',
-						format : 'yyyy/MM/dd ',
+						format : 'yyyy/MM/dd',
 						max : 0,
 						extrabtns: [{
 										id: 'today',
