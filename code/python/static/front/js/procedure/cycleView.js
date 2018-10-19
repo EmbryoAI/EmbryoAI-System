@@ -105,6 +105,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 							 $("#qts").append(str);
 						 }
 					 }
+					 $("#defDiv").hide();
 					 $("#patientView").show();
 					 
 					 //渲染列表
@@ -145,6 +146,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
  
 				 }else {
 					 //该胚胎无数据
+					 $("#defDiv").show();
 					 layer.alert("该病历号无对应数据!");
 				 }
 				 layer.close(jaindex);

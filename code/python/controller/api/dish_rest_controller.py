@@ -6,6 +6,7 @@ from common import logger
 from app import db, login_required
 import service.front.dish_service as dish_service
 import time
+import json
 
 dish_rest_controller = Blueprint('dish_rest_controller', __name__)
 url_prefix = '/api/v1/dish'
@@ -32,6 +33,7 @@ def queryScrollbarSeriesList():
     parser.add_argument('well_id', type=str)
     parser.add_argument('current_seris', type=str)
     parser.add_argument('direction', type=str)
+    parser.add_argument('cell_id', type=str)
     return dish_service.queryScrollbarSeriesList(parser.parse_args())
 
 ''' 根据培养箱id查询培养箱里所有皿的信息 '''
@@ -69,4 +71,4 @@ def emGrade(dishId):
 def emAll(dishId):
     logger().info('dish_controller.胚胎总览表')
     code, emAllList = dish_service.emAll(dishId)
-    return make_response(jsonify(emAllList), code)
+    return make_response(json.dumps(emAllList, ensure_ascii=False), code)

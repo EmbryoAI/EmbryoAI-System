@@ -2,7 +2,7 @@ var currentSeris = "";//基准的胚胎的时间序列
 var n = 0;
 var imgLen = 1  // 已基准孔的图片张数为标准
 var timelienData = null; //时间轴数据
-var pageSize = 20; //时间轴分页每页展示个数
+var pageSize = 48; //时间轴分页每页展示个数
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     var form = layui.form;
     var $ = layui.jquery;
@@ -208,6 +208,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				    		 var image = "";
 				    		 var obj = thumbnailImageUrlList[i];
 				    		 embryoId = obj.embryoId;
+//				    		 var thumbnailUrl = obj.thumbnailUrl.substring(obj.thumbnailUrl.length-57,obj.thumbnailUrl.length);
+//				    		 console.log(thumbnailUrl);
 				    		 if(i==0) {
 								 var image = "<img index='"+(i+1)+"' embryoId='"+embryoId+"' id='imageVideo"+obj.timeSeries+wellId+"'  src='/api/v1/well/image?image_path="+obj.thumbnailUrl+"' />";
 				    		 }else {
@@ -559,9 +561,9 @@ function loadTimeline(wellCode){
 					var index = (i - 1) * pageSize;
 					var end = i * pageSize > timelienData.length ? timelienData.length-1 : (i * pageSize) - 1;
 					if(i === pageNo){
-						timePageDiv = timePageDiv + "<i class='active' page=" + i + " beginSerie=" + data[index]["serie"] +">" + i + "<span> " + data[index]["showTime"] + " ~ " + data[end]["showTime"] + " </span></i>";
+						timePageDiv = timePageDiv + "<i class='active' page=" + i + " beginSerie=" + data[index]["serie"] +">" + data[index]["showTime"] + "<span> " + data[index]["showTime"] + " ~ " + data[end]["showTime"] + " </span></i>";
 					} else {
-						timePageDiv = timePageDiv + "<i page=" + i + " beginSerie=" + data[index]["serie"] +" >" + i + "<span> " + data[index]["showTime"] + " ~ " + data[end]["showTime"] + " </span></i>";
+						timePageDiv = timePageDiv + "<i page=" + i + " beginSerie=" + data[index]["serie"] +" >" + data[index]["showTime"] + "<span> " + data[index]["showTime"] + " ~ " + data[end]["showTime"] + " </span></i>";
 					}
 				}
 				divData = showTimeline(pageNo,pageSize);
@@ -642,7 +644,7 @@ function updateMemo(){
 		datatype : "json",
 		cache:false,
 		success : function(data) {
-			alert(JSON.stringify(data));
+			layer.alert(JSON.stringify(data));
 		},
 		error : function(request) {
 			layer.alert(request.responseText);

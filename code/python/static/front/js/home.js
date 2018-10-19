@@ -10,9 +10,23 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
     $(function () {
         loadNewestCase(1,4);
         loadNewestDish();
-    });
-    
+
+        $(window).resize(function () {
+            nolist();
+        });
+
+        });
 })
+
+    //培养箱空白填充自适应
+    function nolist(){
+        var marginT = $(".layui-col-md4 h6").height()+8;
+        var listH = $(".img-list").height()-20;
+        console.log(marginT,listH);
+        $(".no-list").css("margin-top",marginT+'px');
+        $(".no-list").css("height",listH);
+        $(".no-list").css("line-height",listH-marginT+'px');
+    }
 
 function loadNewestCase(pageNo,pageSize){
     $.ajax({
@@ -25,8 +39,10 @@ function loadNewestCase(pageNo,pageSize){
             alert(request.responseText);
         },
         success : function(data) {
-			var divData = "";
+            var divData = "";
+            var dataCount = 0;
 			if(data !== null && data.count !== null & data.count > 0){
+                dataCount = data.data.length;
 				for (let i = 0; i < data.data.length; i++) {
                     const obj = data.data[i];
                     var dishData = obj.dishCode;
@@ -37,7 +53,7 @@ function loadNewestCase(pageNo,pageSize){
 					divData = divData + '<div class="layui-col-md3">'
                         + '<div class="case-list">';
                     if(dishCode !== null && dishCode.length > 0 && obj.pts > 0) {
-                        divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'")>'
+                        divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'") title="查看病历详情">'
                         + '<img src="/api/v1/image/findImageFouce?procedureId=' + obj.id + '&dishCode=' + dishCode[0] + '" ></div>';
                     } else {
                         divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'")><img src="/static/front/img/icon-noembryo.jpg" ></div>';
@@ -50,8 +66,13 @@ function loadNewestCase(pageNo,pageSize){
                         + '<li><span>阶&nbsp;&nbsp;&nbsp; 段：</span><span>'+obj.zzjd+'</span></li>'
                     + '</ul>'
                     + '</div></div></div>';
-				}
-			}
+                }
+            }
+            if(dataCount < 4){
+                for (let i = dataCount; i < 4; i++) {
+                    divData = divData + '<div class="layui-col-md3"><div class="no-case"><h1>无病历</h1></div></div>';
+                }
+            }
 			$("#caseListDiv").append(divData);
         }
     });
@@ -61,7 +82,7 @@ function lookCase(procedureId){
 	layer.open({
 		title : "病历详情",
 		type : 2,
-		area : [ '1020px', '610px' ],
+		area : [ '1040px', '650px' ],
 		maxmin : true,
 
 		shadeClose : false,
@@ -80,9 +101,11 @@ function loadNewestDish(){
         },
         success : function(res) {
             var divData = "";
+            var dataCount = 0;
 			if(res.code === 200 && res.data !== null && res.count !== null && res.count > 0){
                 $("#incubatorSpan").html(res.data.incubatorCode);
                 data = res.data.dishInfo;
+                dataCount = data.length;
 				for (let i = 0; i < data.length; i++) {
                     divData = divData + '<div class="layui-col-md4" dishId=' + data[i].dishId + '><h6>Dish #' + data[i].dishCode + '</h6>'
                         + '<div class="img-list"><p>拍照时间: <span>' + data[i].imagePath + '</span>';
@@ -104,9 +127,15 @@ function loadNewestDish(){
                         }
                     }
                     divData = divData + '<div class="clear"></div></div></div>';
-				}
-			}
-			$("#homeImageRow").append(divData);
+                }
+            }
+            if(dataCount < 3){
+                for (let i = dataCount; i < 3; i++) {
+                    divData = divData + '<div class="layui-col-md4"><div class="no-list"><img src="/static/front/img/hnoimg.png" alt=""></div></div>';
+                }
+            }
+            $("#homeImageRow").append(divData);
+            nolist();
         }
     });
     

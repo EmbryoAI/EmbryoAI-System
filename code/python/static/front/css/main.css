@@ -448,3 +448,13 @@ body {
     line-height: 32px;
     border: 1px solid #e6e6e6;
 }
+/* 缺省页 */
+.defaultimg{
+    width: 100%;
+    height: 400px;
+    background: url(../img/icon-plsearch.png) no-repeat center;
+    text-align: center;
+    line-height: 750px;
+    font-size: 28px;
+    color: #7e7e8a;
+}

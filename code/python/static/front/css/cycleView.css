@@ -69,6 +69,7 @@
 	}
 .layui-table td, .layui-table th, .layui-table-fixed-r, .layui-table-header, .layui-table-page, .layui-table-tips-main, .layui-table-tool, .layui-table-view, .layui-table[lay-skin=line], .layui-table[lay-skin=row]{
 	border-color: #e6e6e6;
+	text-align: center;
 }	
 .layui-table td, .layui-table th{
 	line-height: 34px;

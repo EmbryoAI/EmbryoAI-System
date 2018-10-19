@@ -1,14 +1,8 @@
 {% extends 'front/header-footer.html' %} {% block mianDiv %}
 <link rel="stylesheet" type="text/css"	href="/static/front/css/embryo.css" />
-<link rel="stylesheet" type="text/css" href="/static/front/css/swiper.min.css" />
 <style type="text/css">
 body {
-	/* width: 1400px; */
-	/* background-color: #fff; */
 	margin: auto;
-}
-.container {
-	/* background-color: #fff; */
 }
 .main {
 	width: 1440px;
@@ -26,29 +20,6 @@ body {
 .layui-form-radio *{
 	font-size: 12px
 }
-.button-next, .button-prev {
-			position: absolute;
-			top: -2px;
-			width: 34px;
-			height: 154px;
-			z-index: 10;
-			cursor: pointer;
-			background-size: initial;
-			background-position: center;
-			background-repeat: no-repeat;
-		}
-		
-		
-		.button-prev {
-    background-image: url(/static/front/img/arrowR.png);
-    right: -42px;
-    left: auto;
-		}
-		.button-next {
-    background-image: url(/static/front/img/arrowL.png);
-		left: -42px;
-    right: auto;
-	}
 </style>
 <div class="main">
 	<input type="hidden" id="procedureId" value="{{procedure_id}}"/>
@@ -56,20 +27,42 @@ body {
 	<input type="hidden" id="embryoId" value="{{embryo_id}}"/>
 	<input type="hidden" id="cellId" value=""/>
 	<input type="hidden" id="wellId" value=""/>
+	<!--孔位选择-->
+	<div class="site">
+		<h1>孔位选择</h1>
+		<!-- <ul id="siteitem">
+				<li class="active"><span>well1</span><img src=""><i></i></li>
+				<li><span>well2</span><img src=""><i></i></li>
+				<li><span>well3</span><img src=""><i></i></li>
+		</ul> -->
+		<ul class="siteitem" id="siteitem">
+		</ul>
+	</div>
 	<!--滚动图-->
-	<div class="scrollpic" id="scrollpic">
+	<!-- <div class="scrollpic" id="scrollpic">
 		<div id="myscroll">
 			<div id="topNav" class="swiper-container">
 				 <div class="swiper-wrapper" id="myscrollboxul">
-				
+					<div class="swiper-slide active"><span><img src=""><b>1h2min</></b></div>
+					<div class="swiper-slide"><span><img src=""><b>2h2min</b></span></div>
+					<div class="swiper-slide"><span><img src=""><b>3h2min</b></span></div>
 				</div>
 			</div>
-			<!--左右按钮-->
 			<div class="button-next" onclick="arrow('left')"></div>
 			<div class="button-prev" onclick="arrow('right')"></div>
 		</div>
+	</div> --> 
+	<div class="scrollpic">
+		<div class="btn-prev" onclick="arrow('left')"><img src="/static/front/img/prev.svg" alt="上一页"></div>
+		<div class="swiper-wrapper" id="myscrollboxul">
+			
+		</div>
+		<div class="btn-next" onclick="arrow('right')"><img src="/static/front/img/next.svg" alt="下一页"></div>
 	</div>
+
+
 	<!--大图信息部分-->
+	<div class="curtime">当前序列：<span id="xltext"></span></div>
 	<div class="viewbox">
 		<!--左边胚胎大图-->
 		<div class="embryo" id="embryo">
@@ -121,7 +114,7 @@ body {
 			</div>
 			<!--测量canvas-->
 			<div class="canvas-box" id="canvasBox">
-				<canvas id="canvas" width="" height=""></canvas>
+				<canvas id="canvas" width="932" height="642"></canvas>
 			</div>
 			<!--工具栏-->
 			<div class="tool">
@@ -140,29 +133,19 @@ body {
 					<!-- <li class="roundness2"><i></i><span>外周测量</span></li> -->
 					<!-- <li class="roundness3"><i></i><span>囊腔面积</span></li> -->
 				</ul>
-				
+				<div class="tool-btn">
+						<div class="layui-input-inline" style="margin-left: 0px;">
+						 <button class="layui-btn layui-bg-blue" lay-submit lay-filter=""  onclick="exportVideo()">导出视频</button>
+						</div>
+						<div class="layui-input-inline" style="margin-left: 0px;">
+							<button class="layui-btn layui-bg-blue" lay-submit lay-filter=""  onclick="exportImg()">导出图像</button>
+						</div>
+					 </div>				
 			</div>
 		</div>
 		<!--右边信息-->
 		<div class="info">
-			<div style="width:100%; height: 130px;">
-				<div class="export-btn">
-					<div class="layui-input-block" style="margin: 12px 0 20px 0;">
-					<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" onclick="exportVideo()">导出当前视频</button>
-					</div>
-					<div class="layui-input-block" style="margin-left: 0px;">
-						<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" onclick="exportImg()">导出当前图像</button>
-					</div>
-				</div>
-				<!--孔位选择-->
-				<div class="site" id="site">
-					<h1>孔位选择</h1>
-					<ul id="siteitem">
-							
-					</ul>
-				</div>
-			</div>
-			<form action="" id="milestoneForm" class="layui-form">
+			<form action="" id="milestoneForm" class="layui-form" style="background:#fff">
 				<input type="hidden" name="embryoId" value="{{embryo_id}}"/>
 				<input type="hidden" name="procedureId" value="{{procedure_id}}"/>
 				<input type="hidden" id="milestoneStage" name="milestoneStage"  />
@@ -269,7 +252,7 @@ body {
 					<h2>备注</h2>
 					<div class="comment">
 						<div class="layui-input-inline" style="width: 100%;">
-							<textarea id="memo" rows="5" name="memo" placeholder="请输入内容" class="layui-textarea" style="min-height: 46px"></textarea>
+							<textarea id="memo" rows="5" name="memo" placeholder="请输入内容" class="layui-textarea" style="min-height: 72px"></textarea>
 						</div>
 					</div>
 					<h2 style="padding-bottom: 0;">胚胎评分<span class="score">25</span></h2>
@@ -282,8 +265,9 @@ body {
 			</form>
 
 		</div>
+		<div style="clear: both; height: 2px; width: 1440px;"></div>
 	</div>
-	<div style="clear: both; height: 2px; width: 100%;"></div>
+	
 </div>
 <div class="dbox" id="dbox-l">
 	<p><strong>测量直线长度：</strong><span id="length"></span>&nbsp;um</p>

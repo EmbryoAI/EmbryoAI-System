@@ -14,13 +14,10 @@
 	<link rel="stylesheet" href="lib/layui/css/layui.css"/>
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
 	<link rel="stylesheet" type="text/css" href="css/embryo.css"/>
-	<link rel="stylesheet" href="css/swiper.min.css">
 	<style type="text/css">
 		body{
-			width: 1400px;
+			min-width: 1366px;
 			background-color: #fff;
-			margin: auto;
-
 		}
 		.container{
 			background-color: #fff;
@@ -30,35 +27,10 @@
 			margin: auto;
 		}
 		.layui-form-checkbox[lay-skin=primary] span{
-			font-size: 14px;
+			font-size: 16px;
 			font-weight: bold;
 			color: #1b2437;
 		}
-		
-			.button-next, .button-prev {
-			position: absolute;
-			top: -2px;
-			width: 34px;
-			height: 154px;
-			z-index: 10;
-			cursor: pointer;
-			background-size: initial;
-			background-position: center;
-			background-repeat: no-repeat;
-		}
-		
-		
-		.button-prev {
-    background-image: url(img/arrowR.png);
-    right: -42px;
-    left: auto;
-		}
-		.button-next {
-    background-image: url(img/arrowL.png);
-		left: -42px;
-    right: auto;
-	}
-	
 	</style>
 </head>
 <body>
@@ -66,36 +38,47 @@
 		<div class="main">
 			<!--滚动图-->
 			<div class="scrollpic" id="scrollpic">
+				<div id="left">
+					<img src="img/arrowL.png" >
+				</div>
 				<div id="myscroll">
-						<div id="topNav" class="swiper-container">
-							 <div class="swiper-wrapper">
-										<div class="swiper-slide active"><span><img src="img/icon-noembryo.jpg"><b>1h2min</></b></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>2h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>3h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>4h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>5h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>6h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>7h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>8h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>9h2min</b></span></div>
-										<div class="swiper-slide"><span><img src="img/icon-noembryo.jpg"><b>10h2min</b></span></div>
-								</div>
-						</div>
-						<!--左右按钮-->
-						<div class="button-prev"></div>
-						<div class="button-next"></div>
+					<div id="myscrollbox">
+						<ul id="myscrollboxul">
+							<li class="active">
+								<a href="#">
+									<img src="img/20180711111150.png">
+									<span>1h3min</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<img src="img/1530082825.png">
+									<span>2h3min</span>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<img src="img/loginbg.jpg">
+									<span>3h3min</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div id="right">
+					<img src="img/arrowR.png" >
 				</div>
 			</div>
-
 			<!--大图信息部分-->
 			<div class="viewbox">
 				<!--左边胚胎大图-->
-				<div class="embryo" id="embryo">
+				<div class="embryo">
 					<!--图片区域-->
 					<div class="lg-img">
-						<img src="img/20180725183944.jpg" >
-						<!-- <img src="img/20180725183945.jpg" > -->
-						<!-- <img src="img/20180725183946.jpg" > -->
+						<img src="img/20180711111150.png" >
+						<img src="img/20180713152312.png" >
+						<img src="img/20180713153142.png" >
+						<img src="img/20180713153221.png" >
 					</div>
 					<!--胚胎信息-->
 					<ul class="eminfo">
@@ -111,38 +94,22 @@
 					<!--标记结局-->
 					<div class="mark">
 						<i class="" data-mark=""></i>
-					<!--	<i class="transplant" data-mark='1'></i>
+ 					<!--	<i class="transplant" data-mark='1'></i>
 						<i class="freeze"  data-mark='2'></i>
 						<i class="abandon" data-mark='3'></i>
 						<i class="hold" data-mark='4'></i>-->
 					</div>
 					<!--选为最清晰-->
 					<div class="elect">
-						<!-- <form action="" class="layui-form">
+						<form action="" class="layui-form">
 							<div class="layui-form-item" pane="">
 								<div class="layui-input-block">
 								<input type="checkbox" name="distinct" lay-skin="primary" lay-filter="clear" title="标记为最清晰">
 								</div>
 							</div>
-						</form> -->
-						<label><input type="checkbox"><i>✓</i>标注为最清晰</label>
+						</form>
 					</div>
-					<!--z轴滚动-->
-					<div class="shaft">
-						<ul class="time-vertical">
-								<li><b></b></li>
-								<li class="active"><b></b></li>
-								<li><b></b></li>
-								<li><b></b></li>
-								<li><b></b></li>
-								<li><b></b></li>
-						</ul>
-						<h6>z轴</h6>
-					</div>
-					<!--测量canvas-->
-					<div class="canvas-box" id="canvasBox">
-						<canvas id="canvas" width="" height=""></canvas>
-					</div>
+					
 					<!--工具栏-->
 					<div class="tool">
 						<ul class="tool-play">
@@ -159,45 +126,41 @@
 							<li class="hold" data-end='4'><i></i><span>待定</span></li>
 						</ul>
 						<ul class="tool-play tool-metrical">
-							<li class="straight" data-li='1'><i></i><span>直线测量</span></li>
-							<li class="roundness" data-li='2'><i></i><span>圆形测量</span></li>
-							<!-- <li class="roundness2"><i></i><span>胚胎外周测量</span></li> -->
-
+							<li class="straight"><i></i><span>直线测量</span></li>
+							<li class="roundness"><i></i><span>圆形测量</span></li>
 						</ul>
+						<div class="tool-btn">
+							<div class="layui-input-inline" style="margin-left: 0px;">
+							 <button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >导出视频</button>
+							</div>
+							<div class="layui-input-inline" style="margin-left: 0px;">
+								<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >导出图像</button>
+							</div>
+ 						</div>
 					</div>
 				</div>
 				<!--右边信息-->
 				<div class="info">
-					<div style="width:100%; height: 130px;">
-					<div class="export-btn">
-						<div class="layui-input-block" style="margin: 12px 0 20px 0;">
-						<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >导出当前视频</button>
-						</div>
-						<div class="layui-input-block" style="margin-left: 0px;">
-							<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" >导出当前图像</button>
-						</div>
-					</div>
 					<!--孔位选择-->
 					<div class="site" id="site">
 						<h1>孔位选择</h1>
 						<ul id="siteitem">
-							<li class="active"><span>well1</span><img src="img/1530082825.png"><i></i></li>
-							<li><span>well2</span><img src="img/1530082825.png"><i></i></li>
-							<li><span>well3</span><img src="img/1530082825.png"><i></i></li>
-							<li><span>well4</span><img src="img/1530082825.png"><i></i></li>
-							<li><span>well5</span><img src="img/1530082825.png"><i></i></li>
-							<li><span>well6</span><img src="img/1530082825.png"><i></i></li>
-							<li><span>well7</span><img src="img/1530082825.png"><i></i></li>
-							<li><span>well8</span><img src="img/1530082825.png"><i></i></li>
-							<li><span>well9</span><img src="img/1530082825.png"><i></i></li>
-							<li><span>well10</span><img src="img/icon-wellnone.jpg" ><i></i></li>
-							<li><span>well11</span><img src="img/icon-wellnone.jpg" ><i></i></li>
-							<li><span>well12</span><img src="img/icon-wellnone.jpg" ><i></i></li>
+							<li class="active"><span>well1</span><img src="img/20180711111150.png" ><i></i></li>
+							<li><span>well2</span><img src="img/20180711111150.png" ><i></i></li>
+							<li><span>well3</span><img src="img/20180711111150.png" ><i></i></li>
+							<li><span>well4</span><img src="img/20180711111150.png" ><i></i></li>
+							<li><span>well5</span><img src="img/20180711111150.png" ><i></i></li>
+							<li><span>well6</span><img src="img/20180711111150.png" ><i></i></li>
+							<li><span>well7</span><img src="img/20180711111150.png" ><i></i></li>
+							<li><span>well8</span><img src="img/20180711111150.png" ><i></i></li>
+							<li><span>well9</span><img src="img/20180711111150.png" ><i></i></li>
+							<li><span>well10</span><img src="img/20180711111150.png" ><i></i></li>
+							<li><span>well11</span><img src="img/20180711111150.png" ><i></i></li>
+							<li><span>well12</span><img src="img/20180711111150.png" ><i></i></li>
 						</ul>
 					</div>
-					</div>
 					<!--备注-->
-					<!-- <div class="comment">
+					<div class="comment">
 						<h1>备注</h1>
 							<div class="layui-input-inline" style="width: 70%;">
 							  <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
@@ -205,7 +168,7 @@
 							<div class="layui-input-inline" style="padding-top: 60px;margin-left: 20px;">
 								<button class="layui-btn layui-bg-blue" lay-submit lay-filter="">保存</button>
 							</div>
-					</div> -->
+					</div>
 					<div id="milestone">
 						<form action="" class="layui-form">
 							<div class="layui-input-block" style="margin: 6px 8px 6px;min-height: 0;">
@@ -221,9 +184,9 @@
 									  <input type="radio" name="sex" value=" " title="5C">
 									  <input type="radio" name="sex" value=" " title="8C">
 									  <input type="radio" name="sex" value=" " title="囊胚">
-									 <!-- <div class="layui-input-inline" style="margin-left: 20px;padding: 10px 0;">
+									  <div class="layui-input-inline" style="margin-left: 20px;padding: 10px 0;">
 									  	<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" style="height: 28px;line-height: 28px;">确认</button>
-									  </div>-->
+									  </div>
 									</div>
 							</div>
 						</form>
@@ -250,87 +213,58 @@
 							  </div>
 						 </div>
 						 <div class="layui-form-item">
-								<label class="layui-form-label">碎片率</label>
-								<div class="layui-input-block" >
-								<input type="radio" name="b" value=" " title="<=5%">
-								<input type="radio" name="b" value=" " title="5%~10%">
-								<input type="radio" name="b" value=" " title="10%~20%">
-								<input type="radio" name="b" value=" " title=">20%">
-								</div>
+						 	<label class="layui-form-label">碎片率</label>
+						 	<div class="layui-input-block" >
+						 	<input type="radio" name="b" value=" " title="<=5%">
+						 	<input type="radio" name="b" value=" " title="5%~10%">
+						 	<input type="radio" name="b" value=" " title="10%~20%">
+							<input type="radio" name="b" value=" " title=">20%">
+						 	</div>
 						 </div>
 						 <div class="layui-form-item">
-								<label class="layui-form-label"><i>*</i>评级</label>
-								<div class="layui-input-block" >
-								<input type="radio" name="c" value=" " title="Ⅰ" checked="">
-								<input type="radio" name="c" value=" " title="Ⅱ">
-								<input type="radio" name="c" value=" " title="Ⅲ">
-								</div>
+						 	<label class="layui-form-label"><i>*</i>评级</label>
+						 	<div class="layui-input-block" >
+						 	<input type="radio" name="c" value=" " title="Ⅰ" checked="">
+						 	<input type="radio" name="c" value=" " title="Ⅱ">
+							<input type="radio" name="c" value=" " title="Ⅲ">
+ 						 	</div>
 						 </div>
-						<h2>胚胎数据<span class="reset">重置</span></h2>
+						<h2>胚胎数据</h2>
 					  <div class="layui-form-item emdate">
-							<div class="layui-inline">
-								<label class="layui-form-label">胚胎外周面积</label>
-								<div class="layui-input-inline">
-									<input type="text" id="area" name="area" autocomplete="off" class="layui-input">
-								</div>
-								<label class="unit">um²</label>
-							</div>
-							<div class="layui-inline">
-								<label class="layui-form-label">胚胎外周直径</label>
-								<div class="layui-input-inline">
-									<input type="text" id="diameter" name="diameter" autocomplete="off" class="layui-input">
-								</div>
-								<label class="unit">um</label>
-							</div>
-							<div class="layui-inline">
-								<label class="layui-form-label">胚胎内面积</label>
-								<div class="layui-input-inline">
-									<input type="text" id="area" name="area" autocomplete="off" class="layui-input">
-								</div>
-								<label class="unit">um²</label>
-							</div>
-							<div class="layui-inline">
-								<label class="layui-form-label">胚胎内直径</label>
-								<div class="layui-input-inline">
-									<input type="text" id="area" name="area" autocomplete="off" class="layui-input">
-								</div>
-								<label class="unit">um</label>
-							</div>
-							<div class="layui-inline">
-								<label class="layui-form-label">透明带厚度</label>
-								<div class="layui-input-inline" >
-									<input type="text" id="thickness" name="thickness" autocomplete="off" class="layui-input">
-								</div>
-								<label class="unit">um</label>
-							</div>
+						<div class="layui-inline">
+						  <label class="layui-form-label">直径</label>
+						  <div class="layui-input-inline" style="width: 60px;">
+							<input type="text" name="d" autocomplete="off" class="layui-input">
+						  </div>
+						</div>
+						<div class="layui-inline">
+						  <label class="layui-form-label">面积</label>
+						  <div class="layui-input-inline" style="width: 60px;">
+							<input type="text" name="e" autocomplete="off" class="layui-input">
+						  </div>
+						</div>
+						<div class="layui-inline">
+						<label class="layui-form-label" style="width: 70px;">透明度厚度</label>
+						<div class="layui-input-inline" style="width: 60px;">
+							<input type="text" name="f" autocomplete="off" class="layui-input">
+						</div>
+						</div>
 					  </div>
-					  <h2 style="padding-bottom: 0;">胚胎评分<span class="score">25</span>	</h2>
-					  
+					  <h2 style="padding-bottom: 0;">胚胎评分</h2>
+					  <h6>25</h6>	
 					  <div class="layui-input-block" style="text-align: center;margin: 0;">
 					  	<button class="layui-btn layui-bg-blue" lay-submit lay-filter="" style="padding: 0 80px;">保存数据</button>
 					  </div>
-						
 					  </div>
 					</form>
 				</div>
 			</div>
 			<div style="clear: both;height: 20px;width: 100%;"></div>
-			<div class="dbox" id="dbox-l">
-				<p><strong>测量直线长度：</strong><span>56656</span>&nbsp;um</p>
-				<p><label>设置为透明带厚度&nbsp;<input type="radio" name="1" checked><i>✓</i></label></p>
-			</div>
-			<div class="dbox" id="dbox-c">
-				<p><strong>测量直径：</strong><span>56656</span>&nbsp;um</p>
-				<p><strong>测量面积：</strong><span>55656</span>&nbsp;um²</p>
-				<p><label>设置为外周数据&nbsp;<input type="radio" name="2" checked><i>✓</i></label></p>
-				<p><label>设置为内周数据&nbsp;<input type="radio" name="2"><i>✓</i></label></p>
-			</div>
 		</div>
     </div>
 		
 	<!--公共js引入-->
 	<script src="lib/layui/layui.js"></script>
 	<script src="js/embryo.js"></script>
-	<script src="js/swiper.min.js"></script>
 </body>
-</html>
+</html> 

@@ -5,110 +5,17 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     var table = layui.table;
     var layer = layui.layer;
 
+		$('.incubator').on('click','span',function(){
+			if($(this).hasClass('active')){
+				$(this).removeClass('active');
+			}else{
+				$(this).siblings('span').removeClass('active');
+				$(this).addClass('active');
+			}
+		})
+
     $(function () {
 
-        // 上部图片滚动设置
-//         var scrollpic = document.getElementById('scrollpic');
-//             var myscroll = document.getElementById('myscroll');
-//             myscroll.style.width = (scrollpic.offsetWidth - 84) + "px";
-        var mySwiper = new Swiper('#topNav', {
-            freeMode: true,
-            freeModeMomentumRatio: 0.5,
-            slidesPerView: 'auto',
-			prevButton:'.swiper-button-prev',
-			nextButton:'.swiper-button-next',
-        });
-        
-        swiperWidth = mySwiper.container[0].clientWidth
-        maxTranslate = mySwiper.maxTranslate();
-        maxWidth = -maxTranslate + swiperWidth / 2
-        
-        $(".swiper-container").on('touchstart', function(e) {
-            e.preventDefault()
-        })
-        
-        mySwiper.on('tap', function(swiper, e) {
-        
-            e.preventDefault()
-        
-            slide = swiper.slides[swiper.clickedIndex]
-            slideLeft = slide.offsetLeft
-            slideWidth = slide.clientWidth
-            slideCenter = slideLeft + slideWidth / 2
-            // 被点击slide的中心点
-        
-            mySwiper.setWrapperTransition(300)
-        
-            if (slideCenter < swiperWidth / 2) {
-                
-                mySwiper.setWrapperTranslate(0)
-        
-            } else if (slideCenter > maxWidth) {
-                
-                mySwiper.setWrapperTranslate(maxTranslate)
-        
-            } else {
-        
-                nowTlanslate = slideCenter - swiperWidth / 2
-        
-                mySwiper.setWrapperTranslate(-nowTlanslate)
-        
-            }
-        
-            $("#topNav  .active").removeClass('active')
-        
-            $("#topNav .swiper-slide").eq(swiper.clickedIndex).addClass('active')
-        
-        })
-
-
-        
-        // function scroll() {
-        //     var scrollpic = document.getElementById('scrollpic');
-        //     var myscroll = document.getElementById('myscroll');
-        //     myscroll.style.width = (scrollpic.offsetWidth - 84) + "px";
-        //     var blw = $("#myscrollbox li").width();
-        //     var liArr = $("#myscrollbox ul").children("li");
-        //     var mysw = $("#myscroll").width();
-        //     var mus = parseInt(mysw / blw); //计算出需要显示的子元素的数量
-        //     var length = liArr.length - mus; //计算子元素可移动次数（被隐藏的子元素数量）
-
-        //     var i = 0;
-        //     $("#right").click(function () {
-        //         i++
-        //         if (length < 0) {
-        //             return false
-        //         }
-
-        //         if (i < length) {
-
-        //             $("#myscrollbox").css("left", -(blw * i));
-
-        //         } else {
-        //             i = length;
-        //             $("#myscrollbox").css("left", -(blw * length));
-        //         }
-
-        //     });
-        //     $("#left").click(function () {
-        //         i--
-        //         if (i >= 0) {
-        //             $("#myscrollbox").css("left", -(blw * i));
-        //         } else {
-        //             i = 0;
-        //             $("#myscrollbox").css("left", 0);
-        //         }
-        //         0
-        //     });
-        // };
-        // scroll();
-
-        function site() {
-            var site = document.getElementById('site');
-            var siteItem = document.getElementById('siteitem');
-            siteItem.style.width = (site.offsetWidth - 44) + "px";
-        }
-        site();
 
         // 点击切换样式
         $('#myscrollboxul li').click(function () {
@@ -257,8 +164,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		
 		$(".tool-metrical li").click(function(){
             var self= $(this)
-            var x1 = 0;
-            var y1 = 0;
+            var x = 0;
+            var y = 0;
             var datali = $(this).attr('data-li');
 			$(".tool-metrical li").removeClass("active");
             self.addClass("active"); 
@@ -267,14 +174,16 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 $('canvas').unbind();
                 $('canvas').mousedown(function(e){
                     flag = true;
-                    x1,x = e.offsetX; // 鼠标落下时的X
-                    y1,y = e.offsetY; // 鼠标落下时的Y
+                    x = e.offsetX; // 鼠标落下时的X
+                    y = e.offsetY; // 鼠标落下时的Y
+                    console.log('x1='+x,y)
                 }).mouseup(function(e){
                     flag = false;
                     url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
                     x = e.offsetX; // 鼠标起时的X
                     y = e.offsetY; // 鼠标起下时的Y
-                        var length = Math.round(Math.sqrt(Math.abs((x1 - x)* (x1 - x)+(y1 - y)* (y1 - y))));
+                    console.log('x2='+x,y)
+//                      var length = Math.round(Math.sqrt(Math.abs((x1 - x)* (x1 - x)+(y1 - y)* (y1 - y))));
                         $('#length').text(length);
     
                         layer.open({

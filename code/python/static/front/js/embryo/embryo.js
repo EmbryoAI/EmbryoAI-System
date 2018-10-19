@@ -18,6 +18,7 @@ var clearImageUrlList="";
 var current_seris_image_path = "";
 var imgVideoZt = "";
 var embryoId = "";
+var currentSerisName = "";
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     form = layui.form;
     var $ = layui.jquery;
@@ -53,27 +54,25 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             },
             success : function(data) {
                 var well = "";
-                for(var i=1;i<=12;i++){
-                    var imagePath = getImage(i, data);
-                    var cellId = getCellId(i, data);
-                    if(imagePath != ''){
-                        if(i == data[0]){
-                            well = well + "<li class=\"active\" id=\"li_" + i + "\" onclick=\"clickLi('" + i + "')\"><span>well" + i + 
-                            "</span><img src=\"/api/v1/well/image?image_path=" + imagePath +
-                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie',0,'" + cellId + "')\"><i></i></li>";
-                        }else{
-                            well = well + "<li id=\"li_" + i + "\" onclick=\"clickLi('" + i + "')\"><span>well" + i + 
-                            "</span><img src=\"/api/v1/well/image?image_path=" + imagePath +
-                            "\" onclick=\"querySeriesList('" + i + "','lastEmbryoSerie',0,'" + cellId + "')\"><i></i></li>";
-                        }
+                var wellList = data.well_list;
+
+                for(var i=0;i<wellList.length;i++){
+                    if(i == 0){
+                        well = well + "<li id=\"li_" + i + "\" class=\"active\" onclick=\"querySeriesList('" + wellList[i].well_code 
+                        + "','lastEmbryoSerie',0,'" +  wellList[i].well_id + "')\"><span onclick=\"clickLi('" + i + "')\">well" + 
+                        wellList[i].well_code + "</span></li>";
                     }else{
-                        well = well + "<li id=\"li_" + i + "\"  onclick=\"clickLi('" + i + "')\"><span>well" + i + 
-                        "</span><img src=\"/static/front/img/icon-wellnone.jpg\"><i></i></li>";
+                        well = well + "<li id=\"li_" + i + "\" onclick=\"querySeriesList('" + wellList[i].well_code 
+                        + "','lastEmbryoSerie',0,'" +  wellList[i].well_id + "')\"><span onclick=\"clickLi('" + i + "')\">well" + 
+                        wellList[i].well_code + "</span></li>";
                     }
+                   
                 }
+
+               
                 $("#siteitem").html(well);
-                wellId = data[0];
-                cellId = data[2];
+                wellId = wellList[0].well_code;
+                cellId = wellList[0].well_id;
                 querySeriesList(wellId,'lastEmbryoSerie',0, cellId);//获取每个孔下面的时间序列
                 if(clearImageUrlList=="") {
                 	queryClearImageUrl();//初始化所有图片
@@ -81,77 +80,16 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             }
         });
 
-        // 上部图片滚动设置
-		var mySwiper = new Swiper('#topNav', {
-            freeMode: true,
-            freeModeMomentumRatio: 0.5,
-            slidesPerView: 'auto',
-			prevButton:'.swiper-button-prev',
-			nextButton:'.swiper-button-next',
-        });
-        
-        swiperWidth = mySwiper.container[0].clientWidth
-        maxTranslate = mySwiper.maxTranslate();
-        maxWidth = -maxTranslate + swiperWidth / 2
-        
-        $(".swiper-container").on('touchstart', function(e) {
-            e.preventDefault()
-        })
-        
-        mySwiper.on('tap', function(swiper, e) {
-        
-            e.preventDefault()
-        
-            slide = swiper.slides[swiper.clickedIndex]
-            if(typeof slide === "undefined"){
-                return
-             }
-            slideLeft = slide.offsetLeft
-            slideWidth = slide.clientWidth
-            slideCenter = slideLeft + slideWidth / 2
-            // 被点击slide的中心点
-        
-            mySwiper.setWrapperTransition(300)
-        
-            if (slideCenter < swiperWidth / 2) {
-                
-                mySwiper.setWrapperTranslate(0)
-        
-            } else if (slideCenter > maxWidth) {
-                
-                mySwiper.setWrapperTranslate(maxTranslate)
-        
-            } else {
-        
-                nowTlanslate = slideCenter - swiperWidth / 2
-        
-                mySwiper.setWrapperTranslate(-nowTlanslate)
-        
-            }
-        
-            $("#topNav  .active").removeClass('active')
-        
-            $("#topNav .swiper-slide").eq(swiper.clickedIndex).addClass('active')
-        
-        })
-
-
-
-        function site() {
-            var site = document.getElementById('site');
-            var siteItem = document.getElementById('siteitem');
-            siteItem.style.width = (site.offsetWidth - 44) + "px";
-        }
-        site();
 
         // 点击切换样式
-        $('#myscrollboxul li').click(function () {
-            $('#myscrollboxul li').removeClass('active');
+        $('.swiper-wrapper .swiper-slide').click(function () {
+            $('.swiper-wrapper .swiper-slide').removeClass('active');
             $(this).addClass('active');
+            $(this)
         });
 
-        $('#siteitem li').click(function () {
-            $('#siteitem li').removeClass('active');
+        $('.siteitem li').click(function () {
+            $('.siteitem li').removeClass('active');
             $(this).addClass('active');
         });
 
@@ -217,7 +155,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             if (a == true) {
                 // layer.msg('打开');
                 $('#milestone').animate({
-                    height: '90px'
+                    height: '123px'
                 });
             } else {
                 // layer.msg('关闭');
@@ -306,7 +244,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             var imageVideoId = $(".lg-video-img img:eq(" + n + ")").attr("id");
             var timeSeries =  imageVideoId.substring(10,imageVideoId.length);
             
-            getBigImage(procedureId, dishId, wellId, timeSeries,1,cellId);//定位到对应的时间序列
+            getBigImage(procedureId, dishId, wellId, timeSeries,1,cellId, currentSerisName);//定位到对应的时间序列
             //记录一下当前暂停图片的URL
             imgVideoZt = $(".lg-video-img img:eq(" + n + ")").attr("id");
             
@@ -356,25 +294,24 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		var x = 0; // 鼠标开始移动的位置X
 		var y = 0; // 鼠标开始移动的位置Y
         var url = ''; // canvas图片的二进制格式转为dataURL格式
-        
+        var x1 ;
+        var y1 ;
         
 		
-		function canvasWidth(){
-			var embr = document.getElementById('embryo');
-			var canvasBox = document.getElementById('canvasBox');
-			canvasBox.style.width = embr.offsetWidth;
-			canvas.width = canvasBox.offsetWidth;
-			canvas.height = canvasBox.offsetHeight;
-		}
-		canvasWidth();
+		// function canvasWidth(){
+		// 	var embr = document.getElementById('embryo');
+		// 	var canvasBox = document.getElementById('canvasBox');
+		// 	canvasBox.style.width = embr.offsetWidth;
+		// 	canvas.width = canvasBox.offsetWidth;
+		// 	canvas.height = canvasBox.offsetHeight;
+		// }
+		// canvasWidth();
 		
 		/* 为canvas绑定mouse事件 */
 		
 		
 		$(".tool-metrical li").click(function(){
             var self= $(this)
-            var x1 = 0;
-            var y1 = 0;
             var datali = $(this).attr('data-li');
 			$(".tool-metrical li").removeClass("active");
             self.addClass("active"); 
@@ -383,30 +320,35 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 $('canvas').unbind();
                 $('canvas').mousedown(function(e){
                     flag = true;
-                    x1,x = e.offsetX; // 鼠标落下时的X
-                    y1,y = e.offsetY; // 鼠标落下时的Y
+                    x = e.offsetX; // 鼠标落下时的X
+                    y = e.offsetY; // 鼠标落下时的Y
+                    console.log("落下的坐标"+x,y)
                 }).mouseup(function(e){
                     flag = false;
                     url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
-                    x = e.offsetX; // 鼠标起时的X
-                    y = e.offsetY; // 鼠标起下时的Y
-                        var length = Math.round(Math.sqrt(Math.abs((x1 - x)* (x1 - x)+(y1 - y)* (y1 - y))));
-                        $('#length').text(length);
-    
+                    x1 = e.offsetX; // 鼠标起时的X
+                    y1 = e.offsetY; // 鼠标起下时的Y
+                    console.log("放开的坐标"+x1,y1)
+                    var rx = (x1-x);
+                    var ry = (y1-y);
+                    var r = Math.sqrt(rx*rx+ry*ry);
+                    r = Math.round(r*(1280 / 932)/3.75);
+                    $('#length').text(r);
+
                         layer.open({
                         type: 1,
                         area: ['300px', '280px'],
-                        shadeClose: true, 
+                        shadeClose: false, 
                         content: $("#dbox-l"),
                         btn:["确认导入","取消"],
-                        yes: function(index, layero){
+                        yes: function(index, layero){;
                             layer.closeAll();
                             layer.msg("导入成功！")
                             clearCanvas()
-    
+
                             var zonaThickness = $('#zonaThickness').val();
                             $('#hideZonaThickness').val(zonaThickness);
-                            $('#zonaThickness').val(length);
+                            $('#zonaThickness').val(r);
                         }
                         ,btn2: function(index, layero){
                             clearCanvas()
@@ -421,25 +363,28 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 $('canvas').unbind();
                 $('canvas').mousedown(function(e){
                     flag = true;
-                    x1,x = e.offsetX; // 鼠标落下时的X
-                    y1,y = e.offsetY; // 鼠标落下时的Y
+                    x = e.offsetX; // 鼠标落下时的X
+                    y = e.offsetY; // 鼠标落下时的Y
+                    console.log("落下的坐标"+x,y)
                 }).mouseup(function(e){
                     flag = false;
                     url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
-                    x = e.offsetX; // 鼠标起时的X
-                    y = e.offsetY; // 鼠标起下时的Y
-                    var rx = (e.offsetX-x1);
-                    var ry = (e.offsetY-y1);
+                    x1 = e.offsetX; // 鼠标起时的X
+                    y1 = e.offsetY; // 鼠标起下时的Y
+                    console.log("放开的坐标"+x1,y1)
+
+                    var rx = (x1-x);
+                    var ry = (y1-y);
                     var r = Math.sqrt(rx*rx+ry*ry);
                     r = Math.round(r*(960/612)/3.75);
                     $('#diameter').text(r);
                     var area = Math.PI * r/2 * r/2;
-                    area = Math.round(area*(960 / 612) ** 2 / (3.75**2));
+                    area = Math.round(area*(1280 / 932) ** 2 / (3.75**2));
                     $('#area').text(area);
                     layer.open({
                         type: 1,
                         area: ['300px', '280px'],
-                        shadeClose: true, 
+                        shadeClose: false, 
                         content: $("#dbox-c"),
                         btn:["确认导入","取消"],
                         yes: function(index, layero){
@@ -476,95 +421,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                         drawCircle(e); // 圆形绘制方法	
                 });
             }
-            // $('canvas').mousedown(function(e){
-            //     flag = true;
-            //     x1,x = e.offsetX; // 鼠标落下时的X
-            //     y1,y = e.offsetY; // 鼠标落下时的Y
-            //     console.log(x,y)
-            // }).mouseup(function(e){
-            //     flag = false;
-            //     url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
-            //     x = e.offsetX; // 鼠标起时的X
-            //     y = e.offsetY; // 鼠标起下时的Y
-
-            //     console.log(x,y)
-            //     if(drwaType == 'straight'){
-            //         var length = Math.round(Math.sqrt(Math.abs((x1 - x)* (x1 - x)+(y1 - y)* (y1 - y))));
-            //         $('#length').text(length);
-
-            //         layer.open({
-            //         type: 1,
-            //         area: ['300px', '280px'],
-            //         shadeClose: true, 
-            //         content: $("#dbox-l"),
-            //         btn:["确认导入","取消"],
-            //         yes: function(index, layero){
-            //             layer.closeAll();
-            //             layer.msg("导入成功！")
-            //             clearCanvas()
-
-            //             var zonaThickness = $('#zonaThickness').val();
-            //             $('#hideZonaThickness').val(zonaThickness);
-            //             $('#zonaThickness').val(length);
-            //         }
-            //         ,btn2: function(index, layero){
-            //             clearCanvas()
-            //         },
-            //         btnAlign: 'c'
-            //     });
-            // }else{
-            //     var rx = (e.offsetX-x1);
-            //     var ry = (e.offsetY-y1);
-            //     var r = Math.round(Math.sqrt(rx*rx+ry*ry));
-            //     $('#diameter').text(r);
-            //     var area = Math.round(Math.PI * r/2 * r/2);
-            //     $('#area').text(area);
-            //     layer.open({
-            //         type: 1,
-            //         area: ['300px', '280px'],
-            //         shadeClose: true, 
-            //         content: $("#dbox-c"),
-            //         btn:["确认导入","取消"],
-            //         yes: function(index, layero){
-            //             layer.closeAll();
-            //             layer.msg("导入成功！")
-            //             clearCanvas()
-            //             var choseVal = $('#dbox-c input[name="2"]:checked ').val();
-            //             if(choseVal == 'choseIn'){
-            //                 var innerArea = $('#innerArea').val();
-            //                 $('#hideInnerArea').val(innerArea);
-            //                 var innerDiameter = $('#innerDiameter').val();
-            //                 $('#hideInnerDiameter').val(innerDiameter);
-
-            //                 $('#innerArea').val(area);
-            //                 $('#innerDiameter').val(r);
-            //             }
-            //             if(choseVal == 'choseOut'){
-            //                 var outerArea = $('#outerArea').val();
-            //                 $('#hideOuterArea').val(outerArea);
-            //                 var outDiameter = $('#outDiameter').val();
-            //                 $('#hideOutDiameter').val(outDiameter);
-
-
-            //                 $('#outerArea').val(area);
-            //                 $('#outDiameter').val(r);
-            //             }
-            //         }
-            //         ,btn2: function(index, layero){
-            //             clearCanvas()
-            //         },
-            //         btnAlign: 'c'
-            //     });
-            // }
-            // }).mousemove(function(e){
-            //     if(self.hasClass('straight')){
-            //         drwaType = 'straight';
-            //         drawLine(e); // 绘制方法
-            //     }else{
-            //         drwaType = 'circle';
-            //         drawCircle(e); // 绘制方法	
-            //     }
-            // });
                
        })
 
@@ -611,9 +467,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		
 		// 跟随屏幕改变的设定	
 		$(window).resize(function () {
-			scroll();
-			site();
-			canvasWidth();
+		
+	
+			
 		});
 	   
 		form.on('radio(milestoneId)', function(data){
@@ -858,7 +714,7 @@ function getCellId(index, data){
     return result;
 }
 
-function querySeriesList(wellId, seris,type, cellId){
+function querySeriesList(wellId, serisCode, type, cellId){
     $("#wellId").val(wellId);
     $("#cellId").val(cellId);
     var procedureId = $("#procedureId").val();
@@ -866,36 +722,40 @@ function querySeriesList(wellId, seris,type, cellId){
     $.ajax({
         cache : false,
         type : "GET",
-        url : "/api/v1/dish/list?procedure_id=" + procedureId + "&dish_id=" + dishId + "&well_id=" + wellId + "&seris=" + seris + "&cell_id=" + cellId,
+        url : "/api/v1/dish/list?procedure_id=" + procedureId + "&dish_id=" + dishId + "&well_id=" 
+            + wellId + "&seris=" + serisCode + "&cell_id=" + cellId,
         data : "",
         error : function(request) {
             parent.layer.alert(request.responseText);
         },
         success : function(data) {
             var seris = "";
-            for(var i=0;i<data.length-1;i=i+4){
-                var imagePath = "/api/v1/well/image?image_path=" + data[i+1];
-                if(data[i+1].indexOf("embryo_not_found") != -1){
-                    imagePath = "/static/front/img/icon-noembryo.jpg";
+            var series = data.series;
+            for(var i=0;i<series.length;i++){
+                if(data.last_series == series[i].series_code){
+                    currentSerisName = series[i]["series_name"];
                 }
-                var active = "<div class=\"swiper-slide\">";
-                if(i == 16){
-                    active = "<div class=\"swiper-slide active\">";
-                    $("#thumbnailPath").val(data[i+1]);
+                var imagePath = "/api/v1/well/image?image_path=" + series[i]["series_image_path"];
+                if(series[i]["series_image_path"].indexOf("embryo_not_found") != -1){
+                    imagePath = "/static/front/img/loc-emb.png";
                 }
-                seris = seris + active + "<span><img id='" + data[i] + "' src=\"" + 
-                                    imagePath +"\" onclick=\"getBigImage('" 
-                                    + procedureId + "','" + dishId + 
-                                    "','" + wellId + "','" + data[i] + "',0,'" + cellId + "')\"><b>" + 
-                                    data[i+2] + "</b></div>";
+                $("#thumbnailPath").val(series[i]["series_image_path"]);
+                var active = "<div class=\"swiper-slide\" id='" + series[i]["series_code"] + "_div'>";
+                seris = seris + active + "<img id='" + series[i]["series_code"] + "' src=\"" + 
+                                    imagePath +"\" onclick=\"getBigImage('" + procedureId + "','" + dishId + 
+                                    "','" + wellId + "','" + series[i]["series_code"] + "',0,'" + cellId +
+                                    "', '" + series[i]["series_name"] + "')\"><span>" + series[i]["milestone_type"] +
+                                      "</span><b>" + series[i]["series_name"] + "</b></div>";
             }
+            $("#myscrollboxul").html(seris);
+            $("#xltext").html(currentSerisName);
+            $("#" + data.last_series + "_div").attr("class", "swiper-slide active");
 
             //胚胎id
-            embryoId = data[data.length-1];
+            embryoId = data.embryo_id;
             $("#embryoId").val(embryoId);
 
-            $("#myscrollboxul").html(seris);
-            currentSeris = data[data.length-2];
+            currentSeris = data.last_series;
             if(type==0) {
             	loadingImage(procedureId,dishId,wellId,currentSeris,'');
             }
@@ -932,10 +792,16 @@ function querySeriesList(wellId, seris,type, cellId){
  * @param seris
  * @param type 0默认方式 1播放暂停
  */
-function getBigImage(procedureId, dishId, wellId, seris,type, cellId){
-    querySeriesList(wellId, seris,type,cellId);
-//    loadingImage(procedureId,dishId,wellId,seris,'');
-//    loadingZIndex(procedureId,dishId,wellId,seris);
+function getBigImage(procedureId, dishId, wellId, seris,type, cellId, serisName){
+    $("#myscrollboxul").children().each(function(){
+        $(this).attr("class","swiper-slide");
+        })
+    $("#" + seris + "_div").attr("class", "swiper-slide active");
+    $("#xltext").html(serisName);
+    if(type==0) {
+        loadingImage(procedureId,dishId,wellId,seris,'');
+    }
+    loadingZIndex(procedureId,dishId,wellId,seris);
 }
 
 function preFrame(){
@@ -958,7 +824,7 @@ function preFrame(){
             parent.layer.alert(request.responseText);
         },
         success : function(data) {
-            getBigImage(procedureId, dishId, wellId, data,0, cellId);
+            querySeriesList(wellId,currentSeris,0, cellId);
         }
     });
 }
@@ -981,7 +847,7 @@ function nextFrame(){
             if(data == null){
                 parent.layer.alert("已经是最后一张了!");
             }else{
-                getBigImage(procedureId, dishId, wellId, data,0,cellId);
+                querySeriesList(wellId,currentSeris,0, cellId);
             }
         }
     });
@@ -1022,28 +888,31 @@ function arrow(direction){
     $.ajax({
 		type : "get",
         url : "/api/v1/dish/scroll?procedure_id=" + procedureId + "&dish_id=" + dishId + 
-                "&well_id=" + wellId + "&current_seris=" + currentSeris + "&direction=" + direction,
+                "&well_id=" + wellId + "&current_seris=" + currentSeris + "&direction=" + direction + "&cell_id=" + cellId,
 		datatype : "json",
 		success : function(data) {
 			var seris = "";
-            for(var i=0;i<data.length;i=i+4){
-                var imagePath = "/api/v1/well/image?image_path=" + data[i+1];
-                if(data[i+1].indexOf("embryo_not_found") != -1){
-                    imagePath = "/static/front/img/icon-noembryo.jpg";
+            var series = data.series;
+            for(var i=0;i<series.length;i++){
+                if(data.last_series == series[i].series_code){
+                    currentSerisName = series[i]["series_name"];
                 }
-                var active = "<div class=\"swiper-slide\">";
-                if(i == 16){
-                    //active = "<div class=\"swiper-slide active\">";
-                    $("#thumbnailPath").val(data[i+1]);
+                var imagePath = "/api/v1/well/image?image_path=" + series[i]["series_image_path"];
+                if(series[i]["series_image_path"].indexOf("embryo_not_found") != -1){
+                    imagePath = "/static/front/img/loc-emb.png";
                 }
-                seris = seris + active + "<span><img id='" + data[i] + "' src=\"" + 
-                                    imagePath +"\" onclick=\"getBigImage('" 
-                                    + procedureId + "','" + dishId + 
-                                    "','" + wellId + "','" + data[i] + "',0, '" + cellId + "')\"><b>" + 
-                                    data[i+2] + "</b></div>";
+                $("#thumbnailPath").val(series[i]["series_image_path"]);
+                var active = "<div class=\"swiper-slide\" id='" + series[i]["series_code"] + "_div'>";
+                seris = seris + active + "<img id='" + series[i]["series_code"] + "' src=\"" + 
+                                    imagePath +"\" onclick=\"getBigImage('" + procedureId + "','" + dishId + 
+                                    "','" + wellId + "','" + series[i]["series_code"] + "',0,'" + cellId +
+                                     "', '" + series[i]["series_name"] + "')\"><span>" + series[i]["milestone_type"] +
+                                      "</span><b>" + series[i]["series_name"] + "</b></div>";
             }
             $("#myscrollboxul").html(seris);
-            currentSeris = data[data.length-1];
+            $("#xltext").html(currentSerisName);
+            $("#" + data.last_series + "_div").attr("class", "swiper-slide active")
+            currentSeris = data.last_series;
             //loadingImage(procedureId,dishId,wellId,currentSeris,'');
             //loadingZIndex(procedureId,dishId,wellId,currentSeris);
 		},
@@ -1277,7 +1146,7 @@ function node(upOrdown) {
 		cache:false,
 		success : function(data) {
 			 if(data!=null) {
-				 getBigImage(procedureId, dishId, wellId, data.milestoneTime,0, cellId);
+				 getBigImage(procedureId, dishId, wellId, data.milestoneTime,0, cellId,currentSerisName);
 			 }else {
 				 if("up"==upOrdown) {
 					 layer.alert("当前已经是第一个里程碑了!");
