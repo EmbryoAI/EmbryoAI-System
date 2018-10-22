@@ -76,7 +76,7 @@ def getAllZIndex(agrs):
         restResult = RestResult(404, "获取该时间序列下的所有z轴节点失败", 0, None)
     return jsonify(restResult.__dict__)
 
-
+"""获取全路径"""
 def readDishState(procedureId,dishId):
     try :
         dish = dish_mapper.queryById(dishId)
@@ -86,7 +86,7 @@ def readDishState(procedureId,dishId):
         pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId,dishId)
         path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
         if not os.path.isdir(path) :
-            return None,None
+            return None,None,None
         # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
         jsonPath = path + conf['DISH_STATE_FILENAME']
         logger().info(jsonPath)
@@ -100,6 +100,32 @@ def readDishState(procedureId,dishId):
     except : 
         logger().info("读取dishState.json文件出现异常")
         return None,None,None
+
+"""获取相对路径"""
+def getImagePath(procedureId,dishId):
+    try :
+        dish = dish_mapper.queryById(dishId)
+        if not dish : 
+            return None,None
+        dishCode = dish.dishCode
+        pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId,dishId)
+        path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
+        newPath = pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
+        if not os.path.isdir(path) :
+            return None,None
+        # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
+        jsonPath = path + conf['DISH_STATE_FILENAME']
+        logger().info(jsonPath)
+        with open(f'{jsonPath}', 'r') as fn :
+            dishJson = json.loads(fn.read())
+        # if dishJson['finished'] & dishJson['avail'] == 1 :
+        #     return pd.imagePath,path, dishJson
+        # else :
+        #     return None,None,None
+        return newPath, dishJson
+    except : 
+        logger().info("读取dishState.json文件出现异常")
+        return None,None
 
 
 def markDistinct(agrs):
