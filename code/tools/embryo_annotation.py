@@ -44,6 +44,10 @@ if __name__=='__main__':
             tag = ''
             window = cv2.namedWindow('Embryo stage annotation')
             img = cv2.imread(conf.images + os.path.sep + f, cv2.IMREAD_GRAYSCALE)
+            percentage = f'{index/len(img_files)*100:02d}'
+            box, _ = cv2.getTextSize(percentage, cv2.FONT_HERSHEY_COMPLEX, 0.6, 1)
+            img = cv2.putText(img, percentage, (20+box[0], box[1]+15), cv2.FONT_HERSHEY_COMPLEX, 
+                0.6, (0,0,255), 1, cv2.LINE_AA)
             if img is None or img.shape != (600, 600):
                 img_files.remove(f)
                 continue
@@ -65,6 +69,10 @@ if __name__=='__main__':
                     if index > 0:
                         index -= 1
                         break
+                elif key == 0x20:
+                    tag = ''
+                    index += 1
+                    break
                 else:
                     key = str(chr(key)).lower()
                     if key in TAG_KEYS:
