@@ -64,7 +64,7 @@ function queryEmbryo(procedureId){
                  "</a></td><td><a href='/front/dish?procedureId="+ procedureId +"&dishId=" + data.data[i].dish_id 
                  + "&dishCode="+ data.data[i].dish_code +"' target='_blank' class='layui-table-link' >" + data.data[i].dish_code 
                   + "</a></td><td><a href='/front/embryo?procedureId=" + procedureId + "&dishId=" + 
-                  data.data[i].dish_id + "&embryoId=" + data.data[i].id + "&cellCode=" + data.data[i].cell_code + 
+                  data.data[i].dish_id + "&embryoId=" + data.data[i].id + "&cellCode=" + data.data[i].cell_code+ "&dishCode="+ data.data[i].dish_code + 
                   "' target='_blank' class='layui-table-link'>" + data.data[i].cell_code + "</a></td></tr>")
             }
 		}

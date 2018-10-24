@@ -1161,3 +1161,7 @@ function node(upOrdown) {
 		}
 	});
 }
+//跳转到皿视图
+function toDishView() {
+	window.location.href="/front/dish/?procedureId="+$("#procedureId").val()+"&dishId="+$("#dishId").val()+"&dishCode="+$("#dishCode").val();
+}
