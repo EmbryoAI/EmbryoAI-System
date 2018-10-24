@@ -318,7 +318,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             self.addClass("active"); 
             console.log(datali)
             if ( datali == 1) {
-                $('canvas').unbind();
+                
                 $('canvas').mousedown(function(e){
                     flag = true;
                     x = e.offsetX; // 鼠标落下时的X
@@ -356,12 +356,14 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                         },
                         btnAlign: 'c'
                     });
+                    $('canvas').unbind();
+		        	$(".tool-metrical li").removeClass("active");
+
                 }).mousemove(function(e){
                         drawLine(e); // 直线绘制方法
                 });
             }
             if ( datali == 2) {
-                $('canvas').unbind();
                 $('canvas').mousedown(function(e){
                     flag = true;
                     x = e.offsetX; // 鼠标落下时的X
@@ -417,6 +419,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                         },
                         btnAlign: 'c'
                     });
+                $('canvas').unbind();
+                $(".tool-metrical li").removeClass("active");
                 }).mousemove(function(e){
                         drawCircle(e); // 圆形绘制方法	
                 });
@@ -876,6 +880,10 @@ function exportImg(){
 }
 
 function exportVideo(){
+    var loadMsg = parent.layer.msg('视频导出中，请耐心等待', {
+        icon: 16
+        ,shade: 0.3,time:0
+    });
     $.ajax({
         cache : false,
         type : "GET",
@@ -887,8 +895,9 @@ function exportVideo(){
         success : function(data) {
             const aLink = document.createElement('a')
             aLink.download = '孔' + wellId + '.mp4';
-            aLink.href = 'http://localhost/' + data;
+            aLink.href = data;
             aLink.dispatchEvent(new MouseEvent('click', {}))
+            parent.layer.close(loadMsg);
         }
     });
 }
@@ -1171,4 +1180,8 @@ function node(upOrdown) {
 			layer.alert(request.responseText);
 		}
 	});
+}
+//跳转到皿视图
+function toDishView() {
+	window.location.href="/front/dish/?procedureId="+$("#procedureId").val()+"&dishId="+$("#dishId").val()+"&dishCode="+$("#dishCode").val();
 }

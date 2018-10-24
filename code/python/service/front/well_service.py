@@ -199,7 +199,8 @@ def getWellVideoPath(agrs):
 
             videoWriter.write(frame)
         videoWriter.release()
-    download_path = pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  + 'video' + pd.imagePath + f'_DISH{dishCode}_{well_id}.mp4'
+    download_path = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + pd.imagePath + os.path.sep \
+             + f'DISH{dishCode}' + os.path.sep  + 'video' + os.path.sep + pd.imagePath + f'_DISH{dishCode}_{well_id}.mp4'
     return jsonify(download_path)
 
 #查询培养箱
