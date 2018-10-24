@@ -90,6 +90,25 @@
 .dishimg li:nth-child(6),.dishimg li:last-child{
 	margin-right: 0;
 }
+.dishimg li b{
+	position: absolute;
+	bottom: 2px;
+	left: 2px;
+	display: block;
+	padding: 2px;
+	color: #fff;
+	z-index: 99;
+}
+.dishimg li a{
+	position: absolute;
+	bottom: 2px;
+	right: 2px;
+	display: block;
+	padding: 2px;
+	color: #fff;
+	z-index: 99;
+
+}
 .dish-tool{
 	width: 1044px;
 	border: 1px solid #dfe3ea;
@@ -306,4 +325,25 @@
 }
 .tool-btn{
 	margin-left: 60px
+}
+.dishimg li b{
+	position: absolute;
+	bottom: 2px;
+	left: 2px;
+	display: block;
+	padding: 2px;
+	color: #fff;
+	z-index: 99;
+	background: #4e4d4c;
+}
+.dishimg li a{
+	position: absolute;
+	bottom: 2px;
+	right: 2px;
+	display: block;
+	padding: 2px;
+	color: #fff;
+	z-index: 99;
+	text-shadow: 1px 1px 0px rgba(0,0,0,1);
+	cursor: pointer;
 }
