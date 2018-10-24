@@ -55,12 +55,13 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             success : function(data) {
                 var well = "";
                 var wellList = data.well_list;
-
+                var cellCode = $('#cellCode').val();
                 for(var i=0;i<wellList.length;i++){
-                    if(i == 0){
+                    if((i+1) == cellCode){
                         well = well + "<li id=\"li_" + i + "\" class=\"active\" onclick=\"querySeriesList('" + wellList[i].well_code 
                         + "','lastEmbryoSerie',0,'" +  wellList[i].well_id + "')\"><span onclick=\"clickLi('" + i + "')\">well" + 
                         wellList[i].well_code + "</span></li>";
+                        cellId = wellList[i].well_id;
                     }else{
                         well = well + "<li id=\"li_" + i + "\" onclick=\"querySeriesList('" + wellList[i].well_code 
                         + "','lastEmbryoSerie',0,'" +  wellList[i].well_id + "')\"><span onclick=\"clickLi('" + i + "')\">well" + 
@@ -71,8 +72,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 
                
                 $("#siteitem").html(well);
-                wellId = wellList[0].well_code;
-                cellId = wellList[0].well_id;
+                wellId = cellCode;
+                
                 querySeriesList(wellId,'lastEmbryoSerie',0, cellId);//获取每个孔下面的时间序列
                 if(clearImageUrlList=="") {
                 	queryClearImageUrl();//初始化所有图片
@@ -823,7 +824,7 @@ function preFrame(){
             parent.layer.alert(request.responseText);
         },
         success : function(data) {
-            querySeriesList(wellId,currentSeris,0, cellId);
+            querySeriesList(wellId,data,0, cellId);
         }
     });
 }
@@ -846,7 +847,7 @@ function nextFrame(){
             if(data == null){
                 parent.layer.alert("已经是最后一张了!");
             }else{
-                querySeriesList(wellId,currentSeris,0, cellId);
+                querySeriesList(wellId,data,0, cellId);
             }
         }
     });
@@ -1145,7 +1146,8 @@ function node(upOrdown) {
 		cache:false,
 		success : function(data) {
 			 if(data!=null) {
-				 getBigImage(procedureId, dishId, wellId, data.milestoneTime,0, cellId,currentSerisName);
+				 querySeriesList(wellId, data.milestoneTime, 0, cellId);
+//				 getBigImage(procedureId, dishId, wellId, data.milestoneTime,0, cellId,currentSerisName);
 			 }else {
 				 if("up"==upOrdown) {
 					 layer.alert("当前已经是第一个里程碑了!");

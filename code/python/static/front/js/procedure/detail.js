@@ -59,14 +59,13 @@ function queryEmbryo(procedureId){
 			for(var i=0;i<data.data.length;i++){
                 table.append("<tr><td>"
                  + data.data[i].embryo_index + 
-                 "</td><td><a href='/front/incubator?procedureId=" + procedureId + "&incubatorId=" + data.data[i].incubator_code + "' target='_blank' class='layui-table-link'>"
-                  + data.data[i].incubator_code +
-                 "</a></td><td><a href='/front/dish?procedureId="+ procedureId +"&dishId=" + data.data[i].dish_id + "&dishCode="+ data.data[i].dish_code +"' target='_blank' class='layui-table-link' >"
-                  + data.data[i].dish_code 
+                 "</td><td><a href='/front/incubator?procedureId=" + procedureId + "&incubatorId=" 
+                 + data.data[i].incubator_code + "' target='_blank' class='layui-table-link'>" + data.data[i].incubator_code +
+                 "</a></td><td><a href='/front/dish?procedureId="+ procedureId +"&dishId=" + data.data[i].dish_id 
+                 + "&dishCode="+ data.data[i].dish_code +"' target='_blank' class='layui-table-link' >" + data.data[i].dish_code 
                   + "</a></td><td><a href='/front/embryo?procedureId=" + procedureId + "&dishId=" + 
-                  data.data[i].dish_id + "&embryoId=" + data.data[i].id + 
-                  "' target='_blank' class='layui-table-link'>"
-                  + data.data[i].cell_code + "</a></td></tr>")
+                  data.data[i].dish_id + "&embryoId=" + data.data[i].id + "&cellCode=" + data.data[i].cell_code + 
+                  "' target='_blank' class='layui-table-link'>" + data.data[i].cell_code + "</a></td></tr>")
             }
 		}
 	});

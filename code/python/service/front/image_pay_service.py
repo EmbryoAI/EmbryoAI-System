@@ -48,6 +48,7 @@ def queryThumbnailImageUrl(agrs):
         #获取JSON文件
         imagePath,path,dishJson = image_service.readDishState(procedureId,dishId)
         thumbnailUrlList=[]
+        result = {}
         embryoId = None
         if dishJson['finished'] & dishJson['avail'] == 1 : 
             wells = dishJson['wells']
@@ -58,17 +59,18 @@ def queryThumbnailImageUrl(agrs):
                 thumbnailUrl = path + series[key]['focus']
                 imageObj['thumbnailUrl'] = thumbnailUrl
                 imageObj['timeSeries'] = key
-                """根据皿ID和孔序号获取孔ID ，再根据周期ID和孔ID 获取 胚胎ID"""
-                if embryoId == None:
-                    sql = " t.procedure_id = :procedureId AND sc.dish_id = :dishId AND sc.cell_code = :cellCode "
-                    filters = {'procedureId': procedureId,'dishId':dishId,'cellCode':wellId}
-                    embryoId = embryo_mapper.getEmbryoByCondition(sql,filters)
-                
-                imageObj['embryoId'] = dict(embryoId)["id"]
                 thumbnailUrlList.append(imageObj)
-        if not thumbnailUrlList:
+                
+            """根据皿ID和孔序号获取孔ID ，再根据周期ID和孔ID 获取 胚胎ID"""
+            if embryoId == None:
+                sql = " t.procedure_id = :procedureId AND sc.dish_id = :dishId AND sc.cell_code = :cellCode "
+                filters = {'procedureId': procedureId,'dishId':dishId,'cellCode':wellId}
+                embryo = embryo_mapper.getEmbryoByCondition(sql,filters)
+            result["thumbnailUrlList"] = thumbnailUrlList
+            result["embryo"] = dict(embryo)
+        if not result:
             return 200, None
         else: 
-            return 200, thumbnailUrlList
+            return 200, result
     except:
         return 200, None
