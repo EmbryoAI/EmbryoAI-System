@@ -103,11 +103,23 @@ def getPatientByEmbryoId(id):
 def getEmbryoByCondition(sqlCondition,filters):
     try :
         sql = text("""
-                SELECT t.id as id FROM t_embryo t
-                LEFT JOIN  sys_cell  sc 
+            SELECT
+              t.id           AS id,
+              t.cell_id         cellId,
+              d.dict_spare AS ptjj,
+              GROUP_CONCAT(d1.dict_value,"#",m.milestone_time ORDER BY m.milestone_time) lcb
+            FROM t_embryo t
+              LEFT JOIN sys_cell sc
                 ON t.cell_id = sc.id
+              LEFT JOIN t_milestone m
+                ON t.id = m.embryo_id
+              LEFT JOIN sys_dict d
+                ON t.embryo_fate_id = d.dict_key AND d.dict_class = 'embryo_fate_type'
+              LEFT JOIN sys_dict d1
+                ON m.milestone_id = d1.dict_key AND d1.dict_class = 'milestone'
                 WHERE
                 """+sqlCondition+"""
+                  GROUP BY t.id
             """)
         print(sql)
         return db.session.execute(sql,filters).fetchone()
