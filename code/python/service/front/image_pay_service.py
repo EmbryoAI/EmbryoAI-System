@@ -6,6 +6,7 @@ from flask import request, jsonify
 from common import uuid,logger
 from app import conf
 import json,os
+from common import getdefault
 
 def queryClearImageUrl(agrs):
     procedureId = agrs['procedureId']
@@ -44,9 +45,10 @@ def queryThumbnailImageUrl(agrs):
     dishId = agrs['dishId']
     wellId = agrs['wellId']
     zData = {}
+    nginxImageUrl = getdefault(conf, 'STATIC_NGINX_IMAGE_URL', "http://localhost:80")
     try:
         #获取JSON文件
-        imagePath,path,dishJson = image_service.readDishState(procedureId,dishId)
+        path,dishJson = image_service.getImagePath(procedureId,dishId)
         thumbnailUrlList=[]
         result = {}
         embryoId = None
@@ -56,7 +58,10 @@ def queryThumbnailImageUrl(agrs):
             series = oneWell['series']
             for key in series:
                 imageObj={}
-                thumbnailUrl = path + series[key]['focus']
+                thumbnailUrl = nginxImageUrl+os.path.sep+path + series[key]['focus']
+                print(nginxImageUrl)
+                print(path)
+                print(thumbnailUrl)
                 imageObj['thumbnailUrl'] = thumbnailUrl
                 imageObj['timeSeries'] = key
                 thumbnailUrlList.append(imageObj)
