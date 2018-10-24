@@ -87,14 +87,23 @@ def getProcedureById(procedureID):
     try:
         sql = text("""
             SELECT pro.`id`,pat.`patient_name`, pat.`idcard_no`,
-            DATE_FORMAT(pat.`birthdate`,'%Y-%m-%d') as birthdate,
-            pat.`email`, pat.`mobile`,pat.`address`,pat.`is_smoking`,pat.`is_drinking`, 
-            pro.`patient_age`, pro.`patient_height`,pro.`patient_weight`,
-            pro.`ec_time` as ec_time,pro.`ec_count` as ec_count, pro.`insemi_time` as insemi_time,pro.`memo`,
-            COUNT(DISTINCT e.id) AS embryo_num,d.dict_value AS insemi_type 
-            FROM t_patient pat LEFT JOIN t_procedure pro ON pat.`id` = pro.`patient_id` LEFT JOIN 
-            t_embryo e ON pro.id=e.procedure_id LEFT JOIN sys_dict d ON pro.insemi_type_id=d.dict_key 
-            AND d.dict_class='insemi_type' WHERE pro.`id` = :procedureID GROUP BY pro.id
+                        DATE_FORMAT(pat.`birthdate`,'%Y-%m-%d') AS birthdate,
+                        pat.`email`, pat.`mobile`,pat.`address`,sl.`sole_name`,pat.`country`, 
+                        pat.`is_smoking`,pat.`is_drinking`, pro.`patient_age`, pro.`patient_height`,
+                        pro.`patient_weight`,pro.`ec_time` AS ec_time,pro.`ec_count` AS ec_count, 
+                        pro.`insemi_time` AS insemi_time,pro.`memo`,
+                        COUNT(DISTINCT e.id) AS embryo_num,d.dict_value AS insemi_type  
+            FROM t_patient pat 
+            LEFT JOIN t_procedure pro 
+            ON pat.`id` = pro.`patient_id` 
+            LEFT JOIN t_embryo e 
+            ON pro.id=e.procedure_id 
+            LEFT JOIN sys_dict d 
+            ON pro.insemi_type_id=d.dict_key 
+            AND d.dict_class='insemi_type' 
+            LEFT JOIN `sys_location` sl 
+            ON pat.`location_id` = sl.`id` 
+            WHERE pro.`id` = :procedureID GROUP BY pro.id
             """)
         return db.session.execute(sql, {'procedureID':procedureID}).fetchone()
     except Exception as e:

@@ -20,7 +20,7 @@ $(function(){
             $("#new_mobile").val(procedure.mobile);
             $("#new_email").val(procedure.email);
             $("#birthdate").html(procedure.birthdate);
-            $("#new_address").val(procedure.address);
+            $("#new_address").val(procedure.country + procedure.sole_name + procedure.address);
             if(procedure.is_smoking == 0){
                 procedure.is_smoking = '';
             }
