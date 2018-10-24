@@ -201,15 +201,20 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 				data : {"procedureId":$("#procedureId").val(),"dishId":$("#dishId").val(),"wellId":wellId},
 				success : function(data) {
 					if(data!=null) {
-						 thumbnailImageUrlList = data;
+						 thumbnailImageUrlList = data.thumbnailUrlList;
+						 var embryo = data.embryo;
+						 var embryoId = embryo.id;
 			    		 $(".dishbox"+wellId).html("");
-			    		 var embryoId = "";
+						 //添加胚胎结局标识
+						 var li = "<i class='" + embryo.ptjj + "'></i>";
+						 $(".dishbox"+wellId).append(li);
+						 
+						 //添加链接
+						 $(".dishbox"+wellId).append("<a  target='_blank' href='/front/embryo/?procedureId="+$("#procedureId").val()+"&dishId="+$("#dishId").val()+"&embryoId="+embryoId+"' >胚胎视图 &gt;&gt;</a>");
+			    		 //添加图片
 				    	 for(var i=0;i<thumbnailImageUrlList.length;i++) {
 				    		 var image = "";
 				    		 var obj = thumbnailImageUrlList[i];
-				    		 embryoId = obj.embryoId;
-//				    		 var thumbnailUrl = obj.thumbnailUrl.substring(obj.thumbnailUrl.length-57,obj.thumbnailUrl.length);
-//				    		 console.log(thumbnailUrl);
 				    		 if(i==0) {
 								 var image = "<img index='"+(i+1)+"' embryoId='"+embryoId+"' id='imageVideo"+obj.timeSeries+wellId+"'  src='/api/v1/well/image?image_path="+obj.thumbnailUrl+"' />";
 				    		 }else {
@@ -217,6 +222,18 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 								 $("#imageVideo"+obj.timeSeries+wellId).hide();
 				    		 }
 							 $(".dishbox"+wellId).append(image);
+							 
+							 //显示里程碑
+							 if(embryo.lcb!=null) {
+								 var lcb = embryo.lcb.split(",");
+								 for (var j = 0; j < lcb.length; j++) {
+									 var lcbArr = lcb[j].split("#");
+									 if(lcbArr[1]==obj.timeSeries) {//如果里程碑的时间序列相等，则添加里程碑的显示
+										 $(".dishbox"+wellId).append("<b>"+lcbArr[0]+"</b>");
+									 }
+								 }
+							 }
+						
 						 }
 				    	 //给孔的li增加embryoId
 						 $(".dishbox"+wellId).attr("embryoId",embryoId);
