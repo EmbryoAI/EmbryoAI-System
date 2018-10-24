@@ -876,10 +876,21 @@ function exportImg(){
 }
 
 function exportVideo(){
-    const aLink = document.createElement('a')
-    aLink.download = '孔' + wellId + '.mp4';
-    aLink.href = '/api/v1/well/video?procedure_id=' + procedureId + '&dish_id=' + dishId + '&well_id=' + wellId; 
-    aLink.dispatchEvent(new MouseEvent('click', {}))
+    $.ajax({
+        cache : false,
+        type : "GET",
+        url : "/api/v1/well/video_path?procedure_id=" + procedureId + "&dish_id=" + dishId + "&well_id=" + wellId,
+        data : "",
+        error : function(request) {
+            parent.layer.alert(request.responseText);
+        },
+        success : function(data) {
+            const aLink = document.createElement('a')
+            aLink.download = '孔' + wellId + '.mp4';
+            aLink.href = 'http://localhost/' + data;
+            aLink.dispatchEvent(new MouseEvent('click', {}))
+        }
+    });
 }
 
 function arrow(direction){

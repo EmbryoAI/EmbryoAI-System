@@ -659,3 +659,9 @@
 .info h2 .reset:hover{
 	opacity: 0.8;
 }
+.tomin{
+	float: right;
+    color: #467cdc;
+	font-weight: bolder;
+	cursor: pointer;
+}

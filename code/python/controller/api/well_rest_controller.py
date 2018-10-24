@@ -50,6 +50,15 @@ def getWellVideo():
     parser.add_argument('well_id', type=str)
     return well_service.getWellVideo(parser.parse_args())
 
+#获取所有大图生成视频的存储路径
+@well_rest_controller.route('/video_path', methods=['GET'])
+def getWellVideoPath():
+    parser = reqparse.RequestParser()
+    parser.add_argument('procedure_id', type=str)
+    parser.add_argument('dish_id', type=str)
+    parser.add_argument('well_id', type=str)
+    return well_service.getWellVideoPath(parser.parse_args())
+
 #查询培养箱
 @well_rest_controller.route('/incubator', methods=['GET'])
 def queryIncubator():
