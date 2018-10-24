@@ -318,7 +318,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             self.addClass("active"); 
             console.log(datali)
             if ( datali == 1) {
-                $('canvas').unbind();
+                
                 $('canvas').mousedown(function(e){
                     flag = true;
                     x = e.offsetX; // 鼠标落下时的X
@@ -356,12 +356,14 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                         },
                         btnAlign: 'c'
                     });
+                    $('canvas').unbind();
+		        	$(".tool-metrical li").removeClass("active");
+
                 }).mousemove(function(e){
                         drawLine(e); // 直线绘制方法
                 });
             }
             if ( datali == 2) {
-                $('canvas').unbind();
                 $('canvas').mousedown(function(e){
                     flag = true;
                     x = e.offsetX; // 鼠标落下时的X
@@ -417,6 +419,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                         },
                         btnAlign: 'c'
                     });
+                $('canvas').unbind();
+                $(".tool-metrical li").removeClass("active");
                 }).mousemove(function(e){
                         drawCircle(e); // 圆形绘制方法	
                 });
@@ -1171,4 +1175,8 @@ function node(upOrdown) {
 			layer.alert(request.responseText);
 		}
 	});
+}
+//跳转到皿视图
+function toDishView() {
+	window.location.href="/front/dish/?procedureId="+$("#procedureId").val()+"&dishId="+$("#dishId").val()+"&dishCode="+$("#dishCode").val();
 }

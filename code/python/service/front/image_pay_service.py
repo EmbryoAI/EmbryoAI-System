@@ -59,9 +59,6 @@ def queryThumbnailImageUrl(agrs):
             for key in series:
                 imageObj={}
                 thumbnailUrl = nginxImageUrl+os.path.sep+path + series[key]['focus']
-                print(nginxImageUrl)
-                print(path)
-                print(thumbnailUrl)
                 imageObj['thumbnailUrl'] = thumbnailUrl
                 imageObj['timeSeries'] = key
                 thumbnailUrlList.append(imageObj)

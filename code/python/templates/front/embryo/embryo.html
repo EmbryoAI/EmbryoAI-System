@@ -22,18 +22,13 @@ body {
 }
 </style>
 <div class="main">
-	<input type="hidden" id="procedureId" value="{{procedure_id}}"/>
-	<input type="hidden" id="dishId" value="{{dish_id}}"/>
-	<input type="hidden" id="embryoId" value="{{embryo_id}}"/>
-	<input type="hidden" id="cellCode" value="{{cell_code}}"/>
-	<input type="hidden" id="cellId" value=""/>
-	<input type="hidden" id="wellId" value=""/>
+
 	<!--孔位选择-->
 	<div class="site">
 		<h1>孔位选择</h1>
 		<ul class="siteitem" id="siteitem">
 		</ul>
-		<div class="tomin">进入皿视图→</div>
+		<div class="tomin" onclick="toDishView();">进入皿视图→</div>
 	</div>
 	<!--滚动图-->
 	<div class="scrollpic">
@@ -123,8 +118,13 @@ body {
 		<!--右边信息-->
 		<div class="info">
 			<form action="" id="milestoneForm" class="layui-form" style="background:#fff">
-				<input type="hidden" name="embryoId" value="{{embryo_id}}"/>
-				<input type="hidden" name="procedureId" value="{{procedure_id}}"/>
+				<input type="hidden" name="procedureId" id="procedureId" value="{{procedure_id}}"/>
+				<input type="hidden" id="dishId" value="{{dish_id}}"/>
+				<input type="hidden" name="embryoId" id="embryoId" value="{{embryo_id}}"/>
+				<input type="hidden" id="cellCode" value="{{cell_code}}"/>
+				<input type="hidden" id="dishCode" value="{{dishCode}}"/>
+				<input type="hidden" id="cellId" value=""/>
+				<input type="hidden" id="wellId" value=""/>
 				<input type="hidden" id="milestoneStage" name="milestoneStage"  />
 				<input type="hidden" id="milestonePath" name="milestonePath"  />
 				<input type="hidden" id="timeSeries"  name="timeSeries"  />

@@ -150,6 +150,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		var x = 0; // 鼠标开始移动的位置X
 		var y = 0; // 鼠标开始移动的位置Y
 		var url = ''; // canvas图片的二进制格式转为dataURL格式
+		var x1;
+		var y1;
 		var drwaType ='';
 		function canvasWidth(){
 			var embr = document.getElementById('embryo');
@@ -164,14 +166,12 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		
 		$(".tool-metrical li").click(function(){
             var self= $(this)
-            var x = 0;
-            var y = 0;
             var datali = $(this).attr('data-li');
 			$(".tool-metrical li").removeClass("active");
             self.addClass("active"); 
             console.log(datali)
             if ( datali == 1) {
-                $('canvas').unbind();
+                // $('canvas').unbind();
                 $('canvas').mousedown(function(e){
                     flag = true;
                     x = e.offsetX; // 鼠标落下时的X
@@ -180,10 +180,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 }).mouseup(function(e){
                     flag = false;
                     url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
-                    x = e.offsetX; // 鼠标起时的X
-                    y = e.offsetY; // 鼠标起下时的Y
-                    console.log('x2='+x,y)
-//                      var length = Math.round(Math.sqrt(Math.abs((x1 - x)* (x1 - x)+(y1 - y)* (y1 - y))));
+                    x1 = e.offsetX; // 鼠标起时的X
+                    y1 = e.offsetY; // 鼠标起下时的Y
+                    console.log('x2='+x1,y1)
                         $('#length').text(length);
     
                         layer.open({
@@ -202,21 +201,23 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                         },
                         btnAlign: 'c'
                     });
+					// console.log($(this))
+					$('canvas').unbind();
                 }).mousemove(function(e){
                         drawLine(e); // 直线绘制方法
                 });
             }
             if ( datali == 2) {
-                $('canvas').unbind();
+                // $('canvas').unbind();
                 $('canvas').mousedown(function(e){
                     flag = true;
-                    x1,x = e.offsetX; // 鼠标落下时的X
-                    y1,y = e.offsetY; // 鼠标落下时的Y
+                    x = e.offsetX; // 鼠标落下时的X
+                    y = e.offsetY; // 鼠标落下时的Y
                 }).mouseup(function(e){
                     flag = false;
                     url = $('canvas')[0].toDataURL(); // 每次 mouseup 都保存一次画布状态
-                    x = e.offsetX; // 鼠标起时的X
-                    y = e.offsetY; // 鼠标起下时的Y
+                    x1 = e.offsetX; // 鼠标起时的X
+                    y1 = e.offsetY; // 鼠标起下时的Y
                     var rx = (e.offsetX-x1);
                     var ry = (e.offsetY-y1);
                     var r = Math.round(Math.sqrt(rx*rx+ry*ry));
@@ -239,6 +240,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                         },
                         btnAlign: 'c'
                     });
+					$('canvas').unbind();
                 }).mousemove(function(e){
                         drawCircle(e); // 圆形绘制方法	
                 });

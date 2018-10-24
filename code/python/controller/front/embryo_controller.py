@@ -20,13 +20,16 @@ def main():
     parser.add_argument('dishId', type=str)
     parser.add_argument('embryoId', type=str)
     parser.add_argument('cellCode', type=str)
+    parser.add_argument('dishCode', type=str)
+    
 
     agrs = parser.parse_args()
     procedureId = agrs['procedureId']
     dishId = agrs['dishId']
     embryoId = agrs['embryoId']
     cellCode = agrs['cellCode']
-    return render_template('front/embryo/embryo.html', procedure_id=procedureId, dish_id=dishId, embryo_id=embryoId, cell_code=cellCode)
+    dishCode = agrs['dishCode']
+    return render_template('front/embryo/embryo.html', procedure_id=procedureId, dish_id=dishId, embryo_id=embryoId, cell_code=cellCode,dishCode=dishCode)
 
 @embryo_controller.route('/toEmbryo', methods=['GET'])
 @login_required
