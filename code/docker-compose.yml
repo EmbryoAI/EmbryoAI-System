@@ -7,10 +7,10 @@ services:
     ports:
       - "6001:6001"
     volumes:
-      - /Users/wangying/git/repos/EmbryoAI-System/code/captures:/captures
+      - $CAPTURE_DIR:/captures
   embryoai-image:
     build: nginx-docker/
     ports:
       - "80:80"
     volumes:
-      - /Users/wangying/git/repos/EmbryoAI-System/code/captures:/usr/share/nginx/html
+      - $CAPTURE_DIR:/usr/share/nginx/html
