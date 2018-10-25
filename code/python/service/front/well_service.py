@@ -100,7 +100,7 @@ def getWellVideo(agrs):
         #目录不存在则创建目录
         os.makedirs(video_path)
 
-    video_name = video_path + os.path.sep + pd.imagePath + f'_DISH{dishCode}_{well_id}.mp4'
+    video_name = video_path + os.path.sep + pd.imagePath + f'_DISH{dishCode}_{well_id}.webm'
     print(video_name)
 
     font_name = ImageFont.truetype('NotoSansCJK-Black.ttc', 30)
@@ -108,7 +108,7 @@ def getWellVideo(agrs):
     color = (0, 0, 0)
 
     fps = 5 #每秒几帧
-    fourcc = cv2.VideoWriter_fourcc(*'DIVX')
+    fourcc = cv2.VideoWriter_fourcc(*'WEBM')
     videoWriter = cv2.VideoWriter(video_name,fourcc,fps,(1280,960))
 
     jsonPath = path + conf['DISH_STATE_FILENAME']
@@ -136,6 +136,72 @@ def getWellVideo(agrs):
 
     cap = open(video_name,'rb').read()
     return cap
+
+def getWellVideoPath(agrs):
+    import cv2
+    import numpy as np
+    from PIL import Image, ImageDraw, ImageFont
+    from task.TimeSeries import serie_to_time
+
+    procedure_id = agrs['procedure_id']
+    procedure_result = procedure_mapper.getProcedureById(procedure_id)
+    patient_name = procedure_result['patient_name']
+    dish_id = agrs['dish_id']
+    well_id = agrs['well_id']
+
+    #先获取视频保存目录
+    dish = dish_mapper.queryById(dish_id)
+    if not dish : 
+        return None
+        
+    dishCode = dish.dishCode
+    pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id, dish_id)
+    path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
+    video_path = path + 'video'
+
+    #判断该目录是否存在
+    video_path_exists = os.path.exists(video_path)
+    if not video_path_exists:
+        #目录不存在则创建目录
+        os.makedirs(video_path)
+
+    video_name = video_path + os.path.sep + pd.imagePath + f'_DISH{dishCode}_{well_id}.mp4'
+
+    video_exists = os.path.exists(video_name)
+    if not video_exists:
+        font_name = ImageFont.truetype('NotoSansCJK-Black.ttc', 30)
+        font_time = ImageFont.truetype('NotoSansCJK-Black.ttc', 20)
+        color = (0, 0, 0)
+
+        fps = 5 #每秒几帧
+        fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+        videoWriter = cv2.VideoWriter(video_name,fourcc,fps,(1280,960))
+
+        jsonPath = path + conf['DISH_STATE_FILENAME']
+        with open(f'{jsonPath}', 'r') as fn :
+            dishJson = json.loads(fn.read())
+        seris_json = dishJson['wells'][f'{well_id}']['series']
+        for series in seris_json:
+            image_name = seris_json[series]['sharp']
+            image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep \
+                + f'DISH{dishCode}' + os.path.sep + series + os.path.sep + image_name 
+            frame = cv2.imread(image_path)
+            img_pil = Image.fromarray(frame)
+            draw = ImageDraw.Draw(img_pil)
+            draw.text((50, 10), patient_name, font=font_name, fill=color)
+            hour, minute = serie_to_time(series)
+            draw.text((1150, 10), f'{hour:02d} H {minute:02d} M', font=font_time, fill=color)
+            # if seris_json[series]['stage']:
+                # draw.text((1150, 30), seris_json[series]['stage'], font=font_time, fill=color)
+            frame = np.asarray(img_pil)
+
+            # frame = cv2.resize(frame,(1280,960))
+
+            videoWriter.write(frame)
+        videoWriter.release()
+    download_path = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + pd.imagePath + os.path.sep \
+             + f'DISH{dishCode}' + os.path.sep  + 'video' + os.path.sep + pd.imagePath + f'_DISH{dishCode}_{well_id}.mp4'
+    return jsonify(download_path)
 
 #查询培养箱
 def queryIncubator():

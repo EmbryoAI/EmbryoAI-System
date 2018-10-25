@@ -55,12 +55,13 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             success : function(data) {
                 var well = "";
                 var wellList = data.well_list;
-
+                var cellCode = $('#cellCode').val();
                 for(var i=0;i<wellList.length;i++){
-                    if(i == 0){
+                    if((i+1) == cellCode){
                         well = well + "<li id=\"li_" + i + "\" class=\"active\" onclick=\"querySeriesList('" + wellList[i].well_code 
                         + "','lastEmbryoSerie',0,'" +  wellList[i].well_id + "')\"><span onclick=\"clickLi('" + i + "')\">well" + 
                         wellList[i].well_code + "</span></li>";
+                        cellId = wellList[i].well_id;
                     }else{
                         well = well + "<li id=\"li_" + i + "\" onclick=\"querySeriesList('" + wellList[i].well_code 
                         + "','lastEmbryoSerie',0,'" +  wellList[i].well_id + "')\"><span onclick=\"clickLi('" + i + "')\">well" + 
@@ -71,8 +72,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 
                
                 $("#siteitem").html(well);
-                wellId = wellList[0].well_code;
-                cellId = wellList[0].well_id;
+                wellId = cellCode;
+                
                 querySeriesList(wellId,'lastEmbryoSerie',0, cellId);//获取每个孔下面的时间序列
                 if(clearImageUrlList=="") {
                 	queryClearImageUrl();//初始化所有图片
@@ -317,7 +318,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             self.addClass("active"); 
             console.log(datali)
             if ( datali == 1) {
-                $('canvas').unbind();
+                
                 $('canvas').mousedown(function(e){
                     flag = true;
                     x = e.offsetX; // 鼠标落下时的X
@@ -331,7 +332,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     console.log("放开的坐标"+x1,y1)
                     var rx = (x1-x);
                     var ry = (y1-y);
-                    var r = Math.sqrt(rx*rx+ry*ry);
+                    var r = Math.sqrt(rx*rx+ry*ry); 
                     r = Math.round(r*(1280 / 932)/3.75);
                     $('#length').text(r);
 
@@ -355,12 +356,14 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                         },
                         btnAlign: 'c'
                     });
+                    $('canvas').unbind();
+		        	$(".tool-metrical li").removeClass("active");
+
                 }).mousemove(function(e){
                         drawLine(e); // 直线绘制方法
                 });
             }
             if ( datali == 2) {
-                $('canvas').unbind();
                 $('canvas').mousedown(function(e){
                     flag = true;
                     x = e.offsetX; // 鼠标落下时的X
@@ -376,10 +379,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                     var rx = (x1-x);
                     var ry = (y1-y);
                     var r = Math.sqrt(rx*rx+ry*ry);
-                    r = Math.round(r*(960/612)/3.75);
+                    r = Math.round(r*(1280/932)/3.75);
                     $('#diameter').text(r);
-                    var area = Math.PI * r/2 * r/2;
-                    area = Math.round(area*(1280 / 932) ** 2 / (3.75**2));
+                    var area = Math.round(Math.PI * r/2 * r/2);
                     $('#area').text(area);
                     layer.open({
                         type: 1,
@@ -417,6 +419,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                         },
                         btnAlign: 'c'
                     });
+                $('canvas').unbind();
+                $(".tool-metrical li").removeClass("active");
                 }).mousemove(function(e){
                         drawCircle(e); // 圆形绘制方法	
                 });
@@ -824,7 +828,7 @@ function preFrame(){
             parent.layer.alert(request.responseText);
         },
         success : function(data) {
-            querySeriesList(wellId,currentSeris,0, cellId);
+            querySeriesList(wellId,data,0, cellId);
         }
     });
 }
@@ -847,7 +851,7 @@ function nextFrame(){
             if(data == null){
                 parent.layer.alert("已经是最后一张了!");
             }else{
-                querySeriesList(wellId,currentSeris,0, cellId);
+                querySeriesList(wellId,data,0, cellId);
             }
         }
     });
@@ -876,10 +880,26 @@ function exportImg(){
 }
 
 function exportVideo(){
-    const aLink = document.createElement('a')
-    aLink.download = '孔' + wellId + '.mp4';
-    aLink.href = '/api/v1/well/video?procedure_id=' + procedureId + '&dish_id=' + dishId + '&well_id=' + wellId; 
-    aLink.dispatchEvent(new MouseEvent('click', {}))
+    var loadMsg = parent.layer.msg('视频导出中，请耐心等待', {
+        icon: 16
+        ,shade: 0.3,time:0
+    });
+    $.ajax({
+        cache : false,
+        type : "GET",
+        url : "/api/v1/well/video_path?procedure_id=" + procedureId + "&dish_id=" + dishId + "&well_id=" + wellId,
+        data : "",
+        error : function(request) {
+            parent.layer.alert(request.responseText);
+        },
+        success : function(data) {
+            const aLink = document.createElement('a')
+            aLink.download = '孔' + wellId + '.mp4';
+            aLink.href = data;
+            aLink.dispatchEvent(new MouseEvent('click', {}))
+            parent.layer.close(loadMsg);
+        }
+    });
 }
 
 function arrow(direction){
@@ -1146,7 +1166,8 @@ function node(upOrdown) {
 		cache:false,
 		success : function(data) {
 			 if(data!=null) {
-				 getBigImage(procedureId, dishId, wellId, data.milestoneTime,0, cellId,currentSerisName);
+				 querySeriesList(wellId, data.milestoneTime, 0, cellId);
+//				 getBigImage(procedureId, dishId, wellId, data.milestoneTime,0, cellId,currentSerisName);
 			 }else {
 				 if("up"==upOrdown) {
 					 layer.alert("当前已经是第一个里程碑了!");
@@ -1159,4 +1180,8 @@ function node(upOrdown) {
 			layer.alert(request.responseText);
 		}
 	});
+}
+//跳转到皿视图
+function toDishView() {
+	window.location.href="/front/dish/?procedureId="+$("#procedureId").val()+"&dishId="+$("#dishId").val()+"&dishCode="+$("#dishCode").val();
 }

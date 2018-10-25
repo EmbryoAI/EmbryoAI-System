@@ -287,7 +287,6 @@
 	position: absolute;
 	left: 50%;
 	transform: translateX(-50%);
-	
 }
 .time-list span.active i{
 	display: inline-block;
@@ -304,4 +303,25 @@
 .time-list span.active,.time-list span:hover{
 	transform:scale(1.1);
 	background: url(../img/icon-timel.png) no-repeat top center;
+}
+.dishimg li b{
+	position: absolute;
+	bottom: 2px;
+	left: 2px;
+	display: block;
+	padding: 2px;
+	color: #fff;
+	z-index: 99;
+	background: #4e4d4c;
+}
+.dishimg li a{
+	position: absolute;
+	bottom: 2px;
+	right: 2px;
+	display: block;
+	padding: 2px;
+	color: #fff;
+	z-index: 99;
+	text-shadow: 1px 1px 0px rgba(0,0,0,1);
+	cursor: pointer;
 }
