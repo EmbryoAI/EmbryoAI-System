@@ -100,7 +100,7 @@ def getWellVideo(agrs):
         #目录不存在则创建目录
         os.makedirs(video_path)
 
-    video_name = video_path + os.path.sep + pd.imagePath + f'_DISH{dishCode}_{well_id}.mp4'
+    video_name = video_path + os.path.sep + pd.imagePath + f'_DISH{dishCode}_{well_id}.webm'
     print(video_name)
 
     font_name = ImageFont.truetype('NotoSansCJK-Black.ttc', 30)
@@ -108,7 +108,7 @@ def getWellVideo(agrs):
     color = (0, 0, 0)
 
     fps = 5 #每秒几帧
-    fourcc = cv2.VideoWriter_fourcc(*'DIVX')
+    fourcc = cv2.VideoWriter_fourcc(*'WEBM')
     videoWriter = cv2.VideoWriter(video_name,fourcc,fps,(1280,960))
 
     jsonPath = path + conf['DISH_STATE_FILENAME']
@@ -174,7 +174,7 @@ def getWellVideoPath(agrs):
         color = (0, 0, 0)
 
         fps = 5 #每秒几帧
-        fourcc = cv2.VideoWriter_fourcc(*'DIVX')
+        fourcc = cv2.VideoWriter_fourcc(*'MP4V')
         videoWriter = cv2.VideoWriter(video_name,fourcc,fps,(1280,960))
 
         jsonPath = path + conf['DISH_STATE_FILENAME']
