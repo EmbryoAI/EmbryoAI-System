@@ -15,7 +15,7 @@ JOBS:
   - id: "embryo_job"
     func: "task.embryo_task:run"
     trigger: "interval"
-    seconds: 10
+    seconds: 300
 SCHEDULER_API_ENABLED: true
 
 EMBRYOAI_IMAGE_ROOT: "/Users/wangying/git/repos/EmbryoAI-System/models/demo0"
@@ -31,4 +31,4 @@ NO_EMBRYO_IMAGE_URL: "cv/embryo_not_found.jpg"
 KERAS_MODEL_NAME: "embryo_model.h5"
 EMBRYO_PREDICT_SIZE: 200
 
-STATIC_NGINX_IMAGE_URL: http://39.104.173.18:8085
+STATIC_NGINX_IMAGE_URL: http://localhost

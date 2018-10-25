@@ -1,0 +1,16 @@
+version: "3"
+services:
+  mysql:
+    image: "mysql:5.6"
+  embryoai-sys:
+    build: .
+    ports:
+      - "6001:6001"
+    volumes:
+      - /Users/wangying/git/repos/EmbryoAI-System/code/captures:/captures
+  embryoai-image:
+    build: nginx-docker/
+    ports:
+      - "80:80"
+    volumes:
+      - /Users/wangying/git/repos/EmbryoAI-System/code/captures:/usr/share/nginx/html
