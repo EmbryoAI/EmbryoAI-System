@@ -353,6 +353,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                         }
                         ,btn2: function(index, layero){
                             clearCanvas()
+                        },cancel: function(){ 
+                            clearCanvas()
                         },
                         btnAlign: 'c'
                     });
@@ -415,6 +417,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                             }
                         }
                         ,btn2: function(index, layero){
+                            clearCanvas()
+                        },cancel: function(){ 
                             clearCanvas()
                         },
                         btnAlign: 'c'
