@@ -135,8 +135,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 	});
 	laydate.render({
 			elem: '#iui',
-			format: 'yyyy-MM-dd',
-			max: 0
+			format: 'yyyy-MM-dd HH:mm',
+			max: 0,
+			type: 'datetime',
 	});
 
 	
