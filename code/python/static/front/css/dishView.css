@@ -39,9 +39,9 @@
 	border: 1px solid #b2b2b2;
 	border-radius: 4px;
 	float: left;
-	margin-bottom: 10px;
+	margin-bottom: 30px;
 	margin-right: 10px;
-	overflow: hidden;
+	/* overflow: hidden; */
 	position: relative;
 	background:  url(../img/icon-noemb.jpg) no-repeat center;
 }
@@ -83,6 +83,12 @@
 }
 .dishimg i.hold{
 	background: url(../img/icon-dish5.png) no-repeat center top;
+}
+.dishimg li div {
+    width: 160px;
+    margin: auto;
+    height: 160px;
+    overflow: hidden;
 }
 .dishimg li img{
 	width: 100%;
@@ -338,12 +344,12 @@
 }
 .dishimg li a{
 	position: absolute;
-	bottom: 2px;
+	bottom: -22px;
 	right: 2px;
 	display: block;
 	padding: 2px;
-	color: #fff;
+	color: #3c83f7;
 	z-index: 99;
-	text-shadow: 1px 1px 0px rgba(0,0,0,1);
+	/* text-shadow: 1px 1px 0px rgba(0,0,0,1); */
 	cursor: pointer;
 }
