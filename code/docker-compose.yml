@@ -4,12 +4,9 @@ services:
     image: "mysql:5.6"
     ports:
       - "3306:3306"
-    enviornment:
+    environment:
       - MYSQL_ROOT_PASSWORD: 123456
       - MYSQL_DATABASE: embryoai_system_db
-    depends_on:
-      embryoai-sys:
-        condition: service_healthy
     volumes:
       - $DB_DIR:/var/lib/mysql
       - sql/embryoai_system_db_1_0.sql:/docker-entrypoint-initdb.d/embryoai_system_db_1_0.sql
