@@ -9,7 +9,7 @@ services:
       - MYSQL_DATABASE:embryoai_system_db
     volumes:
       - $DB_DIR:/var/lib/mysql
-      // - ./sql/embryoai_system_db_1_0.sql:/docker-entrypoint-initdb.d/embryoai_system_db_1_0.sql
+      # - ./sql/embryoai_system_db_1_0.sql:/docker-entrypoint-initdb.d/embryoai_system_db_1_0.sql
 
   embryoai-sys:
     build: .
