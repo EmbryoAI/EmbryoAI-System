@@ -619,7 +619,7 @@ function resetData(){
 }
 
 function loadingZIndex(procedureId,dishId,wellId,timeSeries){
-
+    // alert("procedureId:"+procedureId+"--dishId:"+dishId+"--wellId:"+wellId+"--timeSeries:"+timeSeries);
     //加载z轴所以节点，并渲染
     $.ajax({
         cache : false,
@@ -632,14 +632,13 @@ function loadingZIndex(procedureId,dishId,wellId,timeSeries){
         success : function(data) {
             var zLi = "";
             if(data.code == 200 && data.data != null){
-                var i = data.data.fileStart;
-                var length = data.data.fileEnd;
+                var length = data.data.fileEnd - data.data.fileStart;
                 acquisitionTime = data.data.imagePath;
                 path = data.data.path;
                 var sharpJpg = data.data.sharp;
                 zData = data.data.zIndexFiles;
-                for (;i < length; i++) {
-                    if(sharpJpg == zData[i]) {
+                for (var i = 1;i <= length; i++) {
+                    if(sharpJpg === zData[i]) {
                         sharpZIndex = i;
                         zLi = "<li class='active' onclick=checkZIndex('"+ procedureId +"','"+ dishId +"','"+ wellId +"','"+ timeSeries +"','" + i + "') zindex=" + i + " zjpg='" + zData[i] + "'><b></b></li>" + zLi;
                     } else {
@@ -678,6 +677,7 @@ function loadingZIndex(procedureId,dishId,wellId,timeSeries){
 }
 
 function checkZIndex(procedureId,dishId,wellId,timeSeries,zIndex){
+    // alert("procedureId:"+procedureId+"--dishId:"+dishId+"--wellId:"+wellId+"--timeSeries:"+timeSeries+"--zIndex:"+zIndex);
     $('.time-vertical li').removeClass('active');
     $('.time-vertical li[zIndex='+zIndex+']').addClass('active');
     loadingImage(procedureId,dishId,wellId,timeSeries,zIndex);
@@ -686,6 +686,7 @@ function checkZIndex(procedureId,dishId,wellId,timeSeries,zIndex){
 }
 
 function loadingImage(procedureId,dishId,wellId,timeSeries,zIndex){
+    //alert("procedureId:"+procedureId+"--dishId:"+dishId+"--wellId:"+wellId+"--timeSeries:"+timeSeries+"--zIndex:"+zIndex);
     if(zIndex == null || zIndex == '' || sharpZIndex == zIndex){
         $("#distinctDiv").show();
         $("#distinct").prop("disabled",true);
