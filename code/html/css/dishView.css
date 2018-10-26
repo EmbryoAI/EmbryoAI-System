@@ -87,6 +87,11 @@
 	border-right: 1px solid #b4b6d5;
 	padding-right: 10px;
 }
+.dishimg li div{
+	width: 156px;
+	margin: auto;
+	height: 156px;
+}
 .dishimg li img{
 	width: 100%;
 }
