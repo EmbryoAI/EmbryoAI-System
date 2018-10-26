@@ -113,7 +113,7 @@ function loadNewestDish(){
                     if(wellUrls !== null && wellUrls !== ""){
                         divData = divData + '总时间: <span>' + data[i].times + '</span></p>';
                         for (let j = 0; j < wellUrls.length; j++) {
-                            divData = divData + '<a href="/front/embryo/toEmbryo?imagePath=' + data[i].imagePath + '&dishId=' + data[i].dishId + '&wellCode=' + wellUrls[j].wellId + '" target="_blank"><img src="/api/v1/well/image?image_path=' + wellUrls[j].url + '"></a>';
+                            divData = divData + '<a href="/front/embryo/toEmbryo?imagePath=' + data[i].imagePath + '&dishId=' + data[i].dishId + '&wellCode=' + wellUrls[j].wellId + '&dishCode=' + data[i].dishCode + '" target="_blank"><img src="/api/v1/well/image?image_path=' + wellUrls[j].url + '"></a>';
                         }
                         if(wellUrls.length < 12){
                             for (let j = wellUrls.length; j < 12; j++) {

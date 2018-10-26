@@ -40,6 +40,11 @@ def toEmbryo():
     parser.add_argument('imagePath', type=str)
     parser.add_argument('dishId', type=str)
     parser.add_argument('wellCode', type=str)
+    parser.add_argument('dishCode', type=str)
+
+    agrs = parser.parse_args()
+    wellCode = agrs['wellCode']
+    dishCode = agrs['dishCode']
     
-    procedureId,dishId,embryoId = embryo_service.findEmbroyoInfo(parser.parse_args())
-    return render_template('front/embryo/embryo.html', procedure_id=procedureId, dish_id=dishId, embryo_id=embryoId)
+    procedureId,dishId,embryoId = embryo_service.findEmbroyoInfo(agrs)
+    return render_template('front/embryo/embryo.html', procedure_id=procedureId, dish_id=dishId, embryo_id=embryoId,cell_code=wellCode,dishCode=dishCode)
