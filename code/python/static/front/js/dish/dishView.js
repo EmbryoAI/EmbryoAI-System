@@ -222,8 +222,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 						 lcbobj["wellId"] = wellId;
 						 lcbobj["lcb"] = embryo.lcb;
 						 lcbqj.push(lcbobj);
-						 
+
 						 //添加图片
+						 var imgDiv = $("<div></div>")
 				    	 for(var i=0;i<thumbnailImageUrlList.length;i++) {
 				    		 var image = "";
 				    		 var obj = thumbnailImageUrlList[i];
@@ -234,9 +235,10 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 								 var image = "<img index='"+(i+1)+"' embryoId='"+embryoId+"' id='imageVideo"+obj.timeSeries+wellId+"'  src='"+obj.thumbnailUrl+"' />";
 								 $("#imageVideo"+obj.timeSeries+wellId).hide();
 				    		 }
-							 $(".dishbox"+wellId).append(image);
+							 $(imgDiv).append(image);
 							
 						 }
+						 $(".dishbox"+wellId).append(imgDiv);
 				    	 //给孔的li增加embryoId
 						 $(".dishbox"+wellId).attr("embryoId",embryoId);
 						 $(".dishbox"+wellId).attr("wellCode",wellId);
