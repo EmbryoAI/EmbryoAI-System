@@ -245,7 +245,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             var imageVideoId = $(".lg-video-img img:eq(" + n + ")").attr("id");
             var timeSeries =  imageVideoId.substring(10,imageVideoId.length);
             
-            getBigImage(procedureId, dishId, wellId, timeSeries,1,cellId, currentSerisName);//定位到对应的时间序列
+            querySeriesList(wellId, timeSeries, 1, cellId);
+            
+//            getBigImage(procedureId, dishId, wellId, timeSeries,1,cellId, currentSerisName);//定位到对应的时间序列
             //记录一下当前暂停图片的URL
             imgVideoZt = $(".lg-video-img img:eq(" + n + ")").attr("id");
             
