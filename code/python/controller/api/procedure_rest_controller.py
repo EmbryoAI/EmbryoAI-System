@@ -42,6 +42,14 @@ def queryMedicalRecordNoList():
     logger().info('进入procedure_controller.queryMedicalRecordNoList')
     return procedure_service.queryMedicalRecordNoList(request)
 
+#查询根据输入值补全病历号和病人姓名
+@procedure_rest_controller.route('/no/name/list', methods=['GET'])
+@login_required
+def queryMedicalRecordNoAndNameList():
+    logger().info('进入procedure_controller.queryMedicalRecordNoAndNameList')
+    return procedure_service.queryMedicalRecordNoAndNameList(request)
+
+
 #根据id删除病历
 @procedure_rest_controller.route('/delete/<string:id>', methods=['GET'])
 @login_required

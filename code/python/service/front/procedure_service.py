@@ -11,7 +11,7 @@ import time
 import dao.front.dict_dao as dict_dao
 from task.TimeSeries import TimeSeries,serie_to_time
 from collections import OrderedDict
-
+from app import conf
 
 def queryProcedureList(request):
     try:
@@ -127,6 +127,22 @@ def queryMedicalRecordNoList(request):
        procedureList = list(map(dict, result))
        return jsonify(procedureList)
    
+def queryMedicalRecordNoAndNameList(request):
+     #动态组装查询条件
+    sqlCondition = " where 1=1 " #动态sql
+    filters = {}#动态参数
+    limit = request.args.get('limit')#查询多少条
+    query = request.args.get('query')#当前输入值
+    if query!=None and query!="":
+        filters['query']="%"+query+"%"
+        sqlCondition += " and a.label like :query "
+        
+    sqlCondition += " limit "+limit
+    result = procedure_mapper.queryMedicalRecordNoAndNameList(sqlCondition,filters)
+    procedureList = list(map(dict, result))
+    return jsonify(procedureList)
+   
+   
 #删除病历
 def deleteProcedure(id):
     try:
@@ -141,7 +157,7 @@ def queryProcedureViewList(request):
     try:
         medicalRecordNo = request.args.get('medicalRecordNo')
         if medicalRecordNo==None:
-            return 400, '病历号不能为空!'
+            return 400, '病历号或病人姓名不能为空!'
         
         #查询字典表里程碑的节点
         result = dict_dao.queryDictListByClass("milestone")
@@ -198,7 +214,7 @@ def queryProcedureViewList(request):
             resObj=OrderedDict()
             resObj["patient"] = patient
             resObj["procedureViewList"] = procedureViewList
-                
+            resObj["imageRoot"] = conf['EMBRYOAI_IMAGE_ROOT']
             return 200,resObj
         else:
             return 200,None
