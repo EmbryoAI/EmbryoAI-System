@@ -215,7 +215,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 						 $(".dishbox"+wellId).append(li);
 						 
 						 //添加链接
-						 $(".dishbox"+wellId).append("<a  target='_blank' href='/front/embryo/?procedureId="+$("#procedureId").val()+"&dishId="+$("#dishId").val()+"&embryoId="+embryoId+"&cellCode="+wellId+"' >胚胎视图 &gt;&gt;</a>");
+						 $(".dishbox"+wellId).append("<a  target='_blank' href='/front/embryo/?procedureId="+$("#procedureId").val()+"&dishId="+$("#dishId").val()+"&embryoId="+embryoId+"&cellCode="+wellId+"&dishCode="+$("#dishCode").val()+"' >胚胎视图 &gt;&gt;</a>");
 			    		 
 						 //添加里程碑
 						 var lcbobj = new Object();

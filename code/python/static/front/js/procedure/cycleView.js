@@ -64,7 +64,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     $('#medicalRecordNo').autocompleter({
     	highlightMatches : true,
     	minLength : 3,
-    	source : '/api/v1/procedure/no/list',
+    	source : '/api/v1/procedure/no/name/list',
     		cache : false
 
     	});

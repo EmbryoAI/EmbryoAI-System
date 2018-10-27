@@ -223,8 +223,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             	$("#imgDiv").hide();
             	$("#zIndexDiv").hide();
             	$("#imgVideoDiv").show();
-                imgTime = setInterval(run, 1000);
-
+                imgTime = setInterval(run, 200);
+                
             } else {
             	//播放完成 或者 暂停调用
             	payWc();
