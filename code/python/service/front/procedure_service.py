@@ -11,7 +11,7 @@ import time
 import dao.front.dict_dao as dict_dao
 from task.TimeSeries import TimeSeries,serie_to_time
 from collections import OrderedDict
-
+from app import conf
 
 def queryProcedureList(request):
     try:
@@ -214,7 +214,7 @@ def queryProcedureViewList(request):
             resObj=OrderedDict()
             resObj["patient"] = patient
             resObj["procedureViewList"] = procedureViewList
-                
+            resObj["imageRoot"] = conf['EMBRYOAI_IMAGE_ROOT']
             return 200,resObj
         else:
             return 200,None

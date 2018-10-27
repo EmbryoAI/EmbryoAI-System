@@ -748,7 +748,7 @@ function querySeriesList(wellId, serisCode, type, cellId){
                 if(series[i]["series_image_path"].indexOf("embryo_not_found") != -1){
                     imagePath = "/static/front/img/loc-emb.png";
                 }
-                $("#thumbnailPath").val(series[i]["series_image_path"]);
+                
                 var active = "<div class=\"swiper-slide\" id='" + series[i]["series_code"] + "_div'>";
                 seris = seris + active + "<img id='" + series[i]["series_code"] + "' src=\"" + 
                                     imagePath +"\" onclick=\"getBigImage('" + procedureId + "','" + dishId + 
@@ -926,7 +926,7 @@ function arrow(direction){
                 if(series[i]["series_image_path"].indexOf("embryo_not_found") != -1){
                     imagePath = "/static/front/img/loc-emb.png";
                 }
-                $("#thumbnailPath").val(series[i]["series_image_path"]);
+                
                 var active = "<div class=\"swiper-slide\" id='" + series[i]["series_code"] + "_div'>";
                 seris = seris + active + "<img id='" + series[i]["series_code"] + "' src=\"" + 
                                     imagePath +"\" onclick=\"getBigImage('" + procedureId + "','" + dishId + 
@@ -981,9 +981,15 @@ function chushihua(dictClass) {
 
 //初始化以及页面回显   采集目录 、时间序列、 图片路径、图片名称, 周期ID, 皿ID
 function ini(acquisitionTime,timeSeries,path,imageName) {
+	 
     //由于使用的layUI的表单提交，需要把值复制到表单中
 	$("#milestoneStage").val(acquisitionTime);
-	$("#milestonePath").val(path+timeSeries+"\\"+imageName);
+	var mipath = path.substring(path.indexOf("captures")+9,path.length);
+	$("#milestonePath").val(mipath+timeSeries+"\\"+imageName);
+	
+	var thpath = $("#"+timeSeries).attr("src").substring($("#"+timeSeries).attr("src").indexOf("captures")+9,$("#"+timeSeries).attr("src").length);
+	$("#thumbnailPath").val(thpath);
+	
 	$("#timeSeries").val(timeSeries);
 	//根据胚胎ID查询该胚胎ID是否有里程碑，如果有则进行回显
 	$.ajax({
