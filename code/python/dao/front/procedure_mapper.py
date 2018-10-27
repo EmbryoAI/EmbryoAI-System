@@ -92,7 +92,8 @@ def getProcedureById(procedureID):
                         pat.`is_smoking`,pat.`is_drinking`, pro.`patient_age`, pro.`patient_height`,
                         pro.`patient_weight`,pro.`ec_time` AS ec_time,pro.`ec_count` AS ec_count, 
                         pro.`insemi_time` AS insemi_time,pro.`memo`,
-                        COUNT(DISTINCT e.id) AS embryo_num,d.dict_value AS insemi_type  
+                        COUNT(DISTINCT e.id) AS embryo_num,d.dict_value AS insemi_type,
+                        CONCAT('D',DATEDIFF(IF(pro.cap_end_time,pro.cap_end_time,NOW()),pro.insemi_time)) AS zzjd 
             FROM t_patient pat 
             LEFT JOIN t_procedure pro 
             ON pat.`id` = pro.`patient_id` 
@@ -265,6 +266,9 @@ def getEmbryoFateCount(medicalRecordNo,embryoFateId):
     except Exception as e:
         raise DatabaseError('根据主键ID查询病历时异常', e.message, e)
         return None
+    finally:
+        db.session.remove()
+
 
 def save(procedure):
     try :
@@ -274,5 +278,41 @@ def save(procedure):
         db.session.rollback()
         print_exc()
         raise DatabaseError('新增周期数据时发生错误', e.message, e)
+    finally:
+        db.session.remove()
+
+#查询所有采集结束时间为空的数据
+def queryCollectList():
+    try:
+        sql = text("""
+            SELECT t.id AS procedureId,td.dish_id AS dishId,td.image_path AS imagePath  
+            FROM t_procedure t
+            LEFT JOIN t_procedure_dish td
+            ON t.id = td.procedure_id
+            WHERE t.cap_end_time IS NULL 
+        """)
+        return db.session.execute(sql).fetchall()
+    except Exception as e:
+        raise DatabaseError('查询所有采集结束时间为空的数据时发生错误', e.message, e)
+        return None
+    finally:
+        db.session.remove()
+
+#根据周期ID修改 采集开始时间 和 采集结束时间
+def updateCollect(procedureId,capStartTime,capEndtime):
+    try :
+        sql = text("""
+            UPDATE t_procedure 
+            SET
+            cap_start_time =:capStartTime, 
+            cap_end_time =:capEndtime
+            WHERE id =:procedureId
+        """)
+        db.session.execute(sql,{'capStartTime':capStartTime,'capEndtime':capEndtime,'procedureId':procedureId})
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError('设置里程碑时发生错误!', e.message, e)
     finally:
         db.session.remove()

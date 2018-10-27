@@ -672,6 +672,7 @@ function getProcedureInfo(procedureId){
 			$('#memo').html(procedure.memo);
 			$('#mobile').val(procedure.mobile);
 			$('#email').val(procedure.email);
+			$('#zzjd').html(procedure.zzjd);
 		},
 		error : function(request) {
 			layer.alert(request.responseText);

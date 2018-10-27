@@ -89,7 +89,7 @@ def readDishState(procedureId,dishId):
             return None,None,None
         # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
         jsonPath = path + conf['DISH_STATE_FILENAME']
-        logger().info(jsonPath)
+      
         with open(f'{jsonPath}', 'r') as fn :
             dishJson = json.loads(fn.read())
         # if dishJson['finished'] & dishJson['avail'] == 1 :

@@ -16,6 +16,10 @@ JOBS:
     func: "task.embryo_task:run"
     trigger: "interval"
     seconds: 300
+  - id: "collect_time_job"
+    func: "task.collect_time_task:run"
+    trigger: "interval"
+    seconds: 300
 SCHEDULER_API_ENABLED: true
 
 EMBRYOAI_IMAGE_ROOT: "/Users/wangying/git/repos/EmbryoAI-System/models/demo0"
