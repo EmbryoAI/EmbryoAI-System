@@ -325,7 +325,7 @@ def addProcedure(request):
             for i in range(0, len(dish_code), 2):
                 imagePath = dish_code[i+1]
                 code = dish_code[i][-1]
-                dish = dish_mapper.getByDishCode(code)
+                dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, code)
                 if not dish:
                     dishId = uuid()
                     dish = Dish(id=dishId, incubatorId=incubator.id, dishCode=code, createTime=createTime,
@@ -348,7 +348,7 @@ def addProcedure(request):
             cell_mapper.save(cell)
             #胚胎表新增记录
             embryoId = uuid()
-            embryo = Embryo(id=embryoId, embryoIndex=i, procedureId=procedureId, cellId=cellId, embryoFateId=4)
+            embryo = Embryo(id=embryoId, embryoIndex=i, procedureId=procedureId, cellId=cellId)
             embryo_mapper.save(embryo)
 
     except:
