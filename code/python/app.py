@@ -12,6 +12,7 @@ import logging
 import os
 from keras.models import load_model
 from flask_apscheduler import APScheduler
+import sys
 
 # from minio import Minio
 # from minio.error import (ResponseError, BucketAlreadyOwnedByYou,
@@ -19,10 +20,10 @@ from flask_apscheduler import APScheduler
 
 app_root = os.path.dirname(__file__) + os.path.sep
 
-def read_yml_config( filename=app_root + 'configuration.yml'):
+def read_yml_config( filename=app_root + 'configuration.yml', env='dev'):
     '''从yaml文件中读取配置'''
     with open(filename, 'r') as fn:
-        return load(fn.read())        
+        return load(fn.read())[env]
 
 def init_config(conf):
     '''初始化app的基本配置'''
@@ -45,7 +46,11 @@ def init_config(conf):
     app.config['SECRET_KEY'] = getdefault(conf, 'SECRET_KEY', '123456')
 
 app = Flask(__name__) # EmbryoAI系统Flask APP
-conf = read_yml_config()
+if len(sys.argv) < 2 or sys.argv[-1] == 'dev' or sys.argv[-1] not in ('stage', 'prod'):
+    conf = read_yml_config()
+    conf['EMBRYOAI_IMAGE_ROOT'] = app_root + '..' + os.path.sep + 'captures' + os.path.sep
+else:
+    conf = read_yml_config(env=sys.argv[-1])
 init_config(conf)
 db = SQLAlchemy(app) # 此APP要用到的数据库连接，由ORM框架SQLAlchemy管理
 login_manager = LoginManager()
@@ -57,7 +62,8 @@ logger = app.logger
 # minioClient = Minio(conf["MINIO_IP_PORT"],access_key=conf["MINIO_ACCESS_KEY"],secret_key=conf["MINIO_SECRET_KEY"],secure=False)
 
 # 指定开发测试用的数据目录，发布版本应该屏蔽下面这句代码
-conf['EMBRYOAI_IMAGE_ROOT'] = app_root + '..' + os.path.sep + 'captures' + os.path.sep
+
+
 
 @app.teardown_request
 def shutdown_session(exc=None):
