@@ -22,7 +22,7 @@ app_root = os.path.dirname(__file__) + os.path.sep
 
 def read_yml_config( filename=app_root + 'configuration.yml', env='dev'):
     '''从yaml文件中读取配置'''
-    with open(filename, 'r') as fn:
+    with open(filename, 'rb') as fn:
         return load(fn.read())[env]
 
 def init_config(conf):
