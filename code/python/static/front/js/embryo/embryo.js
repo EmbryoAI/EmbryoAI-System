@@ -19,6 +19,7 @@ var current_seris_image_path = "";
 var imgVideoZt = "";
 var embryoId = "";
 var currentSerisName = "";
+var firstSeris = "";
 var n = 0;
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     form = layui.form;
@@ -912,6 +913,10 @@ function exportVideo(){
 }
 
 function arrow(direction){
+    if(firstSeris == '0000000'){
+        layer.alert('前面已经没有时间序列了!');
+        return;
+    }
     cellId = $("#cellId").val();
     wellId = $("#wellId").val();
     $.ajax({
@@ -941,6 +946,12 @@ function arrow(direction){
             $("#myscrollboxul").html(seris);
             $("#xltext").html(currentSerisName);
             $("#" + data.last_series + "_div").attr("class", "swiper-slide active")
+
+            if(currentSeris == data.last_series){
+                layer.alert('后面已经没有时间序列了!');
+            }
+
+            firstSeris = series[0].series_code;
             currentSeris = data.last_series;
             //loadingImage(procedureId,dishId,wellId,currentSeris,'');
             //loadingZIndex(procedureId,dishId,wellId,currentSeris);

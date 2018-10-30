@@ -97,7 +97,8 @@ def queryScrollbarSeriesList(agrs):
     procedure_id = agrs['procedure_id']
     dish_id = agrs['dish_id']
     well_id = agrs['well_id']
-    current_seris = agrs['current_seris']
+    #current_seris = agrs['current_seris']
+    current_seris = '6200000'
     direction = agrs['direction']
     cell_id = agrs['cell_id']
 
@@ -122,16 +123,16 @@ def queryScrollbarSeriesList(agrs):
     ts = TimeSeries()
 
     last_serie = dishJson['lastSerie']
-
     if direction == 'left':
         if len(ts.range(current_seris)) < 11:
             begin_index = 0
             last_index = 11
             current_seris = ts[5]
         else:
-            print(len(ts.range(current_seris)))
             current_seris = ts[len(ts.range(current_seris)) - 11]
             begin_index = len(ts.range(current_seris)) - 5
+            if begin_index <= 0:
+                begin_index = 0
             last_index = begin_index + 11
 
     if direction == 'right':
@@ -149,6 +150,8 @@ def queryScrollbarSeriesList(agrs):
     embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, cell_id)
 
     list=[]
+    print('begin_index:', begin_index)
+    print('last_index:', last_index)
     for i in ts[begin_index:last_index]:
         #查询序列对应的里程碑节点信息
         milestone_type = ""
