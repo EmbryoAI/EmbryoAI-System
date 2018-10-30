@@ -165,9 +165,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 					$('#dishImageUl li span').remove('.standard');
 					self.addClass('active');
 					self.append("<span class='standard' ></span>")
-					// var wellCode = self.attr("wellCode");
-					// $("#time_box_div").show();
-					// loadTimeline(wellCode);
+					 var wellCode = self.attr("wellCode");
+					 $("#time_box_div").show();
+					 loadTimeline(wellCode);
 					
 					var imageVideoId = $("#dishImageUl .active img:eq(" + n + ")").attr("id");
 					currentSeris = imageVideoId.substring(10,imageVideoId.length-1);;//设置基准胚胎的时间序列

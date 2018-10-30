@@ -13,9 +13,10 @@ def queryClearImageUrl(agrs):
     dishId = agrs['dishId']
     wellId = agrs['wellId']
     zData = {}
+    nginxImageUrl = getdefault(conf, 'STATIC_NGINX_IMAGE_URL', "http://localhost:80")
     try:
         #获取JSON文件
-        imagePath,path,dishJson = image_service.readDishState(procedureId,dishId)
+        path,dishJson = image_service.getImagePath(procedureId,dishId)
         clearImageUrlList=[]
         
         if dishJson['finished'] & dishJson['avail'] == 1 : 
@@ -24,8 +25,7 @@ def queryClearImageUrl(agrs):
             series = oneWell['series']
             for key in series:
                 imageObj={}
-                clearImageUrl = path + key + os.path.sep + series[key]['sharp']
-                imageObj['clearImageUrl'] = clearImageUrl
+                imageObj['clearImageUrl'] = nginxImageUrl + os.path.sep+ path + key + os.path.sep + series[key]['sharp']
                 imageObj['timeSeries'] = key
                 clearImageUrlList.append(imageObj)
         if not clearImageUrlList:
