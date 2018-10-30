@@ -97,8 +97,7 @@ def queryScrollbarSeriesList(agrs):
     procedure_id = agrs['procedure_id']
     dish_id = agrs['dish_id']
     well_id = agrs['well_id']
-    #current_seris = agrs['current_seris']
-    current_seris = '6200000'
+    current_seris = agrs['current_seris']
     direction = agrs['direction']
     cell_id = agrs['cell_id']
 
