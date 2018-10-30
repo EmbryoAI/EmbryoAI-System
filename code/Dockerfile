@@ -5,4 +5,4 @@ WORKDIR /tmp
 RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
 ADD python/ /embryoai-sys
 WORKDIR /
-CMD ["python", "/embryoai-sys/app.py"]
+CMD ["python", "/embryoai-sys/app.py", "stage"]
