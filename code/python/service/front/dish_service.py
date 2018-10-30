@@ -264,7 +264,7 @@ def emAll(dishId):
                         lcb = lcbjd.split("#")
                         if dictObj['dictValue'] == lcb[0]: #如果相等的话
                             hour, minute = serie_to_time(lcb[2])
-                            value = lcb[1]+","+ f'{hour:02d}H{minute:02d}M'
+                            value = conf['EMBRYOAI_IMAGE_ROOT']+lcb[1]+","+ f'{hour:02d}H{minute:02d}M'
                             break
                     tableObj[dictObj['dictValue']] = value
             else:
