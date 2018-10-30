@@ -125,7 +125,11 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 				var today = new Date();
 				var now = today.getFullYear();
 				var result = parseInt(now) - parseInt(year);
-				$('#patientAge').val(result);
+				if(birthdate == ''){
+					$('#patientAge').val(0);
+				}else{
+					$('#patientAge').val(result);
+				}
 			}
 	});
 	laydate.render({
