@@ -24,8 +24,14 @@ def main():
 @procedure_controller.route('/view', methods=['GET'])
 @login_required
 def view():
+    parser = reqparse.RequestParser()
+    parser.add_argument('medicalRecordNo', type=str)
+
+    agrs = parser.parse_args()
+    medicalRecordNo = agrs['medicalRecordNo']
+    
     logger().info('进入procedure_controller.procedureView胚胎周期视图页面')
-    return render_template('front/procedure/procedureView.html',htmlType="incubator")
+    return render_template('front/procedure/procedureView.html',htmlType="incubator",medicalRecordNo=medicalRecordNo)
 
 @procedure_controller.route('/<string:id>', methods=['GET'])
 @login_required

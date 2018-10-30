@@ -64,11 +64,14 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     $('#medicalRecordNo').autocompleter({
     	highlightMatches : true,
     	minLength : 3,
-    	source : '/api/v1/procedure/no/name/list',
+    	source : '/api/v1/procedure/no/list',
     		cache : false
 
     	});
-	
+  //如果 初始化页面时，病历号不为空，则直接查询
+    if("!empty $('#medicalRecordNo').val()") {
+    	listView();
+    }
 })
 
     //由于动态表头，需要使用静态转换成动态，首先初始化静态表格
@@ -157,5 +160,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 			}
 		});
     }
+
 
 

@@ -1,38 +1,116 @@
+dev:
+  SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@39.104.173.18:3306/embryoai_system_db?charset=utf8"
+  SQLALCHEMY_POOL_RECYCLE: 3
+  SQLALCHEMY_POOL_SIZE: 100
+  SQLALCHEMY_POOL_TIMEOUT: 3
+  SQLALCHEMY_MAX_OVERFLOW: 300
+  SQLALCHEMY_COMMIT_ON_TEARDOWN: true
+  SEND_FILE_MAX_AGE_DEFAULT: 1
+  PORT: 6001
+  DEBUG: false
+  THREADED: true
+  LOGGER_FILE: "./embryoai.log"
+  SECRET_KEY: "123456"
+  JOBS:
+    - id: "embryo_job"
+      func: "task.embryo_task:run"
+      trigger: "interval"
+      seconds: 60
+    - id: "collect_time_job"
+      func: "task.collect_time_task:run"
+      trigger: "interval"
+      seconds: 60
+  SCHEDULER_API_ENABLED: true
 
-SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@39.104.173.18:3306/embryoai_system_db?charset=utf8"
-SQLALCHEMY_POOL_RECYCLE: 3
-SQLALCHEMY_POOL_SIZE: 100
-SQLALCHEMY_POOL_TIMEOUT: 3
-SQLALCHEMY_MAX_OVERFLOW: 300
-SQLALCHEMY_COMMIT_ON_TEARDOWN: true
-SEND_FILE_MAX_AGE_DEFAULT: 1
-PORT: 6001
-DEBUG: false
-THREADED: true
-LOGGER_FILE: "./embryoai.log"
-SECRET_KEY: "123456"
-JOBS:
-  - id: "embryo_job"
-    func: "task.embryo_task:run"
-    trigger: "interval"
-    seconds: 300
-  - id: "collect_time_job"
-    func: "task.collect_time_task:run"
-    trigger: "interval"
-    seconds: 300
-SCHEDULER_API_ENABLED: true
+  EMBRYOAI_IMAGE_ROOT: "../captures/"
+  FINISHED_JSON_FILENAME: "finished_cycles.json"
+  CYCLE_PROCESS_FILENAME: "process_state.json"
+  DISH_STATE_FILENAME: "dish_state.json"
+  FINISHED_CYCLES: "finished_cycles.json"
+  EMBRYO_FOCUS_DIRNAME: "focus"
+  ACTIVE_TIMEOUT: 3600
+  CASCADE_TEMPLATE: "embryo_cascade.xml"
+  NO_EMBRYO_IMAGE_URL: "cv/embryo_not_found.jpg"
 
-EMBRYOAI_IMAGE_ROOT: "/Users/wangying/git/repos/EmbryoAI-System/models/demo0"
-FINISHED_JSON_FILENAME: "finished_cycles.json"
-CYCLE_PROCESS_FILENAME: "process_state.json"
-DISH_STATE_FILENAME: "dish_state.json"
-FINISHED_CYCLES: "finished_cycles.json"
-EMBRYO_FOCUS_DIRNAME: "focus"
-ACTIVE_TIMEOUT: 3600
-CASCADE_TEMPLATE: "embryo_cascade.xml"
-NO_EMBRYO_IMAGE_URL: "cv/embryo_not_found.jpg"
+  KERAS_MODEL_NAME: "embryo_model.h5"
+  EMBRYO_PREDICT_SIZE: 200
 
-KERAS_MODEL_NAME: "embryo_model.h5"
-EMBRYO_PREDICT_SIZE: 200
+  STATIC_NGINX_IMAGE_URL: http://localhost
 
-STATIC_NGINX_IMAGE_URL: http://39.104.173.18:8085
+stage:
+  SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@39.104.173.18:3306/embryoai_system_db?charset=utf8"
+  SQLALCHEMY_POOL_RECYCLE: 3
+  SQLALCHEMY_POOL_SIZE: 100
+  SQLALCHEMY_POOL_TIMEOUT: 3
+  SQLALCHEMY_MAX_OVERFLOW: 300
+  SQLALCHEMY_COMMIT_ON_TEARDOWN: true
+  SEND_FILE_MAX_AGE_DEFAULT: 1
+  PORT: 6001
+  DEBUG: false
+  THREADED: true
+  LOGGER_FILE: "./embryoai.log"
+  SECRET_KEY: "123456"
+  JOBS:
+    - id: "embryo_job"
+      func: "task.embryo_task:run"
+      trigger: "interval"
+      seconds: 300
+    - id: "collect_time_job"
+      func: "task.collect_time_task:run"
+      trigger: "interval"
+      seconds: 300
+  SCHEDULER_API_ENABLED: true
+
+  EMBRYOAI_IMAGE_ROOT: "/captures"
+  FINISHED_JSON_FILENAME: "finished_cycles.json"
+  CYCLE_PROCESS_FILENAME: "process_state.json"
+  DISH_STATE_FILENAME: "dish_state.json"
+  FINISHED_CYCLES: "finished_cycles.json"
+  EMBRYO_FOCUS_DIRNAME: "focus"
+  ACTIVE_TIMEOUT: 3600
+  CASCADE_TEMPLATE: "embryo_cascade.xml"
+  NO_EMBRYO_IMAGE_URL: "cv/embryo_not_found.jpg"
+
+  KERAS_MODEL_NAME: "embryo_model.h5"
+  EMBRYO_PREDICT_SIZE: 200
+
+  STATIC_NGINX_IMAGE_URL: http://39.104.173.18:8085
+
+prod:
+  SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@localhost:3306/embryoai_system_db?charset=utf8"
+  SQLALCHEMY_POOL_RECYCLE: 3
+  SQLALCHEMY_POOL_SIZE: 100
+  SQLALCHEMY_POOL_TIMEOUT: 3
+  SQLALCHEMY_MAX_OVERFLOW: 300
+  SQLALCHEMY_COMMIT_ON_TEARDOWN: true
+  SEND_FILE_MAX_AGE_DEFAULT: 1
+  PORT: 6001
+  DEBUG: false
+  THREADED: true
+  LOGGER_FILE: "./embryoai.log"
+  SECRET_KEY: "123456"
+  JOBS:
+    - id: "embryo_job"
+      func: "task.embryo_task:run"
+      trigger: "interval"
+      seconds: 900
+    - id: "collect_time_job"
+      func: "task.collect_time_task:run"
+      trigger: "interval"
+      seconds: 300
+  SCHEDULER_API_ENABLED: true
+
+  EMBRYOAI_IMAGE_ROOT: "" # 实际生产环境的图像采集路径
+  FINISHED_JSON_FILENAME: "finished_cycles.json"
+  CYCLE_PROCESS_FILENAME: "process_state.json"
+  DISH_STATE_FILENAME: "dish_state.json"
+  FINISHED_CYCLES: "finished_cycles.json"
+  EMBRYO_FOCUS_DIRNAME: "focus"
+  ACTIVE_TIMEOUT: 3600
+  CASCADE_TEMPLATE: "embryo_cascade.xml"
+  NO_EMBRYO_IMAGE_URL: "cv/embryo_not_found.jpg"
+
+  KERAS_MODEL_NAME: "embryo_model.h5"
+  EMBRYO_PREDICT_SIZE: 200
+
+  STATIC_NGINX_IMAGE_URL: "" # 实际生产环境的nginx地址

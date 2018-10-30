@@ -43,7 +43,7 @@ def run():
                         series = oneWell['series']
                         for key in series:
                             seriesList.append(key)
-                    except e:
+                    except Exception as e:
                          seriesList = seriesList
            timeSeries = max(seriesList)
            print(timeSeries)

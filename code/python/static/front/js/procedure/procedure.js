@@ -145,7 +145,7 @@ layui
 										{
 											field : 'insemi_time',
 											title : '授精时间',
-											width : 160,
+											width : 180,
 											sort : true
 											,templet:'<div>{{Format(d.insemi_time,"yyyy-MM-dd hh:mm")}}</div>'
 										},
@@ -158,7 +158,7 @@ layui
 											title : '最终阶段',
 										},
 										{
-											width : 180,
+											width : 160,
 											field : 'state',
 											title : '状态',
 										},
@@ -187,12 +187,13 @@ layui
 										}, {
 											field : 'operation',
 											title : '操作',
-											width : 240,
+											width : 320,
 											templet : function(d) {
-												var a="<a style='cursor: pointer;' class='layui-table-link report'>报告</a>";
-												var b="<a style='cursor: pointer;' onclick='toReturnVisit(\""+d.id+"\")' class='layui-table-link return'>回访</a>";
-												var c="<a style='cursor: pointer;' onclick='deleteProcedure(\""+d.id+"\");' class='layui-table-link del'>删除</a>";
-												return a+b+c;
+												var a="<a style='cursor: pointer;' target='_blank' href='/front/procedure/view?medicalRecordNo="+d.medical_record_no+"' class='layui-table-link report'>周期视图</a>";
+												var b="<a style='cursor: pointer;' class='layui-table-link report'>报告</a>";
+												var c="<a style='cursor: pointer;' onclick='toReturnVisit(\""+d.id+"\")' class='layui-table-link return'>回访</a>";
+												var d="<a style='cursor: pointer;' onclick='deleteProcedure(\""+d.id+"\");' class='layui-table-link del'>删除</a>";
+												return  a+b+c+d;
 											}
 										} ] ]
 							});

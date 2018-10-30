@@ -181,7 +181,7 @@ def emAll(dishId):
         sql = text('''
             SELECT e.embryo_index AS codeIndex, 
             SUM(da.pn_id) AS pnId,
-                GROUP_CONCAT(m.milestone_time ORDER BY m.milestone_time) lcb,
+                GROUP_CONCAT(dict1.dict_value,"#",m.thumbnail_path,"#",m.milestone_time ORDER BY m.milestone_time) lcb,
                 e.embryo_score AS score ,dict2.dict_value AS embryoFate
                 FROM t_embryo e
                 LEFT JOIN t_procedure t
@@ -192,6 +192,8 @@ def emAll(dishId):
                 ON m.id = da.milestone_id AND da.pn_id IS NOT NULL
                 LEFT JOIN t_procedure_dish td
                 ON t.id=td.procedure_id
+            LEFT JOIN sys_dict dict1
+            ON m.milestone_id = dict1.dict_key AND dict1.dict_class='milestone' 
             LEFT JOIN sys_dict dict2
             ON e.embryo_fate_id = dict2.dict_key AND dict2.dict_class='embryo_fate_type' 
                 WHERE td.dish_id =:dishId
