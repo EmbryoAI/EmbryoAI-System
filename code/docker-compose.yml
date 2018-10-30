@@ -21,6 +21,6 @@ services:
   embryoai-image:
     build: nginx-docker/
     ports:
-      - "80:80"
+      - "8085:80"
     volumes:
       - $CAPTURE_DIR:/usr/share/nginx/html

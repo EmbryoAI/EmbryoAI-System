@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM registry.docker-cn.com/python:3.6
 RUN apt update && apt install fonts-noto-cjk
 ADD python/requirements.txt /tmp/requirements.txt
 WORKDIR /tmp
