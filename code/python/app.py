@@ -46,11 +46,11 @@ def init_config(conf):
     app.config['SECRET_KEY'] = getdefault(conf, 'SECRET_KEY', '123456')
 
 app = Flask(__name__) # EmbryoAI系统Flask APP
-if len(sys.argv) < 3 or sys.argv[2] == 'dev' or sys.argv[2] not in ('stage', 'prod'):
+if len(sys.argv) < 2 or sys.argv[-1] == 'dev' or sys.argv[-1] not in ('stage', 'prod'):
     conf = read_yml_config()
     conf['EMBRYOAI_IMAGE_ROOT'] = app_root + '..' + os.path.sep + 'captures' + os.path.sep
 else:
-    conf = read_yml_config(argv[2])
+    conf = read_yml_config(env=sys.argv[-1])
 init_config(conf)
 db = SQLAlchemy(app) # 此APP要用到的数据库连接，由ORM框架SQLAlchemy管理
 login_manager = LoginManager()
