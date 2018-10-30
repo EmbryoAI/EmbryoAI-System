@@ -157,7 +157,7 @@ def queryProcedureViewList(request):
     try:
         medicalRecordNo = request.args.get('medicalRecordNo')
         if medicalRecordNo==None:
-            return 400, '病历号或病人姓名不能为空!'
+            return 400, '病历号不能为空!'
         
         #查询字典表里程碑的节点
         result = dict_dao.queryDictListByClass("milestone")

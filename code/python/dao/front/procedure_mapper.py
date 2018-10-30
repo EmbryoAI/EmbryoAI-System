@@ -214,10 +214,10 @@ def queryProcedureViewList(medicalRecordNo):
         ON m.milestone_id = dict1.dict_key AND dict1.dict_class='milestone' 
         LEFT JOIN sys_dict dict2
         ON e.embryo_fate_id = dict2.dict_key AND dict2.dict_class='embryo_fate_type' 
-            WHERE (t.medical_record_no = :medicalRecordNo or pa.patient_name = :medicalRecordNo)
+            WHERE  t.medical_record_no = :medicalRecordNo 
             GROUP BY e.id       
         """)
-        return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo,'medicalRecordNo':medicalRecordNo}).fetchall()
+        return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo}).fetchall()
     except Exception as e:
         raise DatabaseError('根据主键ID查询病历时异常', e.message, e)
         return None
@@ -239,10 +239,10 @@ def getPatientByMedicalRecordNo(medicalRecordNo):
                 ON t.patient_id = p.id
               LEFT JOIN  t_embryo e
                ON e.procedure_id = t.id
-            WHERE (t.medical_record_no = :medicalRecordNo or p.patient_name = :medicalRecordNo)
+            WHERE  t.medical_record_no = :medicalRecordNo 
             GROUP BY t.id
         """)
-        return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo,'medicalRecordNo':medicalRecordNo}).fetchone()
+        return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo}).fetchone()
     except Exception as e:
         raise DatabaseError('根据根据病历号查询患者信息异常', e.message, e)
         return None
@@ -260,9 +260,9 @@ def getEmbryoFateCount(medicalRecordNo,embryoFateId):
             ON t.patient_id=pa.id 
               LEFT JOIN t_embryo e
                 ON e.procedure_id = t.id
-            WHERE (t.medical_record_no = :medicalRecordNo or pa.patient_name = :medicalRecordNo) AND e.embryo_fate_id=:embryoFateId
+            WHERE  t.medical_record_no = :medicalRecordNo  AND e.embryo_fate_id=:embryoFateId
         """)
-        return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo,'medicalRecordNo':medicalRecordNo,'embryoFateId':embryoFateId}).fetchone()[0]
+        return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo,'embryoFateId':embryoFateId}).fetchone()[0]
     except Exception as e:
         raise DatabaseError('根据主键ID查询病历时异常', e.message, e)
         return None

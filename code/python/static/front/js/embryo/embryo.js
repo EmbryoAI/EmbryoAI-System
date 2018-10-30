@@ -764,8 +764,8 @@ function querySeriesList(wellId, serisCode, type, cellId){
             $("#embryoId").val(embryoId);
 
             currentSeris = data.last_series;
+            loadingImage(procedureId,dishId,wellId,currentSeris,'');
             if(type==0) {
-            	loadingImage(procedureId,dishId,wellId,currentSeris,'');
             	queryClearImageUrl();//初始化所有图片
             	n = 0;
             	
