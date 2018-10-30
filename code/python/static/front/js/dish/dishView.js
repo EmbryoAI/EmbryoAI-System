@@ -248,21 +248,22 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 					 
 					if(wellId==12) {
 						var firstWellCode = 0;
-						for (let i = 1; i < 12; i++) {
-							var imgCount = $(".dishbox"+i).children("img").length
+						for (let i = 1; i <= 12; i++) {
+							var imgCount = $(".dishbox"+i+" div").children("img").length
 							if(imgCount > 1){
 								firstWellCode = i;
 								break;
 							}
 						}
 						if(firstWellCode !== 0){
-							// 设置为基准胚胎
+							// 设置第一个有图的孔为基准胚胎
 							$('.dishbox'+firstWellCode).addClass('active');
 							$('.dishbox'+firstWellCode).append("<span class='standard' ></span>");
 					
 							var imageVideoId = $("#dishImageUl .active img:eq(" + n + ")").attr("id");
 							currentSeris = imageVideoId.substring(10,imageVideoId.length-1);;//设置基准胚胎的时间序列
 
+							//根据基准胚胎加载时间轴
 							loadTimeline(firstWellCode);
 						}
 						setTimeout(function(){layer.close(jaindex);},5000);
@@ -705,6 +706,7 @@ function checkTimelien(serie){
 	var endPage = $("#timePageDiv i:last").attr("page");
 	var divData = "";
 	var showPage = 0;
+	currentSeris = serie;
 	for (let i = 1; i <= endPage ; i++) {
 		var pageSerie = $("#timePageDiv i[page='" + i + "'").attr("beginSerie");
 		if(parseInt(serie) === parseInt(pageSerie)){

@@ -331,6 +331,8 @@ def addProcedure(request):
                     dish = Dish(id=dishId, incubatorId=incubator.id, dishCode=code, createTime=createTime,
                                 updateTime=updateTime)
                     dish_mapper.save(dish)
+                else:
+                    dishId = dish.id
                 pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId, code)
                 if not pd:
                     procedureDishId = uuid()
