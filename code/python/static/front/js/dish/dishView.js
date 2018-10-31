@@ -209,7 +209,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 						 var embryo = data.embryo;
 						 var embryoId = embryo.id;
 			    		 $(".dishbox"+wellId).html("<b id='b"+wellId+"'></b>");
-			    		 
+			    		 $(".dishbox"+wellId).html(" <strong>well"+wellId+"</strong>");
 						 //添加胚胎结局标识
 						 var li = "<i class='" + embryo.ptjj + "'></i>";
 						 $(".dishbox"+wellId).append(li);
