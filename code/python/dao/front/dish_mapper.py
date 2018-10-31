@@ -23,7 +23,7 @@ def findDishByIncubatorId(params):
             LEFT JOIN sys_cell sc ON sd.id = sc.dish_id AND sc.del_flag = 0
             LEFT JOIN t_procedure_dish tpd ON sd.id = tpd.dish_id AND tpd.image_path = :imagePath
             LEFT JOIN t_embryo te ON sc.id = te.cell_id AND sc.del_flag = 0 AND tpd.procedure_id = te.procedure_id
-            LEFT JOIN t_procedure tp ON tp.id = tpd.procedure_id
+            LEFT JOIN t_procedure tp ON tp.id = tpd.procedure_id and tp.del_flag = 0
             LEFT JOIN t_patient p ON tp.patient_id = p.id
             LEFT JOIN sys_dict dict ON tp.insemi_type_id = dict.dict_key AND dict.dict_class = 'insemi_type'
             LEFT JOIN (
@@ -137,7 +137,7 @@ def queryDishByImagePath(imagePath) :
             FROM sys_dish sd
             LEFT JOIN t_procedure_dish tpd ON sd.id = tpd.dish_id
             LEFT JOIN sys_incubator si ON sd.incubator_id = si.id
-            WHERE tpd.image_path = :imagePath
+            WHERE tpd.image_path = :imagePath  and  sd.del_flag = 0
         ''')
         print(sql)
         

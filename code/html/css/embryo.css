@@ -239,7 +239,7 @@
     list-style-type: none;
     border-left: 2px solid #eed426;
     padding:6px 0px;
-	margin-left: 11px;
+	margin-left: 14px;
 }
  
 .time-vertical li{
@@ -664,4 +664,22 @@
     color: #467cdc;
 	font-weight: bolder;
 	cursor: pointer;
+}
+.zarrowU,.zarrowD{
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	background: url(../img/yellow-arrowU.png) no-repeat top center;
+	cursor: pointer;
+	margin: 5px 0;
+	opacity: 0.9;
+	transition: all 0.3s;
+}
+.zarrowD{
+	margin-top: 20px;
+	background: url(../img/yellow-arrowD.png) no-repeat top center;
+}
+.zarrowU:hover,.zarrowD:hover{
+	transform:scale(1.2);
+	opacity: 1;
 }
