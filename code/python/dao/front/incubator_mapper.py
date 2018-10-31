@@ -13,10 +13,16 @@ def save(incubator):
         db.session.rollback()
         print_exc()
         raise DatabaseError('新增培养箱数据时发生错误', e.message, e)
+    finally:
+        db.session.remove()
 
 def getByIncubatorCode(incubatorCode):
-    rs = db.session.query(Incubator).filter(Incubator.incubatorCode == incubatorCode).one_or_none()
-    db.session.remove()
-    return rs
+    try:
+        return db.session.query(Incubator).filter(Incubator.incubatorCode == incubatorCode).one_or_none()
+    except Exception as e:
+        raise DatabaseError("根据培养箱编码获培养箱对象异常！",e.message,e)
+        return None
+    finally:
+        db.session.remove()
 
 
