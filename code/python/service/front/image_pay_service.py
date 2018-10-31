@@ -63,7 +63,7 @@ def queryThumbnailImageUrl(agrs):
                 imageObj['timeSeries'] = key
                 thumbnailUrlList.append(imageObj)
                 
-            """根据皿ID和孔序号获取孔ID ，再根据周期ID和孔ID 获取 胚胎ID"""
+            """根据动态条件获取胚胎ID、孔ID、胚胎结局、里程碑等相关信息  """
             if embryoId == None:
                 sql = " t.procedure_id = :procedureId AND sc.dish_id = :dishId AND sc.cell_code = :cellCode "
                 filters = {'procedureId': procedureId,'dishId':dishId,'cellCode':wellId}

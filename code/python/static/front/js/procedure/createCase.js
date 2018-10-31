@@ -194,9 +194,9 @@ function queryDish(incubatorName){
 		}
 	});
 
-	form.on('input(birthdate)', function(data){
-		alert(1);
-     });  
+//	form.on('input(birthdate)', function(data){
+//		alert(1);
+//     });  
 }
 
 function addCase(){
@@ -210,13 +210,14 @@ function addCase(){
 		layer.alert('请选择培养皿!');
 		return;
 	}
-
+	$("#addCaseButton").attr("disabled", true).attr("value","创建中..."); 
 	$.ajax({
 		cache : false,
 		type : "post",
 		url : "/api/v1/procedure/add",
 		data : $('#procedureForm').serialize(),// 你的formid
 		error : function(request) {
+			$("#addCaseButton").attr("disabled", false).attr("value","创建病历"); 
 			layer.alert(request.responseText);
 		},
 		success : function(data) {
