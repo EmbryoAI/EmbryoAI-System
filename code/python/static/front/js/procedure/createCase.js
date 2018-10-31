@@ -49,6 +49,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 		}
 		$('#dish').empty();
 		$('#dish').val(dishName);
+		
 
 		if(length>=2){
 			if($(this).hasClass('active')){
@@ -59,12 +60,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 					url : "/api/v1/embryo/number?dishCode=" + dishName,
 					datatype : "json",
 					success : function(data) {
-						//$('#embryo_number').val(data.length);
-						embryoNumber = data.length;
-						embryoCount = embryoCount - embryoNumber;
+						embryoCount = embryoCount - data;
 						$('#embryo_number').val(embryoCount);
-
-						$('#well_id').val(data);
 					},
 					error : function(request) {
 						layer.alert(request.responseText);
@@ -80,12 +77,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 				url : "/api/v1/embryo/number?dishCode=" + dishName,
 				datatype : "json",
 				success : function(data) {
-					//$('#embryo_number').val(data.length);
-					embryoNumber = data.length;
-					embryoCount = embryoNumber - embryoCount;
+					embryoCount = data - embryoCount;
 					$('#embryo_number').val(embryoCount);
-
-					$('#well_id').val(data);
 				},
 				error : function(request) {
 					layer.alert(request.responseText);
@@ -98,12 +91,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 				url : "/api/v1/embryo/number?dishCode=" + dishName,
 				datatype : "json",
 				success : function(data) {
-					//$('#embryo_number').val(data.length);
-					embryoNumber = data.length;
-					embryoCount = embryoNumber + embryoCount;
+					embryoCount = data + embryoCount;
 					$('#embryo_number').val(embryoCount);
-
-					$('#well_id').val(data);
 				},
 				error : function(request) {
 					layer.alert(request.responseText);

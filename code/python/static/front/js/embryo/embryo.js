@@ -1168,7 +1168,7 @@ function queryClearImageUrl() {
 			 if(data!=null) {
 				 clearImageUrlList = data;
 		    	 for(var i=0;i<clearImageUrlList.length;i++) {
-					 var image = "<img style='display:none' index="+(i+1)+"  id='imageVideo"+clearImageUrlList[i].timeSeries+"' src='"+clearImageUrlList[i].clearImageUrl+"' />";
+					 var image = "<img style='display:none' index="+(i)+"  id='imageVideo"+clearImageUrlList[i].timeSeries+"' src='"+clearImageUrlList[i].clearImageUrl+"' />";
 					 $("#imgVideoDiv").append(image);
 				 }
 			 }

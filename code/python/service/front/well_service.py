@@ -16,44 +16,37 @@ from task.TimeSeries import TimeSeries
 
 
 def queryWellList(procedureId, dishId):
-    try :
-        dish = dish_mapper.queryById(dishId)
-        if not dish : 
-            return None
-            
-        dishCode = dish.dishCode
-        pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId,dishId)
-        path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
-        if not os.path.isdir(path) :
-            return None
-            
-        # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
-        jsonPath = path + conf['DISH_STATE_FILENAME']
-        logger().info(jsonPath)
-        with open(f'{jsonPath}', 'r') as fn :
-            dishJson = json.loads(fn.read())
-
+    dish = dish_mapper.queryById(dishId)
+    if not dish : 
+        return None
         
-        from entity.Well import Well
-        from entity.WellResult import WellResult
-        list=[]
-        for key in dishJson['wells']:
-            last_seris = dishJson['wells'][key]['lastEmbryoSerie']
-            image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + dishJson['wells'][key]['series'][last_seris]['focus']
-            cell = cell_mapper.getCellByDishIdAndCellCode(dishId, key)
-            if not cell:
-                logger().info("查询孔数据异常")
-                return None
-            well = Well(key, image_path, cell.id)
-            list.append(well.__dict__)
+    dishCode = dish.dishCode
+    pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId,dishId)
+    path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
+    if not os.path.isdir(path) :
+        return None
+        
+    # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
+    jsonPath = path + conf['DISH_STATE_FILENAME']
+    with open(f'{jsonPath}', 'r') as fn :
+        dishJson = json.loads(fn.read())
 
-        wellResult = WellResult(200, 'OK', list)
+    from entity.Well import Well
+    from entity.WellResult import WellResult
+    list=[]
+    for key in dishJson['wells']:
+        last_seris = dishJson['wells'][key]['lastEmbryoSerie']
+        image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + dishJson['wells'][key]['series'][last_seris]['focus']
+        cell = cell_mapper.getCellByDishIdAndCellCode(dishId, key)
+        if not cell:
+            logger().info("查询孔数据异常")
+            return None
+        well = Well(key, image_path, cell.id)
+        list.append(well.__dict__)
 
-        return jsonify(wellResult.__dict__)
-    except : 
-        logger().info("读取dishState.json文件出现异常")
-        wellResult = WellResult(400, 'FAIL', None)
-        return jsonify(wellResult.__dict__)
+    wellResult = WellResult(200, 'OK', list)
+
+    return jsonify(wellResult.__dict__)
 
 def getWellImage(agrs):
     image_path = agrs['image_path']

@@ -14,7 +14,7 @@
 	<link rel="stylesheet" type="text/css" href="css/animation.css"/>
 	<link rel="stylesheet" href="lib/layui/css/layui.css"/>
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
-	<link rel="stylesheet" type="text/css" href="css/login.css"/>
+	<!-- <link rel="stylesheet" type="text/css" href="css/login.css"/> -->
 	<style type="text/css">
 		body{
 			background-image:url(img/loginbg.jpg);
@@ -48,5 +48,63 @@
 	</div>
 	<script src="lib/layui/layui.js"></script>
 	<script src="js/login.js"></script>
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		// 判断是否为移动端运行环境 
+
+if(/AppleWebKit.*Mobile/i.test(navigator.userAgent) || (/MIDP|SymbianOS|NOKIA|SAMSUNG|LG|NEC|TCL|Alcatel|BIRD|DBTEL|Dopod|PHILIPS|HAIER|LENOVO|MOT-|Nokia|SonyEricsson|SIE-|Amoi|ZTE/.test(navigator.userAgent))){ 
+
+if(window.location.href.indexOf("?mobile")<0){ 
+
+try{ 
+
+if(/Android|webOS|iPhone|iPad|BlackBerry/i.test(navigator.userAgent)){ 
+
+// 判断访问环境是 Android|webOS|iPhone|iPod|BlackBerry 则加载以下样式 
+
+setActiveStyleSheet("style_mobile_a.css"); 
+
+} 
+
+else if(/iPad/i.test(navigator.userAgent)){ 
+
+// 判断访问环境是 iPad 则加载以下样式 
+
+setActiveStyleSheet("style_mobile_iPad.css"); 
+
+} 
+
+else{ 
+
+// 判断访问环境是 其他移动设备 则加载以下样式 
+
+setActiveStyleSheet("login.css"); 
+
+} 
+
+} 
+
+catch(e){} 
+
+} 
+
+} 
+
+else{ 
+
+// 如果以上都不是，则加载以下样式 
+
+setActiveStyleSheet("login.css"); 
+console.log("opopopop")
+} 
+
+// 判断完毕后加载样式 
+
+function setActiveStyleSheet(filename){
+	var head = document.head || document.getElementsByTagName('head')[0];
+	// head.appendChild("<link href="+filename+" rel=stylesheet>")
+	document.write("<link href="+filename+" rel=stylesheet>");} 
+
+	</script>
 </body>
 </html>

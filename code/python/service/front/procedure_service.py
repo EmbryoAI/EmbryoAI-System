@@ -234,6 +234,8 @@ def addProcedure(request):
     from entity.Embryo import Embryo
     import dao.front.embryo_mapper as embryo_mapper
     import dao.front.cell_mapper as cell_mapper
+    from task.ini_parser import EmbryoIniParser as parser
+    import json,os
 
     id = uuid()
     patientName = request.form.get('patientName')
@@ -322,34 +324,37 @@ def addProcedure(request):
         dishCodeList = dishCode.split('|')
         for dish_code in dishCodeList:
             dish_code = dish_code.split(',')
-            for i in range(0, len(dish_code), 2):
-                imagePath = dish_code[i+1]
-                code = dish_code[i][-1]
-                dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, code)
-                if not dish:
-                    dishId = uuid()
-                    dish = Dish(id=dishId, incubatorId=incubator.id, dishCode=code, createTime=createTime,
-                                updateTime=updateTime)
-                    dish_mapper.save(dish)
-                else:
-                    dishId = dish.id
-                pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId, code)
-                if not pd:
-                    procedureDishId = uuid()
-                    pd = ProcedureDish(id=procedureDishId, procedureId=procedureId, dishId=dishId,
-                                    imagePath=imagePath)
-                    procedure_dish_mapper.save(pd)
-        
-        well_id = well_id.split(',')
-        #孔表新增记录
-        for i in well_id:
-            cellId = uuid()
-            cell = Cell(id=cellId, dishId=dishId, cellCode=i, createTime=createTime, updateTime=updateTime)
-            cell_mapper.save(cell)
-            #胚胎表新增记录
-            embryoId = uuid()
-            embryo = Embryo(id=embryoId, embryoIndex=i, procedureId=procedureId, cellId=cellId)
-            embryo_mapper.save(embryo)
+            imagePath = dish_code[1]
+            code = dish_code[0][-1]
+            dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, code)
+            if not dish:
+                dishId = uuid()
+                dish = Dish(id=dishId, incubatorId=incubator.id, dishCode=code, createTime=createTime,
+                            updateTime=updateTime)
+                dish_mapper.save(dish)
+            else:
+                dishId = dish.id
+            pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId, code)
+            if not pd:
+                procedureDishId = uuid()
+                pd = ProcedureDish(id=procedureDishId, procedureId=procedureId, dishId=dishId,
+                                imagePath=imagePath)
+                procedure_dish_mapper.save(pd)
+
+            ini_path = conf['EMBRYOAI_IMAGE_ROOT'] + os.path.sep + imagePath + os.path.sep + 'DishInfo.ini'
+            config = parser(ini_path)
+            dishes = [f'Dish{i}Info' for i in range(1, 10) if f'Dish{i}Info' in config]
+            wells = [f'Well{i}Avail' for i in range(1, 13)]
+            embryos = [index for d in dishes for index,w in enumerate(wells) if config[d][w]=='1']
+            #孔表新增记录
+            for i in embryos:
+                cellId = uuid()
+                cell = Cell(id=cellId, dishId=dishId, cellCode=i+1, createTime=createTime, updateTime=updateTime)
+                cell_mapper.save(cell)
+                #胚胎表新增记录
+                embryoId = uuid()
+                embryo = Embryo(id=embryoId, embryoIndex=i+1, procedureId=procedureId, cellId=cellId)
+                embryo_mapper.save(embryo)
 
     except:
         return 500, '新增病历失败!'
