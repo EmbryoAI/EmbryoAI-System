@@ -41,41 +41,27 @@ def getPatientByEmbryoId(id):
 
 
 def quertEmbryoNumber(agrs):
-    dishCode = agrs['dishCode']
-    print(dishCode)
     from configparser import ConfigParser
+    from task.ini_parser import EmbryoIniParser as parser
     from app import conf
     import json,os
-    config = ConfigParser()
+
+    dishCode = agrs['dishCode']
 
     list=[]
     dishCodeList = dishCode.split('|')
     for dishCodeStr in dishCodeList:
         catalog = dishCodeStr.split(',')[1]
-        config.readfp(open(conf['EMBRYOAI_IMAGE_ROOT'] + catalog + os.path.sep + 'DishInfo.ini'))
-        catalog_path = conf['EMBRYOAI_IMAGE_ROOT'] + catalog
-        dirs = os.listdir(catalog_path)
+        if catalog[0] == '.':
+            pass  
+        else:
+            ini_path = conf['EMBRYOAI_IMAGE_ROOT'] + os.path.sep + catalog + os.path.sep + 'DishInfo.ini'
+            config = parser(ini_path)
+            dishes = [f'Dish{i}Info' for i in range(1, 10) if f'Dish{i}Info' in config]
+            wells = [f'Well{i}Avail' for i in range(1, 13)]
+            embryo_number = len([index for d in dishes for index,w in enumerate(wells) if config[d][w]=='1'])
 
-        for dir in dirs:
-            dish_path = catalog_path + os.path.sep + dir
-            if os.path.isdir(dish_path):  
-                if dir[0] == '.':  
-                    pass  
-                else:
-                    print(dir)
-                    for i in range(1, 12, 1):
-
-                        dir = dir.lower()
-                        dir = dir[1:len(dir)]
-                        dir = f'D{dir}'
-                        print(dir)
-
-                        well = f'Well{i}Avail'
-                        result = config.get(f'{dir}Info',well)
-                        print(result)
-                        if result == '1':
-                            list.append(i)
-    return jsonify(list)
+    return jsonify(embryo_number)
 
 
 def findEmbroyoInfo(args) :
