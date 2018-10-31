@@ -69,7 +69,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 
     	});
   //如果 初始化页面时，病历号不为空，则直接查询
-    if("!empty $('#medicalRecordNo').val()") {
+    if($('#medicalRecordNo').val()!="") {
     	listView();
     }
 })
