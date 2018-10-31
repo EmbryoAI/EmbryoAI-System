@@ -723,7 +723,8 @@ function getCellId(index, data){
     return result;
 }
 
-function querySeriesList(wellId, serisCode, type, cellId){
+function querySeriesList(wellid, serisCode, type, cellId){
+    wellId = wellid;
     $("#wellId").val(wellId);
     $("#cellId").val(cellId);
     var procedureId = $("#procedureId").val();
@@ -806,6 +807,7 @@ function querySeriesList(wellId, serisCode, type, cellId){
  * @param type 0默认方式 1播放暂停
  */
 function getBigImage(procedureId, dishId, wellId, seris,type, cellId, serisName){
+    currentSeris = seris;
     $("#myscrollboxul").children().each(function(){
         $(this).attr("class","swiper-slide");
         })
@@ -913,9 +915,11 @@ function exportVideo(){
 }
 
 function arrow(direction){
-    if(firstSeris == '0000000'){
-        layer.alert('前面已经没有时间序列了!');
-        return;
+    if(direction == 'left'){
+        if(firstSeris == '0000000'){
+            layer.alert('前面已经没有时间序列了!');
+            return;
+        }
     }
     cellId = $("#cellId").val();
     wellId = $("#wellId").val();
@@ -947,8 +951,10 @@ function arrow(direction){
             $("#xltext").html(currentSerisName);
             $("#" + data.last_series + "_div").attr("class", "swiper-slide active")
 
-            if(currentSeris == data.last_series){
-                layer.alert('后面已经没有时间序列了!');
+            if(direction == 'right'){
+                if(currentSeris == data.last_series){
+                    layer.alert('后面已经没有时间序列了!');
+                }
             }
 
             firstSeris = series[0].series_code;

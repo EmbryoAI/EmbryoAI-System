@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : local
+ Source Server         : astec-c0
  Source Server Type    : MySQL
  Source Server Version : 50640
- Source Host           : localhost:3306
+ Source Host           : 39.104.173.18:3306
  Source Schema         : embryoai_system_db
 
  Target Server Type    : MySQL
  Target Server Version : 50640
  File Encoding         : 65001
 
- Date: 09/06/2018 21:26:43
+ Date: 31/10/2018 14:54:55
 */
 
 SET NAMES utf8mb4;
@@ -40,6 +40,8 @@ CREATE TABLE `sys_dict` (
   `dict_class` varchar(50) DEFAULT NULL COMMENT '字典值类别：如milestone代表里程碑',
   `dict_key` varchar(100) DEFAULT NULL COMMENT '字典Key',
   `dict_value` varchar(200) DEFAULT NULL COMMENT '字典值',
+  `dict_spare` varchar(50) DEFAULT NULL COMMENT '备用，例如放样式、图标等。',
+  `dict_parent_id` varchar(32) DEFAULT '0' COMMENT '父级字典ID',
   PRIMARY KEY (`id`),
   KEY `sys_dict_key_index` (`dict_key`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统字典表';
@@ -48,31 +50,65 @@ CREATE TABLE `sys_dict` (
 -- Records of sys_dict
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_dict` VALUES ('766c51046ad711e8841f0242ac110002', 'milestone', '1', 'PN');
-INSERT INTO `sys_dict` VALUES ('766c58026ad711e8841f0242ac110002', 'milestone', '2', '2C');
-INSERT INTO `sys_dict` VALUES ('766c59d86ad711e8841f0242ac110002', 'milestone', '3', '3C');
-INSERT INTO `sys_dict` VALUES ('766c5b906ad711e8841f0242ac110002', 'milestone', '4', '4C');
-INSERT INTO `sys_dict` VALUES ('766c5d346ad711e8841f0242ac110002', 'milestone', '5', '5C');
-INSERT INTO `sys_dict` VALUES ('766c5ece6ad711e8841f0242ac110002', 'milestone', '6', '8C');
-INSERT INTO `sys_dict` VALUES ('766c5fe66ad711e8841f0242ac110002', 'milestone', '7', '囊胚');
-INSERT INTO `sys_dict` VALUES ('766c60cc6ad711e8841f0242ac110002', 'milestone', '8', '扩张囊胚');
-INSERT INTO `sys_dict` VALUES ('766c61a86ad711e8841f0242ac110002', 'pn', '0', '0PN');
-INSERT INTO `sys_dict` VALUES ('766c68426ad711e8841f0242ac110002', 'pn', '1', '1PN');
-INSERT INTO `sys_dict` VALUES ('766c6a186ad711e8841f0242ac110002', 'pn', '2', '2PN');
-INSERT INTO `sys_dict` VALUES ('766c6b4e6ad711e8841f0242ac110002', 'pn', '3', '>=3PN');
-INSERT INTO `sys_dict` VALUES ('766c6c706ad711e8841f0242ac110002', 'even', '0', '均匀');
-INSERT INTO `sys_dict` VALUES ('766c6d886ad711e8841f0242ac110002', 'even', '1', '不均匀');
-INSERT INTO `sys_dict` VALUES ('766c6ea06ad711e8841f0242ac110002', 'fragment', '1', '<5%');
-INSERT INTO `sys_dict` VALUES ('766c6fa46ad711e8841f0242ac110002', 'fragment', '2', '5%-10%');
-INSERT INTO `sys_dict` VALUES ('766c70d06ad711e8841f0242ac110002', 'fragment', '3', '10%-20%');
-INSERT INTO `sys_dict` VALUES ('766c72386ad711e8841f0242ac110002', 'fragment', '4', '>=20%');
-INSERT INTO `sys_dict` VALUES ('766c733c6ad711e8841f0242ac110002', 'idcard_type', '0', '其他');
-INSERT INTO `sys_dict` VALUES ('766c74406ad711e8841f0242ac110002', 'idcard_type', '1', '身份证');
-INSERT INTO `sys_dict` VALUES ('766c75446ad711e8841f0242ac110002', 'idcard_type', '2', '社保');
-INSERT INTO `sys_dict` VALUES ('766c76486ad711e8841f0242ac110002', 'idcard_type', '3', '驾驶证');
-INSERT INTO `sys_dict` VALUES ('766c772e6ad711e8841f0242ac110002', 'idcard_type', '4', '护照');
-INSERT INTO `sys_dict` VALUES ('766c78326ad711e8841f0242ac110002', 'idcard_type', '5', '港澳台通行证');
-INSERT INTO `sys_dict` VALUES ('766c79906ad711e8841f0242ac110002', 'idcard_type', '6', '回乡证');
+INSERT INTO `sys_dict` VALUES ('1', 'insemi_type', 'IVF', 'IVF', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('100', 'embryo_fate_type', '1', '移植', 'transplant', '0');
+INSERT INTO `sys_dict` VALUES ('101', 'embryo_fate_type', '2', '冷冻', 'freeze', '0');
+INSERT INTO `sys_dict` VALUES ('102', 'embryo_fate_type', '3', '丢弃', 'abandon', '0');
+INSERT INTO `sys_dict` VALUES ('103', 'embryo_fate_type', '4', '待定', 'hold', '0');
+INSERT INTO `sys_dict` VALUES ('150', 'cell', '1', '未分裂', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('151', 'cell', '2', '2C', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('152', 'cell', '3', '3C', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('153', 'cell', '4', '4C', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('154', 'cell', '5', '5C', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('155', 'cell', '6', '6C', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('156', 'cell', '7', '7C', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('157', 'cell', '8', '8C', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('180', 'time', '1', '时间', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('2', 'insemi_type', 'ICSI', 'ICSI', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('200', 'criteria_op', '=', '等于', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('201', 'criteria_op', '<', '小于', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('202', 'criteria_op', '<=', '小于等于', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('203', 'criteria_op', '>', '大于', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('205', 'criteria_op', '>=', '大于等于', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('250', 'criteria_type', 'pn', 'PN数', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('251', 'criteria_type', 'cell', '细胞个数', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('252', 'criteria_type', 'even', '均匀度', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('253', 'criteria_type', 'fragment', '碎片率', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('254', 'criteria_type', 'grade', '评级', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('255', 'criteria_type', 'time', '时间', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('3', 'insemi_type', 'IVF', 'IVF', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('4', 'insemi_type', 'ICSI', 'ICSI', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('5', 'state', '1', '病历已登记完善', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('6', 'state', '2', '结束采集', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('7', 'state', '3', '已回访', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c51046ad711e8841f0242ac110002', 'milestone', '1', 'PN', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c58026ad711e8841f0242ac110002', 'milestone', '2', '2C', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c59d86ad711e8841f0242ac110002', 'milestone', '3', '3C', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c5b906ad711e8841f0242ac110002', 'milestone', '4', '4C', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c5d346ad711e8841f0242ac110002', 'milestone', '5', '5C', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c5ece6ad711e8841f0242ac110002', 'milestone', '6', '8C', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c5fe66ad711e8841f0242ac110002', 'milestone', '7', '囊胚', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c60cc6ad711e8841f0242ac110002', 'milestone', '8', '扩张囊胚', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c61a86ad711e8841f0242ac110002', 'pn', '0', '0PN', NULL, '250');
+INSERT INTO `sys_dict` VALUES ('766c68426ad711e8841f0242ac110002', 'pn', '1', '1PN', NULL, '250');
+INSERT INTO `sys_dict` VALUES ('766c6a186ad711e8841f0242ac110002', 'pn', '2', '2PN', NULL, '250');
+INSERT INTO `sys_dict` VALUES ('766c6b4e6ad711e8841f0242ac110002', 'pn', '3', '>=3PN', NULL, '250');
+INSERT INTO `sys_dict` VALUES ('766c6c706ad711e8841f0242ac110002', 'even', '0', '均匀', NULL, '252');
+INSERT INTO `sys_dict` VALUES ('766c6d886ad711e8841f0242ac110002', 'even', '1', '不均匀', NULL, '252');
+INSERT INTO `sys_dict` VALUES ('766c6ea06ad711e8841f0242ac110002', 'fragment', '1', '<5%', NULL, '253');
+INSERT INTO `sys_dict` VALUES ('766c6fa46ad711e8841f0242ac110002', 'fragment', '2', '5%-10%', NULL, '253');
+INSERT INTO `sys_dict` VALUES ('766c70d06ad711e8841f0242ac110002', 'fragment', '3', '10%-20%', NULL, '253');
+INSERT INTO `sys_dict` VALUES ('766c72386ad711e8841f0242ac110002', 'fragment', '4', '>=20%', NULL, '253');
+INSERT INTO `sys_dict` VALUES ('766c733c6ad711e8841f0242ac110002', 'idcard_type', '0', '其他', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c74406ad711e8841f0242ac110002', 'idcard_type', '1', '身份证', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c75446ad711e8841f0242ac110002', 'idcard_type', '2', '社保', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c76486ad711e8841f0242ac110002', 'idcard_type', '3', '驾驶证', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c772e6ad711e8841f0242ac110002', 'idcard_type', '4', '护照', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c78326ad711e8841f0242ac110002', 'idcard_type', '5', '港澳台通行证', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c79906ad711e8841f0242ac110002', 'idcard_type', '6', '回乡证', NULL, '0');
+INSERT INTO `sys_dict` VALUES ('766c79906ad711e8841f0242ac110003', 'grade', '1', 'I', NULL, '254');
+INSERT INTO `sys_dict` VALUES ('766c79906ad711e8841f0242ac110004', 'grade', '2', 'II', NULL, '254');
+INSERT INTO `sys_dict` VALUES ('766c79906ad711e8841f0242ac110005', 'grade', '3', 'III', NULL, '254');
 COMMIT;
 
 -- ----------------------------
@@ -95,13 +131,13 @@ CREATE TABLE `sys_dish` (
 DROP TABLE IF EXISTS `sys_incubator`;
 CREATE TABLE `sys_incubator` (
   `id` varchar(32) NOT NULL COMMENT '培养箱ID',
-  `incubator_code` varchar(12) DEFAULT NULL COMMENT '培养箱编码（请在业务逻辑中保证唯一性）',
+  `incubator_code` varchar(16) DEFAULT NULL COMMENT '培养箱编码（请在业务逻辑中保证唯一性）',
   `incubator_description` varchar(200) DEFAULT NULL COMMENT '培养箱描述备注',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `incubator_brand` varchar(100) DEFAULT 'ASTEC' COMMENT '培养箱品牌',
   `incubator_type` varchar(100) DEFAULT 'iBIS' COMMENT '培养箱型号',
-  `del_flag` int(255) DEFAULT '0' COMMENT '逻辑删除标志（非0代表已删除）',
+  `del_flag` int(1) DEFAULT '0' COMMENT '逻辑删除标志（非0代表已删除）',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统培养箱基础信息表';
 
@@ -3610,11 +3646,11 @@ DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
   `id` varchar(32) NOT NULL COMMENT '用户ID',
   `username` varchar(50) DEFAULT NULL COMMENT '用户名',
-  `password` varchar(20) DEFAULT NULL COMMENT '密码',
+  `password` varchar(32) DEFAULT NULL COMMENT '密码',
   `email` varchar(200) DEFAULT NULL COMMENT '电子邮件',
   `mobile` varchar(30) DEFAULT NULL COMMENT '手机号码',
   `truename` varchar(50) DEFAULT NULL COMMENT '真实姓名',
-  `birthday` datetime DEFAULT NULL COMMENT '出生日期',
+  `birthday` date DEFAULT NULL COMMENT '出生日期',
   `sex` int(11) DEFAULT NULL COMMENT '性别0:女,1:男',
   `title` varchar(50) DEFAULT NULL COMMENT '职称',
   `is_admin` int(11) DEFAULT '0' COMMENT '是否管理员（非0代表管理员）',
@@ -3627,6 +3663,15 @@ CREATE TABLE `sys_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统用户表';
 
 -- ----------------------------
+-- Records of sys_user
+-- ----------------------------
+BEGIN;
+INSERT INTO `sys_user` VALUES ('2c78f39275c711e8a60a5800e3b75d2e', 'admin', 'e10adc3949ba59abbe56e057f20f883e', 'admin@embryoai.com', '', '管理员', '2018-04-01', 0, NULL, 1, 0, '2018-06-22 10:51:33', '2018-07-04 14:55:42', '2018-06-22 10:51:33', 0);
+INSERT INTO `sys_user` VALUES ('f089a388da7611e8b3090242ac120001', 'yangcheng.ai', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, NULL, NULL, 0);
+INSERT INTO `sys_user` VALUES ('f089a388da7611e8b3090242ac120002', 'xihai', 'e10adc3949ba59abbe56e057f20f883e', '', '15601894246', 'lixihai', '2018-10-09', 1, '住院医师', 1, 0, '2018-10-28 06:01:41', '2018-10-28 06:01:41', '2018-10-28 06:01:41', 0);
+COMMIT;
+
+-- ----------------------------
 -- Table structure for t_embryo
 -- ----------------------------
 DROP TABLE IF EXISTS `t_embryo`;
@@ -3636,7 +3681,7 @@ CREATE TABLE `t_embryo` (
   `procedure_id` varchar(32) DEFAULT NULL COMMENT '周期ID -> t_procedure.id',
   `cell_id` varchar(32) DEFAULT NULL COMMENT '孔ID -> sys_cell.id',
   `embryo_score` double(255,0) DEFAULT NULL COMMENT '胚胎得分',
-  `embryo_fate_id` varchar(32) DEFAULT NULL COMMENT '胚胎结局字典值ID -> sys_dict.id，字典值类型为embryo_fate，可能取值包括：1：移植；2：冷冻；3：丢弃；4：待定',
+  `embryo_fate_id` varchar(32) DEFAULT NULL COMMENT '胚胎结局字典值ID -> sys_dict.id，字典值类型为embryo_fate_type，可能取值包括：1：移植；2：冷冻；3：丢弃；4：待定',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='周期胚胎表';
 
@@ -3664,17 +3709,20 @@ CREATE TABLE `t_milestone` (
   `id` varchar(32) NOT NULL COMMENT 'ID',
   `embryo_id` varchar(32) DEFAULT NULL COMMENT '胚胎ID -> t_embryo.id',
   `milestone_id` varchar(32) DEFAULT NULL COMMENT '里程碑字典值ID -> sys_dict.id，表示胚胎的里程碑阶段的ID，字典值类型milestone，可能取值：1：PN；2：2C；3：3C；4：4C；5：5C；6：8C；7：囊胚；8：扩张囊胚',
-  `milestone_time` datetime DEFAULT NULL COMMENT '里程碑时间（自动识别或用户设定的里程碑时间点）',
+  `milestone_time` varchar(60) DEFAULT NULL COMMENT '里程碑时间（自动识别或用户设定的里程碑时间点）时间序列',
   `milestone_elapse` int(11) DEFAULT NULL COMMENT '里程碑时间点距离初次采集时间的间隔，单位分钟',
   `user_id` varchar(32) DEFAULT NULL COMMENT '设置或确认里程碑时间点的用户ID',
   `milestone_type` int(11) DEFAULT NULL COMMENT '里程碑时间点类型：0-自动识别；1-用户设定',
-  `milestone_path` varchar(500) DEFAULT NULL COMMENT '里程碑时间点图像文件路径',
+  `milestone_path` varchar(255) DEFAULT NULL COMMENT '里程碑时间点图像文件路径',
+  `thumbnail_path` varchar(255) DEFAULT NULL COMMENT '缩略图路径',
+  `image_series` varchar(20) DEFAULT NULL COMMENT '保存当前图片的序号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='胚胎里程碑表';
 
 -- ----------------------------
 -- Table structure for t_milestone_data
 -- ----------------------------
+DROP TABLE IF EXISTS `t_milestone_data`;
 CREATE TABLE `t_milestone_data` (
   `milestone_id` varchar(32) NOT NULL COMMENT '里程碑时间点ID -> t_milestone.id',
   `milestone_stage` int(11) DEFAULT NULL COMMENT '里程碑时间点距离授精时间的间隔，单位分钟',
@@ -3745,6 +3793,9 @@ CREATE TABLE `t_procedure` (
   `state` varchar(32) DEFAULT NULL COMMENT '周期状态字典值ID -> sys_dict.id，字典值类型为state，可能取值有开始采集：1；病历已登记完善：2；结束采集：3；已回访：4',
   `memo` varchar(500) DEFAULT NULL COMMENT '备注',
   `medical_record_no` varchar(50) DEFAULT NULL COMMENT '病历号',
+  `is_smoking` int(11) DEFAULT NULL COMMENT '是否抽烟',
+  `is_drinking` int(11) DEFAULT NULL COMMENT '是否酗酒',
+  `del_flag` int(1) NOT NULL DEFAULT '0' COMMENT '逻辑删除标志（非0代表已删除）',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='治疗周期表';
 
@@ -3771,9 +3822,19 @@ CREATE TABLE `t_rule` (
   `description` varchar(300) DEFAULT NULL COMMENT '评分规则描述',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `del_flag` varchar(255) DEFAULT NULL COMMENT '逻辑删除标志（非0代表已删除）',
+  `del_flag` varchar(1) DEFAULT '0' COMMENT '逻辑删除标志（非0代表已删除）',
+  `is_default` varchar(1) DEFAULT '0' COMMENT '0不默认   1默认',
+  `data_json` varchar(2048) DEFAULT NULL COMMENT '规则的json串',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='胚胎评分规则表';
+
+-- ----------------------------
+-- Records of t_rule
+-- ----------------------------
+BEGIN;
+INSERT INTO `t_rule` VALUES ('847b35d6d9c111e8801d0242ac120003', '2c78f39275c711e8a60a5800e3b75d2e', '测试标准', 'this is a test', '2018-10-27 08:23:00', '2018-10-27 08:25:42', '0', '1', '{\"PN\": [{\"index\": \"981b51fcd9c111e898ed0242ac120003\", \"condition\": \"pn\", \"symbol\": \"=\", \"valueKey\": \"2\", \"value\": \"2PN\", \"score\": \"100\", \"weight\": \"1\"}], \"2C\": [{\"index\": \"a1c3fe52d9c111e8a8950242ac120003\", \"condition\": \"cell\", \"symbol\": \"=\", \"valueKey\": \"2\", \"value\": \"2C\", \"score\": \"100\", \"weight\": \"1\"}, {\"index\": \"acc75fbad9c111e8bc310242ac120003\", \"condition\": \"even\", \"symbol\": \"=\", \"valueKey\": \"0\", \"value\": \"均匀\", \"score\": \"40\", \"weight\": \"1\"}, {\"index\": \"b94f515cd9c111e8b28a0242ac120003\", \"condition\": \"time\", \"symbol\": \"<\", \"valueKey\": \"18\", \"value\": \"18\", \"score\": \"40\", \"weight\": \"1\"}], \"3C\": [{\"index\": \"cd0a6240d9c111e88aac0242ac120003\", \"condition\": \"cell\", \"symbol\": \"=\", \"valueKey\": \"3\", \"value\": \"3C\", \"score\": \"40\", \"weight\": \"1\"}, {\"index\": \"d6a51278d9c111e8bcb90242ac120003\", \"condition\": \"even\", \"symbol\": \"=\", \"valueKey\": \"0\", \"value\": \"均匀\", \"score\": \"40\", \"weight\": \"1\"}, {\"index\": \"e49d262cd9c111e8962c0242ac120003\", \"condition\": \"fragment\", \"symbol\": \"<\", \"valueKey\": \"1\", \"value\": \"<5%\", \"score\": \"20\", \"weight\": \"1\"}], \"4C\": [], \"5C\": [], \"8C\": [], \"囊胚\": [], \"扩张囊胚\": []}');
+INSERT INTO `t_rule` VALUES ('aec6a470db4611e8bfa10242ac120003', 'f089a388da7611e8b3090242ac120002', 'test', '检测用', '2018-10-29 06:48:00', '2018-10-29 07:10:31', '0', '0', '{\"PN\": [{\"index\": \"edc23ed2db4611e884000242ac120003\", \"condition\": \"time\", \"symbol\": \"=\", \"valueKey\": \"16\", \"value\": \"16\", \"score\": \"100\", \"weight\": \"25\"}, {\"index\": \"f8b54ca8db4611e8a4a20242ac120003\", \"condition\": \"pn\", \"symbol\": \"=\", \"valueKey\": \"2\", \"value\": \"2PN\", \"score\": \"100\", \"weight\": \"25\"}], \"2C\": [{\"index\": \"4a58229cdb4711e8b2ea0242ac120003\", \"condition\": \"cell\", \"symbol\": \"=\", \"valueKey\": \"2\", \"value\": \"2C\", \"score\": \"50\", \"weight\": \"30\"}, {\"index\": \"576eb0b8db4711e8b3400242ac120003\", \"condition\": \"even\", \"symbol\": \"<=\", \"valueKey\": \"0\", \"value\": \"均匀\", \"score\": \"50\", \"weight\": \"10\"}], \"3C\": [{\"index\": \"6220c3cadb4711e8ab810242ac120003\", \"condition\": \"fragment\", \"symbol\": \"<=\", \"valueKey\": \"1\", \"value\": \"<5%\", \"score\": \"100\", \"weight\": \"10\"}, {\"index\": \"74944d6adb4711e8bf8a0242ac120003\", \"condition\": \"fragment\", \"symbol\": \"=\", \"valueKey\": \"2\", \"value\": \"5%-10%\", \"score\": \"80\", \"weight\": \"10\"}, {\"index\": \"7fbd146adb4711e8b1630242ac120003\", \"condition\": \"fragment\", \"symbol\": \"=\", \"valueKey\": \"3\", \"value\": \"10%-20%\", \"score\": \"50\", \"weight\": \"10\"}, {\"index\": \"8dd8f898db4711e88b5d0242ac120003\", \"condition\": \"fragment\", \"symbol\": \"=\", \"valueKey\": \"4\", \"value\": \">=20%\", \"score\": \"20\", \"weight\": \"10\"}], \"4C\": [{\"index\": \"2fa4ac9edb4811e887bc0242ac120003\", \"condition\": \"time\", \"symbol\": \"<=\", \"valueKey\": \"72\", \"value\": \"72\", \"score\": \"100\", \"weight\": \"10\"}], \"5C\": [], \"8C\": [], \"囊胚\": [], \"扩张囊胚\": [{\"index\": \"1091700edb4711e8aad90242ac120003\", \"condition\": \"time\", \"symbol\": \"=\", \"valueKey\": \"72\", \"value\": \"72\", \"score\": \"20\", \"weight\": \"50\"}]}');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for t_rule_criteria
