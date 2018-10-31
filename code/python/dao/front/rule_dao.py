@@ -92,4 +92,10 @@ def setDefault(ruleId,userId):
         db.session.remove()
 
 def findAllRules():
-    return db.session.query(Rule)
+    try:
+        return db.session.query(Rule)
+    except Exception as e:
+        raise DatabaseError("findAllRules异常",e.message,e)
+        return None
+    finally:
+        db.session.remove()
