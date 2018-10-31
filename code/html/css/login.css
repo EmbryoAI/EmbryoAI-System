@@ -110,3 +110,15 @@
 	color: #4e8df4;
 	cursor:pointer;
 }
+/* ipad 下的样式 */
+@media only screen and (min-width: 321px) and (max-width: 1024px) {
+.login-text img{
+	display: none;
+}
+.login-container{
+	right: auto;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	font-size: 24px
+}
+}
