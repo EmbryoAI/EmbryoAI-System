@@ -791,9 +791,8 @@ function querySeriesList(wellid, serisCode, type, cellId){
             			layer.alert(request.responseText);
             		}
             	});
-            }else {
-            	n = $("#imageVideo"+currentSeris).attr("index");//根据时间序列同步播放的位置
             }
+            n = $("#imageVideo"+currentSeris).attr("index");//根据时间序列同步播放的位置
             
             loadingZIndex(procedureId,dishId,wellId,currentSeris);
         }
