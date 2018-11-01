@@ -2,11 +2,6 @@
 {% block mianDiv %}
 	<link rel="stylesheet" type="text/css" href="/static/front/css/home.css"/>
 	<style type="text/css">
-		.container {
-			/* background: #fff; */
-			/* width: 1480px; */
-			/* margin: auto; */
-		}
 		.main{
 			width: 1440px;
 			margin: auto;
@@ -14,6 +9,13 @@
 		}
 		.footer{
 			background: #f3f4f8;
+		}
+		/* ipad适配 */
+		@media only screen and (min-width: 321px) and (max-width: 1024px) {
+			.main{
+			width: auto;
+			margin: auto;
+			}
 		}
 	</style>
 	

@@ -56,9 +56,11 @@ def querySeriesList(agrs):
             begin_index = 0
             last_index = 11
 
-        if last_index - len(ts.range(dishJson['lastSerie'])) > 0:
-            last_index = len(ts.range(dishJson['lastSerie']))
+        if len(ts.range(dishJson['lastSerie'])) - len(ts.range(last_seris)) < 10:
+            last_index = len(ts.range(dishJson['lastSerie'])) + 1
             begin_index = last_index - 11
+        
+       
 
         #list=[]
         #for i in ts[begin_index:last_index]:
@@ -74,6 +76,7 @@ def querySeriesList(agrs):
 
         list=[]
         for i in ts[begin_index:last_index]:
+            print(i)
             #查询序列对应的里程碑节点信息
             milestone_type = ""
             result = milestone_mapper.getMilestone(embryo.id, i)
@@ -84,9 +87,8 @@ def querySeriesList(agrs):
             hour, minute = serie_to_time(i)
             series = Series(i, f'{hour:02d}H{minute:02d}M', image_path, milestone_type)
             list.append(series.__dict__)
-
+        print(len(list))
         seriesResult = SeriesResult(200, 'OK', list, last_seris, dishJson['lastSerie'], embryo.id)
-
         return jsonify(seriesResult.__dict__)
     except : 
         logger().info("读取dishState.json文件出现异常")
@@ -141,17 +143,13 @@ def queryScrollbarSeriesList(agrs):
         last_index = begin_index + 11
 
         if last_index >= len(ts.range(last_serie)):
-            last_index = len(ts.range(last_serie))
+            last_index = len(ts.range(last_serie)) + 1
             begin_index = last_index - 11
-            current_seris = ts[len(ts.range(last_serie)) - 5]
-            last_serie = current_seris
 
     #查询胚胎id
     embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, cell_id)
 
     list=[]
-    print('begin_index:', begin_index)
-    print('last_index:', last_index)
     for i in ts[begin_index:last_index]:
         #查询序列对应的里程碑节点信息
         milestone_type = ""
