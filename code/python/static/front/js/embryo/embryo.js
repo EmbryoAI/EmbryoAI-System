@@ -742,7 +742,7 @@ function querySeriesList(wellid, serisCode, type, cellId){
             var seris = "";
             var series = data.series;
             for(var i=0;i<series.length;i++){
-                if(data.last_series == series[i].series_code){
+                if(data.current_series == series[i].series_code){
                     currentSerisName = series[i]["series_name"];
                 }
                 var imagePath = "/api/v1/well/image?image_path=" + series[i]["series_image_path"];
@@ -759,13 +759,13 @@ function querySeriesList(wellid, serisCode, type, cellId){
             }
             $("#myscrollboxul").html(seris);
             $("#xltext").html(currentSerisName);
-            $("#" + data.last_series + "_div").attr("class", "swiper-slide active");
+            $("#" + data.current_series + "_div").attr("class", "swiper-slide active");
 
             //胚胎id
             embryoId = data.embryo_id;
             $("#embryoId").val(embryoId);
 
-            currentSeris = data.last_series;
+            currentSeris = data.current_series;
             
             if(type==0) {
             	loadingImage(procedureId,dishId,wellId,currentSeris,'');
@@ -948,8 +948,7 @@ function arrow(direction){
                                       "</span><b>" + series[i]["series_name"] + "</b></div>";
             }
             $("#myscrollboxul").html(seris);
-            $("#xltext").html(currentSerisName);
-            $("#" + data.last_series + "_div").attr("class", "swiper-slide active")
+            $("#" + data.current_series + "_div").attr("class", "swiper-slide active")
 
             if(direction == 'right'){
                 if(currentSeris == data.last_series){
@@ -958,7 +957,7 @@ function arrow(direction){
             }
 
             firstSeris = series[0].series_code;
-            currentSeris = data.last_series;
+            currentSeris = data.current_series;
             //loadingImage(procedureId,dishId,wellId,currentSeris,'');
             //loadingZIndex(procedureId,dishId,wellId,currentSeris);
 		},

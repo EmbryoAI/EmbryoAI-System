@@ -85,7 +85,7 @@ def querySeriesList(agrs):
             series = Series(i, f'{hour:02d}H{minute:02d}M', image_path, milestone_type)
             list.append(series.__dict__)
 
-        seriesResult = SeriesResult(200, 'OK', list, last_seris, embryo.id)
+        seriesResult = SeriesResult(200, 'OK', list, last_seris, dishJson['lastSerie'], embryo.id)
 
         return jsonify(seriesResult.__dict__)
     except : 
@@ -144,6 +144,7 @@ def queryScrollbarSeriesList(agrs):
             last_index = len(ts.range(last_serie))
             begin_index = last_index - 11
             current_seris = ts[len(ts.range(last_serie)) - 5]
+            last_serie = current_seris
 
     #查询胚胎id
     embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, cell_id)
@@ -163,7 +164,7 @@ def queryScrollbarSeriesList(agrs):
         series = Series(i, f'{hour:02d}H{minute:02d}M', image_path, milestone_type)
         list.append(series.__dict__)
 
-    seriesResult = SeriesResult(200, 'OK', list, current_seris, None)
+    seriesResult = SeriesResult(200, 'OK', list, current_seris, last_serie, None)
 
     return jsonify(seriesResult.__dict__)
 
