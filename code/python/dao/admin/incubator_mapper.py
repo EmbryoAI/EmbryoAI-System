@@ -37,9 +37,14 @@ def findIncubatorByCode(incubatorCode):
 
 
 def queryIncubatorList(page,limit,filters):
-    pagination = Incubator.query.filter_by(**filters).order_by(Incubator.createTime.desc()).paginate(page,per_page=limit,error_out=False)
-    return pagination
-
+    try:
+        pagination = Incubator.query.filter_by(**filters).order_by(Incubator.createTime.desc()).paginate(page,per_page=limit,error_out=False)
+        return pagination
+    except Exception as e:
+        raise DatabaseError('根据培养箱并编码获取培养箱失败！', e.message, e)
+        return None
+    finally:
+        db.session.remove()
 
 def updateIncubator(params):
     try :

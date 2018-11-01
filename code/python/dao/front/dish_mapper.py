@@ -117,9 +117,13 @@ def queryWellIdAndImagePath(procedureId,dishCode):
         db.session.remove()
 
 def getByDishCode(dishCode):
-    rs = db.session.query(Dish).filter(Dish.dishCode == dishCode).one_or_none()
-    db.session.remove()
-    return rs
+    try:
+        return db.session.query(Dish).filter(Dish.dishCode == dishCode).one_or_none()
+    except Exception as e:
+        raise DatabaseError('getByDishCode失败！', e.message, e)
+        return None
+    finally:
+        db.session.remove()
 
 def save(dish):
     try :
@@ -129,6 +133,8 @@ def save(dish):
         db.session.rollback()
         print_exc()
         raise DatabaseError('新增培养皿数据时发生错误', e.message, e)
+    finally:
+        db.session.remove()
 
 def queryDishByImagePath(imagePath) :
     try :
@@ -211,6 +217,10 @@ def emAll(dishId):
         db.session.remove()
 
 def getByIncubatorIdDishCode(incubatorId, dishCode):
-    rs = db.session.query(Dish).filter(Dish.incubatorId == incubatorId, Dish.dishCode == dishCode).one_or_none()
-    db.session.remove()
-    return rs
+    try:
+        return db.session.query(Dish).filter(Dish.incubatorId == incubatorId, Dish.dishCode == dishCode).one_or_none()
+    except Exception as e:
+        raise DatabaseError('getByIncubatorIdDishCode失败！', e.message, e)
+        return None
+    finally:
+        db.session.remove()

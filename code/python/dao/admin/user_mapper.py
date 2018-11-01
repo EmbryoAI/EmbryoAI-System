@@ -44,17 +44,32 @@ def insertUser(user):
         db.session.remove()
 
 def findUserById(id):
-    # return db.session.query(User).filter(User.id == id).one_or_none()
-    rs = db.session.query(User).filter(User.id == id).one_or_none()
-    db.session.remove()
-    return rs
+    try:
+      return db.session.query(User).filter(User.id == id).one_or_none()
+    except Exception as e:
+        raise DatabaseError('根据用户ID获取用户对象失败！', e.message, e)
+        return None
+    finally:
+        db.session.remove()
 
 def findAllUsers(page_number, page_size, username):
-    return db.session.query(User).filter(User.username.like("%"+username+"%") if username is not None else "",User.delFlag=="0").limit(int(page_size)).offset((int(page_number)-1)*int(page_size))
-
+    try:
+        return db.session.query(User).filter(User.username.like("%"+username+"%") if username is not None else "",User.delFlag=="0").limit(int(page_size)).offset((int(page_number)-1)*int(page_size))
+    except Exception as e:
+        raise DatabaseError('查询用户列表失败！', e.message, e)
+        return None
+    finally:
+        db.session.remove()
+        
 def count(username):
-    return db.session.query(User).filter(User.username.like("%"+username+"%") if username is not None else "",User.delFlag=="0").count()
-
+    try:
+        return db.session.query(User).filter(User.username.like("%"+username+"%") if username is not None else "",User.delFlag=="0").count()
+    except Exception as e:
+        raise DatabaseError('查询用户总数失败！', e.message, e)
+        return None
+    finally:
+        db.session.remove()
+        
 def deleteUser(params):
     try:
         sql = text('update sys_user set del_flag = 1 where id = :id')
@@ -70,12 +85,23 @@ def deleteUser(params):
 
 
 def findUserByUserName(username):
-    return db.session.query(User).filter(User.username == username, User.delFlag == '0').one_or_none()
-
+    try:
+        return db.session.query(User).filter(User.username == username, User.delFlag == '0').one_or_none()
+    except Exception as e:
+        raise DatabaseError('根据用户姓名查询用户对象失败！', e.message, e)
+        return None
+    finally:
+        db.session.remove()
 
 def findUserByNameAndPwd(username,password):
-    return db.session.query(User).filter(User.username == username,User.password == password,User.delFlag == '0').one_or_none()
-
+    try:
+        return db.session.query(User).filter(User.username == username,User.password == password,User.delFlag == '0').one_or_none()
+    except Exception as e:
+        raise DatabaseError('根据帐号密码查询用户失败！', e.message, e)
+        return None
+    finally:
+        db.session.remove()
+        
 def updateUserLoginTime(params):
     try:
         sql = text("update sys_user set last_login_time = :lastLoginTime where id = :id")

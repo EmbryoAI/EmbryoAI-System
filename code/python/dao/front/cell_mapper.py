@@ -18,9 +18,8 @@ def save(cell):
 
 def getCellByDishIdAndCellCode(dishId, cellCode):
     try:
-        cell = db.session.query(Cell).filter(Cell.dishId == dishId,Cell.cellCode == cellCode).one_or_none()
+        return db.session.query(Cell).filter(Cell.dishId == dishId,Cell.cellCode == cellCode).one_or_none()
     except Exception as e:
         return cell
     finally:
         db.session.remove()
-    return cell
