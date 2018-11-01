@@ -105,7 +105,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		$('#playBtn').addClass('play');
 		$('#playBtn').children("span").text("播放");
 		
-		// var imageVideoId = $("#dishImageUl .active img:eq(" + n + ")").attr("id");
+		var imageVideoId = $("#dishImageUl .active img:eq(" + n + ")").attr("id");
 		var cellCode = $("#dishImageUl .active").attr("wellCode");
 		currentSeris = imageVideoId.substring(10,imageVideoId.length-cellCode.length);//设置基准胚胎的时间序列
 		clearInterval(imgTime);
