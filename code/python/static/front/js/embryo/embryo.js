@@ -766,8 +766,9 @@ function querySeriesList(wellid, serisCode, type, cellId){
             $("#embryoId").val(embryoId);
 
             currentSeris = data.current_series;
-            loadingImage(procedureId,dishId,wellId,currentSeris,'');
+            
             if(type==0) {
+            	loadingImage(procedureId,dishId,wellId,currentSeris,'');
             	queryClearImageUrl();//初始化所有图片
             	n = 0;
             	
@@ -790,7 +791,10 @@ function querySeriesList(wellid, serisCode, type, cellId){
             			layer.alert(request.responseText);
             		}
             	});
+            }else if (type==1){
+            	n = $("#imageVideo"+currentSeris).attr("index");//根据时间序列同步播放的位置
             }else {
+            	loadingImage(procedureId,dishId,wellId,currentSeris,'');
             	n = $("#imageVideo"+currentSeris).attr("index");//根据时间序列同步播放的位置
             }
             
@@ -840,7 +844,7 @@ function preFrame(){
             parent.layer.alert(request.responseText);
         },
         success : function(data) {
-            querySeriesList(wellId,data,1, cellId);
+            querySeriesList(wellId,data,2, cellId);
         }
     });
 }
@@ -863,7 +867,7 @@ function nextFrame(){
             if(data == null){
                 parent.layer.alert("已经是最后一张了!");
             }else{
-                querySeriesList(wellId,data,1, cellId);
+                querySeriesList(wellId,data,2, cellId);
             }
         }
     });
@@ -1198,7 +1202,7 @@ function node(upOrdown) {
 		cache:false,
 		success : function(data) {
 			 if(data!=null) {
-				 querySeriesList(wellId, data.milestoneTime, 1, cellId);
+				 querySeriesList(wellId, data.milestoneTime, 2, cellId);
 //				 getBigImage(procedureId, dishId, wellId, data.milestoneTime,0, cellId,currentSerisName);
 			 }else {
 				 if("up"==upOrdown) {

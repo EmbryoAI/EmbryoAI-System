@@ -6,7 +6,31 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
     var layer = layui.layer;
     var element = layui.element;
 
-
+		function IsPC() {
+        var userAgentInfo = navigator.userAgent;
+        var Agents = ["Android", "iPhone",
+                    "SymbianOS", "Windows Phone",
+                    "iPad", "iPod"];
+        var flag = true;
+        for (var v = 0; v < Agents.length; v++) {
+            if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    };
+    $(document).ready(function(){
+        var isPC=IsPC();
+        if(isPC){
+           //这里执行的是PC端的代码；
+		   console.log("11pc")
+      }
+        else{
+           //这里执行的是移动端的代码；
+		   alert("m22")
+        }
+    });
 
     // 弹窗系统设置
     $('#settings').on('click', function () {

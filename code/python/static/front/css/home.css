@@ -137,3 +137,22 @@
 	height: 1px;
 	width: 100%;
 }
+@media only screen and (min-width: 321px) and (max-width: 1024px) {
+	.main{
+	width: 100%;
+	margin: auto;
+}
+/* ipad适配 */
+@media only screen and (min-width: 321px) and (max-width: 1024px) {
+	.case-list .embryo-img {
+		width: 80px;
+		height: 80px;
+		margin-right: 4px;
+	}
+	.case-info ul {
+		padding-top: 0px;
+	}
+	.case-info ul li {
+		line-height: 26px;
+	}
+}
