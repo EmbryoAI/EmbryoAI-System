@@ -251,6 +251,19 @@ function queryRules(){
 	});
 }
 
+function countAge(){
+	var birthdate = $('#birth').val();
+	var year = birthdate.substring(0,4);
+	var today = new Date();
+	var now = today.getFullYear();
+	var result = parseInt(now) - parseInt(year);
+	if(birthdate == ''){
+		$('#patientAge').val(0);
+	}else{
+		$('#patientAge').val(result);
+	}
+}
+
 
 
 
