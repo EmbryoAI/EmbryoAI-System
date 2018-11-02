@@ -7,6 +7,50 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 	var laydate = layui.laydate;
 	var address = layui.address();
 
+	//查询未关联的采集目录
+	$.ajax({
+		type : "get",
+		url : "/api/v1/well/catalog/list",
+		datatype : "json",
+		success : function(data) {
+			$.each(data,function(index,item){
+				$('#catalogSelect').append(new Option(data, data));
+			})
+			form.render();
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
+
+	//监听采集目录下拉框选中事件
+	form.on('select(catalogSelect)', function(data){
+
+		$.ajax({
+			type : "get",
+			url : "/api/v1/well/catalog/info?catalogName=20180422152100",
+			datatype : "json",
+			success : function(catalogData) {
+				if(catalogData.code == 200){
+					var catalogInfo = catalogData.data;
+					$('#catalog_incubator').text(catalogInfo.incubator);
+					$('#catalog_dish').text(catalogInfo.dish_list);
+					$('#catalog_patient').text(catalogInfo.patient_name);
+					$('#catalog_collection_time').text(catalogInfo.collectionDate);
+					$('#embryo_number').val(catalogInfo.embryo_number);
+				}else{
+					layer.alert(catalogData.msg)
+				}
+			},
+			error : function(request) {
+				layer.alert(request.responseText);
+			}
+		});
+
+		$('#catalogInfoDiv').show();
+	});
+
+	//查询评分规则
 	$.ajax({
 		type : "get",
 		url : "/api/v1/rule/list",
@@ -23,85 +67,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 		}
 	});
 
-	// 培养箱选择
-	$('.incubator').on('click','span',function(){
-		if($(this).hasClass('active')){
-			$(this).removeClass('active');
-		}else{
-			$(this).siblings('span').removeClass('active');
-			$(this).addClass('active');
-		}
-		$('#incubator').val($(this).html());
-		embryoCount = 0;
-		$('#embryo_number').val(embryoCount);
-	})
-	// 培养皿选择
-	$('.dish').on('click','span',function(){
-		const length = $('.dish').children('.active').length;
-		const text = $(this).text();
-
-		var dishName = "";
-		var dishCatalog = $('#dish_' + this.id).val();
-		if(dishName == ''){
-			dishName = $(this).html() + "," + dishCatalog;
-		}else{
-			dishName = dishName + "|" + $(this).html() + "," + dishCatalog;
-		}
-		$('#dish').empty();
-		$('#dish').val(dishName);
-		
-
-		if(length>=2){
-			if($(this).hasClass('active')){
-				$(this).removeClass('active');
-
-				$.ajax({
-					type : "get",
-					url : "/api/v1/embryo/number?dishCode=" + dishName,
-					datatype : "json",
-					success : function(data) {
-						embryoCount = embryoCount - data;
-						$('#embryo_number').val(embryoCount);
-					},
-					error : function(request) {
-						layer.alert(request.responseText);
-					}
-				});
-			}
-			return
-		}
-		if($(this).hasClass('active')){
-			$(this).removeClass('active');
-			$.ajax({
-				type : "get",
-				url : "/api/v1/embryo/number?dishCode=" + dishName,
-				datatype : "json",
-				success : function(data) {
-					embryoCount = data - embryoCount;
-					$('#embryo_number').val(embryoCount);
-				},
-				error : function(request) {
-					layer.alert(request.responseText);
-				}
-			});
-		}else{
-			$(this).addClass('active');
-			$.ajax({
-				type : "get",
-				url : "/api/v1/embryo/number?dishCode=" + dishName,
-				datatype : "json",
-				success : function(data) {
-					embryoCount = data + embryoCount;
-					$('#embryo_number').val(embryoCount);
-				},
-				error : function(request) {
-					layer.alert(request.responseText);
-				}
-			});
-		}
-		$('#embryo_number').val(embryoCount);
-		
-	})	
+	
 	
 	//日期
 	laydate.render({
@@ -142,25 +108,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
       }
     }    
 	});
-	
-		$(function(){
-				$.ajax({
-						type : "get",
-						url : "/api/v1/well/incubator",
-						datatype : "json",
-						success : function(data) {
-								var child = "";
-								for(var i=0;i<data.length;i++){
-										child = child + "<span onclick=\"queryDish('" + data[i] + "')\">" +
-										data[i] + "</span>";
-								}
-								$('#incubatorNameDiv').append(child);
-						},
-						error : function(request) {
-								layer.alert(request.responseText);
-						}
-				});
-		});
 })
 
 function queryDish(incubatorName){
@@ -213,22 +160,6 @@ function addCase(){
 			parent.layer.alert(data);
 			var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 			parent.layer.close(index);
-		}
-	});
-}
-
-function quertEmbryoNumber(dishCode){
-	$.ajax({
-		type : "get",
-		url : "/api/v1/embryo/number?dishCode=" + dishCode,
-		datatype : "json",
-		success : function(data) {
-			//$('#embryo_number').val(data.length);
-			embryoNumber = data.length;
-			$('#well_id').val(data);
-		},
-		error : function(request) {
-			layer.alert(request.responseText);
 		}
 	});
 }
