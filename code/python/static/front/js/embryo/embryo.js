@@ -765,8 +765,7 @@ function querySeriesList(wellid, serisCode, type, cellId){
             embryoId = data.embryo_id;
             $("#embryoId").val(embryoId);
 
-            currentSeris = data.current_series;
-            
+            currentSeris = data.current_series; 
             if(type==0) {
             	loadingImage(procedureId,dishId,wellId,currentSeris,'');
             	queryClearImageUrl();//初始化所有图片
@@ -925,6 +924,14 @@ function arrow(direction){
             return;
         }
     }
+
+    if(direction == 'right'){
+        if(currentSeris == lastSeris){
+            layer.alert('后面已经没有时间序列了!');
+            return;
+        }
+    }
+
     cellId = $("#cellId").val();
     wellId = $("#wellId").val();
     $.ajax({
@@ -954,14 +961,9 @@ function arrow(direction){
             $("#myscrollboxul").html(seris);
             $("#" + data.current_series + "_div").attr("class", "swiper-slide active")
 
-            if(direction == 'right'){
-                if(currentSeris == data.last_series){
-                    layer.alert('后面已经没有时间序列了!');
-                }
-            }
-
             firstSeris = series[0].series_code;
             currentSeris = data.current_series;
+            lastSeris = data.last_series;
             //loadingImage(procedureId,dishId,wellId,currentSeris,'');
             //loadingZIndex(procedureId,dishId,wellId,currentSeris);
 		},

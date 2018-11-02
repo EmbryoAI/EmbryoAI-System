@@ -82,7 +82,7 @@ function lookCase(procedureId){
 	layer.open({
 		title : "病历详情",
 		type : 2,
-		area : [ '1040px', '650px' ],
+		area : [ '760px', '650px' ],
 		maxmin : true,
 
 		shadeClose : false,
