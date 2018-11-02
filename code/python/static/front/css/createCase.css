@@ -64,7 +64,56 @@
 .layui-form-item .layui-inline{
 	margin-bottom: 22px;
 }
+.catalog{
+	font-size: 14px;
+	font-weight: bolder;
+	position: relative;
+}
+.catalog .layui-form-label{
+	width: 116px;
+	font-weight: bolder;
+}
+.catalog-details{
+	padding: 10px;
+	position: absolute;
+	top: 50%;
+	left: 328px;
+	transform: translateY(-50%);
+}
+.catalog .layui-input-inline{
+	width: 166px
+}
+.tag{ 
+	 border:3px solid #d7dae0;
+	  position:relative;
+	   background-color:#FFF;
+	   padding: 10px
+	}
+.arrow{ 
+	position:absolute;
+	 width:40px; height:40px; 
+	 left:-31px;
+	 top: 50%;
+	transform: translateY(-50%);
 
+	  }
+.arrow *{ 
+	display:block;
+	 border-width:14px; 
+	position:absolute; 
+	border-style:solid dashed dashed dashed; 
+	font-size:0; line-height:0; 
+}
+.arrow em{
+	border-color:transparent #d7dae0 transparent transparent;
+}
+.arrow span{
+	border-color:transparent #FFF transparent transparent;
+	 left:5px;
+}
+.tag p{
+	color: #467cdc;
+}
 
 
 
