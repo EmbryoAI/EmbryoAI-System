@@ -36,7 +36,7 @@ def run():
         cycle_dir = cap_dir + adir + os.path.sep # 未完成采集目录的全路径
         # 交给process_cycle_dir模块进行处理采集目录，返回True或False，代表该采集目录采集结束标志
         state = process_cycle(cycle_dir) 
-        finished_dirs.append({cycle_dir: state}) # 采集结束则将该目录添加到结束目录列表中
+        finished_dirs.append({adir: state}) # 采集结束则将该目录添加到结束目录列表中
     # 保存JSON文件
     with open(cap_dir + finished_json, 'w') as fn:
         json.dump(finished_dirs, fn)
