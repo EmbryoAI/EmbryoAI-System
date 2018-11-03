@@ -31,10 +31,12 @@ $(function(){
                 procedure.is_drinking = '';
             }
             $("#is_drinking").html(procedure.is_drinking);
+            $("#medical_record_no").html(procedure.medical_record_no);
             $("#patient_age").html(procedure.patient_age);
             $("#patient_height").html(procedure.patient_height);
             $("#patient_weight").html(procedure.patient_weight);
             $("#ec_time").html(procedure.ec_time);
+            $("#ec_count").html(procedure.ec_count);
             $("#insemi_type").html(procedure.insemi_type);
             $("#insemi_time").html(procedure.insemi_time);
             $("#embryo_num").html(procedure.embryo_num);
