@@ -293,6 +293,7 @@ def queryCollectionCatalog():
 def getCollectionCatalogInfo(agrs):
     from task.ini_parser import EmbryoIniParser as parser
     from entity.Catalog import Catalog
+    from common import parse_time_for_date_str
 
     catalog_name = agrs['catalogName']
     try:
@@ -303,18 +304,21 @@ def getCollectionCatalogInfo(agrs):
         #获取培养箱信息
         incubator_name = config['IncubatorInfo']['IncubatorName']
         #获取培养皿信息
+        dish_list = []
         dishes = [f'Dish{i}Info' for i in range(1, 10) if f'Dish{i}Info' in config]
-        print(dishes)
+        for dish in dishes:
+            dish_list.append(dish[0:5])
         #获取患者姓名
         patient_name = config[dishes[0]]['PatientName']
         #获取采集开始时间
         collection_date = config['Timelapse']['StartTime']
+        collection_date = parse_time_for_date_str(collection_date)
         #获取胚胎数量
         wells = [f'Well{i}Avail' for i in range(1, 13)]
         embryo_number = len([index for d in dishes for index,w in enumerate(wells) if config[d][w]=='1'])
 
         #封装成对象返回前端
-        catalog = Catalog(incubator=incubator_name, dish_list=dishes, patient_name=patient_name, \
+        catalog = Catalog(incubator=incubator_name, dish_list=dish_list, patient_name=patient_name, \
                 collection_date=collection_date, embryo_number=embryo_number)
 
         result = RestResult(code=200, msg='查询采集目录信息成功', count=None, data=catalog.__dict__)
