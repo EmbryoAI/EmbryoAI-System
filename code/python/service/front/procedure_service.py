@@ -265,16 +265,20 @@ def addProcedure(request):
         return 400, '评分标准不能为空!'
     incubatorCode = request.form.get('incubator')
     if not incubatorCode:
-        return 400, '培养箱不能为空!'
+        return 400, '采集目录不能为空!'
     dishCode = request.form.get('dish')
     if not dishCode:
-        return 400, '培养皿不能为空!'
+        return 400, '采集目录不能为空!'
+    catalog = request.form.get('catalogSelect')
+    if not catalog:
+        return 400, '采集目录不能为空!'
     patientAge = request.form.get('patient_age')
     if not patientAge:
         return 400, '年龄不能为空!'
     medicalRecordNo = request.form.get('medical_record_no')
     if not medicalRecordNo:
         return 400, '病历号不能为空!'
+    
     email = request.form.get('email')
     locationId = request.form.get('area')
     address = request.form.get('address')
@@ -291,7 +295,6 @@ def addProcedure(request):
     if not ecTime:
         ecTime = None
     ecCount = request.form.get('ec_count')
-    well_id = request.form.get('well_id')
     state = 1 #病历已登记完善：2；结束采集：3；已回访：
 
     createTime = updateTime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 
@@ -321,11 +324,9 @@ def addProcedure(request):
                     updateTime=updateTime, delFlag=0)
             incubator_mapper.save(incubator)
         #先查询是否存在培养名,如果没有则新增
-        dishCodeList = dishCode.split('|')
+        dishCodeList = dishCode.split(',')
         for dish_code in dishCodeList:
-            dish_code = dish_code.split(',')
-            imagePath = dish_code[1]
-            code = dish_code[0][-1]
+            code = dish_code[-1]
             dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, code)
             if not dish:
                 dishId = uuid()
@@ -338,10 +339,10 @@ def addProcedure(request):
             if not pd:
                 procedureDishId = uuid()
                 pd = ProcedureDish(id=procedureDishId, procedureId=procedureId, dishId=dishId,
-                                imagePath=imagePath)
+                                imagePath=catalog)
                 procedure_dish_mapper.save(pd)
 
-            ini_path = conf['EMBRYOAI_IMAGE_ROOT'] + os.path.sep + imagePath + os.path.sep + 'DishInfo.ini'
+            ini_path = conf['EMBRYOAI_IMAGE_ROOT'] + os.path.sep + catalog + os.path.sep + 'DishInfo.ini'
             config = parser(ini_path)
             dishes = [f'Dish{i}Info' for i in range(1, 10) if f'Dish{i}Info' in config]
             wells = [f'Well{i}Avail' for i in range(1, 13)]

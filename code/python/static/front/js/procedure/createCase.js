@@ -13,9 +13,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 		url : "/api/v1/well/catalog/list",
 		datatype : "json",
 		success : function(data) {
-			$.each(data,function(index,item){
-				$('#catalogSelect').append(new Option(data, data));
-			})
+			for(var i=0;i<data.length;i++){
+				$('#catalogSelect').append(new Option(data[i], data[i]));
+			}
 			form.render();
 		},
 		error : function(request) {
@@ -28,7 +28,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 
 		$.ajax({
 			type : "get",
-			url : "/api/v1/well/catalog/info?catalogName=20180422152100",
+			url : "/api/v1/well/catalog/info?catalogName=" + data.value,
 			datatype : "json",
 			success : function(catalogData) {
 				if(catalogData.code == 200){
@@ -38,6 +38,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 					$('#catalog_patient').text(catalogInfo.patient_name);
 					$('#catalog_collection_time').text(catalogInfo.collectionDate);
 					$('#embryo_number').val(catalogInfo.embryo_number);
+					$('#dish').val(catalogInfo.dish_list);
+					$('#incubator').val(catalogInfo.incubator);
 				}else{
 					layer.alert(catalogData.msg)
 				}
@@ -110,40 +112,11 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 	});
 })
 
-function queryDish(incubatorName){
-	$.ajax({
-		type : "get",
-		url : "/api/v1/well/dish?incubatorName=" + incubatorName,
-		datatype : "json",
-		success : function(data) {
-				$('#dishDiv').empty();
-				var child = "<strong>培养箱选择：</strong>";
-				for(var i=0;i<data.length;i=i+2){
-					child = child + "<span id=\"" + i + "\">" + data[i] + "</span>" + 
-									"<input type=\"hidden\" id=\"dish_" + i + "\" value=\"" + data[i+1] + "\"/>";
-				}
-				child = child + "<i>* 最多只能选择2个皿</i>";
-				$('#dishDiv').append(child);
-		},
-		error : function(request) {
-				layer.alert(request.responseText);
-		}
-	});
-
-//	form.on('input(birthdate)', function(data){
-//		alert(1);
-//     });  
-}
 
 function addCase(){
-	var cubActive = $('#incubatorNameDiv').children("span").hasClass("active");
-	if(cubActive == false){
-		layer.alert('请选择培养箱!');
-		return;
-	}
-	var dishActive = $('#dishDiv').children("span").hasClass("active");
-	if(dishActive == false){
-		layer.alert('请选择培养皿!');
+	var selected = $("#catalogSelect  option:selected").text();
+	if(selected == 0){
+		layer.alert('采集目录不能为空!');
 		return;
 	}
 	$("#addCaseButton").attr("disabled", true).attr("value","创建中..."); 
