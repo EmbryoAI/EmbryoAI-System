@@ -45,27 +45,36 @@ function loadNewestCase(pageNo,pageSize){
                 dataCount = data.data.length;
 				for (let i = 0; i < data.data.length; i++) {
                     const obj = data.data[i];
-                    var dishData = obj.dishCode;
-                    var dishCode = null;
-                    if(dishData !== null && dishData !== ''){
-                        dishCode = dishData.split(",");
+                    var dishDiv = "";
+                    var dishCodeArr = null;
+                    var dishIdArr = null;
+                    if(obj.dishCode !== null && obj.dishCode !== ''){
+                        dishIdArr = obj.xst.split(",");
+                        dishCodeArr = obj.dishCode.split(",");
+                        for (let j = 0; j < dishIdArr.length; j++) {
+                            if(j > 0){
+                                dishDiv = dishDiv + ',';
+                            }
+                            dishDiv = dishDiv + '<a href="/front/dish?procedureId='+ obj.id +'&dishId=' + dishIdArr[j] + '&dishCode=' +dishCodeArr[j]+'" target="_blank" class="layui-table-link view"><span>Dish #  ' + dishCodeArr[j] + '</span></a>';
+                        }
                     }
 					divData = divData + '<div class="layui-col-md3">'
                         + '<div class="case-list">';
-                    if(dishCode !== null && dishCode.length > 0 && obj.pts > 0) {
+                    if(dishCodeArr !== null && dishCodeArr.length > 0 && obj.pts > 0) {
                         divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'") title="查看病历详情">'
-                        + '<img src="/api/v1/image/findImageFouce?procedureId=' + obj.id + '&dishCode=' + dishCode[0] + '" ></div>';
+                        + '<img src="/api/v1/image/findImageFouce?procedureId=' + obj.id + '&dishCode=' + dishCodeArr[0] + '" ></div>';
                     } else {
                         divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'")><img src="/static/front/img/icon-noembryo.jpg" ></div>';
                     }
                     divData = divData + '<div class="case-info">'
-                    + '<h1><span>培养箱 ' + obj.incubatorCode + ' </span>：<span>Dish #  ' + obj.dishCode + '</span></h1>'
-                    + '<ul>'
+                    + '<h1><a href="/front/incubator?procedureId=' + obj.id + '&incubatorId=' + obj.incubatorCode + '" target="_blank" class="layui-table-link view"><span>培养箱 ' + obj.incubatorCode + ' </span></a>：' + dishDiv 
+                    + '</h1><ul>'
                         + '<li><span style="margin-right: 20px;">'+ obj.patient_name +'</span><span>'+obj.patient_age+'岁</span></li>'
                         + '<li><span>胚胎数：</span><span>' + obj.pts + '枚</span></li>'
                         + '<li><span>阶&nbsp;&nbsp;&nbsp; 段：</span><span>'+obj.zzjd+'</span></li>'
                     + '</ul>'
                     + '</div></div></div>';
+                    //
                 }
             }
             if(dataCount < 4){
