@@ -38,10 +38,11 @@
 /*弹窗详情*/
 .details-box{
 	padding: 10px;
-	width: 1000px;
+	width: 720px;
 	/*height: 520px;*/
 	background-color: #fff;
 	display: none;
+	margin: auto;
 }
 .details-box h1{
 	margin: 0;
@@ -57,8 +58,11 @@
 	padding-top: 12px;
 	line-height: 32px;
 }
+.details-box  strong{
+	color: #1b2437;
+}
 .details-box  span{
-	width: 250px;
+	width: 265px;
 	text-align: left;	
 }
 .details-box table{

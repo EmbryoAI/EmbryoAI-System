@@ -15,4 +15,4 @@ class Rule(db.Model, mixin):
     updateTime = db.Column("update_time", db.DateTime)
     delFlag = db.Column("del_flag", db.String(1))
     isDefault = db.Column("is_default", db.String(1))
-    dataJson = db.Column("data_json", db.String(2048))
+    dataJson = db.Column("data_json", db.Text)

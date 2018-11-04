@@ -268,3 +268,62 @@ def queryDish(agrs):
                                 list.append(catalog)
                         
     return jsonify(list)
+
+#查询采集目录
+def queryCollectionCatalog():
+    json_path = conf['EMBRYOAI_IMAGE_ROOT'] + conf['FINISHED_CYCLES']
+    with open(f'{json_path}', 'r') as fn :
+        catalog_json = json.loads(fn.read())
+    #读取FINISHED_CYCLES JSON文件中所有的采集目录并存放到set中
+    all_relation_catalog_set = set()    
+    for catalog in catalog_json:
+        for key in catalog:
+            all_relation_catalog_set.add(key)
+    #读取数据库中已关联的采集目录并存放到set中
+    relation_catalogs = procedure_dish_mapper.queryAllCatalog()
+    relation_catalog_set = set()  
+    for rc in relation_catalogs:
+        relation_catalog_set.add(rc.relation_catalog)
+    #将两个set做difference操作得到未关联的采集目录返回前端
+    no_relation_catalog = all_relation_catalog_set.difference(relation_catalog_set)
+
+    return jsonify(list(no_relation_catalog))
+
+#查询采集目录详情,包括目录下的培养箱,培养皿,用户姓名,开始采集时间,胚胎数量等
+def getCollectionCatalogInfo(agrs):
+    from task.ini_parser import EmbryoIniParser as parser
+    from entity.Catalog import Catalog
+    from common import parse_time_for_date_str
+
+    catalog_name = agrs['catalogName']
+    try:
+        #拼接ini文件路径
+        ini_path = conf['EMBRYOAI_IMAGE_ROOT'] + os.path.sep + catalog_name + os.path.sep + 'DishInfo.ini'
+        #解析ini文件
+        config = parser(ini_path)
+        #获取培养箱信息
+        incubator_name = config['IncubatorInfo']['IncubatorName']
+        #获取培养皿信息
+        dish_list = []
+        dishes = [f'Dish{i}Info' for i in range(1, 10) if f'Dish{i}Info' in config]
+        for dish in dishes:
+            dish_list.append(dish[0:5])
+        #获取患者姓名
+        patient_name = config[dishes[0]]['PatientName']
+        #获取采集开始时间
+        collection_date = config['Timelapse']['StartTime']
+        collection_date = parse_time_for_date_str(collection_date)
+        #获取胚胎数量
+        wells = [f'Well{i}Avail' for i in range(1, 13)]
+        embryo_number = len([index for d in dishes for index,w in enumerate(wells) if config[d][w]=='1'])
+
+        #封装成对象返回前端
+        catalog = Catalog(incubator=incubator_name, dish_list=dish_list, patient_name=patient_name, \
+                collection_date=collection_date, embryo_number=embryo_number)
+
+        result = RestResult(code=200, msg='查询采集目录信息成功', count=None, data=catalog.__dict__)
+
+        return jsonify(result.__dict__)
+    except:
+        result = RestResult(code=500, msg='查询采集目录信息异常', count=None, data=None)
+        return jsonify(result.__dict__)

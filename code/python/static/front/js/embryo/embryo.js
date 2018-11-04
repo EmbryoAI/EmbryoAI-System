@@ -765,9 +765,9 @@ function querySeriesList(wellid, serisCode, type, cellId){
             embryoId = data.embryo_id;
             $("#embryoId").val(embryoId);
 
-            currentSeris = data.current_series;
-            loadingImage(procedureId,dishId,wellId,currentSeris,'');
+            currentSeris = data.current_series; 
             if(type==0) {
+            	loadingImage(procedureId,dishId,wellId,currentSeris,'');
             	queryClearImageUrl();//初始化所有图片
             	n = 0;
             	
@@ -790,7 +790,10 @@ function querySeriesList(wellid, serisCode, type, cellId){
             			layer.alert(request.responseText);
             		}
             	});
+            }else if (type==1){
+            	n = $("#imageVideo"+currentSeris).attr("index");//根据时间序列同步播放的位置
             }else {
+            	loadingImage(procedureId,dishId,wellId,currentSeris,'');
             	n = $("#imageVideo"+currentSeris).attr("index");//根据时间序列同步播放的位置
             }
             
@@ -840,7 +843,7 @@ function preFrame(){
             parent.layer.alert(request.responseText);
         },
         success : function(data) {
-            querySeriesList(wellId,data,1, cellId);
+            querySeriesList(wellId,data,2, cellId);
         }
     });
 }
@@ -863,7 +866,7 @@ function nextFrame(){
             if(data == null){
                 parent.layer.alert("已经是最后一张了!");
             }else{
-                querySeriesList(wellId,data,1, cellId);
+                querySeriesList(wellId,data,2, cellId);
             }
         }
     });
@@ -921,6 +924,14 @@ function arrow(direction){
             return;
         }
     }
+
+    if(direction == 'right'){
+        if(currentSeris == lastSeris){
+            layer.alert('后面已经没有时间序列了!');
+            return;
+        }
+    }
+
     cellId = $("#cellId").val();
     wellId = $("#wellId").val();
     $.ajax({
@@ -950,14 +961,9 @@ function arrow(direction){
             $("#myscrollboxul").html(seris);
             $("#" + data.current_series + "_div").attr("class", "swiper-slide active")
 
-            if(direction == 'right'){
-                if(currentSeris == data.last_series){
-                    layer.alert('后面已经没有时间序列了!');
-                }
-            }
-
             firstSeris = series[0].series_code;
             currentSeris = data.current_series;
+            lastSeris = data.last_series;
             //loadingImage(procedureId,dishId,wellId,currentSeris,'');
             //loadingZIndex(procedureId,dishId,wellId,currentSeris);
 		},
@@ -1198,7 +1204,7 @@ function node(upOrdown) {
 		cache:false,
 		success : function(data) {
 			 if(data!=null) {
-				 querySeriesList(wellId, data.milestoneTime, 1, cellId);
+				 querySeriesList(wellId, data.milestoneTime, 2, cellId);
 //				 getBigImage(procedureId, dishId, wellId, data.milestoneTime,0, cellId,currentSerisName);
 			 }else {
 				 if("up"==upOrdown) {

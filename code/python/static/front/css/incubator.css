@@ -82,3 +82,9 @@
 	margin-left: 15px;
 	font-weight: normal;
 }
+	/* ipad适配 */
+	@media only screen and (min-width: 321px) and (max-width: 1024px) {
+		.patient-info{
+			margin-right: 10px;
+		}
+	}

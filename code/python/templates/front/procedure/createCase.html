@@ -29,16 +29,38 @@
                 <input type="hidden" name="userId" id="userId" value="{{current_user.id}}">
             {% endif %}
             <!--选择皿-->
-            <div class="choice incubator" id="incubatorNameDiv">
+            <!-- <div class="choice incubator" id="incubatorNameDiv">
                 <strong>培养箱选择：</strong>
-                <!--<span class="active">001</span><span>002</span><span>003</span>-->
-            </div>
+                <span class="active">001</span><span>002</span><span>003</span>
+            </div> -->
             <input type="hidden" name="incubator" id="incubator"/>
-            <div class="choice dish" id="dishDiv">
+            <!-- <div class="choice dish" id="dishDiv">
                 <strong>培养皿选择：</strong>
-                <!--<span class="active">1</span><span>2</span><span>3</span><span>4</span><i>* 最多只能选择2个皿</i>-->
-            </div>
+                <span class="active">1</span><span>2</span><span>3</span><span>4</span><i>* 最多只能选择2个皿</i>
+            </div> -->
             <input type="hidden" name="dish" id="dish"/>
+            <!-- 新增--采集目录选择 -->
+            <div class="catalog">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><i>*</i>采集目录选择：</label>
+                        <div class="layui-input-inline">
+                                <select name="catalogSelect" id="catalogSelect" lay-filter="catalogSelect">
+                                    <option value="0">--请选择采集目录--</option>
+                                </select>
+                            </div> 
+                        </div>
+                        <div class="catalog-details" style="display:none" id="catalogInfoDiv">
+                            <div class="tag">
+                                 <div class="arrow">
+                                     <em></em><span></span>
+                                </div>
+                                <p>培养箱：<span id="catalog_incubator"></span></p>
+                                <p>培养皿：<span id="catalog_dish"></span></p>
+                                <p>姓  名：<span id="catalog_patient"></span></p>
+                                <p>开始采集时间：<span id="catalog_collection_time"></span></p>
+                            </div>
+                        </div>
+                </div>
             <!--基本信息-->
             <h1 class="details-title">基本信息</h1>
             <div class="layui-form-item">
