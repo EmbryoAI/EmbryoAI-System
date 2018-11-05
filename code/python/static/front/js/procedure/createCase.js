@@ -7,6 +7,52 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 	var laydate = layui.laydate;
 	var address = layui.address();
 
+	//查询未关联的采集目录
+	$.ajax({
+		type : "get",
+		url : "/api/v1/well/catalog/list",
+		datatype : "json",
+		success : function(data) {
+			for(var i=0;i<data.length;i++){
+				$('#catalogSelect').append(new Option(data[i], data[i]));
+			}
+			form.render();
+		},
+		error : function(request) {
+			layer.alert(request.responseText);
+		}
+	});
+
+	//监听采集目录下拉框选中事件
+	form.on('select(catalogSelect)', function(data){
+
+		$.ajax({
+			type : "get",
+			url : "/api/v1/well/catalog/info?catalogName=" + data.value,
+			datatype : "json",
+			success : function(catalogData) {
+				if(catalogData.code == 200){
+					var catalogInfo = catalogData.data;
+					$('#catalog_incubator').text(catalogInfo.incubator);
+					$('#catalog_dish').text(catalogInfo.dish_list);
+					$('#catalog_patient').text(catalogInfo.patient_name);
+					$('#catalog_collection_time').text(catalogInfo.collectionDate);
+					$('#embryo_number').val(catalogInfo.embryo_number);
+					$('#dish').val(catalogInfo.dish_list);
+					$('#incubator').val(catalogInfo.incubator);
+				}else{
+					layer.alert(catalogData.msg)
+				}
+			},
+			error : function(request) {
+				layer.alert(request.responseText);
+			}
+		});
+
+		$('#catalogInfoDiv').show();
+	});
+
+	//查询评分规则
 	$.ajax({
 		type : "get",
 		url : "/api/v1/rule/list",
@@ -23,85 +69,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 		}
 	});
 
-	// 培养箱选择
-	$('.incubator').on('click','span',function(){
-		if($(this).hasClass('active')){
-			$(this).removeClass('active');
-		}else{
-			$(this).siblings('span').removeClass('active');
-			$(this).addClass('active');
-		}
-		$('#incubator').val($(this).html());
-		embryoCount = 0;
-		$('#embryo_number').val(embryoCount);
-	})
-	// 培养皿选择
-	$('.dish').on('click','span',function(){
-		const length = $('.dish').children('.active').length;
-		const text = $(this).text();
-
-		var dishName = "";
-		var dishCatalog = $('#dish_' + this.id).val();
-		if(dishName == ''){
-			dishName = $(this).html() + "," + dishCatalog;
-		}else{
-			dishName = dishName + "|" + $(this).html() + "," + dishCatalog;
-		}
-		$('#dish').empty();
-		$('#dish').val(dishName);
-		
-
-		if(length>=2){
-			if($(this).hasClass('active')){
-				$(this).removeClass('active');
-
-				$.ajax({
-					type : "get",
-					url : "/api/v1/embryo/number?dishCode=" + dishName,
-					datatype : "json",
-					success : function(data) {
-						embryoCount = embryoCount - data;
-						$('#embryo_number').val(embryoCount);
-					},
-					error : function(request) {
-						layer.alert(request.responseText);
-					}
-				});
-			}
-			return
-		}
-		if($(this).hasClass('active')){
-			$(this).removeClass('active');
-			$.ajax({
-				type : "get",
-				url : "/api/v1/embryo/number?dishCode=" + dishName,
-				datatype : "json",
-				success : function(data) {
-					embryoCount = data - embryoCount;
-					$('#embryo_number').val(embryoCount);
-				},
-				error : function(request) {
-					layer.alert(request.responseText);
-				}
-			});
-		}else{
-			$(this).addClass('active');
-			$.ajax({
-				type : "get",
-				url : "/api/v1/embryo/number?dishCode=" + dishName,
-				datatype : "json",
-				success : function(data) {
-					embryoCount = data + embryoCount;
-					$('#embryo_number').val(embryoCount);
-				},
-				error : function(request) {
-					layer.alert(request.responseText);
-				}
-			});
-		}
-		$('#embryo_number').val(embryoCount);
-		
-	})	
+	
 	
 	//日期
 	laydate.render({
@@ -142,61 +110,13 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
       }
     }    
 	});
-	
-		$(function(){
-				$.ajax({
-						type : "get",
-						url : "/api/v1/well/incubator",
-						datatype : "json",
-						success : function(data) {
-								var child = "";
-								for(var i=0;i<data.length;i++){
-										child = child + "<span onclick=\"queryDish('" + data[i] + "')\">" +
-										data[i] + "</span>";
-								}
-								$('#incubatorNameDiv').append(child);
-						},
-						error : function(request) {
-								layer.alert(request.responseText);
-						}
-				});
-		});
 })
 
-function queryDish(incubatorName){
-	$.ajax({
-		type : "get",
-		url : "/api/v1/well/dish?incubatorName=" + incubatorName,
-		datatype : "json",
-		success : function(data) {
-				$('#dishDiv').empty();
-				var child = "<strong>培养箱选择：</strong>";
-				for(var i=0;i<data.length;i=i+2){
-					child = child + "<span id=\"" + i + "\">" + data[i] + "</span>" + 
-									"<input type=\"hidden\" id=\"dish_" + i + "\" value=\"" + data[i+1] + "\"/>";
-				}
-				child = child + "<i>* 最多只能选择2个皿</i>";
-				$('#dishDiv').append(child);
-		},
-		error : function(request) {
-				layer.alert(request.responseText);
-		}
-	});
-
-//	form.on('input(birthdate)', function(data){
-//		alert(1);
-//     });  
-}
 
 function addCase(){
-	var cubActive = $('#incubatorNameDiv').children("span").hasClass("active");
-	if(cubActive == false){
-		layer.alert('请选择培养箱!');
-		return;
-	}
-	var dishActive = $('#dishDiv').children("span").hasClass("active");
-	if(dishActive == false){
-		layer.alert('请选择培养皿!');
+	var selected = $("#catalogSelect  option:selected").text();
+	if(selected == 0){
+		layer.alert('采集目录不能为空!');
 		return;
 	}
 	$("#addCaseButton").attr("disabled", true).attr("value","创建中..."); 
@@ -213,22 +133,6 @@ function addCase(){
 			parent.layer.alert(data);
 			var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 			parent.layer.close(index);
-		}
-	});
-}
-
-function quertEmbryoNumber(dishCode){
-	$.ajax({
-		type : "get",
-		url : "/api/v1/embryo/number?dishCode=" + dishCode,
-		datatype : "json",
-		success : function(data) {
-			//$('#embryo_number').val(data.length);
-			embryoNumber = data.length;
-			$('#well_id').val(data);
-		},
-		error : function(request) {
-			layer.alert(request.responseText);
 		}
 	});
 }
@@ -250,7 +154,7 @@ function queryRules(){
 		}
 	});
 }
-
+//根据出生日期计算年龄
 function countAge(){
 	var birthdate = $('#birth').val();
 	var year = birthdate.substring(0,4);
@@ -264,6 +168,22 @@ function countAge(){
 	}
 }
 
-
-
-
+//根据身份证号计算年龄
+function countAgeByIdCard(){
+	var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;  
+	var idCard = $('#nope').val();
+	if(reg.test(idCard) === false){  
+		layer.alert("请输入正确的身份证!");  
+       return  false;  
+   	}  
+	var birthDate = idCard.substring(6, 14);
+	var year = birthDate.substring(0,4);
+	var today = new Date();
+	var now = today.getFullYear();
+	var result = parseInt(now) - parseInt(year);
+	if(birthDate == ''){
+		$('#patientAge').val(0);
+	}else{
+		$('#patientAge').val(result);
+	}
+}

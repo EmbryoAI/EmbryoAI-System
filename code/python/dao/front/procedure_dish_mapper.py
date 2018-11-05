@@ -80,3 +80,18 @@ def queryEmbryoId(imagePath,dishId,cellCode):
         return None,None
     finally:
         db.session.remove()
+
+def queryAllCatalog():
+    try:
+        sql = text("""
+            SELECT tpd.`image_path` AS relation_catalog FROM `t_procedure_dish` tpd 
+        """)
+        print(sql)
+        # 计算总条数
+        data = db.session.execute(sql).fetchall()
+        return data
+    except Exception as e:
+        raise DatabaseError("查询所以关联病例采集目录信息!",e.message,e)
+        return None
+    finally:
+        db.session.remove()

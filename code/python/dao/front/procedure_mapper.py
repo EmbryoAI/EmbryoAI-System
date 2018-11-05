@@ -91,7 +91,7 @@ def getProcedureById(procedureID):
                         pat.`email`, pat.`mobile`,pat.`address`,sl.`sole_name`,pat.`country`, 
                         pat.`is_smoking`,pat.`is_drinking`, pro.`patient_age`, pro.`patient_height`,
                         pro.`patient_weight`,pro.`ec_time` AS ec_time,pro.`ec_count` AS ec_count, 
-                        pro.`insemi_time` AS insemi_time,pro.`memo`,
+                        pro.`insemi_time` AS insemi_time,pro.`memo`,pro.`medical_record_no` AS medical_record_no, 
                         COUNT(DISTINCT e.id) AS embryo_num,d.dict_value AS insemi_type,
                         CONCAT('D',DATEDIFF(IF(pro.cap_end_time,pro.cap_end_time,NOW()),pro.insemi_time)) AS zzjd 
             FROM t_patient pat 
