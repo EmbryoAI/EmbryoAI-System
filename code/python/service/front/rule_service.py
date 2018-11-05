@@ -100,7 +100,7 @@ def saveRuleJson(request):
         else:
             dictValue = dictObj.dictValue#转换字典值存储
         
-        if index==None or index=="null":#如果为空则为新增
+        if index=="":#如果为空则为新增
             index = uuid()
             jsonObj["index"] = index
             jsonObj["condition"] = condition
