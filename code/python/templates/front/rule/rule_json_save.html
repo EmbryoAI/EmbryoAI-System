@@ -38,9 +38,9 @@ body {
 			<input id="ruleId" name="ruleId" type="hidden" value="{{ruleId}}" />
 			<input id="jsonKey" name="jsonKey" type="hidden"  value="{{jsonKey}}" />
 			{% if type=='update' %}
-				<input id="index" name="index" type="text" value="{{index}}" />
+				<input id="index" name="index" type="hidden" value="{{index}}" />
 			{% else %}
-				<input id="index" name="index" type="text" value="" />
+				<input id="index" name="index" type="hidden" value="" />
 			{% endif %}
 			<input id="conditionHide" name="conditionHide" type="hidden" value="{{ruleJson.condition}}" />
 			<input id="symbolHide" name="symbolHide" type="hidden" value="{{ruleJson.symbol}}" />

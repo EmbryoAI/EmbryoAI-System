@@ -70,3 +70,15 @@ def queryDish():
     parser = reqparse.RequestParser()
     parser.add_argument('incubatorName', type=str)
     return well_service.queryDish(parser.parse_args())
+
+#查询采集目录
+@well_rest_controller.route('/catalog/list', methods=['GET'])
+def queryCollectionCatalog():
+    return well_service.queryCollectionCatalog()
+
+#查询采集目录详情,包括目录下的培养箱,培养皿,用户姓名,开始采集时间,胚胎数量等
+@well_rest_controller.route('/catalog/info', methods=['GET'])
+def getCollectionCatalogInfo():
+    parser = reqparse.RequestParser()
+    parser.add_argument('catalogName', type=str)
+    return well_service.getCollectionCatalogInfo(parser.parse_args())

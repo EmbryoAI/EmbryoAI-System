@@ -87,3 +87,10 @@ def nested_dict(obj):
         result[key] = element
     return result
 
+def parse_time_for_date_str(date):
+    year = date[0:4]
+    month = date[4:6]
+    day = date[6:8]
+    hour = date[8:10]
+    min = date[10:12]
+    return year + "-" + month + "-" + day + " " + hour + ":" + min
