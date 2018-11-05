@@ -23,14 +23,12 @@ $(function(){
             if(procedure.sole_name != null && procedure.sole_name != ''){
                 $("#new_address").val(procedure.country + procedure.sole_name + procedure.address);
             }
-            if(procedure.is_smoking == 0){
-                procedure.is_smoking = '';
+            if(procedure.is_smoking == 1){
+                $('#is_smoking').attr("checked", true);
             }
-            $("#is_smoking").html(procedure.is_smoking);
-            if(procedure.is_drinking == 0){
-                procedure.is_drinking = '';
+            if(procedure.is_drinking == 1){
+                $('#is_drinking ').attr("checked", true);
             }
-            $("#is_drinking").html(procedure.is_drinking);
             $("#medical_record_no").html(procedure.medical_record_no);
             $("#patient_age").html(procedure.patient_age);
             $("#patient_height").html(procedure.patient_height);

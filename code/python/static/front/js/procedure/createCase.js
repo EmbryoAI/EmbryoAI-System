@@ -154,7 +154,7 @@ function queryRules(){
 		}
 	});
 }
-
+//根据出生日期计算年龄
 function countAge(){
 	var birthdate = $('#birth').val();
 	var year = birthdate.substring(0,4);
@@ -168,6 +168,22 @@ function countAge(){
 	}
 }
 
-
-
-
+//根据身份证号计算年龄
+function countAgeByIdCard(){
+	var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;  
+	var idCard = $('#nope').val();
+	if(reg.test(idCard) === false){  
+		layer.alert("请输入正确的身份证!");  
+       return  false;  
+   	}  
+	var birthDate = idCard.substring(6, 14);
+	var year = birthDate.substring(0,4);
+	var today = new Date();
+	var now = today.getFullYear();
+	var result = parseInt(now) - parseInt(year);
+	if(birthDate == ''){
+		$('#patientAge').val(0);
+	}else{
+		$('#patientAge').val(result);
+	}
+}
