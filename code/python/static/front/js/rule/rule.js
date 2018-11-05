@@ -3,7 +3,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
     var $ = layui.jquery;
     var layer = layui.layer;
     var table = layui.table;
-		
+	var dataIndex = 0;
 $(function () {
 	$('#search').on('click', function () {//查询
 		if($("#ruleId").val()=="") {
@@ -44,11 +44,14 @@ $(function () {
 								tableTbody+="<td>"+obj[j].weight+"</td>";
 								tableTbody+="<td>";
 								tableTbody+="<a class='layui-table-link edit-btn'" +
-										" onclick='toRuleJsonSave(\""+dictList[i].dictValue+"\",\""+obj[j].index+"\")'" +
+										" onclick='toRuleJsonSave(\""+dictList[i].dictValue+"\",\""+obj[j].index+"\",\"update\")'" +
 												" lay-event='edit'>编辑</a>";
 								tableTbody+="<a class='layui-table-link del-btn' " +
 										"onclick='deleteRuleJson(\""+dictList[i].dictValue+"\",\""+obj[j].index+"\")'" +
 												" lay-event='del'>删除</a>";
+								tableTbody+="<a class='layui-table-link edit-btn' " +
+								"onclick='toRuleJsonSave(\""+dictList[i].dictValue+"\",\""+obj[j].index+"\",\"copy\")'" +
+										" lay-event='del'>复制</a>";
 								tableTbody+="</td>";
 							tableTbody+="</tr>";
 						}
@@ -61,12 +64,20 @@ $(function () {
 						+tableTbody
 						+'</table>'
 						+'<p class="addbtn">'
-							+"<button onclick='toRuleJsonSave(\""+dictList[i].dictValue+"\",null);'; type='button'>新增条件行</button>"
+							+"<button onclick='toRuleJsonSave(\""+dictList[i].dictValue+"\",null,\"add\");'; type='button'>新增条件行</button>"
 						+'</p>'
 					+'</div>'
 					$("#tableSec").append(str);
 				 }
 				 
+					 
+				if(dataIndex == 0){
+					$('#tableSec .node').addClass('show');
+				}else{
+					$('#tableSec .node').addClass('hide');
+					$('#tableSec .show').removeClass('show');
+					$('#tableSec div[data-index=\"' + dataIndex + '\"]').addClass('show');
+				}
 			},
 			error : function(request) {
 				layer.alert(request.responseText);
@@ -84,7 +95,7 @@ $(function () {
 					$('#tableSec .show').removeClass('show');
 					$('#tableSec div[data-index=\"' + index + '\"]').addClass('show');
 				}
-				
+				dataIndex = index;
 		})
 		$('#stage').on('click','span',function(){
 				$('#stage span').removeClass('active');
@@ -148,13 +159,16 @@ function toRuleSave(type) {
 /**
  * 添加规则JSON串页面
  * @param jsonKey  添加的里程碑节点类型
+ * @param type add.新增  update.编辑  copy.复制
  */
-function toRuleJsonSave(jsonKey,index) {
+function toRuleJsonSave(jsonKey,index,type) {
 	var title = "";
-	if(index==null) {
+	if(type=="add") {
 		title = "添加"+jsonKey+"规则";
-	}else {
+	}else if(type=="update"){
 		title = "编辑"+jsonKey+"规则";
+	}else {
+		title = "复制"+jsonKey+"规则";
 	}
 	
 	layer.open({
@@ -162,7 +176,7 @@ function toRuleJsonSave(jsonKey,index) {
 		maxmin: true,
 		title: title,
 		area : ['560px' , '400px'],
-		content: '/front/rule/toRuleJsonSave/'+$("#ruleId").val()+'/'+jsonKey+'/'+index,
+		content: '/front/rule/toRuleJsonSave/'+$("#ruleId").val()+'/'+jsonKey+'/'+index+'/'+type,
 	    end:function(index,layero){
 	    	$('#search').trigger("click");
 	    }

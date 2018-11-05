@@ -39,11 +39,15 @@ def toRuleSave():
 
 
 """
-    跳转到新增规则JSON页面
+     跳转到新增规则JSON页面
+  @param ruleId: 规则ID
+  @param jsonKey: jsonKey
+  @param index: 当前要修改的这条的主键
+  @param type: add新增  update编辑   copy复制  
 """
-@rule_controller.route('/toRuleJsonSave/<string:ruleId>/<string:jsonKey>/<string:index>', methods=['GET'])
+@rule_controller.route('/toRuleJsonSave/<string:ruleId>/<string:jsonKey>/<string:index>/<string:type>', methods=['GET'])
 @login_required
-def toRuleJsonSave(ruleId,jsonKey,index):
+def toRuleJsonSave(ruleId,jsonKey,index,type):
     #获取条件
     result = dict_dao.queryDictListByClass("criteria_type")
     criteriaList = list(map(lambda x: x.to_dict(),result))
@@ -69,4 +73,4 @@ def toRuleJsonSave(ruleId,jsonKey,index):
     ruleJson = rule_service.getRuleJson(ruleId,jsonKey,index)
     return render_template('front/rule/rule_json_save.html',ruleId=ruleId
                            ,conditionList=conditionList,symbolList=symbolList
-                           ,jsonKey=jsonKey,index=index,ruleJson=ruleJson)
+                           ,jsonKey=jsonKey,index=index,ruleJson=ruleJson,type=type)
