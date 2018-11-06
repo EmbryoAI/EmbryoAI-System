@@ -55,7 +55,7 @@ function loadNewestCase(pageNo,pageSize){
                             if(j > 0){
                                 dishDiv = dishDiv + ',';
                             }
-                            dishDiv = dishDiv + '<a href="/front/dish?procedureId='+ obj.id +'&dishId=' + dishIdArr[j] + '&dishCode=' +dishCodeArr[j]+'" target="_blank" class="layui-table-link view"><span>Dish #  ' + dishCodeArr[j] + '</span></a>';
+                            dishDiv = dishDiv + '<a href="/front/dish?procedureId='+ obj.id +'&dishId=' + dishIdArr[j] + '&dishCode=' +dishCodeArr[j]+'" target="_blank"><span>Dish #  ' + dishCodeArr[j] + '</span></a>';
                         }
                     }
 					divData = divData + '<div class="layui-col-md3">'
@@ -67,7 +67,7 @@ function loadNewestCase(pageNo,pageSize){
                         divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'")><img src="/static/front/img/icon-noembryo.jpg" ></div>';
                     }
                     divData = divData + '<div class="case-info">'
-                    + '<h1><a href="/front/incubator?procedureId=' + obj.id + '&incubatorId=' + obj.incubatorCode + '" target="_blank" class="layui-table-link view"><span>培养箱' + obj.incubatorCode + '</span></a>：' + dishDiv 
+                    + '<h1><a href="/front/incubator?procedureId=' + obj.id + '&incubatorId=' + obj.incubatorCode + '" target="_blank"><span>培养箱 ' + obj.incubatorCode + '</span></a>：' + dishDiv 
                     + '</h1><ul>'
                         + '<li><span style="margin-right: 20px;">'+ obj.patient_name +'</span><span>'+obj.patient_age+'岁</span></li>'
                         + '<li><span>胚胎数：</span><span>' + obj.pts + '枚</span></li>'

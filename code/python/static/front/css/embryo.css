@@ -679,6 +679,7 @@
 	margin-top: 20px;
 	background: url(../img/yellow-arrowD.png) no-repeat top center;
 }
+
 .zarrowU:hover,.zarrowD:hover{
 	transform:scale(1.2);
 	opacity: 1;
