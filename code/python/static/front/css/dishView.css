@@ -346,7 +346,7 @@
 }
 .dishimg li a{
 	position: absolute;
-	bottom: -22px;
+	bottom: -26px;
 	right: 2px;
 	display: block;
 	padding: 2px;
@@ -354,4 +354,7 @@
 	z-index: 99;
 	/* text-shadow: 1px 1px 0px rgba(0,0,0,1); */
 	cursor: pointer;
+}
+.dishimg li a:hover{
+	color: ##0531d4;
 }

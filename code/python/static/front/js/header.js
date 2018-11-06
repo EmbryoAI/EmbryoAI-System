@@ -94,7 +94,7 @@ function openAddCase() {
 	layer.open({
 		title : "病历详情",
 		type : 2,
-		area : [ '1400px', '700px' ],
+		area : [ '1000px', '700px' ],
 		maxmin : true,
 		shadeClose : false,
         content : '/front/procedure/add',
