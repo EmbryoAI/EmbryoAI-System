@@ -78,9 +78,29 @@ def findImageFouce():
 
 
 ''' 
-    查询最新的采集目录下的培养箱里的三个皿里的12张缩略图
+    查询最新的采集目录下的三个皿里的12张缩略图
 '''
 @image_rest_controller.route('/findNewestImageUrl', methods=['POST','GET'])
 def findNewestImageUrl():
     imageUrlList = image_service.findNewestImageUrl()
     return jsonify(imageUrlList.__dict__)
+
+
+''' 根据周期id、皿编号、孔编号、时间序列、z轴位置获取图像路径
+    @param procedureId: 周期id
+    @param dishId ： 皿id
+    @param wellId ： 孔编号
+    @param timeSeries ： 时间序列
+    @param zIndex ： z轴位置
+'''
+@image_rest_controller.route('/getBigImagePath', methods=['POST','GET'])
+@login_required
+def getBigImagePath():
+    parser = reqparse.RequestParser()
+    parser.add_argument('procedureId', type=str)
+    parser.add_argument('dishId', type=str)
+    parser.add_argument('wellId', type=str)
+    parser.add_argument('timeSeries', type=str)
+    parser.add_argument('zIndex',type=str)
+    imageUrl = image_service.getBigImagePath(parser.parse_args())
+    return jsonify(imageUrl.__dict__)

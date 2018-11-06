@@ -239,12 +239,12 @@ def findNewestImageUrl():
         if dishList is None :
             return RestResult(200, "最新采集目录下暂无皿信息", 0, "")
 
-        dataList = {"incubatorId":dishList[0]["incubatorId"],"incubatorCode":dishList[0]["incubatorCode"]}
+        dataList = {}
         data = []
         for dishMap in dishList : 
             jsonPath = path + f'DISH{dishMap["dishCode"]}' + os.path.sep + conf['DISH_STATE_FILENAME'] 
             print(jsonPath)
-            infoMap = {'imagePath':imagePath,"dishId":dishMap["dishId"],"dishCode":dishMap["dishCode"]}
+            infoMap = {'imagePath':imagePath,"dishId":dishMap["dishId"],"dishCode":dishMap["dishCode"],"incubatorId":dishMap["incubatorId"],"incubatorCode":dishMap["incubatorCode"]}
             print(infoMap)
             if not os.path.exists(jsonPath) :
                 infoMap["wellUrls"] = ""
@@ -281,3 +281,41 @@ def findNewestImageUrl():
         return RestResult(200, "查询最新采集目录下的皿信息成功", 1, dataList)
     except:
         return RestResult(400, "查询最新采集目录下的皿信息失败", 0, "")
+
+
+def getBigImagePath(agrs):
+    logger().info(agrs)
+    procedureId = agrs['procedureId']
+    dishId = agrs['dishId']
+    wellId = agrs['wellId']
+    timeSeries = agrs['timeSeries']
+    zIndex = agrs['zIndex']
+    try:
+        dish = dish_mapper.queryById(dishId)
+        imagePath,path,dishJson = readDishState(procedureId,dishId)
+        url = imagePath + os.path.sep + f'DISH{dish.dishCode}' + os.path.sep 
+        if dishJson['finished'] & dishJson['avail'] == 1 : 
+            if not timeSeries.strip() :
+            # if not timeSeries:
+                timeSeries = dishJson['lastSerie']
+            wells = dishJson['wells']
+            oneWell = wells[f'{wellId}']
+            series = oneWell['series']
+            oneSeries = series[f'{timeSeries}']
+            jpgName = oneSeries['sharp']
+            # jpgName = oneSeries['focus']
+            if zIndex :
+                zIndexFiles = oneWell['zIndexFiles']
+                jpgName = zIndexFiles[f'{zIndex}']
+            url = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + url + timeSeries + os.path.sep + jpgName
+            logger().info(url)
+            # image = cv2.imread(r'e:\EmbryoAI\EmbryoAI-System\code\python\..\captures\20180422152100\DISH8\7000000\00006.jpg')
+            # image = open(jpgPath,'rb').read()
+            return RestResult(200, "获取图片路径成功", 1, url)
+        else :
+            logger("文件未处理完成或皿状态是无效的")
+            return RestResult(400, "获取图片路径失败", 0, "")
+    except:
+        logger().info("获取图片路径出现异常")
+        return RestResult(400, "获取图片路径失败", 0, "")
+    

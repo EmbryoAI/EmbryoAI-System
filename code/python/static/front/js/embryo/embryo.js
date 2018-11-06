@@ -696,10 +696,24 @@ function loadingImage(procedureId,dishId,wellId,timeSeries,zIndex){
         $("#distinct").prop("disabled",false);
         $("#distinct").prop("checked",false);
     }
-    var imgUrl = "/api/v1/image/findImage?procedureId="+ procedureId +"&dishId="+ dishId +"&wellId="+ wellId +"&timeSeries="+ timeSeries +"&zIndex=" + zIndex; 
-    var img = "<img src=" + imgUrl + ">";
-    $("#imgDiv").html(img);
-    current_seris_image_path = imgUrl;
+    $.ajax({
+        cache : true,
+        type : "get",
+        url : "/api/v1/image/getBigImagePath",
+        data : {"procedureId":procedureId,"dishId":dishId,"wellId":wellId,"timeSeries":timeSeries,"zIndex":zIndex},
+        success : function(data) {
+            if (data.code == "200") {
+                $("#imgDiv").html("<img src=" + data.data + ">");
+            } else {
+                layer.alert(data.msg);
+                $("#imgDiv").html("");
+            }
+        },
+        error : function(request) {
+            layer.alert(request.responseText);
+        }
+    });
+    current_seris_image_path = "/api/v1/image/findImage?procedureId="+ procedureId +"&dishId="+ dishId +"&wellId="+ wellId +"&timeSeries="+ timeSeries +"&zIndex=" + zIndex;
 }
 
 //羊城
