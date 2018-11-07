@@ -25,9 +25,12 @@
 	margin-left: 7px;
 	transition:all .3s ease;
 }
-.btn-prev:hover,.btn-next:hover{
-	transform:scale(1.5);
-	cursor: pointer;
+
+@media only screen and (min-width: 1029px) {
+	.btn-prev:hover,.btn-next:hover{
+		transform:scale(1.5);
+		cursor: pointer;
+	}
 }
 .btn-next{
 	float: right;
@@ -679,8 +682,9 @@
 	margin-top: 20px;
 	background: url(../img/yellow-arrowD.png) no-repeat top center;
 }
-
-.zarrowU:hover,.zarrowD:hover{
-	transform:scale(1.2);
-	opacity: 1;
+@media only screen and (min-width: 1029px) {
+	.zarrowU:hover,.zarrowD:hover{
+		transform:scale(1.2);
+		opacity: 1;
+	}
 }

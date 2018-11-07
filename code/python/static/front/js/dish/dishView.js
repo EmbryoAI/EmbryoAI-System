@@ -16,6 +16,20 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 		  ,shade: 0.3,time:0
 	});
     $(function () {
+	// 移动端点击侧滑出病历详情
+		$('#blinfo').click(function (){
+			console.log('ssss')
+			if($(this).hasClass('active')){
+				$(this).removeClass('active');
+				$(this).text("← 病历信息");
+				$(".dish-info").animate({right:'-300px'});
+			}else{
+				$(this).addClass('active');
+				$(this).text("病历信息 →");
+				$(".dish-info").animate({right:'0'});
+
+			}
+		})
 		// 加载胚胎标记状态
 		loadEmbryoResultTool("'embryo_fate_type'");
 		

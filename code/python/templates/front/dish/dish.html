@@ -6,6 +6,24 @@
         width: 1400px;
         margin: auto;
     }
+    /* ipad适配 */
+@media only screen and (min-width: 321px) and (max-width: 1024px) {
+    .main{
+        width: auto;
+        margin: auto;
+        padding: 50px 10px 80px 10px;
+    }
+    .dish-sec{	width:1000px ;	height: 600px;	margin-top: 28px;	margin: auto;  overflow: hidden;   position: relative;}
+    .dish-name{	width: 960px;    margin: auto;    margin-bottom: 20px;}
+    .dish-box{	width: 960px;	padding: 10px;	height: 568px;    float: none;    margin: auto;}
+    .dishimg li{    width: 144px;    height: 144px;}
+    .dishimg li div{        width: 144px; height: 144px;   }
+    .time-list span{    margin: 0 4px;margin-top: -6px;}
+    .dish-tool {    width: 100%;}
+    .dish-info {margin-left: 0; position: absolute; top: 0; z-index: 99; right: -300px; height: 568px; float: none ;box-shadow: -10px 0 20px rgb(167, 163, 163);}
+    #blinfo{ display: block;  }
+
+}
 </style>
 
 <!--主体内容都放在这个div里-->
@@ -18,7 +36,7 @@
         <h1>皿视图</h1>
         <h6>Dish View</h6>
     </div>
-    <div class="dish-name" id="dish-nameDiv"><a>@培养箱  ： Dish #</a></div>
+    <div class="dish-name" ><strong id="dish-nameDiv"> <a>@培养箱  ： Dish #</a></strong><span id="blinfo">← 病历信息</span></div>
     <div class="dish-sec">
         <div class="dish-box">
             <ul class="dishimg" id="dishImageUl">

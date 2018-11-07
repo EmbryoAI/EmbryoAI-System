@@ -8,7 +8,6 @@
 }
 .dish-sec{
 	width:100% ;
-	/* border: 1px solid #007AFF; */
 	height: 510px;
 	margin-top: 28px;
 }
@@ -357,4 +356,13 @@
 }
 .dishimg li a:hover{
 	color: ##0531d4;
+}
+#blinfo{
+    display: none;
+	float: right;
+    font-size: 16px;
+    color: #3c83f7;
+    padding: 4px 6px;
+    border-radius: 3px;
+    font-weight: bolder;
 }
