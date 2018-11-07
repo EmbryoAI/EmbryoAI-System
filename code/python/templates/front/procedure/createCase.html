@@ -75,7 +75,7 @@
                     <div class="layui-input-inline">
                         <!--<input type="text" name="" required lay-verify="card" class="layui-input">-->
 						<div class="field">
-							<input type="text" name="nope" id="nope" placeholder="" class="layui-input" />
+							<input type="text" name="nope" id="nope" placeholder="" class="layui-input" onchange="countAgeByIdCard()"/>
 						</div>
                     </div>
                 </div>
@@ -192,13 +192,16 @@
 						</div> 
 					</div>
 				</div>
-				</form>
+                </form>
+                
+                <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <input  class="layui-btn layui-bg-blue" type="button"  id="addCaseButton" onclick="addCase()" value="创建病历" />
+                        </div>
+                    </div>
+
             </div>
-        <div class="layui-form-item">
-			<div class="layui-input-block">
-				<input  class="layui-btn layui-bg-blue" type="button"  id="addCaseButton" onclick="addCase()" value="创建病历" />
-			</div>
-		</div>
+
              
 
     <script src="/static/admin/layui/layui.js"></script>

@@ -8,7 +8,6 @@
 }
 .dish-sec{
 	width:100% ;
-	/* border: 1px solid #007AFF; */
 	height: 510px;
 	margin-top: 28px;
 }
@@ -346,7 +345,7 @@
 }
 .dishimg li a{
 	position: absolute;
-	bottom: -22px;
+	bottom: -26px;
 	right: 2px;
 	display: block;
 	padding: 2px;
@@ -354,4 +353,16 @@
 	z-index: 99;
 	/* text-shadow: 1px 1px 0px rgba(0,0,0,1); */
 	cursor: pointer;
+}
+.dishimg li a:hover{
+	color: ##0531d4;
+}
+#blinfo{
+    display: none;
+	float: right;
+    font-size: 16px;
+    color: #3c83f7;
+    padding: 4px 6px;
+    border-radius: 3px;
+    font-weight: bolder;
 }

@@ -23,7 +23,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
         var marginT = $(".layui-col-md4 h6").height()+8;
         var listH = $(".img-list").height()-20;
         console.log(marginT,listH);
-        $(".no-list").css("margin-top",marginT+'px');
+        // $(".no-list").css("margin-top",marginT+'px');
         $(".no-list").css("height",listH);
         $(".no-list").css("line-height",listH-marginT+'px');
     }
@@ -55,7 +55,7 @@ function loadNewestCase(pageNo,pageSize){
                             if(j > 0){
                                 dishDiv = dishDiv + ',';
                             }
-                            dishDiv = dishDiv + '<a href="/front/dish?procedureId='+ obj.id +'&dishId=' + dishIdArr[j] + '&dishCode=' +dishCodeArr[j]+'" target="_blank" class="layui-table-link view"><span>Dish #  ' + dishCodeArr[j] + '</span></a>';
+                            dishDiv = dishDiv + '<a href="/front/dish?procedureId='+ obj.id +'&dishId=' + dishIdArr[j] + '&dishCode=' +dishCodeArr[j]+'" target="_blank"><span>Dish #  ' + dishCodeArr[j] + '</span></a>';
                         }
                     }
 					divData = divData + '<div class="layui-col-md3">'
@@ -67,7 +67,7 @@ function loadNewestCase(pageNo,pageSize){
                         divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'")><img src="/static/front/img/icon-noembryo.jpg" ></div>';
                     }
                     divData = divData + '<div class="case-info">'
-                    + '<h1><a href="/front/incubator?procedureId=' + obj.id + '&incubatorId=' + obj.incubatorCode + '" target="_blank" class="layui-table-link view"><span>培养箱 ' + obj.incubatorCode + ' </span></a>：' + dishDiv 
+                    + '<h1><a href="/front/incubator?procedureId=' + obj.id + '&incubatorId=' + obj.incubatorCode + '" target="_blank"><span>培养箱 ' + obj.incubatorCode + '</span></a>：' + dishDiv 
                     + '</h1><ul>'
                         + '<li><span style="margin-right: 20px;">'+ obj.patient_name +'</span><span>'+obj.patient_age+'岁</span></li>'
                         + '<li><span>胚胎数：</span><span>' + obj.pts + '枚</span></li>'
@@ -112,11 +112,12 @@ function loadNewestDish(){
             var divData = "";
             var dataCount = 0;
 			if(res.code === 200 && res.data !== null && res.count !== null && res.count > 0){
-                $("#incubatorSpan").html(res.data.incubatorCode);
+               // $("#incubatorSpan").html(res.data.incubatorCode);
                 data = res.data.dishInfo;
                 dataCount = data.length;
 				for (let i = 0; i < data.length; i++) {
-                    divData = divData + '<div class="layui-col-md4" dishId=' + data[i].dishId + '><h6>Dish #' + data[i].dishCode + '</h6>'
+                    // divData = divData + '<h1 class="incbt-title">@培养箱 <span>'+ data[i].incubatorCode +'</span></h1>';
+                    divData = divData + '<div class="layui-col-md4" dishId=' + data[i].dishId + '><h1 class="incbt-title">@培养箱 <span>'+ data[i].incubatorCode +'</span></h1><h6>Dish #' + data[i].dishCode + '</h6>'
                         + '<div class="img-list"><p>拍照时间: <span>' + data[i].imagePath + '</span>';
                     const wellUrls = data[i].wellUrls;
                     if(wellUrls !== null && wellUrls !== ""){
@@ -140,7 +141,7 @@ function loadNewestDish(){
             }
             if(dataCount < 3){
                 for (let i = dataCount; i < 3; i++) {
-                    divData = divData + '<div class="layui-col-md4"><div class="no-list"><img src="/static/front/img/hnoimg.png" alt=""></div></div>';
+                    divData = divData + '<div class="layui-col-md4"><h1 class="incbt-title">@培养箱 <span></span></h1><h6>Dish # </h6><div class="no-list"><img src="/static/front/img/hnoimg.png" alt=""></div></div>';
                 }
             }
             $("#homeImageRow").append(divData);

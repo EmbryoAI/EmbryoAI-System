@@ -37,7 +37,11 @@ body {
 		<form class="layui-form" name="ruleForm" id="ruleForm" action="">
 			<input id="ruleId" name="ruleId" type="hidden" value="{{ruleId}}" />
 			<input id="jsonKey" name="jsonKey" type="hidden"  value="{{jsonKey}}" />
-			<input id="index" name="index" type="hidden" value="{{index}}" />
+			{% if type=='update' %}
+				<input id="index" name="index" type="hidden" value="{{index}}" />
+			{% else %}
+				<input id="index" name="index" type="hidden" value="" />
+			{% endif %}
 			<input id="conditionHide" name="conditionHide" type="hidden" value="{{ruleJson.condition}}" />
 			<input id="symbolHide" name="symbolHide" type="hidden" value="{{ruleJson.symbol}}" />
 			<input id="valueKeyHide" name="valueKeyHide" type="hidden" value="{{ruleJson.valueKey}}" />

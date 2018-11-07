@@ -143,7 +143,8 @@ def queryDishByImagePath(imagePath) :
             FROM sys_dish sd
             LEFT JOIN t_procedure_dish tpd ON sd.id = tpd.dish_id
             LEFT JOIN sys_incubator si ON sd.incubator_id = si.id
-            WHERE tpd.image_path = :imagePath  and  sd.del_flag = 0
+            WHERE tpd.image_path = :imagePath  and  sd.del_flag = 0 
+            limit 0,3
         ''')
         print(sql)
         

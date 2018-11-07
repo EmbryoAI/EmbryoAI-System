@@ -63,6 +63,12 @@
 	color: #3c83f7;
 	font-weight: bolder;
 }
+.case-info h1 a{
+	color: #3c83f7;
+}
+.case-info h1 a span:hover{
+	color: #3f68ff;
+}
 .case-info ul{
 	padding-top: 10px;
 }
@@ -76,7 +82,7 @@
     width: 156px;
     border-bottom: 3px solid;
     padding-bottom: 8px;
-	margin-left: 16px;
+	margin-bottom: 16px;
 }
 .img-list{
 	background-color: #fff;
@@ -146,8 +152,9 @@
 @media only screen and (min-width: 321px) and (max-width: 1024px) {
 	.case-list .embryo-img {
 		width: 80px;
-		height: 80px;
-		margin-right: 4px;
+		height: 110px;
+		margin-right: 8px;
+		border: none;
 	}
 	.case-info ul {
 		padding-top: 0px;

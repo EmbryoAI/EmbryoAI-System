@@ -141,4 +141,7 @@
 	.case-info ul li {
 		line-height: 26px;
 	}
+	.view{
+		margin-right: 0;
+	}
 }
