@@ -587,6 +587,24 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
             return false;
         });
 
+    // 移动端点击侧滑出里程碑信息
+		$('.btn-draw').click(function (){
+			if($(this).hasClass('active')){
+				$(this).removeClass('active');
+                $('.btn-draw i').text("←");
+                $('.btn-draw span').text("查看里程碑信息");
+                $(".info").animate({right:'-500px'});
+                $(this).animate({right:'10px'});
+                
+			}else{
+				$(this).addClass('active');
+                $(".btn-draw i").text("→");
+                $('.btn-draw span').text("关闭里程碑信息");
+                $(".info").animate({right:'0px'});
+                $(this).animate({right:'470px'});
+                
+			}
+		})
     });
 })
 

@@ -667,6 +667,7 @@
     color: #467cdc;
 	font-weight: bolder;
 	cursor: pointer;
+	margin-right: 10px;
 }
 .zarrowU,.zarrowD{
 	display: inline-block;
@@ -682,9 +683,90 @@
 	margin-top: 20px;
 	background: url(../img/yellow-arrowD.png) no-repeat top center;
 }
+
 @media only screen and (min-width: 1029px) {
 	.zarrowU:hover,.zarrowD:hover{
 		transform:scale(1.2);
 		opacity: 1;
+	}
+}
+   /* ipad适配 */
+   .btn-draw{
+		position: absolute;
+		right: 10px;
+		top: 40%;
+		background: #fff;
+		width: 26px;
+		text-align: center;
+		transform: translateY(-40%);
+		padding: 10px;
+		font-size: 16px;
+		border-radius: 8px;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+		color: #467cdc;
+		display:none;
+		z-index: 9999;
+   }
+   .btn-draw i{
+		font-weight: bolder;
+   }
+   @media only screen and (min-width: 321px) and (max-width: 1024px) {
+	.btn-draw{
+		display: block;
+	}
+	.site {
+		width: 1000px;
+	}
+	.siteitem li span {
+		margin-right: 14px;
+		width: 46px;
+		line-height: 24px;
+		height: 24px;
+		border: solid 2px #d7dae0;
+	}
+	.scrollpic {
+		width: 1000px;
+		height: 82px;
+	}
+	.btn-prev, .btn-next {
+		height: 66px;
+		line-height: 66px;
+	}
+	.swiper-wrapper {
+		width: 908px;
+		height: 82px;
+	}
+	.swiper-slide {
+		width: 64px;
+		height: 64px;
+	}
+	.swiper-slide img {
+		width: 60px;
+	}
+	.swiper-slide span{
+		font-size: 12px;
+	}
+	.swiper-slide b{
+		font-size: 12px;
+		width: 60px;
+	}
+	.viewbox {
+		position: relative;
+		height: 736px;
+		overflow: hidden;
+	}
+	.embryo{
+		float: none;
+	}
+	.info {
+		position: absolute;
+		right: -500px;
+		top: 0;
+		z-index: 9999;
+		width: 470px;
+		min-height: 654px;
+		background: url(../img/icon-nolcb.png) no-repeat center;
+		background-color: #fff;
 	}
 }
