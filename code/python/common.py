@@ -94,3 +94,69 @@ def parse_time_for_date_str(date):
     hour = date[8:10]
     min = date[10:12]
     return year + "-" + month + "-" + day + " " + hour + ":" + min
+
+def get_serie_time(insemi_time, cap_start_time, time_serie):
+    ''' 获得某一个采集时间序列距离授精时间的时间间隔 
+        @param insemi_time: 授精时间字符串，格式"%Y-%m-%d %H:%M"
+        @param cap_start_time: 开始采集时间字符串，可以为格式"%Y-%m-%d %H:%M"或采集目录名称格式
+        @param time_serie: 时间序列字符串，7位数字组成，与时间序列目录名称一致
+        @returns hour, minute 该时间序列距离授精时间的小时和分钟数
+    '''
+    import datetime as dt
+    from task.TimeSeries import serie_to_minute
+    if len(insemi_time) == 16:
+        in_time = dt.datetime.strptime(insemi_time, '%Y-%m-%d %H:%M')
+    elif len(insemi_time) == 19:
+        in_time = dt.datetime.strptime(insemi_time, '%Y-%m-%d %H:%M:%S')
+    else:
+        raise ValueError('授精时间字符串格式错误')
+    if len(cap_start_time) == 16:
+        cap_time = dt.datetime.strptime(cap_start_time, '%Y-%m-%d %H:%M')
+    elif len(cap_start_time) == 19:
+        cap_time = dt.datetime.strptime(cap_start_time, '%Y-%m-%d %H:%M:%S')
+    elif len(cap_start_time) == 14:
+        cap_time = dt.datetime.strptime(cap_start_time, '%Y%m%d%H%M%S')
+    else:
+        raise ValueError('开始采集时间字符串格式错误')
+    ts_minutes = serie_to_minute(time_serie)
+    cap_minutes = (cap_time - in_time).total_seconds()//60
+    return divmod(cap_minutes + ts_minutes, 60)
+
+def get_serie_time_hours(insemi_time, cap_start_time, time_serie):
+    ''' 获得某一个采集时间序列距离授精时间的小时数（取整）间隔 
+        @param insemi_time: 授精时间字符串，格式"%Y-%m-%d %H:%M"
+        @param cap_start_time: 开始采集时间字符串，可以为格式"%Y-%m-%d %H:%M"或采集目录名称格式
+        @param time_serie: 时间序列字符串，7位数字组成，与时间序列目录名称一致
+        @returns hours 该时间序列距离授精时间的小时数
+    '''
+    h, m = get_serie_time(insemi_time, cap_start_time, time_serie)
+    return h + m/60
+
+''' 获得某一个采集时间序列距离授精时间的分钟数间隔的匿名函数 '''
+get_serie_time_minutes = lambda insemi_time, cap_start_time, time_serie: (
+    get_serie_time_hours(insemi_time, cap_start_time, time_serie) * 60
+) 
+
+import unittest
+class CommonTest(unittest.TestCase):
+    def test(self):
+        d1 = '2018-09-11 12:30'
+        d2 = '2018-09-11 15:00'
+        ts = '2101500'
+        self.assertEqual(get_serie_time(d1, d2, ts), (60, 45))
+        self.assertEqual(get_serie_time_hours(d1, d2, ts), 60.75)
+        self.assertEqual(get_serie_time_minutes(d1, d2, ts), 3645)
+        d2 = '20180911150000'
+        self.assertEqual(get_serie_time(d1, d2, ts), (60, 45))
+        d1 = '2018-11-01 14:50:00'
+        d2 = '2018-11-01 18:35:00'
+        ts = '6224500'
+        self.assertEqual(get_serie_time(d1, d2, ts), (170, 30))     
+        self.assertEqual(get_serie_time_hours(d1, d2, ts), 170.5)
+        self.assertEqual(get_serie_time_minutes(d1, d2, ts), 10230)   
+
+if __name__=='__main__':
+    unittest.main()
+    
+
+    
