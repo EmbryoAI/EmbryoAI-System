@@ -178,6 +178,9 @@ function countAgeByIdCard(){
    	}  
 	var birthDate = idCard.substring(6, 14);
 	var year = birthDate.substring(0,4);
+	var month =  birthDate.substring(4,6);
+	var day =  birthDate.substring(6,8);
+	$('#birth').val(year + "-" + month + "-" + day);
 	var today = new Date();
 	var now = today.getFullYear();
 	var result = parseInt(now) - parseInt(year);
