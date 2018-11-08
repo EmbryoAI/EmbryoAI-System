@@ -260,8 +260,8 @@ def addProcedure(request):
     embryoNumber = request.form.get('embryo_number')
     if not embryoNumber:
         return 400, '胚胎个数不能为空!'
-    embryoScore = request.form.get('embryo_score')
-    if not embryoScore:
+    embryoScoreId = request.form.get('embryo_score')
+    if not embryoScoreId:
         return 400, '评分标准不能为空!'
     incubatorCode = request.form.get('incubator')
     if not incubatorCode:
@@ -308,7 +308,7 @@ def addProcedure(request):
     procedure = Procedure(id=procedureId, patientId=id, userId=userId, patientAge=patientAge,
                     patientHeight=patientHeight, patientWeight=patientWeight, ecTime=ecTime,
                     ecCount=ecCount, insemiTime=insemiTime, insemiTypeId=insemiTypeId, state=state,
-                    delFlag=0, medicalRecordNo=medicalRecordNo)
+                    delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId)
     
 
     try:

@@ -29,3 +29,4 @@ class Procedure(db.Model, mixin):
     memo = db.Column("memo", db.String(500))
     delFlag = db.Column("del_flag", db.Integer, default=0)
     medicalRecordNo = db.Column("medical_record_no", db.String(255))
+    embryoScoreId = db.Column("embryo_score_id", db.String(32))

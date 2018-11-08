@@ -60,7 +60,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 		success : function(data) {
 			$("#rule").append("<option value=\"\">请选择</option>");
 			for(var i=0;i<data.data.length;i++){
-				$("#rule").append("<option value=\"" + i + "\">" + data.data[i].ruleName + "</option>");
+				$("#rule").append("<option value=\"" + data.data[i].id + "\">" + data.data[i].ruleName + "</option>");
 			}
 			form.render('select');
 		},

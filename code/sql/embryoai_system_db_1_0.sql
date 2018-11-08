@@ -3796,6 +3796,7 @@ CREATE TABLE `t_procedure` (
   `is_smoking` int(11) DEFAULT NULL COMMENT '是否抽烟',
   `is_drinking` int(11) DEFAULT NULL COMMENT '是否酗酒',
   `del_flag` int(1) NOT NULL DEFAULT '0' COMMENT '逻辑删除标志（非0代表已删除）',
+  `embryo_score_id` varchar(32) DEFAULT NULL COMMENT '评分标准主键ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='治疗周期表';
 
