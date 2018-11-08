@@ -18,7 +18,6 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     $(function () {
 	// 移动端点击侧滑出病历详情
 		$('#blinfo').click(function (){
-			console.log('ssss')
 			if($(this).hasClass('active')){
 				$(this).removeClass('active');
 				$(this).text("← 病历信息");
