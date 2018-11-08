@@ -630,13 +630,14 @@ function loadingZIndex(procedureId,dishId,wellId,timeSeries){
         	layer.alert(request.responseText);
         },
         success : function(data) {
-            var zLi = "";
+            var zIndexDivData = "";
             if(data.code == 200 && data.data != null){
                 var length = data.data.fileEnd - data.data.fileStart;
                 acquisitionTime = data.data.imagePath;
                 path = data.data.path;
                 var sharpJpg = data.data.sharp;
                 zData = data.data.zIndexFiles;
+                var zLi = "";
                 for (var i = 1;i <= length; i++) {
                     if(sharpJpg === zData[i]) {
                         sharpZIndex = i;
@@ -645,10 +646,14 @@ function loadingZIndex(procedureId,dishId,wellId,timeSeries){
                         zLi = "<li onclick=checkZIndex('"+ procedureId +"','"+ dishId +"','"+ wellId +"','"+ timeSeries +"','" + i + "') zindex=" + i + " zjpg='" + zData[i] + "'><b></b></li>" + zLi;
                     }
                 }
-                $("#zIndex").html(zLi);
-                // var imageName = $(".time-vertical .active").attr("zjpg");
+                zIndexDivData = zIndexDivData + "<a class='zarrowU' onclick=checkArrowZIndex('"+ procedureId +"','"+ dishId +"','"+ wellId +"','"+ timeSeries +"','up')></a>"
+                    + "<ul class='time-vertical'>" + zLi + "</ul>"
+                    + "<a class='zarrowD' onclick=checkArrowZIndex('"+ procedureId +"','"+ dishId +"','"+ wellId +"','"+ timeSeries +"','next')></a>"
+                    + '<h6>z轴</h6>';
+                $("#zIndexDiv").html(zIndexDivData);
                 ini(acquisitionTime,timeSeries,path,sharpJpg);
             }
+            
         }
     });
     
@@ -676,6 +681,43 @@ function loadingZIndex(procedureId,dishId,wellId,timeSeries){
     
 }
 
+/**
+ * 点击z轴上下箭头触发函数
+ * @param {*} procedureId 
+ * @param {*} dishId 
+ * @param {*} wellId 
+ * @param {*} timeSeries 
+ * @param {*} arrowDirection 
+ */
+function checkArrowZIndex(procedureId,dishId,wellId,timeSeries,arrowDirection){
+    var zIndex = $(".time-vertical .active").attr('zindex');
+    var length = $(".time-vertical li").length;
+    if(arrowDirection === "up"){
+        zIndex = parseInt(zIndex) + 1;
+        if(zIndex > length){
+            zIndex = 1;
+        }
+    } else if (arrowDirection === "next"){
+        zIndex = parseInt(zIndex) - 1;
+        if(zIndex < 1){
+            zIndex = length;
+        }
+    }
+    $('.time-vertical li').removeClass('active');
+    $('.time-vertical li[zIndex='+zIndex+']').addClass('active');
+    loadingImage(procedureId,dishId,wellId,timeSeries,zIndex);
+    var imageName = $(".time-vertical li[zIndex="+zIndex+"]").attr("zjpg");
+    ini(acquisitionTime,timeSeries,path,imageName);
+}
+
+/**
+ * 选择z轴位置触发函数
+ * @param {*} procedureId 
+ * @param {*} dishId 
+ * @param {*} wellId 
+ * @param {*} timeSeries 
+ * @param {*} zIndex 
+ */
 function checkZIndex(procedureId,dishId,wellId,timeSeries,zIndex){
     // alert("procedureId:"+procedureId+"--dishId:"+dishId+"--wellId:"+wellId+"--timeSeries:"+timeSeries+"--zIndex:"+zIndex);
     $('.time-vertical li').removeClass('active');
@@ -685,6 +727,14 @@ function checkZIndex(procedureId,dishId,wellId,timeSeries,zIndex){
 //    ini(acquisitionTime,timeSeries,path,imageName)
 }
 
+/**
+ * 加载胚胎页面大图
+ * @param {*} procedureId 
+ * @param {*} dishId 
+ * @param {*} wellId 
+ * @param {*} timeSeries 
+ * @param {*} zIndex 
+ */
 function loadingImage(procedureId,dishId,wellId,timeSeries,zIndex){
     //alert("procedureId:"+procedureId+"--dishId:"+dishId+"--wellId:"+wellId+"--timeSeries:"+timeSeries+"--zIndex:"+zIndex);
     if(zIndex == null || zIndex == '' || sharpZIndex == zIndex){
