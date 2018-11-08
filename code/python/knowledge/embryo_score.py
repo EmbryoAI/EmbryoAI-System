@@ -297,23 +297,31 @@ rule_json = '''{
 }'''
 
 class EmbryoScore(KnowledgeEngine):
+	''' 胚胎自动评分知识引擎类 '''
     score = 0
     @classmethod
     def removeAllRules(cls):
+		''' 移除类中所有的规则，规则方法以rule开头 '''
         for m in [attr for attr in cls.__dict__ if attr.startswith('rule')]:
             delattr(cls, m)
 
 def parse_json_rules(rule_json):
+	''' 将json字符串内容加载到知识引擎中 
+		@param rule_json: 从数据库中读取到的评分规则json字符串
+	'''
     import json
     rules = json.loads(rule_json)
-    sal = 100
-    index = 0
-    for stage in rules:
-        for rule_item in rules[stage]:
+    sal = 100 # 规则优先级
+    index = 0	# 规则属性序号
+    for stage in rules: # 循环读取胚胎阶段
+        for rule_item in rules[stage]: # 循环读取每个阶段中的每个规则
+			# 需要进行判断的条件包括：胚胎阶段 stage，判断内容 condition，真实的值 value
             rule = {'condition': rule_item['condition']}
             rule['stage'] = stage
+			# 目前支持的条件判断符号
             if rule_item['symbol'] not in ('=', '<', '<=', '>', '>='):
                 continue
+			# 5种不同的判断
             def _cond(value, symbol):
                 if symbol == '=': return EQ(value)
                 if symbol == '<': return LT(value)
@@ -321,19 +329,24 @@ def parse_json_rules(rule_json):
                 if symbol == '>': return GT(value)
                 if symbol == '>=': return GE(value)
 
+			# 计算分值的闭包方法
             def _add(self, **kwargs):
                 if 'score' not in kwargs or 'weight' not in kwargs:
                     raise ValueError('参数中没有分值和权重，无法计算里程碑分值')
                 s, w = int(kwargs['score']), float(kwargs['weight'])
                 self.score += s * w
-        
+			# 构建Rule处理方法，并将其添加到EmbryoScore类中
             R = Rule(AND(Fact(**rule, value=MATCH.value & _cond(rule_item['value'], rule_item['symbol']))),
                     salience=sal)(partial(_add, score=rule_item['score'], weight=rule_item['weight']))
             setattr(EmbryoScore, f'rule{index}', R)
-            index += 1
-            sal -= 1
+
+            index += 1	# Rule序号递增
+            sal -= 1 # 优先级递减
 
 def init_engine(rule_json):
+	''' 初始化规则引擎
+		@param rule_json: 从数据库读取出来的规则json字符串
+	'''
     EmbryoScore.removeAllRules()
     parse_json_rules(rule_json)
     engine = EmbryoScore()
