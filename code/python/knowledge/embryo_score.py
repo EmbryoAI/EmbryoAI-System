@@ -3,7 +3,6 @@
 
 from pyknow import *
 from functools import partial
-from common import getdefault
 from app import logger
 
 rule_json = '''{
@@ -341,11 +340,18 @@ def init_engine(rule_json):
     engine.reset()
     return engine
 
+import unittest
+
+class ScoreTest(unittest.TestCase):
+	def test(self):
+		engine = init_engine(rule_json)
+		engine.declare(Fact(condition='pn', stage='PN', value='2PN'))
+		engine.declare(Fact(stage='4C', condition='cell', value='4C'))
+		engine.declare(Fact(stage='4C', condition='fragment', value='10%-20%'))
+		engine.declare(Fact(stage='4C', condition='time', value='32'))
+		engine.run()
+		self.assertEqual(engine.score, 70)
+
+
 if __name__ == '__main__':
-    engine = init_engine(rule_json)
-    engine.declare(Fact(condition='pn', stage='PN', value='2PN'))
-    engine.declare(Fact(stage='4C', condition='cell', value='4C'))
-    engine.declare(Fact(stage='4C', condition='fragment', value='10%-20%'))
-    engine.declare(Fact(stage='4C', condition='time', value='32'))
-    engine.run()
-    print(engine.score)
+    unittest.main()
