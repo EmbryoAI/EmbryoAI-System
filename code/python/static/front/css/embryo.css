@@ -711,7 +711,7 @@
    .btn-draw i{
 		font-weight: bolder;
    }
-   @media only screen and (min-width: 321px) and (max-width: 1024px) {
+   /* @media only screen and (min-width: 321px) and (max-width: 1024px) {
 	.btn-draw{
 		display: block;
 	}
@@ -769,4 +769,4 @@
 		background: url(../img/icon-nolcb.png) no-repeat center;
 		background-color: #fff;
 	}
-}
+} */
