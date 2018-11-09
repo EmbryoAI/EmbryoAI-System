@@ -228,12 +228,8 @@ def getImageFouce(agrs):
 
 def findNewestImageUrl():
     try:
-        #获取JSON文件
-        imagePath = procedure_dish_mapper.queryNewestImagesInfo()
-        if not imagePath :
-            return RestResult(200, "暂无采集数据", 0, "")
-        result = dish_mapper.queryDishByImagePath(imagePath)
-        path = conf['EMBRYOAI_IMAGE_ROOT'] + imagePath + os.path.sep 
+        result = dish_mapper.queryTop3Dish()
+        
         dishList = list(map(dict, result))
 
         if dishList is None :
@@ -242,10 +238,12 @@ def findNewestImageUrl():
         dataList = {}
         data = []
         for dishMap in dishList : 
+            imagePath = dishMap["imagePath"]
+            path = conf['EMBRYOAI_IMAGE_ROOT'] + imagePath + os.path.sep 
             jsonPath = path + f'DISH{dishMap["dishCode"]}' + os.path.sep + conf['DISH_STATE_FILENAME'] 
-            print(jsonPath)
-            infoMap = {'imagePath':imagePath,"dishId":dishMap["dishId"],"dishCode":dishMap["dishCode"],"incubatorId":dishMap["incubatorId"],"incubatorCode":dishMap["incubatorCode"]}
-            print(infoMap)
+            infoMap = dishMap
+            infoMap["imagePathShow"] = imagePath[0:4] + "-" + imagePath[4:6] + "-" + imagePath[6:8] + " " + imagePath[8:10] + ":" + imagePath[10:12] + ":" + imagePath[12:14]
+            
             if not os.path.exists(jsonPath) :
                 infoMap["wellUrls"] = ""
             else :
@@ -265,7 +263,8 @@ def findNewestImageUrl():
                         oneSeries = series[oneWell['lastEmbryoSerie']]
                         jpgName = oneSeries['focus']
 
-                        imageUrl = path + f'DISH{dishMap["dishCode"]}' + os.path.sep + jpgName
+                        # 
+                        imageUrl = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + imagePath + os.path.sep + f'DISH{dishMap["dishCode"]}' + os.path.sep + jpgName
                         imageObj['url'] = imageUrl
                         imageObj['wellId'] = key
                         imageUrlList.append(imageObj)
