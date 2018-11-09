@@ -330,14 +330,16 @@ def parse_json_rules(rule_json):
 				if symbol == '>=': return GE(value)
 
 			# 计算分值的闭包方法
-			def _add(self, **kwargs):
-				if 'score' not in kwargs or 'weight' not in kwargs:
-					raise ValueError('参数中没有分值和权重，无法计算里程碑分值')
-				s, w = int(kwargs['score']), float(kwargs['weight'])
-				self.score += s * w
+			def _add_partial(score, weight):
+				def _add(self, **kwargs):
+					s, w = int(score), float(weight)
+					self.score += s * w
+				return _add
 			# 构建Rule处理方法，并将其添加到EmbryoScore类中
-			R = Rule(AND(Fact(**rule, value=MATCH.value & _cond(rule_item['value'], rule_item['symbol']))),
-				salience=sal)(partial(_add, score=rule_item['score'], weight=rule_item['weight']))
+			R = Rule(AND(Fact(**rule, value=MATCH.value & 
+					_cond(rule_item['value'], rule_item['symbol']))),
+					salience=sal)(_add_partial(score=rule_item['score'], 
+					weight=rule_item['weight']))
 			setattr(EmbryoScore, f'rule{index}', R)
 
 			index += 1	# Rule序号递增
