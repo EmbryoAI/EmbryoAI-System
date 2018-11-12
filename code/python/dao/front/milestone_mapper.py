@@ -108,21 +108,21 @@ def queryMilestoneList(embryoId):
          db.session.remove()
     return milestoneList
 
-#根据胚胎ID和时间序列获取里程碑节点
-def getMilestone(embryoId, series):
+#根据胚胎ID获取里程碑节点
+def getMilestone(embryoId):
     try:
         sql = text("""
-                SELECT sd.`dict_value` AS milestone_type FROM `t_milestone` tm 
+                SELECT sd.`dict_value` AS milestone_type, tm.`embryo_id` AS embryo_id, tm.`milestone_time` AS seris  
+                FROM `t_milestone` tm 
                 LEFT JOIN `sys_dict` sd 
                 ON tm.`milestone_id` = sd.`dict_key` 
-                WHERE sd.`dict_class` = 'milestone' 
+                WHERE sd.`dict_class` = 'milestone'  
                 AND tm.`embryo_id` = '""" + embryoId + """' 
-                AND tm.`milestone_time` = '""" + series + """'
             """)
         print(sql)
-        return db.session.execute(sql).fetchone()
+        return db.session.execute(sql).fetchall()
     except Exception as e:
-        raise DatabaseError("根据胚胎ID和时间序列查询里程碑信息异常",e.message,e)
+        raise DatabaseError("根据胚胎ID查询里程碑信息异常",e.message,e)
         return None
     finally:
          db.session.remove()
