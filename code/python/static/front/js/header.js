@@ -92,9 +92,9 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
 
 function openAddCase() {
 	layer.open({
-		title : "病历详情",
+		title : "新建病历",
 		type : 2,
-		area : [ '1000px', '700px' ],
+		area : [ '860px', '650px' ],
 		maxmin : true,
 		shadeClose : false,
         content : '/front/procedure/add',

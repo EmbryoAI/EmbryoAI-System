@@ -118,12 +118,12 @@ function loadNewestDish(){
 				for (let i = 0; i < data.length; i++) {
                     // divData = divData + '<h1 class="incbt-title">@培养箱 <span>'+ data[i].incubatorCode +'</span></h1>';
                     divData = divData + '<div class="layui-col-md4" dishId=' + data[i].dishId + '><h1 class="incbt-title">@培养箱 <span>'+ data[i].incubatorCode +'</span></h1><h6>Dish #' + data[i].dishCode + '</h6>'
-                        + '<div class="img-list"><p>拍照时间: <span>' + data[i].imagePath + '</span>';
+                        + '<div class="img-list"><p>拍照时间: <span>' + data[i].imagePathShow + '</span>';
                     const wellUrls = data[i].wellUrls;
                     if(wellUrls !== null && wellUrls !== ""){
                         divData = divData + '总时间: <span>' + data[i].times + '</span></p>';
                         for (let j = 0; j < wellUrls.length; j++) {
-                            divData = divData + '<a href="/front/embryo/toEmbryo?imagePath=' + data[i].imagePath + '&dishId=' + data[i].dishId + '&wellCode=' + wellUrls[j].wellId + '&dishCode=' + data[i].dishCode + '" target="_blank"><img src="/api/v1/well/image?image_path=' + wellUrls[j].url + '"></a>';
+                            divData = divData + '<a href="/front/embryo/toEmbryo?imagePath=' + data[i].imagePath + '&dishId=' + data[i].dishId + '&wellCode=' + wellUrls[j].wellId + '&dishCode=' + data[i].dishCode + '" target="_blank"><img src="' + wellUrls[j].url + '"></a>';
                         }
                         if(wellUrls.length < 12){
                             for (let j = wellUrls.length; j < 12; j++) {

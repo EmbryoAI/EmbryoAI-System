@@ -225,3 +225,24 @@ def getByIncubatorIdDishCode(incubatorId, dishCode):
         return None
     finally:
         db.session.remove()
+
+def queryTop3Dish() :
+    try :
+        sql = text('''
+            SELECT si.id incubatorId,si.incubator_code incubatorCode, sd.id dishId,sd.dish_code dishCode,tpd.image_path imagePath
+            FROM sys_dish sd
+            LEFT JOIN t_procedure_dish tpd ON sd.id = tpd.dish_id
+            LEFT JOIN sys_incubator si ON sd.incubator_id = si.id
+            WHERE sd.del_flag = 0 
+            order by tpd.image_path desc
+            limit 0,3
+        ''')
+        print(sql)
+        result = db.session.execute(sql)
+        data = result.fetchall()
+        return data
+    except Exception as e :
+        raise DatabaseError("查询培养箱下的最新采集目录时发生错误",e.message,e)
+        return None
+    finally:
+        db.session.remove()
