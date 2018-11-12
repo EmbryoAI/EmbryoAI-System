@@ -137,6 +137,23 @@ get_serie_time_minutes = lambda insemi_time, cap_start_time, time_serie: (
     get_serie_time_hours(insemi_time, cap_start_time, time_serie) * 60
 ) 
 
+''' 获得某一个采集时间序列距离授精时间的小时数（取整）间隔 
+    @param cap_start_time: 采集目录时间字符串
+    @param insemi_time: 受精时间日期
+    @param time_serie: 时间序列字符串，7位数字组成，与时间序列目录名称一致
+    @returns hours 该时间序列距离授精时间的分钟数
+'''
+def get_serie_time_minutes_new(cap_start_time,insemi_time,time_serie):
+    import datetime
+    cap_start_time = datetime.datetime.strptime(cap_start_time, "%Y%m%d%H%M%S")
+    cap_start_time = (cap_start_time+datetime.timedelta(days=int(time_serie[0:1]))
+    +datetime.timedelta(hours=int(time_serie[1:3]))+datetime.timedelta(minutes=int(time_serie[3:5]))
+    +datetime.timedelta(seconds=int(time_serie[5:7])))
+    cap_start_time = cap_start_time-insemi_time
+    cap_start_time = int(round(cap_start_time.total_seconds()/60,1))
+    return cap_start_time
+            
+            
 import unittest
 class CommonTest(unittest.TestCase):
     def test(self):

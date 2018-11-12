@@ -126,3 +126,37 @@ def getMilestone(embryoId, series):
         return None
     finally:
          db.session.remove()
+
+#根据胚胎ID获取所有里程碑节点的胚胎形态
+def queryEmbryoForm(embryoId):
+    try:
+        sql = text("""
+            SELECT c.dict_value AS 'stage',a.milestone_time AS milestoneTime,d.dict_class AS 'condition',d.dict_value AS 'value'
+            ,d1.dict_class AS 'condition1',d1.dict_value AS 'value1'
+            ,d2.dict_class AS 'condition2',d2.dict_value AS 'value2'
+            ,d3.dict_class AS 'condition3',d3.dict_value AS 'value3'
+            ,d4.dict_class AS 'condition4',d4.dict_value AS 'value4'
+            FROM t_milestone a
+            LEFT JOIN t_milestone_data b
+            ON a.id = b.milestone_id
+            LEFT JOIN sys_dict c
+            ON a.milestone_id=c.dict_key AND c.dict_class='milestone'
+            LEFT JOIN sys_dict d
+            ON b.pn_id=d.dict_key AND d.dict_class='pn'
+            LEFT JOIN sys_dict d1
+            ON b.cell_count=d1.dict_key AND d1.dict_class='cell'
+            LEFT JOIN sys_dict d2
+            ON b.even_id=d2.dict_key AND d2.dict_class='even'
+            LEFT JOIN sys_dict d3
+            ON b.fragment_id=d3.dict_key AND d3.dict_class='fragment'
+            LEFT JOIN sys_dict d4
+            ON b.grade_id=d4.dict_key AND d4.dict_class='grade'
+            WHERE  a.embryo_id  = :embryoId
+            """)
+        print(sql)
+        return db.session.execute(sql, {'embryoId':embryoId}).fetchall()
+    except Exception as e:
+        raise DatabaseError("根据胚胎ID获取所有里程碑节点的胚胎形态异常",e.message,e)
+        return None
+    finally:
+         db.session.remove()

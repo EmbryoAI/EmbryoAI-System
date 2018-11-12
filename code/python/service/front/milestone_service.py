@@ -9,11 +9,17 @@ import dao.front.procedure_mapper as procedure_mapper
 from flask import request, jsonify
 from common import parse_date
 from common import uuid
+from common import get_serie_time_minutes_new
 import re
 import time
 import datetime
 from app import current_user
 import service.front.image_service as image_service
+import dao.front.rule_dao as rule_dao
+import dao.front.embryo_mapper as embryo_mapper
+import knowledge.embryo_score as embryo_score
+from pyknow import *
+from functools import partial
 
 def insertMilestone(request):
     id = uuid()
@@ -139,6 +145,31 @@ def insertMilestone(request):
             milestone.id = milestoneOld.id
             milestoneData.milestoneId = milestoneOld.id
             milestone_mapper.updateMilestone(milestone,milestoneData)
+            
+        #评分设置，首先查询出当前周期对应的评分规则
+        rule = rule_dao.getRuleById(procedure.embryoScoreId,userId)
+        engine = embryo_score.init_engine(rule.dataJson)
+        #获取当前胚胎的所有里程碑节点的胚胎形态
+        embryoForm = milestone_mapper.queryEmbryoForm(embryoId)
+#         embryoFormList = list(map(dict, embryoForm))
+        for obj in embryoForm:
+            cap_start_time = request.form.get('milestoneStage')
+            timeValue = get_serie_time_minutes_new(cap_start_time,procedure.insemiTime,obj.milestoneTime)
+            #计算时间
+            engine.declare(Fact(stage=obj.stage,condition="time", value=str(timeValue)))
+            #计算节点
+            if obj.stage == 'PN':
+                engine.declare(Fact(stage=obj.stage,condition=obj.condition, value=obj.value))
+            elif obj.stage=="2C" or obj.stage=="3C" or obj.stage=="4C" or obj.stage=="5C" or obj.stage=="8C":    
+                 engine.declare(Fact(stage=obj.stage,condition=obj.condition1, value=obj.value1))
+                 engine.declare(Fact(stage=obj.stage,condition=obj.condition2, value=obj.value2))
+                 if obj.stage=="3C" or obj.stage=="4C" or obj.stage=="5C" or obj.stage=="8C":
+                    engine.declare(Fact(stage=obj.stage,condition=obj.condition3, value=obj.value3))
+                 if obj.stage=="8C":
+                    engine.declare(Fact(stage=obj.stage,condition=obj.condition4, value=obj.value4))
+        engine.run()
+        print(engine.score)
+        embryo_mapper.updateEmbryoScore(embryoId,engine.score)
     except:
         return 400, '设置里程碑时异常!'
     return 200, '设置里程碑时成功!'

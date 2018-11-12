@@ -149,3 +149,16 @@ def queryByProcedureIdAndCellId(procedureId,cellId):
     finally:
         db.session.remove()
     return embryo
+
+def updateEmbryoScore(id, embryoScore):
+    try:
+        sql = text("UPDATE `t_embryo` SET embryo_score = :embryoScore WHERE id = :id")
+        print(sql)
+        db.session.execute(sql,{'id':id, 'embryoScore':embryoScore})
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        print_exc()
+        raise DatabaseError("标记胚胎结局时发生错误",e.message,e)
+    finally:
+        db.session.remove()
