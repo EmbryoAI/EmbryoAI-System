@@ -26,6 +26,8 @@ def queryClearImageUrl(agrs):
             for key in series:
                 imageObj={}
                 imageObj['clearImageUrl'] = nginxImageUrl + os.path.sep+ path + key + os.path.sep + series[key]['sharp']
+                thumbnailUrl = nginxImageUrl+os.path.sep+path + series[key]['focus']
+                imageObj['thumbnailUrl'] = thumbnailUrl
                 imageObj['timeSeries'] = key
                 clearImageUrlList.append(imageObj)
         if not clearImageUrlList:

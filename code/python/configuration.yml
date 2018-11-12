@@ -35,7 +35,7 @@ dev:
   KERAS_MODEL_NAME: "embryo_model.h5"
   EMBRYO_PREDICT_SIZE: 200
 
-  STATIC_NGINX_IMAGE_URL: http://localhost
+  STATIC_NGINX_IMAGE_URL: http://39.104.173.18:8085
 
 stage:
   SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@39.104.173.18:3306/embryoai_system_db?charset=utf8"

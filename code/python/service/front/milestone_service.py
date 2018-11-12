@@ -9,7 +9,7 @@ import dao.front.procedure_mapper as procedure_mapper
 from flask import request, jsonify
 from common import parse_date
 from common import uuid
-from common import get_serie_time_minutes_new
+from common import get_serie_time_hours
 import re
 import time
 import datetime
@@ -154,7 +154,10 @@ def insertMilestone(request):
 #         embryoFormList = list(map(dict, embryoForm))
         for obj in embryoForm:
             cap_start_time = request.form.get('milestoneStage')
-            timeValue = get_serie_time_minutes_new(cap_start_time,procedure.insemiTime,obj.milestoneTime)
+            cap_start_time = datetime.datetime.strptime(cap_start_time, "%Y%m%d%H%M%S")
+            cap_start_time = cap_start_time.strftime("%Y-%m-%d %H:%M")
+            insemiTime = procedure.insemiTime.strftime("%Y-%m-%d %H:%M")
+            timeValue = get_serie_time_hours(insemiTime,cap_start_time,obj.milestoneTime)
             #计算时间
             engine.declare(Fact(stage=obj.stage,condition="time", value=str(timeValue)))
             #计算节点
