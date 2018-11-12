@@ -1156,6 +1156,7 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 		cache:false,
 		success : function(data) {
 			if (data.code == 0) {
+				 $("#embryoScoreSpanId").html(data.data.embryoScore)
 	            if (data.data.embryoFateId != 0) {
 	            	embryoFateIdQj=data.data.embryoFateId;
 	                $(".mark i").attr('data-mark', data.data.embryoFateId);
