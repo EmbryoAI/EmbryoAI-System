@@ -156,12 +156,26 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 $('#milestone').animate({
                     height: '123px'
                 });
+               var value = $('[name=milestoneId]:checked').val();
+               
+               if(value!=undefined) {
+                showHide(value);
+               }
+               $("#milestoneFormSubDiv").show();
             } else {
                 // layer.msg('关闭');
                 $('#milestone').animate({
                     height: '31px'
                 });
-
+        		$("#countDiv").hide();
+        		$("#evenDiv").hide();
+        		$("#fragmentDiv").hide();
+        		$("#gradeDiv").hide();
+        		$("#pnDiv").hide();
+        		$("#embryoDiv").hide();
+        		$("#embryoSjDiv").hide();
+        		$("#stageDiv").hide();
+        		$("#milestoneFormSubDiv").hide();
             }
 
         });
