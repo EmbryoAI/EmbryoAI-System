@@ -580,6 +580,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 					layer.alert(request.responseText);
 				},
 				success : function(data) {
+					$("#embryoScoreSpanId").html(data.embryoScore)
+					$("#milestoneScoreSpanId").html(data.milestoneScore);
 					layer.alert("设置成功!");
 				}
 			});
@@ -1107,6 +1109,7 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 				if(data!=null) {//如果当前里程碑不为空则回显
 					var milestone = data.milestone;
                     var milestoneData = data.milestoneData;
+                    $("#milestoneScoreSpanId").html(milestoneData.milestoneScore);
                     if(milestone!=null) {
 						$("#milestoneCheckbox").prop('checked', true);
 		                $('#milestone').animate({

@@ -131,7 +131,7 @@ body {
 		<!--右边信息-->
 		<div class="btn-draw"><i>←</i><span>查看里程碑信息</span></div>
 		<div class="info">
-			<p class="ptscore">胚胎总分：<span>568</span></p>
+			<p class="ptscore">胚胎总分：<span id="embryoScoreSpanId">0</span></p>
 			<form action="" id="milestoneForm" class="layui-form" style="background:#fff">
 				<input type="hidden" name="procedureId" id="procedureId" value="{{procedure_id}}"/>
 				<input type="hidden" id="dishId" value="{{dish_id}}"/>
@@ -247,7 +247,7 @@ body {
 							<textarea id="memo" rows="5" name="memo" placeholder="请输入内容" class="layui-textarea" style="min-height: 50px"></textarea>
 						</div>
 					</div>
-					<h2 style="padding-bottom: 0;">里程碑节点评分<span class="score" id="embryoScoreSpanId"></span></h2>
+					<h2 style="padding-bottom: 0;">里程碑节点评分<span class="score" id="milestoneScoreSpanId"></span></h2>
 				</div>
 				
 				<div class="layui-input-block"	style="text-align: center; margin:20px 0 0px;">

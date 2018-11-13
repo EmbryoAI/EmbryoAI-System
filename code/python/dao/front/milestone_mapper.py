@@ -6,12 +6,24 @@ from entity.MilestoneData import MilestoneData
 from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
 from traceback import print_exc
+import dao.front.dict_dao as dict_dao
+from pyknow import *
+from functools import partial
+import time
+import datetime
+import dao.front.rule_dao as rule_dao
+import dao.front.embryo_mapper as embryo_mapper
+import knowledge.embryo_score as embryo_score
+from common import get_serie_time_hours
 
-def insertMilestone(milestone,milestoneData):
+def insertMilestone(milestone,milestoneData,procedure,cap_start_time):
     try :
+        countMilestoneScore(milestone,milestoneData,procedure,cap_start_time)#计算节点分数
         db.session.add(milestone)
         db.session.add(milestoneData)
+        embryoScore = updateEmbryoScore(milestone.embryoId);#修改胚胎表总分
         db.session.commit()
+        return milestoneData.milestoneScore,embryoScore
     except Exception as e:
         db.session.rollback()
         print_exc()
@@ -19,8 +31,9 @@ def insertMilestone(milestone,milestoneData):
     finally:
         db.session.remove()
     
-def updateMilestone(milestone,milestoneData):
+def updateMilestone(milestone,milestoneData,procedure,cap_start_time):
     try :
+        countMilestoneScore(milestone,milestoneData,procedure,cap_start_time)#计算节点分数
         sql = text("""
             UPDATE t_milestone 
             SET
@@ -36,7 +49,7 @@ def updateMilestone(milestone,milestoneData):
         """)
         
         sql2 = text("""
-            UPDATE embryoai_system_db.t_milestone_data 
+            UPDATE t_milestone_data 
                 SET
                 milestone_stage =:milestoneStage , 
                 pn_id =:pnId , 
@@ -58,7 +71,9 @@ def updateMilestone(milestone,milestoneData):
         
         db.session.execute(sql, milestone.to_dict())
         db.session.execute(sql2, milestoneData.to_dict())
+        embryoScore = updateEmbryoScore(milestone.embryoId);#修改胚胎表总分
         db.session.commit()
+        return milestoneData.milestoneScore,embryoScore
     except Exception as e:
         db.session.rollback()
         print_exc()
@@ -66,6 +81,63 @@ def updateMilestone(milestone,milestoneData):
     finally:
         db.session.remove()
 
+#计算里程碑节点分
+def countMilestoneScore(milestone,milestoneData,procedure,cap_start_time):
+    #评分设置，首先查询出当前周期对应的评分规则
+    rule = rule_dao.getRuleById(procedure.embryoScoreId,milestoneData.userId)
+    engine = embryo_score.init_engine(rule.dataJson)
+    #获取当前胚胎的的胚胎形态
+    stageDict =  dict_dao.getDictByClassAndKey("milestone",milestone.milestoneId);
+    pnIdDict =  dict_dao.getDictByClassAndKey("pn",milestoneData.pnId);
+    cellDict =  dict_dao.getDictByClassAndKey("cell",milestoneData.cellCount);
+    evenDict =  dict_dao.getDictByClassAndKey("even",milestoneData.evenId);
+    fragmentDict =  dict_dao.getDictByClassAndKey("fragment",milestoneData.fragmentId);
+    gradeDict =  dict_dao.getDictByClassAndKey("grade",milestoneData.gradeId);
+ 
+    engine = embryo_score.init_engine(rule.dataJson)
+    
+    cap_start_time = datetime.datetime.strptime(cap_start_time, "%Y%m%d%H%M%S")
+    cap_start_time = cap_start_time.strftime("%Y-%m-%d %H:%M")
+    insemiTime = procedure.insemiTime.strftime("%Y-%m-%d %H:%M")
+    timeValue = get_serie_time_hours(insemiTime,cap_start_time,milestone.milestoneTime)
+    #计算时间
+    engine.declare(Fact(stage=stageDict.dictValue,condition="time", value=str(timeValue)))
+    #计算节点
+    if stageDict.dictValue == 'PN':
+        engine.declare(Fact(stage=stageDict.dictValue,condition=pnIdDict.dictClass, value=pnIdDict.dictValue))
+    elif stageDict.dictValue=="2C" or stageDict.dictValue=="3C" or stageDict.dictValue=="4C" or stageDict.dictValue=="5C" or stageDict.dictValue=="8C":    
+         engine.declare(Fact(stage=stageDict.dictValue,condition=cellDict.dictClass, value=cellDict.dictValue))
+         engine.declare(Fact(stage=stageDict.dictValue,condition=evenDict.dictClass, value=evenDict.dictValue))
+         if stageDict.dictValue=="3C" or stageDict.dictValue=="4C" or stageDict.dictValue=="5C" or stageDict.dictValue=="8C":
+            engine.declare(Fact(stage=stageDict.dictValue,condition=fragmentDict.dictClass, value=fragmentDict.dictValue))
+         if stageDict.dictValue=="8C":
+            engine.declare(Fact(stage=stageDict.dictValue,condition=gradeDict.dictClass, value=gradeDict.dictValue))
+    engine.run()
+    print(engine.score)
+    milestoneData.milestoneScore=engine.score
+#     embryo_mapper.updateEmbryoScore(embryoId,sumScore)
+
+#保存胚胎总分
+def updateEmbryoScore(embryoId):
+    count_sql = text("""
+            SELECT SUM(b.milestone_score)
+                        FROM t_milestone a
+                        LEFT JOIN t_milestone_data b
+                        ON a.id = b.milestone_id
+                        WHERE  a.embryo_id=:embryoId
+    """)
+    print(count_sql)
+    # 计算总条数
+    count_result = db.session.execute(count_sql,{"embryoId":embryoId})
+    totalSize = count_result.fetchone()[0]
+    
+    sql = text("""
+            UPDATE t_embryo SET embryo_score =:totalSize
+            WHERE id=:embryoId
+    """)
+    db.session.execute(sql, {"totalSize":totalSize,"embryoId":embryoId})
+    return totalSize
+        
 #动态条件查询里程碑对象
 def getMilestoneByEmbryoId(sqlCondition,filters):
     reslt = None

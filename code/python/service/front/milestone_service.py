@@ -9,17 +9,11 @@ import dao.front.procedure_mapper as procedure_mapper
 from flask import request, jsonify
 from common import parse_date
 from common import uuid
-from common import get_serie_time_hours
 import re
 import time
 import datetime
 from app import current_user
 import service.front.image_service as image_service
-import dao.front.rule_dao as rule_dao
-import dao.front.embryo_mapper as embryo_mapper
-import knowledge.embryo_score as embryo_score
-from pyknow import *
-from functools import partial
 
 def insertMilestone(request):
     id = uuid()
@@ -65,6 +59,7 @@ def insertMilestone(request):
     
     #里程碑时间点距离授精时间的间隔，单位分钟    采集时间+时间序列-授精时间算成分钟数
     timeSeries= request.form.get('timeSeries')
+    cap_start_time = request.form.get('milestoneStage')
     milestoneStage = request.form.get('milestoneStage')
     milestoneStage = datetime.datetime.strptime(milestoneStage, "%Y%m%d%H%M%S")
     milestoneStage = (milestoneStage+datetime.timedelta(days=int(timeSeries[0:1]))
@@ -130,52 +125,59 @@ def insertMilestone(request):
         sql = "AND embryo_id = :embryoId and milestone_time = :milestoneTime "
         filters = {'embryoId': embryoId,'milestoneTime':milestoneTime}
         milestoneOld = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
+        milestoneScoreResult = 0;
+        embryoScoreResult = 0;
         if not milestoneOld:
             #根据胚胎ID和里程碑值查询是否存在了，存在则把当前里程碑节点替换成当前图片
             sql = "AND embryo_id = :embryoId and milestone_id = :milestoneId "
             filters = {'embryoId': embryoId,'milestoneId':milestoneId}
             milestoneOld = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
             if not milestoneOld:
-                milestone_mapper.insertMilestone(milestone,milestoneData)
+                milestoneScoreResult,embryoScoreResult = milestone_mapper.insertMilestone(milestone,milestoneData,procedure,cap_start_time)
             else:
                 milestone.id = milestoneOld.id
                 milestoneData.milestoneId = milestoneOld.id
-                milestone_mapper.updateMilestone(milestone,milestoneData)
+                milestoneScoreResult,embryoScoreResult = milestone_mapper.updateMilestone(milestone,milestoneData,procedure,cap_start_time)
         else:
             milestone.id = milestoneOld.id
             milestoneData.milestoneId = milestoneOld.id
-            milestone_mapper.updateMilestone(milestone,milestoneData)
-            
-        #评分设置，首先查询出当前周期对应的评分规则
-        rule = rule_dao.getRuleById(procedure.embryoScoreId,userId)
-        engine = embryo_score.init_engine(rule.dataJson)
-        #获取当前胚胎的所有里程碑节点的胚胎形态
-        embryoForm = milestone_mapper.queryEmbryoForm(embryoId)
-#         embryoFormList = list(map(dict, embryoForm))
-        for obj in embryoForm:
-            cap_start_time = request.form.get('milestoneStage')
-            cap_start_time = datetime.datetime.strptime(cap_start_time, "%Y%m%d%H%M%S")
-            cap_start_time = cap_start_time.strftime("%Y-%m-%d %H:%M")
-            insemiTime = procedure.insemiTime.strftime("%Y-%m-%d %H:%M")
-            timeValue = get_serie_time_hours(insemiTime,cap_start_time,obj.milestoneTime)
-            #计算时间
-            engine.declare(Fact(stage=obj.stage,condition="time", value=str(timeValue)))
-            #计算节点
-            if obj.stage == 'PN':
-                engine.declare(Fact(stage=obj.stage,condition=obj.condition, value=obj.value))
-            elif obj.stage=="2C" or obj.stage=="3C" or obj.stage=="4C" or obj.stage=="5C" or obj.stage=="8C":    
-                 engine.declare(Fact(stage=obj.stage,condition=obj.condition1, value=obj.value1))
-                 engine.declare(Fact(stage=obj.stage,condition=obj.condition2, value=obj.value2))
-                 if obj.stage=="3C" or obj.stage=="4C" or obj.stage=="5C" or obj.stage=="8C":
-                    engine.declare(Fact(stage=obj.stage,condition=obj.condition3, value=obj.value3))
-                 if obj.stage=="8C":
-                    engine.declare(Fact(stage=obj.stage,condition=obj.condition4, value=obj.value4))
-        engine.run()
-        print(engine.score)
-        embryo_mapper.updateEmbryoScore(embryoId,engine.score)
+            milestoneScoreResult,embryoScoreResult = milestone_mapper.updateMilestone(milestone,milestoneData,procedure,cap_start_time)
+        result = {"milestoneScore":milestoneScoreResult,"embryoScore":embryoScoreResult}    
+#         '''由于字典转换太过麻烦，目前采用这种不合理方式实现，后续优化'''
+#         #评分设置，首先查询出当前周期对应的评分规则
+#         rule = rule_dao.getRuleById(procedure.embryoScoreId,userId)
+#         engine = embryo_score.init_engine(rule.dataJson)
+#         #获取当前胚胎的所有里程碑节点的胚胎形态
+#         embryoForm = milestone_mapper.queryEmbryoForm(embryoId)
+# #         embryoFormList = list(map(dict, embryoForm))
+#         sumScore = 0;
+#         for obj in embryoForm:
+#             engine = embryo_score.init_engine(rule.dataJson)
+#             cap_start_time = request.form.get('milestoneStage')
+#             cap_start_time = datetime.datetime.strptime(cap_start_time, "%Y%m%d%H%M%S")
+#             cap_start_time = cap_start_time.strftime("%Y-%m-%d %H:%M")
+#             insemiTime = procedure.insemiTime.strftime("%Y-%m-%d %H:%M")
+#             timeValue = get_serie_time_hours(insemiTime,cap_start_time,obj.milestoneTime)
+#             #计算时间
+#             engine.declare(Fact(stage=obj.stage,condition="time", value=str(timeValue)))
+#             #计算节点
+#             if obj.stage == 'PN':
+#                 engine.declare(Fact(stage=obj.stage,condition=obj.condition, value=obj.value))
+#             elif obj.stage=="2C" or obj.stage=="3C" or obj.stage=="4C" or obj.stage=="5C" or obj.stage=="8C":    
+#                  engine.declare(Fact(stage=obj.stage,condition=obj.condition1, value=obj.value1))
+#                  engine.declare(Fact(stage=obj.stage,condition=obj.condition2, value=obj.value2))
+#                  if obj.stage=="3C" or obj.stage=="4C" or obj.stage=="5C" or obj.stage=="8C":
+#                     engine.declare(Fact(stage=obj.stage,condition=obj.condition3, value=obj.value3))
+#                  if obj.stage=="8C":
+#                     engine.declare(Fact(stage=obj.stage,condition=obj.condition4, value=obj.value4))
+#             engine.run()
+#             sumScore+=engine.score
+#             print(engine.score)
+#         print(sumScore)
+#         embryo_mapper.updateEmbryoScore(embryoId,sumScore)
     except:
         return 400, '设置里程碑时异常!'
-    return 200, '设置里程碑时成功!'
+    return 200, result
 
 def getMilestoneByEmbryoId(embryoId, timeSeries, procedureId, dishId, wellId):
     if not timeSeries:
