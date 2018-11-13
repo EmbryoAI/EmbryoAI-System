@@ -6,9 +6,16 @@
 	line-height: 28px;
 	height: 28px;
 	background-color: #f0f0f0;
+	padding-left: 10px;
+}
+.curtime strong{
+	color: #ef570b;
+    margin-right: 20px;
+    font-size: 18px;
 }
 .curtime span{
 	color: #467cdc;
+    font-size: 16px;
 }
 .scrollpic {
 	width: 1440px;
