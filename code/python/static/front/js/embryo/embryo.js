@@ -1130,6 +1130,7 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 		                    height: '126px'
 		                });
 	                	$("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").prop("checked",true);
+	                	$("#milestoneFormSubDiv").show();
 	                }
 	                if(milestoneData.pnId!="") {
 	                	$("input:radio[name=pnId][value="+milestoneData.pnId+"]").prop("checked",true);
@@ -1201,10 +1202,11 @@ function showHide(value) {
 		$("#embryoDiv").show();
 		$("#embryoSjDiv").show();
 		$("#stageDiv").show();
-		
+		$("#milestoneFormSubDiv").show();
 	}
 	
 	if(value==null) {
+		$("#milestoneFormSubDiv").hide();
 		$("#countDiv").hide();
 		$("#evenDiv").hide();
 		$("#fragmentDiv").hide();
