@@ -1,14 +1,17 @@
 /*上部滚动图*/
 .curtime{
-	/* margin-bottom: 20px; */
     font-weight: bold;
-	color: #1b2437;
+	color: #2eaae6;
 	line-height: 28px;
 	height: 28px;
-	background-color: #f0f0f0;
+	text-align: center;
+	position: absolute;
+	bottom: 92px;
+	left: 10px;
 }
 .curtime span{
-	color: #467cdc;
+	color: #52c6ff;
+    padding: 2px 4px;
 }
 .scrollpic {
 	width: 1440px;
@@ -288,6 +291,16 @@
 	width: 130px; 
 	height: 120px;
 }
+.ptscore{
+	font-size: 16px;
+    font-weight: bold;
+    vertical-align: middle;
+}
+.ptscore span{
+	font-size: 36px;
+    color: #ff8429;
+    vertical-align: middle;
+}
 .site{
 	width: 1440px;
 	height: 60px;
@@ -365,7 +378,7 @@
 }
 .info h2 .score{
     color: #ff8429;
-	font-size: 54px;
+	font-size: 30px;
 	vertical-align: middle;
 	margin-left: 40px;
 }
