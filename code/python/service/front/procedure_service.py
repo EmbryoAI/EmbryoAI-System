@@ -283,7 +283,15 @@ def addProcedure(request):
     locationId = request.form.get('area')
     address = request.form.get('address')
     isDrinking = request.form.get('is_drinking')
+    if isDrinking == 'on':
+        isDrinking = 1
+    else:
+        isDrinking = 0
     isSmoking = request.form.get('is_smoking')
+    if isSmoking == 'on':
+        isSmoking = 1
+    else:
+        isSmoking = 0
     userId = request.form.get('userId')
     patientHeight = request.form.get('patient_height')
     if not patientHeight:
@@ -356,6 +364,25 @@ def addProcedure(request):
                 embryoId = uuid()
                 embryo = Embryo(id=embryoId, embryoIndex=i+1, procedureId=procedureId, cellId=cellId)
                 embryo_mapper.save(embryo)
+
+        #同步患者信息,病例信息到云端
+        import json
+        from common import request_post
+        from entity.PatientInfo import PatientInfo
+        from entity.PatientBaseInfo import PatientBaseInfo
+        from entity.PatientCaseInfo import PatientCaseInfo
+        url = conf['PATIENT_INFO_UP_URL']
+        
+        patient_base_info = PatientBaseInfo(id=id, idcardNo=idcardNo, idcardTypeId=idcardTypeId, patientName=patientName,
+                        birthdate=birthdate, country='中国', locationId=locationId, address=address,
+                        email=email, mobile=mobile, delFlag=0, createTime=createTime, updateTime=updateTime,
+                        isDrinking=isDrinking, isSmoking=isSmoking)
+        patient_case_info = PatientCaseInfo(id=procedureId, patientId=id, userId=userId, patientAge=patientAge,
+                        patientHeight=patientHeight, patientWeight=patientWeight, ecTime=ecTime,
+                        ecCount=ecCount, insemiTime=insemiTime, insemiTypeId=insemiTypeId, state=state,
+                        delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId)
+        patientInfo = PatientInfo(patient_base_info.__dict__, patient_case_info.__dict__)
+        request_post(url, json.dumps(patientInfo.__dict__, ensure_ascii=False))
 
     except:
         return 500, '新增病历失败!'

@@ -177,12 +177,26 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 $('#milestone').animate({
                     height: '123px'
                 });
+               var value = $('[name=milestoneId]:checked').val();
+               
+               if(value!=undefined) {
+                showHide(value);
+               }
+               $("#milestoneFormSubDiv").show();
             } else {
                 // layer.msg('关闭');
                 $('#milestone').animate({
                     height: '31px'
                 });
-
+        		$("#countDiv").hide();
+        		$("#evenDiv").hide();
+        		$("#fragmentDiv").hide();
+        		$("#gradeDiv").hide();
+        		$("#pnDiv").hide();
+        		$("#embryoDiv").hide();
+        		$("#embryoSjDiv").hide();
+        		$("#stageDiv").hide();
+        		$("#milestoneFormSubDiv").hide();
             }
 
         });
@@ -601,6 +615,8 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 					layer.alert(request.responseText);
 				},
 				success : function(data) {
+					$("#embryoScoreSpanId").html(data.embryoScore)
+					$("#milestoneScoreSpanId").html(data.milestoneScore);
 					layer.alert("设置成功!");
 				}
 			});
@@ -1150,12 +1166,14 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 				if(data!=null) {//如果当前里程碑不为空则回显
 					var milestone = data.milestone;
                     var milestoneData = data.milestoneData;
+                    $("#milestoneScoreSpanId").html(milestoneData.milestoneScore);
                     if(milestone!=null) {
 						$("#milestoneCheckbox").prop('checked', true);
 		                $('#milestone').animate({
 		                    height: '126px'
 		                });
 	                	$("input:radio[name=milestoneId][value="+milestone.milestoneId+"]").prop("checked",true);
+	                	$("#milestoneFormSubDiv").show();
 	                }
 	                if(milestoneData.pnId!="") {
 	                	$("input:radio[name=pnId][value="+milestoneData.pnId+"]").prop("checked",true);
@@ -1227,10 +1245,11 @@ function showHide(value) {
 		$("#embryoDiv").show();
 		$("#embryoSjDiv").show();
 		$("#stageDiv").show();
-		
+		$("#milestoneFormSubDiv").show();
 	}
 	
 	if(value==null) {
+		$("#milestoneFormSubDiv").hide();
 		$("#countDiv").hide();
 		$("#evenDiv").hide();
 		$("#fragmentDiv").hide();

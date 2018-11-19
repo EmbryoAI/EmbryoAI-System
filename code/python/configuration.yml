@@ -36,6 +36,7 @@ dev:
   EMBRYO_PREDICT_SIZE: 200
 
   STATIC_NGINX_IMAGE_URL: http://39.104.173.18:8085
+  PATIENT_INFO_UP_URL: "http://localhost:8086/api/v1.0/receivePatientInfo"
 
 stage:
   SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@39.104.173.18:3306/embryoai_system_db?charset=utf8"
@@ -76,6 +77,8 @@ stage:
 
   STATIC_NGINX_IMAGE_URL: http://39.104.173.18:8085
 
+  PATIENT_INFO_UP_URL: "http://localhost:8086/api/v1.0/receivePatientInfo"
+
 prod:
   SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@localhost:3306/embryoai_system_db?charset=utf8"
   SQLALCHEMY_POOL_RECYCLE: 3
@@ -114,3 +117,5 @@ prod:
   EMBRYO_PREDICT_SIZE: 200
 
   STATIC_NGINX_IMAGE_URL: "" # 实际生产环境的nginx地址
+
+  PATIENT_INFO_UP_URL: "" # 实际生产环境患者信息同步云端接口地址

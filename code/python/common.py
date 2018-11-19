@@ -171,6 +171,19 @@ class CommonTest(unittest.TestCase):
 
 if __name__=='__main__':
     unittest.main()
+
+def post(url, data):
+    import requests
+    r = requests.post(url, data=data)
+    logger_msg = '请求地址:' + url + '<|>请求参数:' + str(data, decoding = "utf-8") + \
+        '<|>请求结果状态' + f'{r.status_code}' + '<|>请求结果信息:' + str(r.content, decoding = "utf-8")
+    print(logger_msg)
+
+def request_post(url, data):
+    import threading
+
+    thread = threading.Thread(target=post, args=(url, data.encode("utf-8")))
+    thread.start()
     
 
     

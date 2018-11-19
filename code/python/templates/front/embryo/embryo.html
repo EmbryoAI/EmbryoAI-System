@@ -49,7 +49,6 @@ body {
 
 
 	<!--大图信息部分-->
-	<div class="curtime">当前序列：<span id="xltext"></span></div>
 	<div class="viewbox">
 		<!--左边胚胎大图-->
 		<div class="embryo" id="embryo">
@@ -61,6 +60,8 @@ body {
 			<div class="lg-video-img" id="imgVideoDiv" style="display: none;">
 			 
 			</div>
+			<!-- 当前序列 -->
+			<div class="curtime">当前序列：<span id="xltext"></span></div>
 			
 			<!--胚胎信息-->
 			<ul class="eminfo">
@@ -130,6 +131,7 @@ body {
 		<!--右边信息-->
 		<div class="btn-draw"><i>←</i><span>查看里程碑信息</span></div>
 		<div class="info">
+			<p class="ptscore">胚胎总分：<span id="embryoScoreSpanId">0</span></p>
 			<form action="" id="milestoneForm" class="layui-form" style="background:#fff">
 				<input type="hidden" name="procedureId" id="procedureId" value="{{procedure_id}}"/>
 				<input type="hidden" id="dishId" value="{{dish_id}}"/>
@@ -242,13 +244,13 @@ body {
 					<h2>备注</h2>
 					<div class="comment">
 						<div class="layui-input-inline" style="width: 100%;">
-							<textarea id="memo" rows="5" name="memo" placeholder="请输入内容" class="layui-textarea" style="min-height: 72px"></textarea>
+							<textarea id="memo" rows="5" name="memo" placeholder="请输入内容" class="layui-textarea" style="min-height: 50px"></textarea>
 						</div>
 					</div>
-					<h2 style="padding-bottom: 0;">胚胎评分<span class="score" id="embryoScoreSpanId"></span></h2>
+					<h2 style="padding-bottom: 0;">里程碑节点评分<span class="score" id="milestoneScoreSpanId"></span></h2>
 				</div>
 				
-				<div class="layui-input-block"	style="text-align: center; margin:20px 0 0px;">
+				<div id="milestoneFormSubDiv" class="layui-input-block"	style="text-align: center; margin:20px 0 0px;display: none;">
 					<button id="saveMilestoneButton" class="layui-btn layui-bg-blue"
 						lay-submit lay-filter="milestoneFormSub" style="padding: 0 80px;">保存数据</button>
 				</div>
