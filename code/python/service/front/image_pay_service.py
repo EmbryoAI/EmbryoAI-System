@@ -60,7 +60,10 @@ def queryThumbnailImageUrl(agrs):
             series = oneWell['series']
             for key in series:
                 imageObj={}
-                thumbnailUrl = nginxImageUrl+os.path.sep+path + series[key]['focus']
+                if(series[key]['focus']=='cv/embryo_not_found.jpg'):
+                    thumbnailUrl = "/static/front/img/loc-emb.png"
+                else:
+                    thumbnailUrl = nginxImageUrl+os.path.sep+path + series[key]['focus']
                 imageObj['thumbnailUrl'] = thumbnailUrl
                 imageObj['timeSeries'] = key
                 thumbnailUrlList.append(imageObj)
