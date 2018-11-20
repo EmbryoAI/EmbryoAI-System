@@ -18,90 +18,57 @@ from entity.Series import Series
 from entity.SeriesResult import SeriesResult
 
 def querySeriesList(agrs):
+    from common import getdefault
     procedure_id = agrs['procedure_id']
     dish_id = agrs['dish_id']
     well_id = agrs['well_id']
     seris = agrs['seris']
-    cell_id = agrs['cell_id']
+    #先查询病例对应的采集目录路径
+    dish = dish_mapper.queryById(dish_id)
+    if not dish : 
+        return None
+    dishCode = dish.dishCode
+    pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id,dish_id)
+    path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
+    if not os.path.isdir(path) :
+        return None
+    #再拼接对应目录下面的JSON文件路径
+    path,dishJson = image_service.getImagePath(procedure_id,dish_id)
+    well_json = dishJson['wells'][well_id]
 
-    try :
-        dish = dish_mapper.queryById(dish_id)
-        if not dish : 
-            return None
-            
-        dishCode = dish.dishCode
-        pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id,dish_id)
-        path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
-        if not os.path.isdir(path) :
-            return None
-            
-        # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
-        jsonPath = path + conf['DISH_STATE_FILENAME']
-        logger().info(jsonPath)
-        with open(f'{jsonPath}', 'r') as fn :
-            dishJson = json.loads(fn.read())
+    #开始计算要返回的11张序列
+    ts = TimeSeries()
+    end_index = len(ts.range(seris)) + 6
+    begin_index = len(ts.range(seris)) - 5
 
-        well_json = dishJson['wells'][well_id]
-        last_seris = well_json['lastEmbryoSerie']
-
-        if seris != 'lastEmbryoSerie':
-            last_seris = seris
-        
-
-        ts = TimeSeries()
-        last_index = len(ts.range(last_seris)) + 6
-        begin_index = len(ts.range(last_seris)) - 5
-
-        if begin_index < 0:
+    #判断是否超过最后一张序列的位置
+    if len(ts.range(dishJson['lastSerie'])) - len(ts.range(seris)) < 10:
+        end_index = len(ts.range(dishJson['lastSerie'])) + 1
+        begin_index = end_index - 11
+    #判断是否第一张序列的位置
+    if begin_index < 0:
             begin_index = 0
-            last_index = 11
+            end_index = 11
 
-        if len(ts.range(dishJson['lastSerie'])) - len(ts.range(last_seris)) < 10:
-            last_index = len(ts.range(dishJson['lastSerie'])) + 1
-            begin_index = last_index - 11
-        
-       
-
-        #list=[]
-        #for i in ts[begin_index:last_index]:
-        #    list.append(i)
-        #    image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + well_json['series'][i]['focus']
-        #    list.append(image_path)
-        #    hour, minute = serie_to_time(i)
-        #    list.append(f'{hour:02d}H{minute:02d}M')
-        #    list.append(last_seris)
-        
-        #查询胚胎id
-        embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, cell_id)
-
-        list=[]
-        for i in ts[begin_index:last_index]:
-            print(i)
-            #查询序列对应的里程碑节点信息
-            milestone_type = ""
-            result = milestone_mapper.getMilestone(embryo.id, i)
-            if result:
-                milestone_type = result.milestone_type
-
-            image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + well_json['series'][i]['focus']
-            hour, minute = serie_to_time(i)
-            series = Series(i, f'{hour:02d}H{minute:02d}M', image_path, milestone_type)
-            list.append(series.__dict__)
-        print(len(list))
-        seriesResult = SeriesResult(200, 'OK', list, last_seris, dishJson['lastSerie'], embryo.id)
-        return jsonify(seriesResult.__dict__)
-    except : 
-        logger().info("读取dishState.json文件出现异常")
-        seriesResult = SeriesResult(400, '获取序列出现异常', None, None, None)
-        return jsonify(seriesResult.__dict__)
+    #拼接返回的list
+    nginxImageUrl = getdefault(conf, 'STATIC_NGINX_IMAGE_URL', "http://localhost:80")
+    list=[]
+    for i in ts[begin_index:end_index]:
+        image_path = nginxImageUrl + os.path.sep + pd.imagePath + os.path.sep + f'DISH{dishCode}' + \
+            os.path.sep + well_json['series'][i]['focus']
+        hour, minute = serie_to_time(i)
+        series = Series(i, f'{hour:02d}H{minute:02d}M', image_path)
+        list.append(series.__dict__)
+    seriesResult = SeriesResult(200, 'OK', list, seris, dishJson['lastSerie'])
+    return jsonify(seriesResult.__dict__)
 
 def queryScrollbarSeriesList(agrs):
+    from common import getdefault
     procedure_id = agrs['procedure_id']
     dish_id = agrs['dish_id']
     well_id = agrs['well_id']
     current_seris = agrs['current_seris']
     direction = agrs['direction']
-    cell_id = agrs['cell_id']
 
     dish = dish_mapper.queryById(dish_id)
     if not dish : 
@@ -127,43 +94,35 @@ def queryScrollbarSeriesList(agrs):
     if direction == 'left':
         if len(ts.range(current_seris)) < 11:
             begin_index = 0
-            last_index = 11
+            end_index = 11
             current_seris = ts[5]
         else:
             current_seris = ts[len(ts.range(current_seris)) - 11]
             begin_index = len(ts.range(current_seris)) - 5
             if begin_index <= 0:
                 begin_index = 0
-            last_index = begin_index + 11
+            end_index = begin_index + 11
 
     if direction == 'right':
         
         current_seris = ts[len(ts.range(current_seris)) + 11]
         begin_index = len(ts.range(current_seris)) - 5
-        last_index = begin_index + 11
+        end_index = begin_index + 11
 
-        if last_index >= len(ts.range(last_serie)):
-            last_index = len(ts.range(last_serie)) + 1
-            begin_index = last_index - 11
+        if end_index >= len(ts.range(last_serie)):
+            end_index = len(ts.range(last_serie)) + 1
+            begin_index = end_index - 11
 
-    #查询胚胎id
-    embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, cell_id)
-
+    #拼接返回的list
+    nginxImageUrl = getdefault(conf, 'STATIC_NGINX_IMAGE_URL', "http://localhost:80")
     list=[]
-    for i in ts[begin_index:last_index]:
-        #查询序列对应的里程碑节点信息
-        milestone_type = ""
-        result = milestone_mapper.getMilestone(embryo.id, i)
-        if result:
-            milestone_type = result.milestone_type
-
-        image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + well_json['series'][i]['focus']
+    for i in ts[begin_index:end_index]:
+        image_path = nginxImageUrl + os.path.sep + pd.imagePath + os.path.sep + f'DISH{dishCode}' + \
+            os.path.sep + well_json['series'][i]['focus']
         hour, minute = serie_to_time(i)
-        series = Series(i, f'{hour:02d}H{minute:02d}M', image_path, milestone_type)
+        series = Series(i, f'{hour:02d}H{minute:02d}M', image_path)
         list.append(series.__dict__)
-
-    seriesResult = SeriesResult(200, 'OK', list, current_seris, last_serie, None)
-
+    seriesResult = SeriesResult(200, 'OK', list, current_seris, dishJson['lastSerie'])
     return jsonify(seriesResult.__dict__)
 
 def loadDishByIncubatorId(agrs):

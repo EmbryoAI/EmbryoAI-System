@@ -224,3 +224,19 @@ def getMilepostNode(embryoId,milestoneTime,upOrdown):
                 milestone = obj.to_dict()
                 break
     return 200, milestone
+
+def getMilestone(agrs):
+    procedure_id = agrs['procedureId']
+    cell_id = agrs['cellId']
+
+    embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, cell_id)
+    milestone_list = milestone_mapper.getMilestone(embryo.id)
+    list = []
+    for milestone in milestone_list:
+        print('milestone:',milestone)
+        obj={}
+        obj['milestoneType'] = milestone.milestone_type
+        obj['embryoId'] = milestone.embryo_id
+        obj['seris'] = milestone.seris
+        list.append(obj)
+    return jsonify(list)

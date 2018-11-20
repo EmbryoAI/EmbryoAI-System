@@ -45,3 +45,11 @@ def getMilestoneByEmbryoId(embryoId):
 def getMilepostNode(embryoId,milestoneTime,upOrdown):
     code, milestone = milestone_service.getMilepostNode(embryoId,milestoneTime,upOrdown)
     return make_response(jsonify(milestone), code)
+
+@milestone_rest_controller.route('/info', methods=['GET'])
+@login_required
+def getMilestone():
+    parser = reqparse.RequestParser()
+    parser.add_argument('procedureId', type=str)
+    parser.add_argument('cellId', type=str)
+    return milestone_service.getMilestone(parser.parse_args())
