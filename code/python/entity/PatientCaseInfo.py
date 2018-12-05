@@ -2,8 +2,9 @@
 
 class PatientCaseInfo():
     
-    def __init__(self, id, patientId, userId, patientAge, patientHeight, patientWeight, ecTime, ecCount, insemiTime, insemiTypeId, state, delFlag, medicalRecordNo, embryoScoreId):
+    def __init__(self, id, orgId, patientId, userId, patientAge, patientHeight, patientWeight, ecTime, ecCount, insemiTime, insemiTypeId, state, delFlag, medicalRecordNo, embryoScoreId):
         self.id = id
+        self.orgId = orgId
         self.patientId = patientId
         self.userId = userId
         self.patientAge = patientAge

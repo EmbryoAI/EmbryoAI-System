@@ -366,23 +366,24 @@ def addProcedure(request):
                 embryo_mapper.save(embryo)
 
         #同步患者信息,病例信息到云端
-        import json
-        from common import request_post
-        from entity.PatientInfo import PatientInfo
-        from entity.PatientBaseInfo import PatientBaseInfo
-        from entity.PatientCaseInfo import PatientCaseInfo
-        url = conf['PATIENT_INFO_UP_URL']
+        #import json
+        #from common import request_post
+        #from entity.PatientInfo import PatientInfo
+        #from entity.PatientBaseInfo import PatientBaseInfo
+        #from entity.PatientCaseInfo import PatientCaseInfo
+        #url = conf['PATIENT_INFO_UP_URL']
+        #orgId = conf['org_id']
         
-        patient_base_info = PatientBaseInfo(id=id, idcardNo=idcardNo, idcardTypeId=idcardTypeId, patientName=patientName,
-                        birthdate=birthdate, country='中国', locationId=locationId, address=address,
-                        email=email, mobile=mobile, delFlag=0, createTime=createTime, updateTime=updateTime,
-                        isDrinking=isDrinking, isSmoking=isSmoking)
-        patient_case_info = PatientCaseInfo(id=procedureId, patientId=id, userId=userId, patientAge=patientAge,
-                        patientHeight=patientHeight, patientWeight=patientWeight, ecTime=ecTime,
-                        ecCount=ecCount, insemiTime=insemiTime, insemiTypeId=insemiTypeId, state=state,
-                        delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId)
-        patientInfo = PatientInfo(patient_base_info.__dict__, patient_case_info.__dict__)
-        request_post(url, json.dumps(patientInfo.__dict__, ensure_ascii=False))
+        #patient_base_info = PatientBaseInfo(id=id, idcardNo=idcardNo, idcardTypeId=idcardTypeId, patientName=patientName,
+                        #birthdate=birthdate, country='中国', locationId=locationId, address=address,
+                        #email=email, mobile=mobile, delFlag=0, createTime=createTime, updateTime=updateTime,
+                        #isDrinking=isDrinking, isSmoking=isSmoking)
+        #patient_case_info = PatientCaseInfo(id=procedureId, orgId=orgId, patientId=id, userId=userId, patientAge=patientAge,
+                        #patientHeight=patientHeight, patientWeight=patientWeight, ecTime=ecTime,
+                        #ecCount=ecCount, insemiTime=insemiTime, insemiTypeId=insemiTypeId, state=state,
+                        #delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId)
+        #patientInfo = PatientInfo(patient_base_info.__dict__, patient_case_info.__dict__)
+        #request_post(url, json.dumps(patientInfo.__dict__, ensure_ascii=False))
 
     except:
         return 500, '新增病历失败!'
