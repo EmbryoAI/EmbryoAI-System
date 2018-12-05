@@ -177,7 +177,42 @@ def insertMilestone(request):
 #         embryo_mapper.updateEmbryoScore(embryoId,sumScore)
     except:
         return 400, '设置里程碑时异常!'
+    
+    try:
+        #同步里程碑到云端-开启异步线程同步
+        import threading
+        thread = threading.Thread(target=nsync, args=(milestone,milestoneData))
+        thread.start()
+    except:
+        print("同步里程碑到云端异常")
     return 200, result
+
+def nsync(milestone,milestoneData):
+    import json
+    from app import conf
+    from common import request_post
+    import dao.front.dict_dao as dict_dao
+    url = conf['MILESTONE_INFO_UP_URL']
+    #里程碑字典转换
+    milestoneDict = dict_dao.getDictByClassAndKey("milestone",milestone.milestoneId)
+    milestone.milestoneId = milestoneDict.dictValue
+    if milestoneData.pnId!=None:
+        #PN字典转换
+        pnDict = dict_dao.getDictByClassAndKey("pn",milestoneData.pnId)
+        milestoneData.pnId = pnDict.dictValue
+    #均匀度
+    evenDict = dict_dao.getDictByClassAndKey("even",milestoneData.evenId)
+    milestoneData.evenId = evenDict.dictValue
+    #碎片比例字典转换
+    fragmentDict = dict_dao.getDictByClassAndKey("fragment",milestoneData.fragmentId)
+    milestoneData.fragmentId = fragmentDict.dictValue
+    #胚胎评级字典转换
+    gradeDict = dict_dao.getDictByClassAndKey("grade",milestoneData.gradeId)
+    milestoneData.gradeId = gradeDict.dictValue
+
+    
+    baseResult = {"milestone":milestone.to_dict(),"milestoneData":milestoneData.to_dict()}
+    request_post(url, json.dumps(baseResult, ensure_ascii=False))
 
 def getMilestoneByEmbryoId(embryoId, timeSeries, procedureId, dishId, wellId):
     if not timeSeries:
