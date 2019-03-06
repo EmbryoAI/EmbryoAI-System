@@ -96,9 +96,20 @@ def updateProcedure(request):
     mobile = request.form.get('mobile')
     email = request.form.get('email')
     memo = request.form.get('memo')
+    patient_id = request.form.get('patientId')
     try:
+        print('email', email)
         procedure_mapper.update(id, memo)
-        patient_mapper.update(id, mobile, email)
+        patient_mapper.update(patient_id, mobile, email)
+
+        #同步患者信息,病例信息到云端
+        import json
+        from common import request_post
+        url = conf['PROCEDURE_INFO_UPDATE_URL']
+        
+        d = dict(procedureId=id, patientId=patient_id, memo=memo, mobile=mobile, email=email)
+
+        request_post(url, json.dumps(d, ensure_ascii=False))
     except:
         return 500, '修改病历详情时发生错误!'
     return 200, '修改病历详情成功!'
@@ -108,6 +119,17 @@ def memo(request):
     memo = request.args.get('memo')
     try:
         procedure_mapper.update(id, memo)
+
+        #同步患者信息,病例信息到云端
+        import json
+        from common import request_post
+        url = conf['PROCEDURE_INFO_UPDATE_URL']
+        
+        list = []
+        list.append(id)
+        list.append(memo)
+
+        request_post(url, json.dumps(list, ensure_ascii=False))
     except:
         return 500, '修改病历详情时发生错误!'
     return 200, '修改病历详情成功!'

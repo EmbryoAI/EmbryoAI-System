@@ -22,55 +22,61 @@ def queryWellList(procedureId, dishId):
     from entity.WellResult import WellResult
     import dao.front.milestone_mapper as milestone_mapper
 
-    dish = dish_mapper.queryById(dishId)
-    if not dish : 
-        return None
+    try:
+        dish = dish_mapper.queryById(dishId)
+        if not dish : 
+            return None
+            
+        dishCode = dish.dishCode
+        pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId,dishId)
+        path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
+        if not os.path.isdir(path) :
+            return None
+            
+        # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
+        jsonPath = path + conf['DISH_STATE_FILENAME']
+        with open(f'{jsonPath}', 'r') as fn :
+            dishJson = json.loads(fn.read())
         
-    dishCode = dish.dishCode
-    pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId,dishId)
-    path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
-    if not os.path.isdir(path) :
-        return None
-        
-    # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
-    jsonPath = path + conf['DISH_STATE_FILENAME']
-    with open(f'{jsonPath}', 'r') as fn :
-        dishJson = json.loads(fn.read())
-    
 
-    #先查询该皿ID下面的所有孔数据
-    cell_list = cell_mapper.queryCellByDishId(dishId)
+        #先查询该皿ID下面的所有孔数据
+        cell_list = cell_mapper.queryCellByDishId(dishId)
 
-    well_list=[]
-    for key in dishJson['wells']:
-        last_embryo_seris = dishJson['wells'][key]['lastEmbryoSerie']
-        image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + \
-            os.path.sep + dishJson['wells'][key]['series'][last_embryo_seris]['focus']
+        well_list=[]
+        for key in dishJson['wells']:
+            last_embryo_seris = dishJson['wells'][key]['lastEmbryoSerie']
+            image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + \
+                os.path.sep + dishJson['wells'][key]['series'][last_embryo_seris]['focus']
 
-        cell_id = ""
-        #再跟JSON里面的序列匹配孔ID
-        for cell in cell_list:
-            if key == cell.cell_code:
-                cell_id = cell.cell_id
+            cell_id = ""
+            #再跟JSON里面的序列匹配孔ID
+            for cell in cell_list:
+                if key == cell.cell_code:
+                    cell_id = cell.cell_id
 
-        well = Well(key, image_path, cell_id, last_embryo_seris)
-        well_list.append(well.__dict__)
+            well = Well(key, image_path, cell_id, last_embryo_seris)
+            well_list.append(well.__dict__)
 
-    #查询里程碑信息
-    embryo = embryo_mapper.queryByProcedureIdAndCellId(procedureId, cell_id)
-    milestone_list = milestone_mapper.getMilestone(embryo.id)
-    list = []
-    for milestone in milestone_list:
-        print('milestone:',milestone)
-        obj={}
-        obj['milestoneType'] = milestone.milestone_type
-        obj['embryoId'] = milestone.embryo_id
-        obj['seris'] = milestone.seris
-        list.append(obj)
+        #查询里程碑信息
+        embryo = embryo_mapper.queryByProcedureIdAndCellId(procedureId, cell_id)
+        print('procedureId',procedureId)
+        print('cell_id',cell_id)
+        milestone_list = milestone_mapper.getMilestone(embryo.id)
+        list = []
+        for milestone in milestone_list:
+            print('milestone:',milestone)
+            obj={}
+            obj['milestoneType'] = milestone.milestone_type
+            obj['embryoId'] = milestone.embryo_id
+            obj['seris'] = milestone.seris
+            list.append(obj)
 
-    wellResult = WellResult(200, 'OK', well_list, list, dishJson['lastSerie'])
+        wellResult = WellResult(200, 'OK', well_list, list, dishJson['lastSerie'])
 
-    return jsonify(wellResult.__dict__)
+        return jsonify(wellResult.__dict__)
+    except:
+        wellResult = WellResult(500, '系统异常,请联系开发人员!', None, None, None)
+        return jsonify(wellResult.__dict__)
 
 def getWellImage(agrs):
     image_path = agrs['image_path']
@@ -296,6 +302,7 @@ def queryDish(agrs):
 #查询采集目录
 def queryCollectionCatalog():
     json_path = conf['EMBRYOAI_IMAGE_ROOT'] + conf['FINISHED_CYCLES']
+    print('json_path',json_path)
     with open(f'{json_path}', 'r') as fn :
         catalog_json = json.loads(fn.read())
     #读取FINISHED_CYCLES JSON文件中所有的采集目录并存放到set中

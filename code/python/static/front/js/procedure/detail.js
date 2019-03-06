@@ -39,6 +39,7 @@ $(function(){
             $("#insemi_time").html(procedure.insemi_time);
             $("#embryo_num").html(procedure.embryo_num);
             $("#new_memo").val(procedure.memo);
+            $("#patientId").val(procedure.patient_id);
             
             queryEmbryo(procedureId);
 		}
