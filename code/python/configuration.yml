@@ -61,7 +61,7 @@ stage:
       seconds: 300
   SCHEDULER_API_ENABLED: true
 
-  EMBRYOAI_IMAGE_ROOT: "../captures/"
+  EMBRYOAI_IMAGE_ROOT: "/captures/"
   FINISHED_JSON_FILENAME: "finished_cycles.json"
   CYCLE_PROCESS_FILENAME: "process_state.json"
   DISH_STATE_FILENAME: "dish_state.json"
