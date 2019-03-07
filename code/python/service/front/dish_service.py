@@ -18,112 +18,118 @@ from entity.Series import Series
 from entity.SeriesResult import SeriesResult
 
 def querySeriesList(agrs):
-    from common import getdefault
-    procedure_id = agrs['procedure_id']
-    dish_id = agrs['dish_id']
-    well_id = agrs['well_id']
-    seris = agrs['seris']
-    #先查询病例对应的采集目录路径
-    dish = dish_mapper.queryById(dish_id)
-    if not dish : 
-        return None
-    dishCode = dish.dishCode
-    pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id,dish_id)
-    path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
-    if not os.path.isdir(path) :
-        return None
-    #再拼接对应目录下面的JSON文件路径
-    path,dishJson = image_service.getImagePath(procedure_id,dish_id)
-    well_json = dishJson['wells'][well_id]
+    try:
+        from common import getdefault
+        procedure_id = agrs['procedure_id']
+        dish_id = agrs['dish_id']
+        well_id = agrs['well_id']
+        seris = agrs['seris']
+        #先查询病例对应的采集目录路径
+        dish = dish_mapper.queryById(dish_id)
+        if not dish : 
+            return None
+        dishCode = dish.dishCode
+        pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id,dish_id)
+        path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
+        if not os.path.isdir(path) :
+            return None
+        #再拼接对应目录下面的JSON文件路径
+        path,dishJson = image_service.getImagePath(procedure_id,dish_id)
+        well_json = dishJson['wells'][well_id]
 
-    #开始计算要返回的11张序列
-    ts = TimeSeries()
-    end_index = len(ts.range(seris)) + 6
-    begin_index = len(ts.range(seris)) - 5
+        #开始计算要返回的11张序列
+        ts = TimeSeries()
+        end_index = len(ts.range(seris)) + 6
+        begin_index = len(ts.range(seris)) - 5
 
-    #判断是否超过最后一张序列的位置
-    if len(ts.range(dishJson['lastSerie'])) - len(ts.range(seris)) < 10:
-        end_index = len(ts.range(dishJson['lastSerie'])) + 1
-        begin_index = end_index - 11
-    #判断是否第一张序列的位置
-    if begin_index < 0:
-            begin_index = 0
-            end_index = 11
+        #判断是否超过最后一张序列的位置
+        if len(ts.range(dishJson['lastSerie'])) - len(ts.range(seris)) < 10:
+            end_index = len(ts.range(dishJson['lastSerie'])) + 1
+            begin_index = end_index - 11
+        #判断是否第一张序列的位置
+        if begin_index < 0:
+                begin_index = 0
+                end_index = 11
 
-    #拼接返回的list
-    nginxImageUrl = getdefault(conf, 'STATIC_NGINX_IMAGE_URL', "http://localhost:80")
-    list=[]
-    for i in ts[begin_index:end_index]:
-        image_path = nginxImageUrl + os.path.sep + pd.imagePath + os.path.sep + f'DISH{dishCode}' + \
-            os.path.sep + well_json['series'][i]['focus']
-        hour, minute = serie_to_time(i)
-        series = Series(i, f'{hour:02d}H{minute:02d}M', image_path)
-        list.append(series.__dict__)
-    seriesResult = SeriesResult(200, 'OK', list, seris, dishJson['lastSerie'])
-    return jsonify(seriesResult.__dict__)
+        #拼接返回的list
+        nginxImageUrl = getdefault(conf, 'STATIC_NGINX_IMAGE_URL', "http://localhost:80")
+        list=[]
+        for i in ts[begin_index:end_index]:
+            image_path = nginxImageUrl + os.path.sep + pd.imagePath + os.path.sep + f'DISH{dishCode}' + \
+                os.path.sep + well_json['series'][i]['focus']
+            hour, minute = serie_to_time(i)
+            series = Series(i, f'{hour:02d}H{minute:02d}M', image_path)
+            list.append(series.__dict__)
+        seriesResult = SeriesResult(200, 'OK', list, seris, dishJson['lastSerie'])
+        return 200, jsonify(seriesResult.__dict__)
+    except:
+        return 500, '查询序列列表异常'
 
 def queryScrollbarSeriesList(agrs):
-    from common import getdefault
-    procedure_id = agrs['procedure_id']
-    dish_id = agrs['dish_id']
-    well_id = agrs['well_id']
-    current_seris = agrs['current_seris']
-    direction = agrs['direction']
+    try:
+        from common import getdefault
+        procedure_id = agrs['procedure_id']
+        dish_id = agrs['dish_id']
+        well_id = agrs['well_id']
+        current_seris = agrs['current_seris']
+        direction = agrs['direction']
 
-    dish = dish_mapper.queryById(dish_id)
-    if not dish : 
-        return None
-        
-    dishCode = dish.dishCode
-    pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id,dish_id)
-    path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
-    if not os.path.isdir(path) :
-        return None
-        
-    # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
-    jsonPath = path + conf['DISH_STATE_FILENAME']
-    logger().info(jsonPath)
-    with open(f'{jsonPath}', 'r') as fn :
-        dishJson = json.loads(fn.read())
+        dish = dish_mapper.queryById(dish_id)
+        if not dish : 
+            return None
+            
+        dishCode = dish.dishCode
+        pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id,dish_id)
+        path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
+        if not os.path.isdir(path) :
+            return None
+            
+        # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
+        jsonPath = path + conf['DISH_STATE_FILENAME']
+        logger().info(jsonPath)
+        with open(f'{jsonPath}', 'r') as fn :
+            dishJson = json.loads(fn.read())
 
-    well_json = dishJson['wells'][well_id]
+        well_json = dishJson['wells'][well_id]
 
-    ts = TimeSeries()
+        ts = TimeSeries()
 
-    last_serie = dishJson['lastSerie']
-    if direction == 'left':
-        if len(ts.range(current_seris)) < 11:
-            begin_index = 0
-            end_index = 11
-            current_seris = ts[5]
-        else:
-            current_seris = ts[len(ts.range(current_seris)) - 11]
-            begin_index = len(ts.range(current_seris)) - 5
-            if begin_index <= 0:
+        last_serie = dishJson['lastSerie']
+        if direction == 'left':
+            if len(ts.range(current_seris)) < 11:
                 begin_index = 0
+                end_index = 11
+                current_seris = ts[5]
+            else:
+                current_seris = ts[len(ts.range(current_seris)) - 11]
+                begin_index = len(ts.range(current_seris)) - 5
+                if begin_index <= 0:
+                    begin_index = 0
+                end_index = begin_index + 11
+
+        if direction == 'right':
+            
+            current_seris = ts[len(ts.range(current_seris)) + 11]
+            begin_index = len(ts.range(current_seris)) - 5
             end_index = begin_index + 11
 
-    if direction == 'right':
-        
-        current_seris = ts[len(ts.range(current_seris)) + 11]
-        begin_index = len(ts.range(current_seris)) - 5
-        end_index = begin_index + 11
+            if end_index >= len(ts.range(last_serie)):
+                end_index = len(ts.range(last_serie)) + 1
+                begin_index = end_index - 11
 
-        if end_index >= len(ts.range(last_serie)):
-            end_index = len(ts.range(last_serie)) + 1
-            begin_index = end_index - 11
-
-    #拼接返回的list
-    nginxImageUrl = getdefault(conf, 'STATIC_NGINX_IMAGE_URL', "http://localhost:80")
-    list=[]
-    for i in ts[begin_index:end_index]:
-        image_path = nginxImageUrl + os.path.sep + pd.imagePath + os.path.sep + f'DISH{dishCode}' + \
-            os.path.sep + well_json['series'][i]['focus']
-        hour, minute = serie_to_time(i)
-        series = Series(i, f'{hour:02d}H{minute:02d}M', image_path)
-        list.append(series.__dict__)
-    seriesResult = SeriesResult(200, 'OK', list, current_seris, dishJson['lastSerie'])
-    return jsonify(seriesResult.__dict__)
+        #拼接返回的list
+        nginxImageUrl = getdefault(conf, 'STATIC_NGINX_IMAGE_URL', "http://localhost:80")
+        list=[]
+        for i in ts[begin_index:end_index]:
+            image_path = nginxImageUrl + os.path.sep + pd.imagePath + os.path.sep + f'DISH{dishCode}' + \
+                os.path.sep + well_json['series'][i]['focus']
+            hour, minute = serie_to_time(i)
+            series = Series(i, f'{hour:02d}H{minute:02d}M', image_path)
+            list.append(series.__dict__)
+        seriesResult = SeriesResult(200, 'OK', list, current_seris, dishJson['lastSerie'])
+        return 200, jsonify(seriesResult.__dict__)
+    except:
+        return 500, '左右滚动查询序列列表异常'
 
 def loadDishByIncubatorId(agrs):
     incubatorId = agrs["incubatorId"]
@@ -170,10 +176,10 @@ def getSeriesList(agrs):
                 hour, minute = serie_to_time(key)
                 obj["showTime"] = f'{hour:02d}H{minute:02d}M'
                 list.append(obj)
-        return jsonify(list)
+        return 200, jsonify(list)
     except : 
         logger().info("读取dishState.json文件出现异常")
-        return None
+        return 500, '查询序列列表异常'
 
 """根据皿ID获取胚胎评分表"""
 def emGrade(dishId):

@@ -21,7 +21,8 @@ def querySeriesList():
     parser.add_argument('well_id', type=str)
     parser.add_argument('seris', type=str)
     parser.add_argument('cell_id', type=str)
-    return dish_service.querySeriesList(parser.parse_args())
+    code, msg = dish_service.querySeriesList(parser.parse_args())
+    return make_response(msg, code)
 
 #左右滚动
 @dish_rest_controller.route('/scroll', methods=['GET'])
@@ -33,7 +34,8 @@ def queryScrollbarSeriesList():
     parser.add_argument('well_id', type=str)
     parser.add_argument('current_seris', type=str)
     parser.add_argument('direction', type=str)
-    return dish_service.queryScrollbarSeriesList(parser.parse_args())
+    code, msg = dish_service.queryScrollbarSeriesList(parser.parse_args())
+    return make_response(msg, code)
 
 ''' 根据培养箱id查询培养箱里所有皿的信息 '''
 @dish_rest_controller.route('/loadDishList',methods=['GET'])

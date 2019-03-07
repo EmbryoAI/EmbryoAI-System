@@ -14,7 +14,8 @@ url_prefix = '/api/v1/embryo'
 @embryo_rest_controller.route('/list/<string:id>', methods=['GET'])
 @login_required
 def queryEmbryoList(id):
-    return embryo_service.queryEmbryoList(id)
+    code, msg = embryo_service.queryEmbryoList(id)
+    return make_response(msg, code)
 
 #根据备胎ID标记当前备胎的结局
 @embryo_rest_controller.route('/sign/<string:id>/<string:embryoFateId>', methods=['GET'])
@@ -27,17 +28,20 @@ def signEmbryo(id,embryoFateId):
 @embryo_rest_controller.route('/<string:id>', methods=['GET'])
 @login_required
 def getEmbryoById(id):
-    return embryo_service.getEmbryoById(id)
+    code, msg = embryo_service.getEmbryoById(id)
+    return make_response(msg, code)
 
 #根据胚胎ID查询患者相关信息
 @embryo_rest_controller.route('/patient/<string:id>', methods=['GET'])
 @login_required
 def getPatientByEmbryoId(id):
-    return embryo_service.getPatientByEmbryoId(id)
+    code, msg = embryo_service.getPatientByEmbryoId(id)
+    return make_response(msg, code)
 
 #根据皿读取ini文件获取胚胎数量
 @embryo_rest_controller.route('/number', methods=['GET'])
-def quertEmbryoNumber():
+def queryEmbryoNumber():
     parser = reqparse.RequestParser()
     parser.add_argument('dishCode', type=str)
-    return embryo_service.quertEmbryoNumber(parser.parse_args())
+    code, msg = embryo_service.queryEmbryoNumber(parser.parse_args())
+    return make_response(msg, code)

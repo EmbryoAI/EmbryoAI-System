@@ -8,9 +8,12 @@ import dao.front.procedure_dish_mapper as procedure_dish_mapper
 
 
 def queryEmbryoList(id):
-    result = embryo_mapper.queryEmbryoList(id)
-    restResult = RestResult(0, "OK", len(result), list(map(dict, result)))
-    return jsonify(restResult.__dict__)
+    try:
+        result = embryo_mapper.queryEmbryoList(id)
+        restResult = RestResult(0, "OK", len(result), list(map(dict, result)))
+        return 200, jsonify(restResult.__dict__)
+    except:
+        return 500, '查询胚胎列表异常!'
 
 def signEmbryo(id,embryoFateId):
     try:
@@ -25,7 +28,7 @@ def getEmbryoById(id):
         restResult = RestResult(0, "404", 0, None)
         if embryo is not None:
             restResult = RestResult(0, "OK", 1, dict(embryo))
-        return jsonify(restResult.__dict__)
+        return 200, jsonify(restResult.__dict__)
     except:
         return 400, '查询单个胚胎时发生错误!'
 
@@ -35,33 +38,36 @@ def getPatientByEmbryoId(id):
          restResult = RestResult(0, "404", 0, None)
          if embryo is not None:
              restResult = RestResult(0, "OK", 1, dict(embryo))
-         return jsonify(restResult.__dict__)
+         return 200, jsonify(restResult.__dict__)
      except:
          return 400, '查询单个胚胎时发生错误!'
 
 
-def quertEmbryoNumber(agrs):
-    from configparser import ConfigParser
-    from task.ini_parser import EmbryoIniParser as parser
-    from app import conf
-    import json,os
+def queryEmbryoNumber(agrs):
+    try:
+        from configparser import ConfigParser
+        from task.ini_parser import EmbryoIniParser as parser
+        from app import conf
+        import json,os
 
-    dishCode = agrs['dishCode']
+        dishCode = agrs['dishCode']
 
-    list=[]
-    dishCodeList = dishCode.split('|')
-    for dishCodeStr in dishCodeList:
-        catalog = dishCodeStr.split(',')[1]
-        if catalog[0] == '.':
-            pass  
-        else:
-            ini_path = conf['EMBRYOAI_IMAGE_ROOT'] + os.path.sep + catalog + os.path.sep + 'DishInfo.ini'
-            config = parser(ini_path)
-            dishes = [f'Dish{i}Info' for i in range(1, 10) if f'Dish{i}Info' in config]
-            wells = [f'Well{i}Avail' for i in range(1, 13)]
-            embryo_number = len([index for d in dishes for index,w in enumerate(wells) if config[d][w]=='1'])
+        list=[]
+        dishCodeList = dishCode.split('|')
+        for dishCodeStr in dishCodeList:
+            catalog = dishCodeStr.split(',')[1]
+            if catalog[0] == '.':
+                pass  
+            else:
+                ini_path = conf['EMBRYOAI_IMAGE_ROOT'] + os.path.sep + catalog + os.path.sep + 'DishInfo.ini'
+                config = parser(ini_path)
+                dishes = [f'Dish{i}Info' for i in range(1, 10) if f'Dish{i}Info' in config]
+                wells = [f'Well{i}Avail' for i in range(1, 13)]
+                embryo_number = len([index for d in dishes for index,w in enumerate(wells) if config[d][w]=='1'])
 
-    return jsonify(embryo_number)
+        return 200, jsonify(embryo_number)
+    except:
+        return 500, '查询胚胎数量异常!'
 
 
 def findEmbroyoInfo(args) :
