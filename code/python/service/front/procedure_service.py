@@ -282,6 +282,7 @@ def addProcedure(request):
     email = request.form.get('email')
     locationId = request.form.get('area')
     address = request.form.get('address')
+    memo = request.form.get('memo')
     isDrinking = request.form.get('is_drinking')
     if isDrinking == 'on':
         isDrinking = 1
@@ -316,7 +317,7 @@ def addProcedure(request):
     procedure = Procedure(id=procedureId, patientId=id, userId=userId, patientAge=patientAge,
                     patientHeight=patientHeight, patientWeight=patientWeight, ecTime=ecTime,
                     ecCount=ecCount, insemiTime=insemiTime, insemiTypeId=insemiTypeId, state=state,
-                    delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId)
+                    delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId, memo=memo)
     
 
     try:
@@ -381,10 +382,16 @@ def addProcedure(request):
                         birthdate=birthdate, country='中国', locationId=locationId, address=address,
                         email=email, mobile=mobile, delFlag=0, createTime=createTime, updateTime=updateTime,
                         isDrinking=isDrinking, isSmoking=isSmoking)
-        patient_case_info = PatientCaseInfo(id=procedureId, patientId=id, userId=userId, patientAge=patientAge,
+
+        #获取机构注册ID
+        import service.front.organization_service as org_service 
+        org_config = org_service.getOrganConfig()
+        orgId = org_config['orgId']
+        
+        patient_case_info = PatientCaseInfo(id=procedureId, orgId=orgId, patientId=id, userId=userId, patientAge=patientAge,
                         patientHeight=patientHeight, patientWeight=patientWeight, ecTime=ecTime,
                         ecCount=ecCount, insemiTime=insemiTime, insemiTypeId=insemiTypeId, state=state,
-                        delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId)
+                        delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId, memo=memo)
         patientInfo = PatientInfo(patient_base_info.__dict__, patient_case_info.__dict__)
         request_post(url, json.dumps(patientInfo.__dict__, ensure_ascii=False))
 
