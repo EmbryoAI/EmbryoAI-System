@@ -357,9 +357,13 @@ def addProcedure(request):
             embryos = [index for d in dishes for index,w in enumerate(wells) if config[d][w]=='1']
             #孔表新增记录
             for i in embryos:
-                cellId = uuid()
-                cell = Cell(id=cellId, dishId=dishId, cellCode=i+1, createTime=createTime, updateTime=updateTime)
-                cell_mapper.save(cell)
+                cellCode = i+1
+                cell = cell_mapper.getCellByDishIdAndCellCode(dishId, cellCode)
+                if not cell:
+                    cellId = uuid()
+                    cell = Cell(id=cellId, dishId=dishId, cellCode=cellCode, createTime=createTime, updateTime=updateTime)
+                    cell_mapper.save(cell)
+
                 #胚胎表新增记录
                 embryoId = uuid()
                 embryo = Embryo(id=embryoId, embryoIndex=i+1, procedureId=procedureId, cellId=cellId)
