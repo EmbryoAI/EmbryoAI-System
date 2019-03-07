@@ -38,6 +38,9 @@ dev:
   STATIC_NGINX_IMAGE_URL: http://39.104.173.18:8085
   PATIENT_INFO_UP_URL: "http://localhost:8086/api/v1.0/receivePatientInfo"
   MILESTONE_INFO_UP_URL: "http://localhost:8086/api/v1.0/milestone"
+
+  ORGAN_REGISTER_URL: "http://localhost:8086/api/v1.0/organization/register"  #机构注册到云端接口
+  ORGAN_JSON_FILENAME: "organization.json"
 stage:
   SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@39.104.173.18:3306/embryoai_system_db?charset=utf8"
   SQLALCHEMY_POOL_RECYCLE: 3
@@ -79,6 +82,9 @@ stage:
 
   PATIENT_INFO_UP_URL: "http://localhost:8086/api/v1.0/receivePatientInfo"
 
+  ORGAN_REGISTER_URL: "http://39.104.173.18:8086/api/v1.0/organization/register"  #机构注册到云端接口
+  ORGAN_JSON_FILENAME: "organization.json"
+
 prod:
   SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@localhost:3306/embryoai_system_db?charset=utf8"
   SQLALCHEMY_POOL_RECYCLE: 3
@@ -119,3 +125,6 @@ prod:
   STATIC_NGINX_IMAGE_URL: "" # 实际生产环境的nginx地址
 
   PATIENT_INFO_UP_URL: "" # 实际生产环境患者信息同步云端接口地址
+
+  ORGAN_REGISTER_URL: ""  #实际生成环境机构注册到云端接口地址
+  ORGAN_JSON_FILENAME: "organization.json"
