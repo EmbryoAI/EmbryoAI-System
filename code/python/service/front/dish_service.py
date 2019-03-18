@@ -146,7 +146,25 @@ def queryScrollbarSeriesList(agrs):
             hour, minute = serie_to_time(i)
             series = Series(i, f'{hour:02d}H{minute:02d}M', image_path)
             list.append(series.__dict__)
-        seriesResult = SeriesResult(200, 'OK', list, current_seris, dishJson['lastSerie'])
+
+        #查询里程碑信息
+        current_cell = cell_mapper.getCellByDishIdAndCellCode(dish_id, well_id)
+        embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, current_cell.id)
+        milestone_list = milestone_mapper.getMilestone(embryo.id)
+        m_list = []
+        for milestone in milestone_list:
+            obj={}
+            obj['milestoneType'] = milestone.milestone_type
+            obj['embryoId'] = milestone.embryo_id
+            obj['seris'] = milestone.seris
+            m_list.append(obj)
+        
+        if not milestone_list:
+            obj={}
+            obj['embryoId'] = embryo.id
+            m_list.append(obj)
+
+        seriesResult = SeriesResult(200, 'OK', list, current_seris, dishJson['lastSerie'], m_list)
         return 200, jsonify(seriesResult.__dict__)
     except:
         return 500, '左右滚动查询序列列表异常'

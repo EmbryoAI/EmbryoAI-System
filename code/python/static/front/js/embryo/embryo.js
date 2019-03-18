@@ -1080,6 +1080,7 @@ function arrow(direction){
 		success : function(data) {
             var series = data.series;
             var serisContent = "";
+            var milestoneList = data.milestone_list;
             for(var i=0;i<=series.length-1;i++){
                 var milestoneType = "<span></span>";
                 for(var j=0;j<milestoneList.length;j++){
@@ -1200,7 +1201,7 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 				}
 				form.render();
 	        	//当前时间序列的缩略图
-	        	var thpath = $("#"+currentSeris).attr("src").substring($("#"+currentSeris).attr("src").indexOf("captures")+9,$("#"+currentSeris).attr("src").length);
+	        	var thpath = $("#"+currentSeris).attr("src").substring($("#"+currentSeris).attr("src").indexOf("\\",8),$("#"+currentSeris).attr("src").length);
 	        	$("#thumbnailPath").val(thpath);
 		},
 		error : function(request) {
