@@ -81,8 +81,8 @@ stage:
 
   STATIC_NGINX_IMAGE_URL: http://39.104.173.18:8085
 
-  PATIENT_INFO_UP_URL: "http://localhost:8086/api/v1.0/receivePatientInfo"
-  PROCEDURE_INFO_UPDATE_URL: "http://localhost:8086/api/v1.0/updateProcedure"
+  PATIENT_INFO_UP_URL: "http://39.104.173.18:8086/api/v1.0/receivePatientInfo"
+  PROCEDURE_INFO_UPDATE_URL: "http://39.104.173.18:8086/api/v1.0/updateProcedure"
 
   ORGAN_REGISTER_URL: "http://39.104.173.18:8086/api/v1.0/organization/register"  #机构注册到云端接口
   ORGAN_JSON_FILENAME: "organization.json"

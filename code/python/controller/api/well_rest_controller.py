@@ -12,10 +12,10 @@ url_prefix = '/api/v1/well'
 
 
 #根据procedureId,dishCode获取孔列表
-@well_rest_controller.route('/list/<string:procedureId>/<string:dishId>', methods=['GET'])
+@well_rest_controller.route('/list/<string:procedureId>/<string:dishId>/<string:wellId>', methods=['GET'])
 @login_required
-def queryWellList(procedureId, dishId):
-    code, msg = well_service.queryWellList(procedureId, dishId)
+def queryWellList(procedureId, dishId, wellId):
+    code, msg = well_service.queryWellList(procedureId, dishId, wellId)
     return make_response(msg, code)
 
 #根据路径返回孔缩略图

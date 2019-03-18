@@ -67,7 +67,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
         $.ajax({
             cache : false,
             type : "GET",
-            url : "/api/v1/well/list/" + procedureId + "/" + dishId,
+            url : "/api/v1/well/list/" + procedureId + "/" + dishId + "/" + wellId,
             data : "",
             error : function(request) {
                 parent.layer.alert(request.responseText);
@@ -1099,8 +1099,8 @@ function arrow(direction){
                     series[i].series_name + "</b></div>";
             }
             $("#myscrollboxul").html(serisContent);
-            embryoId = milestoneList[0].embryoId;
-            $("#embryoId").val(embryoId);
+            var now_embryoId = milestoneList[0].embryoId;
+            $("#embryoId").val(now_embryoId);
 
             firstSeris = series[0].series_code;
             currentSeris = data.current_series;
@@ -1206,7 +1206,8 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 		error : function(request) {
 			layer.alert(request.responseText);
 		}
-	});
+    });
+    
 	
 	//回显胚胎结局
 	//根据胚胎ID查询该胚胎ID是否有里程碑，如果有则进行回显
