@@ -16,6 +16,8 @@ from collections import OrderedDict
 import dao.front.dict_dao as dict_dao
 from entity.Series import Series
 from entity.SeriesResult import SeriesResult
+import dao.front.dish_mapper as dish_mapper
+import dao.front.cell_mapper as cell_mapper
 
 def querySeriesList(agrs):
     try:
@@ -23,6 +25,7 @@ def querySeriesList(agrs):
         procedure_id = agrs['procedure_id']
         dish_id = agrs['dish_id']
         well_id = agrs['well_id']
+        print("well_id:", well_id)
         seris = agrs['seris']
         #先查询病例对应的采集目录路径
         dish = dish_mapper.queryById(dish_id)
@@ -60,7 +63,24 @@ def querySeriesList(agrs):
             hour, minute = serie_to_time(i)
             series = Series(i, f'{hour:02d}H{minute:02d}M', image_path)
             list.append(series.__dict__)
-        seriesResult = SeriesResult(200, 'OK', list, seris, dishJson['lastSerie'])
+
+        #查询里程碑信息
+        current_cell = cell_mapper.getCellByDishIdAndCellCode(dish_id, well_id)
+        embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, current_cell.id)
+        milestone_list = milestone_mapper.getMilestone(embryo.id)
+        m_list = []
+        for milestone in milestone_list:
+            obj={}
+            obj['milestoneType'] = milestone.milestone_type
+            obj['embryoId'] = milestone.embryo_id
+            obj['seris'] = milestone.seris
+            m_list.append(obj)
+        
+        if not milestone_list:
+            obj={}
+            obj['embryoId'] = embryo.id
+            m_list.append(obj)
+        seriesResult = SeriesResult(200, 'OK', list, seris, dishJson['lastSerie'], m_list)
         return 200, jsonify(seriesResult.__dict__)
     except:
         return 500, '查询序列列表异常'

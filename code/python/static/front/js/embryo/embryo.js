@@ -20,7 +20,6 @@ var imgVideoZt = "";
 var embryoId = "";
 var currentSerisName = "";
 var firstSeris = "";
-var milestoneList = "";
 var n = 0;
 layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
     form = layui.form;
@@ -73,7 +72,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
                 parent.layer.alert(request.responseText);
             },
             success : function(data) {
-                milestoneList = data.milestone_list;
+                var milestoneList = data.milestone_list;
                 var well = "";
                 var wellList = data.well_list;
                 var cellCode = $('#cellCode').val();
@@ -864,6 +863,7 @@ function querySeriesList(wellid, serisCode, type, cellId){
         },
         success : function(data) {
             var series = data.series;
+            var milestoneList = data.milestone_list;
             for(var i=0;i<=series.length-1;i++){
                 var milestoneType = "<span></span>";
                 for(var j=0;j<milestoneList.length;j++){

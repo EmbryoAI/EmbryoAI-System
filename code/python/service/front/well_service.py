@@ -56,12 +56,8 @@ def queryWellList(procedureId, dishId, cellCode):
         well_list.append(well.__dict__)
 
     #查询里程碑信息
-    print('cellCode:', cellCode)
     current_cell = cell_mapper.getCellByDishIdAndCellCode(dishId, cellCode)
     embryo = embryo_mapper.queryByProcedureIdAndCellId(procedureId, current_cell.id)
-    print('procedureId:', procedureId)
-    print('cell_id:', cell_id)
-    print('embryo.id:', embryo.id)
     milestone_list = milestone_mapper.getMilestone(embryo.id)
     list = []
     for milestone in milestone_list:
