@@ -217,24 +217,27 @@ def nsync(milestone,milestoneData):
 def getMilestoneByEmbryoId(embryoId, timeSeries, procedureId, dishId, wellId):
     if not timeSeries:
         return 400, '初始化里程碑节点出错，图片路径不能为空!'
-    sql = "AND embryo_id = :embryoId and milestone_time = :milestoneTime "
-    filters = {'embryoId': embryoId,'milestoneTime':timeSeries}
-    milestone = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
-    milestoneData = None
-    result = {}
-    if milestone!=None:
-        milestoneData = milestone_data_mapper.getMilestoneData(milestone.id)
-
-        result["milestone"] = dict(milestone)
-        result["milestoneData"] = milestoneData.to_dict()
-
-    if milestoneData is None:
-        result["milestoneData"] = analysisMilestoneData(procedureId, dishId, timeSeries, wellId)
-        
-    if not result:
-        return 200, None
-    else: 
-        return 200, result
+    try:
+        sql = "AND embryo_id = :embryoId and milestone_time = :milestoneTime "
+        filters = {'embryoId': embryoId,'milestoneTime':timeSeries}
+        milestone = milestone_mapper.getMilestoneByEmbryoId(sql,filters)
+        milestoneData = None
+        result = {}
+        if milestone!=None:
+            milestoneData = milestone_data_mapper.getMilestoneData(milestone.id)
+    
+            result["milestone"] = dict(milestone)
+            result["milestoneData"] = milestoneData.to_dict()
+    
+        if milestoneData is None:
+            result["milestoneData"] = analysisMilestoneData(procedureId, dishId, timeSeries, wellId)
+            
+        if not result:
+            return 200, None
+        else: 
+            return 200, result
+    except:
+        return 400, '初始化里程碑节点出错!'
     
 
 def analysisMilestoneData(procedureId, dishId, timeSeries, wellId):
@@ -242,23 +245,27 @@ def analysisMilestoneData(procedureId, dishId, timeSeries, wellId):
     return dishJson['wells'][wellId]['series'][timeSeries]
 
 def getMilepostNode(embryoId,milestoneTime,upOrdown):
-    #首先获取当前胚胎的所有里程碑节点
-    milestoneList = milestone_mapper.queryMilestoneList(embryoId)
-    if "up" == upOrdown:#如果为上一里程碑集合反转
-       milestoneList.reverse()
-    
-    milestone = None
-    for obj in milestoneList:
-        print(obj.milestoneTime)
-        if "up" == upOrdown: #如果是上一里程碑
-            if obj.milestoneTime < milestoneTime:
-                milestone = obj.to_dict()
-                break
-        else :
-            if obj.milestoneTime > milestoneTime:
-                milestone = obj.to_dict()
-                break
-    return 200, milestone
+    try:
+        #首先获取当前胚胎的所有里程碑节点
+        milestoneList = milestone_mapper.queryMilestoneList(embryoId)
+        if "up" == upOrdown:#如果为上一里程碑集合反转
+           milestoneList.reverse()
+        
+        milestone = None
+        for obj in milestoneList:
+            print(obj.milestoneTime)
+            if "up" == upOrdown: #如果是上一里程碑
+                if obj.milestoneTime < milestoneTime:
+                    milestone = obj.to_dict()
+                    break
+            else :
+                if obj.milestoneTime > milestoneTime:
+                    milestone = obj.to_dict()
+                    break
+        return 200, milestone
+    except:
+        return 400, '获取上下里程碑节点出错!'
+
 
 def getMilestone(agrs):
     procedure_id = agrs['procedureId']
