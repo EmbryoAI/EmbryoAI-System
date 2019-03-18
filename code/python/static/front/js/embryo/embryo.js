@@ -1200,7 +1200,7 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 				}
 				form.render();
 	        	//当前时间序列的缩略图
-	        	var thpath = $("#"+currentSeris).attr("src").substring($("#"+currentSeris).attr("src").indexOf("captures")+9,$("#"+currentSeris).attr("src").length);
+	        	var thpath = $("#"+currentSeris).attr("src").substring($("#"+currentSeris).attr("src").indexOf("\\",8),$("#"+currentSeris).attr("src").length);
 	        	$("#thumbnailPath").val(thpath);
 		},
 		error : function(request) {
