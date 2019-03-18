@@ -55,7 +55,9 @@ def loadSeriesList():
     parser.add_argument('procedureId', type=str)
     parser.add_argument('dishId', type=str)
     parser.add_argument('wellId', type=str)
-    return dish_service.getSeriesList(parser.parse_args())
+    
+    code,result = dish_service.getSeriesList(parser.parse_args())
+    return make_response(result, code)
 
 
 """根据皿ID获取胚胎评分表"""
