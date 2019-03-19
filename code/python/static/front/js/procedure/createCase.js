@@ -162,6 +162,10 @@ function addCase(){
 	});
 }
 
+function compareDate(d1,d2){
+  return ((new Date(d1.replace(/-/g,"\/"))) > (new Date(d2.replace(/-/g,"\/"))));
+}
+
 function queryRules(){
 	$("#rule").empty();
 	$.ajax({
