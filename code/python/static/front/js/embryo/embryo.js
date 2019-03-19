@@ -891,6 +891,28 @@ function querySeriesList(wellid, serisCode, type, cellId){
             $("#" + serisCode + "_div").attr("class", "swiper-slide active");
             embryoId = milestoneList[0].embryoId;
             $("#embryoId").val(embryoId);
+            
+            //由于切换孔了，需要根据胚胎ID加载一次患者信息
+            $.ajax({
+                type : "get",
+                url : "/api/v1/embryo/patient/"+$("#embryoId").val(),
+                datatype : "json",
+                success : function(data) {
+                    if (data.code == 0) {
+                        $("#patientNameSpan").html(data.data.patient_name);
+                        $("#patientAge").html(data.data.patient_age);
+                        $("#embryoIndexSpan").html(data.data.embryo_index);
+                        $("#zzjdSpan").html(data.data.zzjd);
+                    } else {
+                        layer.alert(data.msg);
+                    }
+                },
+                error : function(request) {
+                    layer.alert(request.responseText);
+                }
+            });
+            
+            loadingZIndex(procedureId,dishId,wellId,currentSeris);
         }
     });
 
@@ -899,26 +921,6 @@ function querySeriesList(wellid, serisCode, type, cellId){
         loadingImage(procedureId,dishId,wellId,currentSeris,'');
         queryClearImageUrl();//初始化所有图片
         n = 0;
-        
-        //由于切换孔了，需要根据胚胎ID加载一次患者信息
-        $.ajax({
-            type : "get",
-            url : "/api/v1/embryo/patient/"+$("#embryoId").val(),
-            datatype : "json",
-            success : function(data) {
-                if (data.code == 0) {
-                    $("#patientNameSpan").html(data.data.patient_name);
-                    $("#patientAge").html(data.data.patient_age);
-                    $("#embryoIndexSpan").html(data.data.embryo_index);
-                    $("#zzjdSpan").html(data.data.zzjd);
-                } else {
-                    layer.alert(data.msg);
-                }
-            },
-            error : function(request) {
-                layer.alert(request.responseText);
-            }
-        });
     }else if (type==1){
         n = $("#imageVideo"+currentSeris).attr("index");//根据时间序列同步播放的位置
     }else {
@@ -926,7 +928,7 @@ function querySeriesList(wellid, serisCode, type, cellId){
         n = $("#imageVideo"+currentSeris).attr("index");//根据时间序列同步播放的位置
     }
     
-    loadingZIndex(procedureId,dishId,wellId,currentSeris);
+
 }
 
 /**
@@ -1100,8 +1102,8 @@ function arrow(direction){
                     series[i].series_name + "</b></div>";
             }
             $("#myscrollboxul").html(serisContent);
-            var now_embryoId = milestoneList[0].embryoId;
-            $("#embryoId").val(now_embryoId);
+            embryoId = milestoneList[0].embryoId;
+            $("#embryoId").val(embryoId);
 
             firstSeris = series[0].series_code;
             currentSeris = data.current_series;
