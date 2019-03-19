@@ -124,6 +124,26 @@ function addCase(){
 		layer.alert('采集目录不能为空!');
 		return;
 	}
+
+	//获取采集时间
+	var collectionTime = $('#catalog_collection_time').text();
+	var ecTime = $("#get").val();
+	var insemiTime = $("#iui").val();
+	if(ecTime != ""){
+		var collectionCompareEcTime = compareDate(collectionTime, ecTime);
+		if(!collectionCompareEcTime){
+			layer.alert("取卵时间大于采集时间,请重新选择取卵时间!");
+			return;
+		}
+	}	
+	if(insemiTime != ""){
+		var collectionCompareInsemiTime = compareDate(collectionTime, insemiTime);
+		if(!collectionCompareInsemiTime){
+			layer.alert("受精时间大于采集时间,请重新选择受精时间!");
+			return;
+		}
+	}
+
 	$("#addCaseButton").attr("disabled", true).attr("value","创建中..."); 
 	$.ajax({
 		cache : false,
