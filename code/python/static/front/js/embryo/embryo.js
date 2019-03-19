@@ -892,6 +892,17 @@ function querySeriesList(wellid, serisCode, type, cellId){
             embryoId = milestoneList[0].embryoId;
             $("#embryoId").val(embryoId);
             
+            if(type==0) {
+                loadingImage(procedureId,dishId,wellId,currentSeris,'');
+                queryClearImageUrl();//初始化所有图片
+                n = 0;
+            }else if (type==1){
+                n = $("#imageVideo"+currentSeris).attr("index");//根据时间序列同步播放的位置
+            }else {
+                loadingImage(procedureId,dishId,wellId,currentSeris,'');
+                n = $("#imageVideo"+currentSeris).attr("index");//根据时间序列同步播放的位置
+            }
+            
             //由于切换孔了，需要根据胚胎ID加载一次患者信息
             $.ajax({
                 type : "get",
@@ -917,16 +928,7 @@ function querySeriesList(wellid, serisCode, type, cellId){
     });
 
 
-    if(type==0) {
-        loadingImage(procedureId,dishId,wellId,currentSeris,'');
-        queryClearImageUrl();//初始化所有图片
-        n = 0;
-    }else if (type==1){
-        n = $("#imageVideo"+currentSeris).attr("index");//根据时间序列同步播放的位置
-    }else {
-        loadingImage(procedureId,dishId,wellId,currentSeris,'');
-        n = $("#imageVideo"+currentSeris).attr("index");//根据时间序列同步播放的位置
-    }
+
     
 
 }
