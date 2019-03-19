@@ -93,7 +93,8 @@ def getProcedureById(procedureID):
                         pro.`patient_weight`,pro.`ec_time` AS ec_time,pro.`ec_count` AS ec_count, 
                         pro.`insemi_time` AS insemi_time,pro.`memo`,pro.`medical_record_no` AS medical_record_no, 
                         COUNT(DISTINCT e.id) AS embryo_num,d.dict_value AS insemi_type,
-                        CONCAT('D',DATEDIFF(IF(pro.cap_end_time,pro.cap_end_time,NOW()),pro.insemi_time)) AS zzjd 
+                        CONCAT('D',DATEDIFF(IF(pro.cap_end_time,pro.cap_end_time,NOW()),pro.insemi_time)) AS zzjd,
+                        tr.`rule_name` AS rule_name 
             FROM t_patient pat 
             LEFT JOIN t_procedure pro 
             ON pat.`id` = pro.`patient_id` 
@@ -104,6 +105,8 @@ def getProcedureById(procedureID):
             AND d.dict_class='insemi_type' 
             LEFT JOIN `sys_location` sl 
             ON pat.`location_id` = sl.`id` 
+            JOIN `t_rule` tr 
+            ON pro.`embryo_score_id` = tr.`id` 
             WHERE pro.`id` = :procedureID GROUP BY pro.id
             """)
         return db.session.execute(sql, {'procedureID':procedureID}).fetchone()
