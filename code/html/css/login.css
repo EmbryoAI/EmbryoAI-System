@@ -99,6 +99,30 @@
 	border-radius: 4px;
 	font-size: 16px
 }
+.phone-box .phone-num{
+	margin-bottom: 40px;
+	background: url(../img/login-icon5.png) no-repeat left center;
+}
+.phone-box .phone-code{
+	background: url(../img/login-icon4.png) no-repeat left center;
+}
+.phone-box .phone-num:focus{
+	background: url(../img/login-icon6.png) no-repeat left center;
+}
+.phone-box .phone-code:focus{
+	background: url(../img/login-icon3.png) no-repeat left center;
+}
+.codebtn{
+	position: absolute;
+	padding-right: 10px;
+	background-color: #fff;
+	border: 0;
+	line-height: 30px;
+	color:#4169d3 ;
+	cursor:pointer;
+	right: 6px;
+    top: 94px;
+}
 .admin-login{
 	margin-top: 40px;
 	padding-left: 20px;

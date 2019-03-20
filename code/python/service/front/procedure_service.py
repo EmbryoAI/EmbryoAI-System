@@ -62,34 +62,37 @@ def queryProcedureList(request):
         #查询总数
         count = procedure_mapper.queryProcedureCount(sqlCondition,filters)
         restResult = RestResult(0, "OK", count, procedureList)
+        return 200, jsonify(restResult.__dict__)
     except:
-        restResult = RestResult(400, "查询病历列表时发生错误!", 0, None)
-    return jsonify(restResult.__dict__)
+        return 400, '查询病历列表时发生错误!'
 
 def getProcedureDetail(id):
-    restResult = RestResult(0, "查无该病历详情!", 0, None)
+    try:
+        restResult = RestResult(0, "查无该病历详情!", 0, None)
 
-    result = procedure_mapper.getProcedureById(id)
-    if not result:
-        return jsonify(restResult.__dict__)
+        result = procedure_mapper.getProcedureById(id)
+        if not result:
+            return jsonify(restResult.__dict__)
 
-    ec_time = None
-    insemi_time = None
+        ec_time = None
+        insemi_time = None
 
-    if result.ec_time and result.ec_time != '0000-00-00 00:00:00':
-        ec_time = parse_date(str(result.ec_time), 1)
-    if result.insemi_time != '0000-00-00 00:00:00':
-        insemi_time = parse_date(str(result.insemi_time), 1)
+        if result.ec_time and result.ec_time != '0000-00-00 00:00:00':
+            ec_time = parse_date(str(result.ec_time), 1)
+        if result.insemi_time != '0000-00-00 00:00:00':
+            insemi_time = parse_date(str(result.insemi_time), 1)
 
-    result = dict(result)
-    result['ec_time'] = ec_time
-    result['insemi_time'] = insemi_time
-    
+        result = dict(result)
+        result['ec_time'] = ec_time
+        result['insemi_time'] = insemi_time
+        
 
-    if result:
-        restResult = RestResult(0, "OK", 1, result)
-    
-    return jsonify(restResult.__dict__)
+        if result:
+            restResult = RestResult(0, "OK", 1, result)
+        
+        return 200, jsonify(restResult.__dict__)
+    except:
+        return 400, '查询病历详情时时发生错误!'
 
 def updateProcedure(request):
     id = request.form.get('id')
@@ -99,18 +102,18 @@ def updateProcedure(request):
     try:
         procedure_mapper.update(id, memo)
         patient_mapper.update(id, mobile, email)
+        return 200, '修改病历详情成功!'
     except:
         return 500, '修改病历详情时发生错误!'
-    return 200, '修改病历详情成功!'
 
 def memo(request):
     id = request.args.get('procedureId')
     memo = request.args.get('memo')
     try:
         procedure_mapper.update(id, memo)
+        return 200, '修改病历详情成功!'
     except:
         return 500, '修改病历详情时发生错误!'
-    return 200, '修改病历详情成功!'
 
 def queryMedicalRecordNoList(request):
         #动态组装查询条件
@@ -148,9 +151,10 @@ def deleteProcedure(id):
     try:
         params = {'id': id, 'delFlag': 1}
         procedure_mapper.deleteProcedure(params)
+        return 200, '删除病例成功'
     except:
-        return 400, {'msg': '删除病历时发生错误'}
-    return 204, None
+        return 500, '删除病例失败'
+    
 
 
 def queryProcedureViewList(request):
@@ -282,8 +286,17 @@ def addProcedure(request):
     email = request.form.get('email')
     locationId = request.form.get('area')
     address = request.form.get('address')
+    memo = request.form.get('memo')
     isDrinking = request.form.get('is_drinking')
+    if isDrinking == 'on':
+        isDrinking = 1
+    else:
+        isDrinking = 0
     isSmoking = request.form.get('is_smoking')
+    if isSmoking == 'on':
+        isSmoking = 1
+    else:
+        isSmoking = 0
     userId = request.form.get('userId')
     patientHeight = request.form.get('patient_height')
     if not patientHeight:
@@ -308,7 +321,7 @@ def addProcedure(request):
     procedure = Procedure(id=procedureId, patientId=id, userId=userId, patientAge=patientAge,
                     patientHeight=patientHeight, patientWeight=patientWeight, ecTime=ecTime,
                     ecCount=ecCount, insemiTime=insemiTime, insemiTypeId=insemiTypeId, state=state,
-                    delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId)
+                    delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId, memo=memo)
     
 
     try:
@@ -349,15 +362,45 @@ def addProcedure(request):
             embryos = [index for d in dishes for index,w in enumerate(wells) if config[d][w]=='1']
             #孔表新增记录
             for i in embryos:
-                cellId = uuid()
-                cell = Cell(id=cellId, dishId=dishId, cellCode=i+1, createTime=createTime, updateTime=updateTime)
-                cell_mapper.save(cell)
+                cellCode = i+1
+                cell = cell_mapper.getCellByDishIdAndCellCode(dishId, cellCode)
+                if not cell:
+                    cellId = uuid()
+                    cell = Cell(id=cellId, dishId=dishId, cellCode=cellCode, createTime=createTime, updateTime=updateTime)
+                    cell_mapper.save(cell)
+
                 #胚胎表新增记录
                 embryoId = uuid()
                 embryo = Embryo(id=embryoId, embryoIndex=i+1, procedureId=procedureId, cellId=cellId)
                 embryo_mapper.save(embryo)
 
+        #同步患者信息,病例信息到云端
+        import json
+        from common import request_post
+        from entity.PatientInfo import PatientInfo
+        from entity.PatientBaseInfo import PatientBaseInfo
+        from entity.PatientCaseInfo import PatientCaseInfo
+        url = conf['PATIENT_INFO_UP_URL']
+        
+        patient_base_info = PatientBaseInfo(id=id, idcardNo=idcardNo, idcardTypeId=idcardTypeId, patientName=patientName,
+                        birthdate=birthdate, country='中国', locationId=locationId, address=address,
+                        email=email, mobile=mobile, delFlag=0, createTime=createTime, updateTime=updateTime,
+                        isDrinking=isDrinking, isSmoking=isSmoking)
+
+        #获取机构注册ID
+        import service.front.organization_service as org_service 
+        org_config = org_service.getOrganConfig()
+        orgId = org_config['orgId']
+        
+        patient_case_info = PatientCaseInfo(id=procedureId, orgId=orgId, patientId=id, userId=userId, patientAge=patientAge,
+                        patientHeight=patientHeight, patientWeight=patientWeight, ecTime=ecTime,
+                        ecCount=ecCount, insemiTime=insemiTime, insemiTypeId=insemiTypeId, state=state,
+                        delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId, memo=memo)
+        patientInfo = PatientInfo(patient_base_info.__dict__, patient_case_info.__dict__)
+        request_post(url, json.dumps(patientInfo.__dict__, ensure_ascii=False))
+
+        return 200, '新增病历成功!'
     except:
         return 500, '新增病历失败!'
 
-    return 200, '新增病历成功!'
+    

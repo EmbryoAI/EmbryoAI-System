@@ -12,10 +12,11 @@ url_prefix = '/api/v1/well'
 
 
 #根据procedureId,dishCode获取孔列表
-@well_rest_controller.route('/list/<string:procedureId>/<string:dishId>', methods=['GET'])
+@well_rest_controller.route('/list/<string:procedureId>/<string:dishId>/<string:wellId>', methods=['GET'])
 @login_required
-def queryWellList(procedureId, dishId):
-    return well_service.queryWellList(procedureId, dishId)
+def queryWellList(procedureId, dishId, wellId):
+    code, msg = well_service.queryWellList(procedureId, dishId, wellId)
+    return make_response(msg, code)
 
 #根据路径返回孔缩略图
 @well_rest_controller.route('/image', methods=['GET'])
@@ -23,7 +24,8 @@ def queryWellList(procedureId, dishId):
 def getWellImage():
     parser = reqparse.RequestParser()
     parser.add_argument('image_path', type=str)
-    return well_service.getWellImage(parser.parse_args())
+    code, msg = well_service.getWellImage(parser.parse_args())
+    return make_response(msg, code)
 
 #根据当前时间序列获取上一帧序列
 @well_rest_controller.route('/preframe', methods=['GET'])
@@ -31,7 +33,8 @@ def getWellImage():
 def getPreFrame():
     parser = reqparse.RequestParser()
     parser.add_argument('current_seris', type=str)
-    return well_service.getPreFrame(parser.parse_args())
+    code, msg = well_service.getPreFrame(parser.parse_args())
+    return make_response(msg, code)
 
 #根据当前时间序列获取下一帧序列
 @well_rest_controller.route('/nextframe', methods=['GET'])
@@ -39,7 +42,8 @@ def getPreFrame():
 def getNextFrame():
     parser = reqparse.RequestParser()
     parser.add_argument('current_seris', type=str)
-    return well_service.getNextFrame(parser.parse_args())
+    code, msg = well_service.getNextFrame(parser.parse_args())
+    return make_response(msg, code)
 
 #将孔下面的所有大图生成视频
 @well_rest_controller.route('/video', methods=['GET'])
@@ -48,7 +52,8 @@ def getWellVideo():
     parser.add_argument('procedure_id', type=str)
     parser.add_argument('dish_id', type=str)
     parser.add_argument('well_id', type=str)
-    return well_service.getWellVideo(parser.parse_args())
+    code, msg = well_service.getWellVideo(parser.parse_args())
+    return make_response(msg, code)
 
 #获取所有大图生成视频的存储路径
 @well_rest_controller.route('/video_path', methods=['GET'])
@@ -57,24 +62,28 @@ def getWellVideoPath():
     parser.add_argument('procedure_id', type=str)
     parser.add_argument('dish_id', type=str)
     parser.add_argument('well_id', type=str)
-    return well_service.getWellVideoPath(parser.parse_args())
+    code, msg = well_service.getWellVideoPath(parser.parse_args())
+    return make_response(msg, code)
 
 #查询培养箱
 @well_rest_controller.route('/incubator', methods=['GET'])
 def queryIncubator():
-    return well_service.queryIncubator()
+    code, msg = well_service.queryIncubator()
+    return make_response(msg, code)
 
 #查询培养皿
 @well_rest_controller.route('/dish', methods=['GET'])
 def queryDish():
     parser = reqparse.RequestParser()
     parser.add_argument('incubatorName', type=str)
-    return well_service.queryDish(parser.parse_args())
+    code, msg = well_service.queryDish(parser.parse_args())
+    return  make_response(msg, code)
 
 #查询采集目录
 @well_rest_controller.route('/catalog/list', methods=['GET'])
 def queryCollectionCatalog():
-    return well_service.queryCollectionCatalog()
+    code, msg = well_service.queryCollectionCatalog()
+    return make_response(msg, code)
 
 #查询采集目录详情,包括目录下的培养箱,培养皿,用户姓名,开始采集时间,胚胎数量等
 @well_rest_controller.route('/catalog/info', methods=['GET'])

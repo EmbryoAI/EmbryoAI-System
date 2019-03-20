@@ -29,6 +29,7 @@ if __name__=='__main__':
     parser = ArgumentParser()
     parser.add_argument('-i', '--images', help='图像目录的路径', required=True)
     parser.add_argument('-a', '--annotation', help='标注文件路径及文件名', required=True)
+    parser.add_argument('-d', '--default', help='默认标签', default='')
     conf = parser.parse_args()
     print(TAG_MESSAGE)
     img_files = list(sorted(filter(lambda x: x.endswith('.jpg'), os.listdir(conf.images))))
@@ -41,12 +42,12 @@ if __name__=='__main__':
         index = 0
         while index < len(img_files):
             f = img_files[index]
-            tag = ''
+            tag = conf.default
             window = cv2.namedWindow('Embryo stage annotation')
             img = cv2.imread(conf.images + os.path.sep + f, cv2.IMREAD_GRAYSCALE)
-            percentage = f'{index/len(img_files)*100:02d}'
+            percentage = f'{index/len(img_files)*100:.02f} %'
             box, _ = cv2.getTextSize(percentage, cv2.FONT_HERSHEY_COMPLEX, 0.6, 1)
-            img = cv2.putText(img, percentage, (20+box[0], box[1]+15), cv2.FONT_HERSHEY_COMPLEX, 
+            img = cv2.putText(img, percentage, (5+box[0], box[1]+15), cv2.FONT_HERSHEY_COMPLEX, 
                 0.6, (0,0,255), 1, cv2.LINE_AA)
             if img is None or img.shape != (600, 600):
                 img_files.remove(f)

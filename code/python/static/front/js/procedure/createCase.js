@@ -114,11 +114,36 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 
 
 function addCase(){
+	var checkIdResult = $("#checkIdResult").val();
+	if(checkIdResult == "" || checkIdResult == 'false'){
+		layer.alert('请输入正确的身份证号!');
+		return;
+	}
 	var selected = $("#catalogSelect  option:selected").text();
 	if(selected == 0){
 		layer.alert('采集目录不能为空!');
 		return;
 	}
+
+	//获取采集时间
+	var collectionTime = $('#catalog_collection_time').text();
+	var ecTime = $("#get").val();
+	var insemiTime = $("#iui").val();
+	if(ecTime != ""){
+		var collectionCompareEcTime = compareDate(collectionTime, ecTime);
+		if(!collectionCompareEcTime){
+			layer.alert("取卵时间大于采集时间,请重新选择取卵时间!");
+			return;
+		}
+	}	
+	if(insemiTime != ""){
+		var collectionCompareInsemiTime = compareDate(collectionTime, insemiTime);
+		if(!collectionCompareInsemiTime){
+			layer.alert("受精时间大于采集时间,请重新选择受精时间!");
+			return;
+		}
+	}
+
 	$("#addCaseButton").attr("disabled", true).attr("value","创建中..."); 
 	$.ajax({
 		cache : false,
@@ -135,6 +160,10 @@ function addCase(){
 			parent.layer.close(index);
 		}
 	});
+}
+
+function compareDate(d1,d2){
+  return ((new Date(d1.replace(/-/g,"\/"))) > (new Date(d2.replace(/-/g,"\/"))));
 }
 
 function queryRules(){
@@ -170,12 +199,14 @@ function countAge(){
 
 //根据身份证号计算年龄
 function countAgeByIdCard(){
-	var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;  
-	var idCard = $('#nope').val();
-	if(reg.test(idCard) === false){  
+	var idCard = $('#nope').val(); 
+	var checkResult = isCardNo(idCard);
+	$("#checkIdResult").val(checkResult);
+	if(checkResult == false){
 		layer.alert("请输入正确的身份证!");  
-       return  false;  
-   	}  
+		return  false;  
+	}
+	
 	var birthDate = idCard.substring(6, 14);
 	var year = birthDate.substring(0,4);
 	var month =  birthDate.substring(4,6);
@@ -189,4 +220,25 @@ function countAgeByIdCard(){
 	}else{
 		$('#patientAge').val(result);
 	}
+}
+
+
+function isCardNo(id) {
+	var format = /^(([1][1-5])|([2][1-3])|([3][1-7])|([4][1-6])|([5][0-4])|([6][1-5])|([7][1])|([8][1-2]))\d{4}(([1][9]\d{2})|([2]\d{3}))(([0][1-9])|([1][0-2]))(([0][1-9])|([1-2][0-9])|([3][0-1]))\d{3}[0-9xX]$/;
+	//号码规则校验
+	if (!format.test(id)) {
+		return false;
+	}
+	//区位码校验
+	//出生年月日校验   前正则限制起始年份为1900;
+	var year = id.substr(6, 4),//身份证年
+		month = id.substr(10, 2),//身份证月
+		date = id.substr(12, 2),//身份证日
+		time = Date.parse(month + '-' + date + '-' + year),//身份证日期时间戳date
+		now_time = Date.parse(new Date()),//当前时间戳
+		dates = (new Date(year, month, 0)).getDate();//身份证当月天数
+	if (time > now_time || date > dates) {
+		return false;
+	}
+	return true;
 }
