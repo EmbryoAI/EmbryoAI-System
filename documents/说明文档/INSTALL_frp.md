@@ -20,6 +20,7 @@
 	tar xvf frp_0.25.1_linux_amd64.tar.gz
 
 然后
+
 	cd  frp_0.25.1_linux_amd64
 
 ## 修改配置文件
