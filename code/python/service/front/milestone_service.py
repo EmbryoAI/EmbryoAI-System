@@ -12,7 +12,7 @@ from common import uuid
 import re
 import time
 import datetime
-from app import current_user
+from app import current_user,conf
 import service.front.image_service as image_service
 
 def insertMilestone(request):
