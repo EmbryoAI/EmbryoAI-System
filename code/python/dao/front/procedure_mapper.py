@@ -4,6 +4,7 @@ from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
 from traceback import print_exc
 
+
 def queryProcedureList(page,limit,sqlCondition,filters):
 #     pagination = Procedure.query.filter_by(**filters).order_by(Procedure.insemiTime.desc()).paginate(page,per_page=limit,error_out=False)
 #     pagination = Procedure.query.filter_by(**filters).paginate(page,per_page=limit,error_out=False)
@@ -273,9 +274,71 @@ def getEmbryoFateCount(medicalRecordNo,embryoFateId):
         db.session.remove()
 
 
-def save(procedure):
+def save(procedure, patient, incubatorCode, dishCode, catalog, procedureId):
+    import dao.front.patient_mapper as patient_mapper
+    import dao.front.incubator_mapper as incubator_mapper
+    from common import uuid
+    from entity.Incubator import Incubator
+    import time
+    import dao.front.dish_mapper as dish_mapper
+    from entity.Dish import Dish
+    import dao.front.procedure_dish_mapper as procedure_dish_mapper
+    
+    from entity.ProcedureDish import ProcedureDish
+    import json,os
+    from app import conf
+    from task.ini_parser import EmbryoIniParser as parser
+    import dao.front.cell_mapper as cell_mapper
+    from entity.Cell import Cell
+    from entity.Embryo import Embryo
+    import dao.front.embryo_mapper as embryo_mapper
     try :
+        #保存周期数据
         db.session.add(procedure)
+        #保存患者信息表
+        db.session.add(patient)
+        #先查询是否存在培养箱,如果没有则新增
+        createTime = updateTime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time())) 
+        incubator = db.session.query(Incubator).filter(Incubator.incubatorCode == incubatorCode).one_or_none()
+        if not incubator:
+            incubatorId = uuid()
+            incubator = Incubator(id=incubatorId, incubatorCode=incubatorCode, createTime=createTime, updateTime=updateTime, delFlag=0)
+            db.session.add(incubator)
+        #先查询是否存在培养皿,如果没有则新增
+        dishCodeList = dishCode.split(',')
+        for dish_code in dishCodeList:
+            code = dish_code[-1]
+            dish = db.session.query(Dish).filter(Dish.incubatorId == incubatorId, Dish.dishCode == dishCode).one_or_none()
+            if not dish:
+                dishId = uuid()
+                dish = Dish(id=dishId, incubatorId=incubator.id, dishCode=code, createTime=createTime, updateTime=updateTime)
+                db.session.add(dish)
+            else:
+                dishId = dish.id 
+            #保存周期与皿与采集目录关联表
+            procedureDishId = uuid()
+            pd = ProcedureDish(id=procedureDishId, procedureId=procedure.id, dishId=dishId, imagePath=catalog)
+            db.session.add(pd)
+
+            ini_path = conf['EMBRYOAI_IMAGE_ROOT'] + os.path.sep + catalog + os.path.sep + 'DishInfo.ini'
+            config = parser(ini_path)
+            dishes = [f'Dish{i}Info' for i in range(1, 10) if f'Dish{i}Info' in config]
+            wells = [f'Well{i}Avail' for i in range(1, 13)]
+            embryos = [index for d in dishes for index,w in enumerate(wells) if config[d][w]=='1']
+            #孔表新增记录
+            for i in embryos:
+                cellCode = i+1
+                cell = db.session.query(Cell).filter(Cell.dishId == dishId,Cell.cellCode == cellCode).one_or_none()
+                if not cell:
+                    cellId = uuid()
+                    cell = Cell(id=cellId, dishId=dishId, cellCode=cellCode, createTime=createTime, updateTime=updateTime)
+                    db.session.add(cell)
+
+                #胚胎表新增记录
+                embryoId = uuid()
+                embryo = Embryo(id=embryoId, embryoIndex=i+1, procedureId=procedure.id, cellId=cellId)
+                db.session.add(embryo)
+
         db.session.commit()
     except Exception as e:
         db.session.rollback()
