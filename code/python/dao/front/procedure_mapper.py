@@ -95,7 +95,7 @@ def getProcedureById(procedureID):
                         pro.`insemi_time` AS insemi_time,pro.`memo`,pro.`medical_record_no` AS medical_record_no, 
                         COUNT(DISTINCT e.id) AS embryo_num,d.dict_value AS insemi_type,
                         CONCAT('D',DATEDIFF(IF(pro.cap_end_time,pro.cap_end_time,NOW()),pro.insemi_time)) AS zzjd,
-                        tr.`rule_name` AS rule_name 
+                        tr.`rule_name` AS rule_name, pat.`id` AS patient_id   
             FROM t_patient pat 
             LEFT JOIN t_procedure pro 
             ON pat.`id` = pro.`patient_id` 

@@ -40,7 +40,7 @@ $(function(){
             $("#embryo_num").html(procedure.embryo_num);
             $("#new_memo").val(procedure.memo);
             $("#rule_name").html(procedure.rule_name);
-            
+            $("#patientId").val(procedure.patient_id);
             queryEmbryo(procedureId);
 		}
 	});

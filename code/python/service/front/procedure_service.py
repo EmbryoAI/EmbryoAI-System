@@ -96,12 +96,26 @@ def getProcedureDetail(id):
 
 def updateProcedure(request):
     id = request.form.get('id')
+    patient_id = request.form.get('patientId')
     mobile = request.form.get('mobile')
     email = request.form.get('email')
     memo = request.form.get('memo')
     try:
         procedure_mapper.update(id, memo)
-        patient_mapper.update(id, mobile, email)
+        patient_mapper.update(patient_id, mobile, email)
+
+        #读取上传云端代码块开关
+        switch = conf['CLOUD_CODE_SWITCH']
+        if switch:
+            #同步患者信息,病例信息到云端
+            import json
+            from common import request_post
+            url = conf['PATIENT_INFO_UPDATE_URL']
+            
+            data = { 'procedureId' : id, 'patientId' : patient_id, 'mobile' : mobile, 'email' : email, 'memo' : memo }
+
+            request_post(url, json.dumps(data, ensure_ascii=False))
+
         return 200, '修改病历详情成功!'
     except:
         return 500, '修改病历详情时发生错误!'
@@ -325,7 +339,7 @@ def addProcedure(request):
             from entity.PatientInfo import PatientInfo
             from entity.PatientBaseInfo import PatientBaseInfo
             from entity.PatientCaseInfo import PatientCaseInfo
-            url = conf['PATIENT_INFO_UP_URL']
+            url = conf['PATIENT_INFO_INSERT_URL']
             
             patient_base_info = PatientBaseInfo(id=id, idcardNo=idcardNo, idcardTypeId=idcardTypeId, patientName=patientName,
                             birthdate=birthdate, country='中国', locationId=locationId, address=address,
