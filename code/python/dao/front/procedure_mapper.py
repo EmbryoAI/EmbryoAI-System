@@ -304,6 +304,8 @@ def save(procedure, patient, incubatorCode, dishCode, catalog, procedureId):
             incubatorId = uuid()
             incubator = Incubator(id=incubatorId, incubatorCode=incubatorCode, createTime=createTime, updateTime=updateTime, delFlag=0)
             db.session.add(incubator)
+        else:
+            incubatorId = incubator.id 
         #先查询是否存在培养皿,如果没有则新增
         dishCodeList = dishCode.split(',')
         for dish_code in dishCodeList:
