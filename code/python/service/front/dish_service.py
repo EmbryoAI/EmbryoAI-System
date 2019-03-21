@@ -23,25 +23,30 @@ def querySeriesList(agrs):
     try:
         from common import getdefault
         procedure_id = agrs['procedure_id']
+        print('procedure_id:',procedure_id)
         dish_id = agrs['dish_id']
+        print('dish_id:',dish_id)
         well_id = agrs['well_id']
         print("well_id:", well_id)
         seris = agrs['seris']
+        if seris == 'null':
+            return 500, '无法定位到胚胎'
         #先查询病例对应的采集目录路径
         dish = dish_mapper.queryById(dish_id)
         if not dish : 
-            return None
+            return 500, f'查无对应的皿信息{dish_id}'
         dishCode = dish.dishCode
         pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id,dish_id)
         path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
         if not os.path.isdir(path) :
-            return None
+            return 500, f'查无对应的采集目录{path}'
         #再拼接对应目录下面的JSON文件路径
         path,dishJson = image_service.getImagePath(procedure_id,dish_id)
         well_json = dishJson['wells'][well_id]
 
         #开始计算要返回的11张序列
         ts = TimeSeries()
+        print('seris:',seris)
         end_index = len(ts.range(seris)) + 6
         begin_index = len(ts.range(seris)) - 5
 
@@ -58,14 +63,22 @@ def querySeriesList(agrs):
         nginxImageUrl = getdefault(conf, 'STATIC_NGINX_IMAGE_URL', "http://localhost:80")
         list=[]
         for i in ts[begin_index:end_index]:
+            print('i:',i)
+            try:
+                series_json = well_json['series'][i]['focus']
+            except:
+                #如果读取json中某个序列异常则默认显示定位不到胚胎图片
+                series_json = '/static/front/img/loc-emb.png'
             image_path = nginxImageUrl + os.path.sep + pd.imagePath + os.path.sep + f'DISH{dishCode}' + \
-                os.path.sep + well_json['series'][i]['focus']
+                os.path.sep + series_json
             hour, minute = serie_to_time(i)
             series = Series(i, f'{hour:02d}H{minute:02d}M', image_path)
             list.append(series.__dict__)
 
         #查询里程碑信息
         current_cell = cell_mapper.getCellByDishIdAndCellCode(dish_id, well_id)
+        if not current_cell:
+            500, f'查询当前孔信息异常dishId:{dish_id}cellCode{well_id}'
         embryo = embryo_mapper.queryByProcedureIdAndCellId(procedure_id, current_cell.id)
         milestone_list = milestone_mapper.getMilestone(embryo.id)
         m_list = []
@@ -83,7 +96,7 @@ def querySeriesList(agrs):
         seriesResult = SeriesResult(200, 'OK', list, seris, dishJson['lastSerie'], m_list)
         return 200, jsonify(seriesResult.__dict__)
     except:
-        return 500, '查询序列列表异常'
+        return 500, '获取序列列表异常'
 
 def queryScrollbarSeriesList(agrs):
     try:

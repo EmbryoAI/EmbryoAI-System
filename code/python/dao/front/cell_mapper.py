@@ -20,7 +20,7 @@ def getCellByDishIdAndCellCode(dishId, cellCode):
     try:
         return db.session.query(Cell).filter(Cell.dishId == dishId,Cell.cellCode == cellCode).one_or_none()
     except Exception as e:
-        return cell
+        return None
     finally:
         db.session.remove()
 

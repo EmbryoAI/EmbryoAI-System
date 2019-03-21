@@ -43,7 +43,7 @@ dev:
   ORGAN_REGISTER_URL: "http://localhost:8086/api/v1.0/organization/register"  #机构注册到云端接口
   ORGAN_JSON_FILENAME: "organization.json"
 
-  CLOUD_CODE_SWITCH: true #上传云端代码块开关
+  CLOUD_CODE_SWITCH: false #上传云端代码块开关
 stage:
   SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@39.104.173.18:3306/embryoai_system_db?charset=utf8"
   SQLALCHEMY_POOL_RECYCLE: 3
