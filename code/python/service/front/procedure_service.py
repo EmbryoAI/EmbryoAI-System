@@ -374,30 +374,34 @@ def addProcedure(request):
                 embryo = Embryo(id=embryoId, embryoIndex=i+1, procedureId=procedureId, cellId=cellId)
                 embryo_mapper.save(embryo)
 
-        #同步患者信息,病例信息到云端
-        import json
-        from common import request_post
-        from entity.PatientInfo import PatientInfo
-        from entity.PatientBaseInfo import PatientBaseInfo
-        from entity.PatientCaseInfo import PatientCaseInfo
-        url = conf['PATIENT_INFO_UP_URL']
-        
-        patient_base_info = PatientBaseInfo(id=id, idcardNo=idcardNo, idcardTypeId=idcardTypeId, patientName=patientName,
-                        birthdate=birthdate, country='中国', locationId=locationId, address=address,
-                        email=email, mobile=mobile, delFlag=0, createTime=createTime, updateTime=updateTime,
-                        isDrinking=isDrinking, isSmoking=isSmoking)
+        #读取上传云端代码块开关
+        switch = conf['CLOUD_CODE_SWITCH']
+        if switch:
+            #同步患者信息,病例信息到云端
+            import json
+            from common import request_post
+            from entity.PatientInfo import PatientInfo
+            from entity.PatientBaseInfo import PatientBaseInfo
+            from entity.PatientCaseInfo import PatientCaseInfo
+            url = conf['PATIENT_INFO_UP_URL']
+            
+            patient_base_info = PatientBaseInfo(id=id, idcardNo=idcardNo, idcardTypeId=idcardTypeId, patientName=patientName,
+                            birthdate=birthdate, country='中国', locationId=locationId, address=address,
+                            email=email, mobile=mobile, delFlag=0, createTime=createTime, updateTime=updateTime,
+                            isDrinking=isDrinking, isSmoking=isSmoking)
 
-        #获取机构注册ID
-        import service.front.organization_service as org_service 
-        org_config = org_service.getOrganConfig()
-        orgId = org_config['orgId']
+            #获取机构注册ID
+            import service.front.organization_service as org_service 
+            org_config = org_service.getOrganConfig()
+            orgId = org_config['orgId']
+            
+            patient_case_info = PatientCaseInfo(id=procedureId, orgId=orgId, patientId=id, userId=userId, patientAge=patientAge,
+                            patientHeight=patientHeight, patientWeight=patientWeight, ecTime=ecTime,
+                            ecCount=ecCount, insemiTime=insemiTime, insemiTypeId=insemiTypeId, state=state,
+                            delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId, memo=memo)
+            patientInfo = PatientInfo(patient_base_info.__dict__, patient_case_info.__dict__)
+            request_post(url, json.dumps(patientInfo.__dict__, ensure_ascii=False))
         
-        patient_case_info = PatientCaseInfo(id=procedureId, orgId=orgId, patientId=id, userId=userId, patientAge=patientAge,
-                        patientHeight=patientHeight, patientWeight=patientWeight, ecTime=ecTime,
-                        ecCount=ecCount, insemiTime=insemiTime, insemiTypeId=insemiTypeId, state=state,
-                        delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId, memo=memo)
-        patientInfo = PatientInfo(patient_base_info.__dict__, patient_case_info.__dict__)
-        request_post(url, json.dumps(patientInfo.__dict__, ensure_ascii=False))
 
         return 200, '新增病历成功!'
     except:
