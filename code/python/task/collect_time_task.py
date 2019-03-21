@@ -23,38 +23,42 @@ def run():
     
     collectList = procedure_mapper.queryCollectList()
     for collect in collectList:#判断 字段为空的结束采集时间 的采集目录  是否已经采集完成了
-        
-        flag = list(filter(lambda x: collect["imagePath"] in x, finished))[0][collect["imagePath"]]
+        listnew = list(filter(lambda x: collect["imagePath"] in x, finished))
+        if len(listnew):
+            flag = listnew[0][collect["imagePath"]]
 #         for fini in:(NULL)
 #            for fini in finished:
 #              if collect["imagePath"]==fini:
 #                 flag = True
 #                 break
         
-        if flag:#采集完成了 才把采集结束时间 同步到数据库
-           capStartTime = datetime.datetime.strptime(collect["imagePath"], "%Y%m%d%H%M%S")#把采集目录转换为 日期
-           #获取当前采集目录下的最后一个时间序列
-           a,b,dishJson = image_service.readDishState(collect["procedureId"],collect["dishId"])
-           
-           #循环所有孔的时间序列，保存起来，取最大的一个
-           seriesList = []
-           if dishJson['finished'] & dishJson['avail'] == 1 : 
-                wells = dishJson['wells']
-                for i in range(1,12):
-                    try:
-                        oneWell = wells[f'{i}']
-                        series = oneWell['series']
-                        for key in series:
-                            seriesList.append(key)
-                    except Exception as e:
-                         seriesList = seriesList
-           timeSeries = max(seriesList)#取最大的一个
- 
-           #开始时间+时间序列的时间  使用datetime.timedelta方法 
-           capEndtime = (capStartTime+datetime.timedelta(days=int(timeSeries[0:1]))
-            +datetime.timedelta(hours=int(timeSeries[1:3]))+datetime.timedelta(minutes=int(timeSeries[3:5]))
-            +datetime.timedelta(seconds=int(timeSeries[5:7])))
-           
-           #把计算好的采集开始时间 和 结束时间入库
-           procedure_mapper.updateCollect(collect["procedureId"],capStartTime,capEndtime)
-    logger.debug('结束定时任务')
+            if flag:#采集完成了 才把采集结束时间 同步到数据库
+               capStartTime = datetime.datetime.strptime(collect["imagePath"], "%Y%m%d%H%M%S")#把采集目录转换为 日期
+               #获取当前采集目录下的最后一个时间序列
+               a,b,dishJson = image_service.readDishState(collect["procedureId"],collect["dishId"])
+               
+               #循环所有孔的时间序列，保存起来，取最大的一个
+               seriesList = []
+               if dishJson['finished'] & dishJson['avail'] == 1 : 
+                    wells = dishJson['wells']
+                    for i in range(1,12):
+                        try:
+                            oneWell = wells[f'{i}']
+                            series = oneWell['series']
+                            for key in series:
+                                seriesList.append(key)
+                        except Exception as e:
+                             seriesList = seriesList
+               timeSeries = max(seriesList)#取最大的一个
+     
+               #开始时间+时间序列的时间  使用datetime.timedelta方法 
+               capEndtime = (capStartTime+datetime.timedelta(days=int(timeSeries[0:1]))
+                +datetime.timedelta(hours=int(timeSeries[1:3]))+datetime.timedelta(minutes=int(timeSeries[3:5]))
+                +datetime.timedelta(seconds=int(timeSeries[5:7])))
+               
+               #把计算好的采集开始时间 和 结束时间入库
+               procedure_mapper.updateCollect(collect["procedureId"],capStartTime,capEndtime)
+               logger.info('定时任务【同步采集时间】结束')
+        else:
+            logger.info('定时任务【同步采集时间】结束，listnew值为空')
+  

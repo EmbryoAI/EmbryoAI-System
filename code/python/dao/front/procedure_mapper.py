@@ -218,7 +218,7 @@ def queryProcedureViewList(medicalRecordNo):
         ON m.milestone_id = dict1.dict_key AND dict1.dict_class='milestone' 
         LEFT JOIN sys_dict dict2
         ON e.embryo_fate_id = dict2.dict_key AND dict2.dict_class='embryo_fate_type' 
-            WHERE  t.medical_record_no = :medicalRecordNo 
+            WHERE  t.medical_record_no = (SELECT id FROM t_procedure WHERE medical_record_no=:medicalRecordNo ORDER BY  id  LIMIT 1 )  
             GROUP BY e.id       
         """)
         return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo}).fetchall()
@@ -244,7 +244,7 @@ def getPatientByMedicalRecordNo(medicalRecordNo):
               LEFT JOIN  t_embryo e
                ON e.procedure_id = t.id
             WHERE  t.medical_record_no = :medicalRecordNo 
-            GROUP BY t.id
+            GROUP BY t.id ORDER BY  t.id  LIMIT 1
         """)
         return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo}).fetchone()
     except Exception as e:
