@@ -15,7 +15,11 @@
 */
 
 SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+-- SET FOREIGN_KEY_CHECKS = 0;
+
+CREATE DATABASE `embryoai_system_db`;
+
+USE `embryoai_system_db`;
 
 -- ----------------------------
 -- Table structure for sys_cell

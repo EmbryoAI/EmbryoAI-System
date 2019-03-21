@@ -88,7 +88,7 @@ stage:
   ORGAN_JSON_FILENAME: "organization.json"
 
 prod:
-  SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@localhost:3306/embryoai_system_db?charset=utf8"
+  SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@192.168.8.101:3306/embryoai_system_db?charset=utf8"
   SQLALCHEMY_POOL_RECYCLE: 3
   SQLALCHEMY_POOL_SIZE: 100
   SQLALCHEMY_POOL_TIMEOUT: 3
@@ -111,7 +111,7 @@ prod:
       seconds: 300
   SCHEDULER_API_ENABLED: true
 
-  EMBRYOAI_IMAGE_ROOT: "" # 实际生产环境的图像采集路径
+  EMBRYOAI_IMAGE_ROOT: "/captures/" # 实际生产环境的图像采集路径
   FINISHED_JSON_FILENAME: "finished_cycles.json"
   CYCLE_PROCESS_FILENAME: "process_state.json"
   DISH_STATE_FILENAME: "dish_state.json"
@@ -124,10 +124,4 @@ prod:
   KERAS_MODEL_NAME: "embryo_model.h5"
   EMBRYO_PREDICT_SIZE: 200
 
-  STATIC_NGINX_IMAGE_URL: "" # 实际生产环境的nginx地址
-
-  PATIENT_INFO_UP_URL: "" # 实际生产环境患者信息同步云端接口地址
-  PROCEDURE_INFO_UPDATE_URL: "" # 实际生产环境患者信息同步云端接口地址
-
-  ORGAN_REGISTER_URL: ""  #实际生成环境机构注册到云端接口地址
-  ORGAN_JSON_FILENAME: "organization.json"
+  STATIC_NGINX_IMAGE_URL: "http://192.168.40.100:8085" # 实际生产环境的nginx地址
