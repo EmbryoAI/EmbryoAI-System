@@ -96,12 +96,26 @@ def getProcedureDetail(id):
 
 def updateProcedure(request):
     id = request.form.get('id')
+    patient_id = request.form.get('patientId')
     mobile = request.form.get('mobile')
     email = request.form.get('email')
     memo = request.form.get('memo')
     try:
         procedure_mapper.update(id, memo)
-        patient_mapper.update(id, mobile, email)
+        patient_mapper.update(patient_id, mobile, email)
+
+        #读取上传云端代码块开关
+        switch = conf['CLOUD_CODE_SWITCH']
+        if switch:
+            #同步患者信息,病例信息到云端
+            import json
+            from common import request_post
+            url = conf['PATIENT_INFO_UPDATE_URL']
+            
+            data = { 'procedureId' : id, 'patientId' : patient_id, 'mobile' : mobile, 'email' : email, 'memo' : memo }
+
+            request_post(url, json.dumps(data, ensure_ascii=False))
+
         return 200, '修改病历详情成功!'
     except:
         return 500, '修改病历详情时发生错误!'
@@ -228,19 +242,7 @@ def queryProcedureViewList(request):
 def addProcedure(request):
     from common import uuid
     from entity.Patient import Patient
-    from entity.Incubator import Incubator
-    from entity.Dish import Dish
-    from entity.Cell import Cell
-    from entity.ProcedureDish import ProcedureDish
-    import dao.front.incubator_mapper as incubator_mapper
-    import dao.front.dish_mapper as dish_mapper
-    import dao.front.procedure_dish_mapper as procedure_dish_mapper
-    from entity.Embryo import Embryo
-    import dao.front.embryo_mapper as embryo_mapper
-    import dao.front.cell_mapper as cell_mapper
-    from task.ini_parser import EmbryoIniParser as parser
-    import json,os
-
+    
     id = uuid()
     patientName = request.form.get('patientName')
     if not patientName:
@@ -324,63 +326,19 @@ def addProcedure(request):
                     delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId, memo=memo)
     
 
-    try:
-        #保存患者信息表
-        patient_mapper.save(patient)
-        #保存病历表
-        procedure_mapper.save(procedure)
-        #先查询是否存在培养箱,如果没有则新增
-        incubator = incubator_mapper.getByIncubatorCode(incubatorCode)
-        if not incubator:
-            incubatorId = uuid()
-            incubator = Incubator(id=incubatorId, incubatorCode=incubatorCode, createTime=createTime,
-                    updateTime=updateTime, delFlag=0)
-            incubator_mapper.save(incubator)
-        #先查询是否存在培养名,如果没有则新增
-        dishCodeList = dishCode.split(',')
-        for dish_code in dishCodeList:
-            code = dish_code[-1]
-            dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, code)
-            if not dish:
-                dishId = uuid()
-                dish = Dish(id=dishId, incubatorId=incubator.id, dishCode=code, createTime=createTime,
-                            updateTime=updateTime)
-                dish_mapper.save(dish)
-            else:
-                dishId = dish.id
-            pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId, code)
-            if not pd:
-                procedureDishId = uuid()
-                pd = ProcedureDish(id=procedureDishId, procedureId=procedureId, dishId=dishId,
-                                imagePath=catalog)
-                procedure_dish_mapper.save(pd)
-
-            ini_path = conf['EMBRYOAI_IMAGE_ROOT'] + os.path.sep + catalog + os.path.sep + 'DishInfo.ini'
-            config = parser(ini_path)
-            dishes = [f'Dish{i}Info' for i in range(1, 10) if f'Dish{i}Info' in config]
-            wells = [f'Well{i}Avail' for i in range(1, 13)]
-            embryos = [index for d in dishes for index,w in enumerate(wells) if config[d][w]=='1']
-            #孔表新增记录
-            for i in embryos:
-                cellCode = i+1
-                cell = cell_mapper.getCellByDishIdAndCellCode(dishId, cellCode)
-                if not cell:
-                    cellId = uuid()
-                    cell = Cell(id=cellId, dishId=dishId, cellCode=cellCode, createTime=createTime, updateTime=updateTime)
-                    cell_mapper.save(cell)
-
-                #胚胎表新增记录
-                embryoId = uuid()
-                embryo = Embryo(id=embryoId, embryoIndex=i+1, procedureId=procedureId, cellId=cellId)
-                embryo_mapper.save(embryo)
-
+    #保存病历表
+    procedure_mapper.save(procedure, patient, incubatorCode, dishCode, catalog, procedureId)
+    
+    #读取上传云端代码块开关
+    switch = conf['CLOUD_CODE_SWITCH']
+    if switch:
         #同步患者信息,病例信息到云端
         import json
         from common import request_post
         from entity.PatientInfo import PatientInfo
         from entity.PatientBaseInfo import PatientBaseInfo
         from entity.PatientCaseInfo import PatientCaseInfo
-        url = conf['PATIENT_INFO_UP_URL']
+        url = conf['PATIENT_INFO_INSERT_URL']
         
         patient_base_info = PatientBaseInfo(id=id, idcardNo=idcardNo, idcardTypeId=idcardTypeId, patientName=patientName,
                         birthdate=birthdate, country='中国', locationId=locationId, address=address,
@@ -398,9 +356,8 @@ def addProcedure(request):
                         delFlag=0, medicalRecordNo=medicalRecordNo, embryoScoreId=embryoScoreId, memo=memo)
         patientInfo = PatientInfo(patient_base_info.__dict__, patient_case_info.__dict__)
         request_post(url, json.dumps(patientInfo.__dict__, ensure_ascii=False))
+    
 
-        return 200, '新增病历成功!'
-    except:
-        return 500, '新增病历失败!'
+    return 200, '新增病历成功!'
 
     

@@ -12,7 +12,8 @@ from common import uuid
 import re
 import time
 import datetime
-from app import current_user
+from traceback import print_exc
+from app import current_user,conf
 import service.front.image_service as image_service
 
 def insertMilestone(request):
@@ -176,15 +177,20 @@ def insertMilestone(request):
 #         print(sumScore)
 #         embryo_mapper.updateEmbryoScore(embryoId,sumScore)
     except:
+        print_exc()
         return 400, '设置里程碑时异常!'
     
-    try:
-        #同步里程碑到云端-开启异步线程同步
-        import threading
-        thread = threading.Thread(target=nsync, args=(milestone,milestoneData))
-        thread.start()
-    except:
-        print("同步里程碑到云端异常")
+    #读取上传云端代码块开关
+    switch = conf['CLOUD_CODE_SWITCH']
+    if switch:
+        try:
+            #同步里程碑到云端-开启异步线程同步
+            import threading
+            thread = threading.Thread(target=nsync, args=(milestone,milestoneData))
+            thread.start()
+        except:
+            print("同步里程碑到云端异常")
+            
     return 200, result
 
 def nsync(milestone,milestoneData):

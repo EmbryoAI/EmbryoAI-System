@@ -132,7 +132,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'], function () {
 								 if(value!="" && value.indexOf(",")!=-1) {
 									 var proArr = value.split(",");
 									 str += "<td>";
-									 if(proArr[0].indexOf("")!=-1) {
+									 if(proArr[0].indexOf("loc-emb.png")!=-1) {
 										 str +="<img src='/static/front/img/loc-emb.png' class='cycle-img' /><br/>";
 									 }else {
 									 	str +="<img src='/api/v1/well/image?image_path="+obj.imageRoot+proArr[0]+"' class='cycle-img' /><br/>";

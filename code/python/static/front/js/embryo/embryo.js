@@ -1204,8 +1204,10 @@ function ini(acquisitionTime,timeSeries,path,imageName) {
 					showHide(null);
 				}
 				form.render();
+				
 	        	//当前时间序列的缩略图
-	        	var thpath = $("#"+currentSeris).attr("src").substring($("#"+currentSeris).attr("src").indexOf("\\",8),$("#"+currentSeris).attr("src").length);
+				var thpath = $("#"+currentSeris).attr("src").replace(/\\/g,"/");
+	        	thpath = thpath.substring(thpath.indexOf("/",8),thpath.length);
 	        	$("#thumbnailPath").val(thpath);
 		},
 		error : function(request) {
