@@ -35,8 +35,14 @@ def run():
     for adir in active_dirs:
         cycle_dir = cap_dir + adir + os.path.sep # 未完成采集目录的全路径
         # 交给process_cycle_dir模块进行处理采集目录，返回True或False，代表该采集目录采集结束标志
-        state = process_cycle(cycle_dir) 
-        finished_dirs.append({adir: state}) # 采集结束则将该目录添加到结束目录列表中
+        state = process_cycle(cycle_dir)  
+        # 如果state为True，而且原本的目录就为False存在json中，更新相应的值，而不是append
+        if state and {adir: False} in finished_dirs:
+            findex = finished_dirs.index({adir: False})
+            finished_dirs[findex][adir] = True
+        # 否则如果目录及状态不存在在json列表中，append
+        elif {adir: state} not in finished_dirs:
+            finished_dirs.append({adir: state}) # 采集结束则将该目录添加到结束目录列表中
     # 保存JSON文件
     with open(cap_dir + finished_json, 'w') as fn:
         json.dump(finished_dirs, fn)

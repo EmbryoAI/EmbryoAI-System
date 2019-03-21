@@ -28,7 +28,7 @@ dev:
   DISH_STATE_FILENAME: "dish_state.json"
   FINISHED_CYCLES: "finished_cycles.json"
   EMBRYO_FOCUS_DIRNAME: "focus"
-  ACTIVE_TIMEOUT: 3600
+  ACTIVE_TIMEOUT: 7200
   CASCADE_TEMPLATE: "embryo_cascade.xml"
   NO_EMBRYO_IMAGE_URL: "cv/embryo_not_found.jpg"
 
@@ -72,7 +72,7 @@ stage:
   DISH_STATE_FILENAME: "dish_state.json"
   FINISHED_CYCLES: "finished_cycles.json"
   EMBRYO_FOCUS_DIRNAME: "focus"
-  ACTIVE_TIMEOUT: 3600
+  ACTIVE_TIMEOUT: 7200
   CASCADE_TEMPLATE: "embryo_cascade.xml"
   NO_EMBRYO_IMAGE_URL: "cv/embryo_not_found.jpg"
 
@@ -117,7 +117,7 @@ prod:
   DISH_STATE_FILENAME: "dish_state.json"
   FINISHED_CYCLES: "finished_cycles.json"
   EMBRYO_FOCUS_DIRNAME: "focus"
-  ACTIVE_TIMEOUT: 3600
+  ACTIVE_TIMEOUT: 7200
   CASCADE_TEMPLATE: "embryo_cascade.xml"
   NO_EMBRYO_IMAGE_URL: "cv/embryo_not_found.jpg"
 
