@@ -85,6 +85,9 @@ def updateMilestone(milestone,milestoneData,procedure,cap_start_time):
 def countMilestoneScore(milestone,milestoneData,procedure,cap_start_time):
     #评分设置，首先查询出当前周期对应的评分规则
     rule = rule_dao.getRuleById(procedure.embryoScoreId,milestoneData.userId)
+    print("procedure.embryoScoreId："+procedure.embryoScoreId)
+    print("milestoneData.userId："+milestoneData.userId)
+    print(rule.dataJson)
     engine = embryo_score.init_engine(rule.dataJson)
     #获取当前胚胎的的胚胎形态
     stageDict =  dict_dao.getDictByClassAndKey("milestone",milestone.milestoneId);
