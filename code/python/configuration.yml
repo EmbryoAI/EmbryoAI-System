@@ -104,7 +104,7 @@ prod:
     - id: "embryo_job"
       func: "task.embryo_task:run"
       trigger: "interval"
-      seconds: 900
+      seconds: 300
     - id: "collect_time_job"
       func: "task.collect_time_task:run"
       trigger: "interval"
