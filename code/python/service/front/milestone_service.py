@@ -12,7 +12,8 @@ from common import uuid
 import re
 import time
 import datetime
-from app import current_user
+from traceback import print_exc
+from app import current_user,conf
 import service.front.image_service as image_service
 
 def insertMilestone(request):
@@ -176,6 +177,7 @@ def insertMilestone(request):
 #         print(sumScore)
 #         embryo_mapper.updateEmbryoScore(embryoId,sumScore)
     except:
+        print_exc()
         return 400, '设置里程碑时异常!'
     
     #读取上传云端代码块开关
