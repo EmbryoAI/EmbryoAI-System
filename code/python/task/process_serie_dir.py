@@ -74,14 +74,14 @@ def process_serie(path, serie, dish_info):
             # 保存缩略图
             cv2.imwrite(focus_path + focus_file, img_out, [int(cv2.IMWRITE_JPEG_QUALITY), 50])
             outer_cnt, outer_area, outer_diameter = outer_edge(img)
-            if len(outer_cnt):
+            if isinstance(outer_cnt, np.ndarray) and outer_cnt.tolist() and len(outer_cnt):
                 serie_info.outerArea = outer_area
                 serie_info.outerDiameter = outer_diameter
             cell_result = cell_edge(img)
-            if len(cell_result) == 1:
+            if cell_result and len(cell_result) == 1:
                 serie_info.innerArea = cell_result[0][1]
                 serie_info.innerDiameter = cell_result[0][2]
-            if len(cell_result) == 2:
+            if cell_result and len(cell_result) == 2:
                 serie_info.innerArea = cell_result[0][1]
                 serie_info.innerDiameter = cell_result[0][2]
                 serie_info.expansionArea = cell_result[1][1]

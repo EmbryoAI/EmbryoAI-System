@@ -64,7 +64,7 @@ def process_cycle(path):
 
         # 设置皿目录是否结束采集标志，该标志checkpoint由process_dish方法返回
         cycle_json[dish_index] = checkpoint 
-        finished = finished & checkpoint # 所有皿目录处理完成标志
+        finished = finished and checkpoint # 所有皿目录处理完成标志
 
         # 将处理完成的皿目录下的图像上传到minio
 
