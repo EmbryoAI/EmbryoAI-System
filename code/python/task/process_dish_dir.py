@@ -3,8 +3,10 @@
 from task.TimeSeries import TimeSeries, serie_to_minute
 import os
 import json
-from app import conf
+from app import app, conf
 from task.process_serie_dir import process_serie
+
+logger = app.logger
 
 '''
 ### 皿目录处理模块，皿目录命名规则：天小时分钟秒数 即 DHHmmss，后两位都为0，参见TimeSeries辅助类
@@ -24,17 +26,21 @@ def process_dish(path, dish_info):
     '''
     from functools import partial
     dish_path = path + f'DISH{dish_info.index}' + os.path.sep # 皿目录完整路径
+    logger.debug(f'处理皿目录: {dish_path}')
     if not dish_info.lastSerie:
         last_op = '0' * 7
     else:
         
         last_op = TimeSeries()[serie_to_minute(dish_info.lastSerie)//15+1]
+    logger.debug(f'最后处理的时间序列: {last_op}')
     # 已经处理过的时间序列列表
     processed = TimeSeries().range(last_op)
+    logger.debug(f'已经处理的时间序列: {processed}')
     # 以下两行代码使用偏函数从当前目录中得到所有合法且未处理的时间序列子目录
     f = partial(dir_filter, processed=processed, base=dish_path)
     todo = list(sorted(filter(f, os.listdir(dish_path))))
 
+    logger.debug(f'未处理的时间序列: {todo}')
 
     for serie in todo:
         # 交给process_serie_dir模块对时间序列目录进行处理
@@ -59,7 +65,14 @@ def check_finish_state(path, last_serie):
     end_time = start_time + dt.timedelta(minutes=serie_to_minute(last_serie)) # 结束采集时间
     now = dt.datetime.now() # 当前系统时间
     interval = now - end_time
-    if interval.days > 0 or interval.seconds > conf['ACTIVE_TIMEOUT']:
+    '''
+    datetime的timedelta有一个大坑，当now小于end_time时，即end_time还在现在时间之后的情况下，居然返回的是
+    如 `-1 day, 23:49:08.318271` 这样的值，而不是 `0 day, - xxx` 这样的值。导致下面的or判断生效产生了一个
+    严重bug。加上对days的非负判断后程序正常。
+    
+    以此注释记录此处问题及前因后果。
+    '''
+    if interval.days > 0 or (interval.days == 0 and interval.seconds > conf['ACTIVE_TIMEOUT']):
         return True # 大于设定时间，返回True
     return False
 

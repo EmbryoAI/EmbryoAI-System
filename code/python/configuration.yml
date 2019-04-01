@@ -28,7 +28,7 @@ dev:
   DISH_STATE_FILENAME: "dish_state.json"
   FINISHED_CYCLES: "finished_cycles.json"
   EMBRYO_FOCUS_DIRNAME: "focus"
-  ACTIVE_TIMEOUT: 3600
+  ACTIVE_TIMEOUT: 7200
   CASCADE_TEMPLATE: "embryo_cascade.xml"
   NO_EMBRYO_IMAGE_URL: "cv/embryo_not_found.jpg"
 
@@ -43,7 +43,7 @@ dev:
   ORGAN_REGISTER_URL: "http://localhost:8086/api/v1.0/organization/register"  #机构注册到云端接口
   ORGAN_JSON_FILENAME: "organization.json"
 
-  CLOUD_CODE_SWITCH: true #上传云端代码块开关
+  CLOUD_CODE_SWITCH: false #上传云端代码块开关
 stage:
   SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@39.104.173.18:3306/embryoai_system_db?charset=utf8"
   SQLALCHEMY_POOL_RECYCLE: 3
@@ -74,7 +74,7 @@ stage:
   DISH_STATE_FILENAME: "dish_state.json"
   FINISHED_CYCLES: "finished_cycles.json"
   EMBRYO_FOCUS_DIRNAME: "focus"
-  ACTIVE_TIMEOUT: 3600
+  ACTIVE_TIMEOUT: 7200
   CASCADE_TEMPLATE: "embryo_cascade.xml"
   NO_EMBRYO_IMAGE_URL: "cv/embryo_not_found.jpg"
 
@@ -107,7 +107,7 @@ prod:
     - id: "embryo_job"
       func: "task.embryo_task:run"
       trigger: "interval"
-      seconds: 900
+      seconds: 300
     - id: "collect_time_job"
       func: "task.collect_time_task:run"
       trigger: "interval"
@@ -120,7 +120,7 @@ prod:
   DISH_STATE_FILENAME: "dish_state.json"
   FINISHED_CYCLES: "finished_cycles.json"
   EMBRYO_FOCUS_DIRNAME: "focus"
-  ACTIVE_TIMEOUT: 3600
+  ACTIVE_TIMEOUT: 7200
   CASCADE_TEMPLATE: "embryo_cascade.xml"
   NO_EMBRYO_IMAGE_URL: "cv/embryo_not_found.jpg"
 
