@@ -310,7 +310,7 @@ def save(procedure, patient, incubatorCode, dishCode, catalog, procedureId):
         dishCodeList = dishCode.split(',')
         for dish_code in dishCodeList:
             code = dish_code[-1]
-            dish = db.session.query(Dish).filter(Dish.incubatorId == incubatorId, Dish.dishCode == dishCode).one_or_none()
+            dish = db.session.query(Dish).filter(Dish.incubatorId == incubatorId, Dish.dishCode == code).one_or_none()
             if not dish:
                 dishId = uuid()
                 dish = Dish(id=dishId, incubatorId=incubator.id, dishCode=code, createTime=createTime, updateTime=updateTime)
@@ -324,17 +324,21 @@ def save(procedure, patient, incubatorCode, dishCode, catalog, procedureId):
 
             ini_path = conf['EMBRYOAI_IMAGE_ROOT'] + os.path.sep + catalog + os.path.sep + 'DishInfo.ini'
             config = parser(ini_path)
-            dishes = [f'Dish{i}Info' for i in range(1, 10) if f'Dish{i}Info' in config]
+            dishes = [f'Dish{code}Info']
             wells = [f'Well{i}Avail' for i in range(1, 13)]
             embryos = [index for d in dishes for index,w in enumerate(wells) if config[d][w]=='1']
+            print('embryos:',embryos)
             #孔表新增记录
             for i in embryos:
                 cellCode = i+1
+                print('cellCode:',cellCode)
                 cell = db.session.query(Cell).filter(Cell.dishId == dishId,Cell.cellCode == cellCode).one_or_none()
                 if not cell:
                     cellId = uuid()
                     cell = Cell(id=cellId, dishId=dishId, cellCode=cellCode, createTime=createTime, updateTime=updateTime)
                     db.session.add(cell)
+                else:
+                    cellId = cell.id
 
                 #胚胎表新增记录
                 embryoId = uuid()
@@ -342,10 +346,12 @@ def save(procedure, patient, incubatorCode, dishCode, catalog, procedureId):
                 db.session.add(embryo)
 
         db.session.commit()
+        return 200, '新增病历成功!'
     except Exception as e:
+        print('新增病历失败:', e)
         db.session.rollback()
         print_exc()
-        raise DatabaseError('新增周期数据时发生错误', e.message, e)
+        return 500, '新增病历失败!'
     finally:
         db.session.remove()
 

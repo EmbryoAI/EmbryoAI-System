@@ -327,7 +327,9 @@ def addProcedure(request):
     
 
     #保存病历表
-    procedure_mapper.save(procedure, patient, incubatorCode, dishCode, catalog, procedureId)
+    code, msg = procedure_mapper.save(procedure, patient, incubatorCode, dishCode, catalog, procedureId)
+    if code == 500:
+        return code, msg
     
     #读取上传云端代码块开关
     switch = conf['CLOUD_CODE_SWITCH']
