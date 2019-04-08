@@ -35,12 +35,13 @@
 	server_addr = 39.104.173.18
 	server_port = 7000
 
-	[ssh]
+	[ssh-a-unique-name] # 每个医院唯一的ssh标签名称
 	type = tcp
 	local_ip = 127.0.0.1
 	local_port = 22
-	remote_port = [远程端口号]
+	remote_port = [远程端口号] # 每个医院在服务器上唯一的端口号
 
+其中`[ssh-a-unique-name]`是每个医院唯一的ssh标签名称，由现场工程师分配，并记录整理。
 其中远程端口号为开发团队为此台服务器分配的端口号，每个case都不一样，修改前请与开发团队确认。
 
 ## 执行frp客户端
@@ -48,5 +49,12 @@
 执行命令：
 
 	./frpc &
+
+## 附录：已安装医院名单及对应ID和PORT
+
+| 医院名称 | 城市 | 服务器端口号 | SSH标签名称 |
+| - | - | - | - |
+| 浙江省人民医院 | 杭州 | 10122 | ssh |
+| 上海市第九人民医院 | 上海 | 10222 | ssh-shanghai-9yuan |
 
 

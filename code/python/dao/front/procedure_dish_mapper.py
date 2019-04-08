@@ -50,7 +50,21 @@ def queryNewestImagesInfo():
 def queryByImagePathAndDishId(imagePath,dishId):
     procedureDish = None
     try:
-        procedureDish =  db.session.query(ProcedureDish).filter(ProcedureDish.imagePath == imagePath,ProcedureDish.dishId == dishId).one_or_none()
+        sql = text("""
+            SELECT 
+                tpd.dish_id AS dishId,
+                tpd.id AS id,
+                tpd.image_path AS imagePath,
+                tpd.procedure_id AS procedureId
+            FROM t_procedure_dish tpd 
+            LEFT JOIN t_procedure tp 
+            ON tpd.procedure_id = tp.id
+            WHERE tpd.dish_id = :dishId 
+            AND tpd.image_path = :imagePath 
+            AND tp.del_flag = 0
+        """)
+        procedureDish = db.session.execute(sql,{'imagePath':imagePath,'dishId':dishId}).one_or_none()
+        #procedureDish =  db.session.query(ProcedureDish).filter(ProcedureDish.imagePath == imagePath,ProcedureDish.dishId == dishId).one_or_none()
     except Exception as e:
         return procedureDish
     finally:
@@ -63,20 +77,19 @@ def queryEmbryoId(imagePath,dishId,cellCode):
             SELECT tpd.procedure_id procedureId,te.id embryoId
             FROM t_procedure_dish tpd
             LEFT JOIN t_embryo te ON tpd.procedure_id = te.procedure_id
-            LEFT JOIN sys_cell sc ON te.cell_id = sc.id AND tpd.dish_id = sc.dish_id
-            WHERE tpd.image_path = :imagePath AND sc.dish_id = :dishId AND sc.cell_code = :cellCode
+            LEFT JOIN sys_cell sc ON te.cell_id = sc.id AND tpd.dish_id = sc.dish_id 
+            LEFT JOIN t_procedure tp ON tpd.procedure_id = tp.id 
+            WHERE tpd.image_path = :imagePath AND sc.dish_id = :dishId AND sc.cell_code = :cellCode AND tp.del_flag = 0
         """)
         print(sql)
-        # 计算总条数
-        count_result = db.session.execute(sql,{'imagePath':imagePath,'dishId':dishId,'cellCode':cellCode})
-        data = count_result.fetchone()
+        data = db.session.execute(sql,{'imagePath':imagePath,'dishId':dishId,'cellCode':cellCode}).fetchone()
         print(data)
         if data is not None:
             procedureId = data[0]
             embryoId = data[1]
         return procedureId,embryoId
     except Exception as e:
-        raise DatabaseError("查询最新采集时间及培养箱信息!",e.message,e)
+        raise DatabaseError("查询胚胎ID及病例ID!",e.message,e)
         return None,None
     finally:
         db.session.remove()
@@ -84,10 +97,13 @@ def queryEmbryoId(imagePath,dishId,cellCode):
 def queryAllCatalog():
     try:
         sql = text("""
-            SELECT tpd.`image_path` AS relation_catalog FROM `t_procedure_dish` tpd 
+            SELECT tpd.image_path AS relation_catalog 
+            FROM t_procedure_dish tpd 
+            JOIN t_procedure tp 
+            ON tpd.procedure_id = tp.id
+            WHERE tp.`del_flag` = 0 
         """)
         print(sql)
-        # 计算总条数
         data = db.session.execute(sql).fetchall()
         return data
     except Exception as e:
