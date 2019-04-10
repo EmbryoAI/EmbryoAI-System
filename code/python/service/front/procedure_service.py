@@ -12,6 +12,7 @@ import dao.front.dict_dao as dict_dao
 from task.TimeSeries import TimeSeries,serie_to_time
 from collections import OrderedDict
 from app import conf
+import service.front.image_service as image_service
 
 def queryProcedureList(request):
     try:
@@ -21,6 +22,9 @@ def queryProcedureList(request):
         limit = request.args.get('limit')
         if limit==None:
             limit=10
+        getFocus = request.args.get('getFocus')
+        if getFocus == None :
+            getFocus = 0
 
         #动态组装查询条件
         sqlCondition = " where pr.del_flag=0 "#动态sql
@@ -59,6 +63,13 @@ def queryProcedureList(request):
         #查詢列表
         result = procedure_mapper.queryProcedureList(int(page),int(limit),sqlCondition,filters)
         procedureList = list(map(dict, result))
+        if int(getFocus) == 1 and procedureList is not None :
+            for i in range(len(procedureList)) :
+                procedureId = procedureList[i]["id"]
+                dishCode = procedureList[i]["dishCode"].split(",")[0]
+                focusPath = image_service.getImageFouce(procedureId,dishCode)
+                procedureList[i]["focusPath"] = focusPath
+        
         #查询总数
         count = procedure_mapper.queryProcedureCount(sqlCondition,filters)
         restResult = RestResult(0, "OK", count, procedureList)

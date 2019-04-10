@@ -30,6 +30,8 @@ def queryNewestImagesInfo():
         count_sql = text("""
             SELECT tpd.image_path imagePath
             FROM t_procedure_dish tpd
+            LEFT JOIN t_procedure tp ON tpd.procedure_id = tp.id
+            WHERE tp.del_flag = 0
             ORDER BY tpd.image_path DESC
             LIMIT 0,1
         """)

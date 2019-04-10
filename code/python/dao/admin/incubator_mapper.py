@@ -88,7 +88,7 @@ def getIncubatorCodeByDishId(dishId):
         count_result = db.session.execute(sql,{"dishId":dishId})
         return count_result.fetchone()[0]
     except Exception as e:
-        print_exc();
+        print_exc()
         raise DatabaseError("根据皿ID获取培养箱编码异常!",e.message,e)
         return None
     finally:

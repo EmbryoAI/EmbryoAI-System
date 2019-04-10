@@ -8,7 +8,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
     var element = layui.element;
 
     $(function () {
-        loadNewestCase(1,4);
+        loadNewestCase(1,4,1);
         loadNewestDish();
 
         $(window).resize(function () {
@@ -28,12 +28,12 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element'], function (
         $(".no-list").css("line-height",listH-marginT+'px');
     }
 
-function loadNewestCase(pageNo,pageSize){
+function loadNewestCase(pageNo,pageSize,getFocus){
     $.ajax({
         cache : false,
         type : "GET",
         url : "/api/v1/procedure/list",
-        data : {"page":pageNo,"limit":pageSize},
+        data : {"page":pageNo,"limit":pageSize,"getFocus":getFocus},
         async : false,
         error : function(request) {
             alert(request.responseText);
@@ -59,14 +59,14 @@ function loadNewestCase(pageNo,pageSize){
                         }
                     }
 					divData = divData + '<div class="layui-col-md3">'
-                        + '<div class="case-list">';
-                    if(dishCodeArr !== null && dishCodeArr.length > 0 && obj.pts > 0) {
-                        divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'") title="查看病历详情">'
-                        + '<img src="/api/v1/image/findImageFouce?procedureId=' + obj.id + '&dishCode=' + dishCodeArr[0] + '" ></div>';
+                        + '<div class="case-list">'
+                        + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'") title="查看病历详情">';
+                    if(obj.focusPath !== null && obj.focusPath !== "") {
+                        divData = divData + '<img src="' + obj.focusPath + '" >';
                     } else {
-                        divData = divData + '<div class="embryo-img" onclick=lookCase("'+ obj.id +'")><img src="/static/front/img/icon-noembryo.jpg" ></div>';
+                        divData = divData + '<img src="/static/front/img/icon-noembryo.jpg" >';
                     }
-                    divData = divData + '<div class="case-info">'
+                    divData = divData + '</div><div class="case-info">'
                     + '<h1><a href="/front/incubator?procedureId=' + obj.id + '&incubatorId=' + obj.incubatorCode + '" target="_blank"><span>培养箱 ' + obj.incubatorCode + '</span></a>：' + dishDiv 
                     + '</h1><ul>'
                         + '<li><span style="margin-right: 20px;">'+ obj.patient_name +'</span><span>'+obj.patient_age+'岁</span></li>'
@@ -123,7 +123,13 @@ function loadNewestDish(){
                     if(wellUrls !== null && wellUrls !== ""){
                         divData = divData + '总时间: <span>' + data[i].times + '</span></p>';
                         for (let j = 0; j < wellUrls.length; j++) {
-                            divData = divData + '<a href="/front/embryo/toEmbryo?imagePath=' + data[i].imagePath + '&dishId=' + data[i].dishId + '&wellCode=' + wellUrls[j].wellId + '&dishCode=' + data[i].dishCode + '" target="_blank"><img src="' + wellUrls[j].url + '"></a>';
+                            divData = divData + '<a href="/front/embryo/toEmbryo?imagePath=' + data[i].imagePath + '&dishId=' + data[i].dishId + '&wellCode=' + wellUrls[j].wellId + '&dishCode=' + data[i].dishCode + '" target="_blank">';
+                            if(wellUrls[j].url !== null && wellUrls[j].url !== ""){
+                                divData = divData + '<img src="' + wellUrls[j].url + '">';
+                            } else {
+                                divData = divData + '<img src="/static/front/img/icon-noembryo.jpg" >';
+                            }
+                            divData = divData + '</a>';
                         }
                         if(wellUrls.length < 12){
                             for (let j = wellUrls.length; j < 12; j++) {

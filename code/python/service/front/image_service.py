@@ -35,9 +35,13 @@ def getImageByCondition(agrs):
             jpgPath = path + timeSeries + os.path.sep + jpgName
             logger().info(jpgPath)
             # image = cv2.imread(r'e:\EmbryoAI\EmbryoAI-System\code\python\..\captures\20180422152100\DISH8\7000000\00006.jpg')
-            image = open(jpgPath,'rb').read()
+            if os.path.exists(jpgPath) :
+                image = open(jpgPath,'rb').read()
+            else :
+                logger().info("图片不存在")
+                image = None
         else :
-            logger("文件未处理完成或皿状态是无效的")
+            logger().info("文件未处理完成或皿状态是无效的")
             image = None
     except:
         logger().info("获取图片文件出现异常")
@@ -86,17 +90,23 @@ def readDishState(procedureId,dishId):
         pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId,dishId)
         path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
         if not os.path.isdir(path) :
+            logger().info("培养皿路径不存在")
             return None,None,None
         # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
         jsonPath = path + conf['DISH_STATE_FILENAME']
-      
-        with open(f'{jsonPath}', 'r') as fn :
-            dishJson = json.loads(fn.read())
-        # if dishJson['finished'] & dishJson['avail'] == 1 :
-        #     return pd.imagePath,path, dishJson
-        # else :
-        #     return None,None,None
-        return pd.imagePath,path, dishJson
+
+        if os.path.exists(f'{jsonPath}') :
+            with open(f'{jsonPath}', 'r') as fn :
+                dishJson = json.loads(fn.read())
+            if dishJson['finished'] & dishJson['avail'] == 1 :
+                return pd.imagePath,path, dishJson
+            else :
+                logger().info("读取dishState.json文件,此皿为无效状态")
+                return pd.imagePath,path,None
+        else :
+            logger().info("dishState.json文件不存在")
+            return pd.imagePath,path,None
+        
     except : 
         logger().info("读取dishState.json文件出现异常")
         return None,None,None
@@ -116,13 +126,18 @@ def getImagePath(procedureId,dishId):
         # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
         jsonPath = path + conf['DISH_STATE_FILENAME']
         logger().info(jsonPath)
-        with open(f'{jsonPath}', 'r') as fn :
-            dishJson = json.loads(fn.read())
-        # if dishJson['finished'] & dishJson['avail'] == 1 :
-        #     return pd.imagePath,path, dishJson
-        # else :
-        #     return None,None,None
-        return newPath, dishJson
+
+        if os.path.exists(jsonPath) : 
+            with open(f'{jsonPath}', 'r') as fn :
+                dishJson = json.loads(fn.read())
+        else :
+            logger().info("s%文件不存在",jsonPath)
+            return newPath,None
+        if dishJson['finished'] & dishJson['avail'] == 1 :
+            return newPath, dishJson
+        else :
+            logger().info(f"DISH{dishCode}未处理完成或无效")
+            return newPath,None
     except : 
         logger().info("读取dishState.json文件出现异常")
         return None,None
@@ -143,11 +158,12 @@ def markDistinct(agrs):
     
     try :
         dishJsonPath = path + conf['DISH_STATE_FILENAME']
-        with open(dishJsonPath) as fn:
-            jstr = json.load(fn)
-            dishConf = DishConfig(jstr)
+        if os.path.exists(dishJsonPath) : 
+            with open(dishJsonPath) as fn:
+                jstr = json.load(fn)
+                dishConf = DishConfig(jstr)
         imagePath = path + timeSeries + os.path.sep + imageName
-        if imagePath :
+        if imagePath & os.path.exists(imagePath) & dishConf :
             serieInfo = dishConf.wells[wellId].series[timeSeries]
             logger().info(nested_dict(serieInfo))
             img = read_img_grayscale(imagePath)
@@ -186,44 +202,53 @@ def markDistinct(agrs):
             with open(dishJsonPath, 'w') as fn:
                 fn.write(json.dumps(nested_dict(dishConf)))
             restResult = RestResult(200, "标记最清晰图片成功", 0, imageName)
+        else :
+            restResult = RestResult(400, "标记最清晰图片失败，请联系管理员或稍后再试", 0, imageName)
     except:
         restResult = RestResult(404, "标记最清晰图片错误", 0, imageName)
     return jsonify(restResult.__dict__)
 
 
-def getImageFouce(agrs):
-    logger().info(agrs)
-    procedureId = agrs['procedureId']
-    dishCode = agrs['dishCode']
+"""
+根据周期ID和皿编号查询病历最新缩略图路径
+"""
+def getImageFouce(procedureId,dishCode):
+    logger().info("procedureId:[%s],dishCode:[%s]"%(procedureId,dishCode))
+    # procedureId = agrs['procedureId']
+    # dishCode = agrs['dishCode']
     try:
         wellCode,imagePath = dish_mapper.queryWellIdAndImagePath(procedureId,dishCode)
         if wellCode is not None and imagePath is not None:
-            path = conf['EMBRYOAI_IMAGE_ROOT'] + imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
-            if not os.path.isdir(path) :
-                return ""
             # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
-            jsonPath = path + conf['DISH_STATE_FILENAME']
-            print(jsonPath)
-            with open(f'{jsonPath}', 'r') as fn :
-                dishJson = json.loads(fn.read())
-            if dishJson['finished'] & dishJson['avail'] == 1 : 
-                wells = dishJson['wells']
-                oneWell = wells[f'{wellCode}']
-                timeSeries = oneWell['lastEmbryoSerie']
-                series = oneWell['series']
-                oneSeries = series[f'{timeSeries}']
-                jpgName = oneSeries['focus']
-                jpgPath = path + jpgName
-                print(jpgPath)
-                # image = cv2.imread(r'e:\EmbryoAI\EmbryoAI-System\code\python\..\captures\20180422152100\DISH8\7000000\00006.jpg')
-                image = open(jpgPath,'rb').read()
+            jsonPath = conf['EMBRYOAI_IMAGE_ROOT'] + imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + conf['DISH_STATE_FILENAME']
+            if os.path.exists(jsonPath) :
+                with open(f'{jsonPath}', 'r') as fn :
+                    dishJson = json.loads(fn.read())
+                if dishJson['finished'] & dishJson['avail'] == 1 : 
+                    wells = dishJson['wells']
+                    oneWell = wells[f'{wellCode}']
+                    timeSeries = oneWell['lastEmbryoSerie']
+                    series = oneWell['series']
+                    if timeSeries :
+                        oneSeries = series[f'{timeSeries}']
+                        jpgName = oneSeries['focus']
+                        jpgPath = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + jpgName
+                    else :
+                        logger().info("dish_state.json文件中未获取到定位到胚胎的最后时间序列")
+                        jpgPath = ""
+                else :
+                    logger().info("采集目录:[%s]未处理完成或皿状态是无效的"%(imagePath))
+                    jpgPath = ""
             else :
-                logger("文件未处理完成或皿状态是无效的")
-                image = ""
+                logger().info(" [%s]文件不存在"%(jsonPath))
+                jpgPath = "" 
+        else :
+            logger().info("根据周期ID[%s],皿编号[%s]未查询到对应的数据"%(procedureId,dishCode))
+            jpgPath = "" 
     except:
         logger().info("获取图片文件出现异常")
-        image = ""
-    return image
+        jpgPath = ""
+    return jpgPath
 
 
 def findNewestImageUrl():
@@ -245,32 +270,34 @@ def findNewestImageUrl():
             infoMap["imagePathShow"] = imagePath[0:4] + "-" + imagePath[4:6] + "-" + imagePath[6:8] + " " + imagePath[8:10] + ":" + imagePath[10:12] + ":" + imagePath[12:14]
             
             if not os.path.exists(jsonPath) :
+                logger().info("[%s]文件不存在"%(jsonPath))
                 infoMap["wellUrls"] = ""
             else :
                 imageUrlList = []
                 with open(f'{jsonPath}', 'r') as fn :
                     dishJson = json.loads(fn.read())
-
                 if dishJson['finished'] & dishJson['avail'] == 1 : 
-                    # timeSeries = dishJson['lastSerie']
                     hour, minute = serie_to_time(dishJson['lastSerie'])
                     infoMap["times"] = f'{hour:02d}H{minute:02d}M'
                     wells = dishJson['wells']
                     for key in wells:
                         imageObj={}
+                        imageObj['wellId'] = key
                         oneWell = wells[f'{key}']
                         series = oneWell['series']
-                        oneSeries = series[oneWell['lastEmbryoSerie']]
-                        jpgName = oneSeries['focus']
-
-                        # 
-                        imageUrl = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + imagePath + os.path.sep + f'DISH{dishMap["dishCode"]}' + os.path.sep + jpgName
-                        imageObj['url'] = imageUrl
-                        imageObj['wellId'] = key
+                        if oneWell['lastEmbryoSerie'] :
+                            oneSeries = series[oneWell['lastEmbryoSerie']]
+                            jpgName = oneSeries['focus']
+                            imageUrl = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + imagePath + os.path.sep + f'DISH{dishMap["dishCode"]}' + os.path.sep + jpgName
+                            imageObj['url'] = imageUrl
+                        else :
+                            logger().info("最后一个找到胚胎的时间序列为空")
+                            imageObj['url'] = ""
                         imageUrlList.append(imageObj)
-                    
+                        
                     infoMap["wellUrls"] = imageUrlList
                 else :
+                    logger().info("采集目录:[%s]未处理完成或皿无效"%(imagePath))
                     infoMap["wellUrls"] = ""
             data.append(infoMap)
         if not data:
@@ -312,8 +339,8 @@ def getBigImagePath(agrs):
             # image = open(jpgPath,'rb').read()
             return RestResult(200, "获取图片路径成功", 1, url)
         else :
-            logger("文件未处理完成或皿状态是无效的")
-            return RestResult(400, "获取图片路径失败", 0, "")
+            logger().info("采集目录[%s]未处理完成或皿状态是无效的"%(imagePath))
+            return RestResult(400, "采集目录未处理完成或皿状态是无效的", 0, "")
     except:
         logger().info("获取图片路径出现异常")
         return RestResult(400, "获取图片路径失败", 0, "")

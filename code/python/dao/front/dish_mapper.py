@@ -6,7 +6,7 @@ from traceback import print_exc
 
 def queryById(dishId):
     try:
-        dish =  db.session.query(Dish).filter(Dish.id == dishId).one_or_none()
+        dish =  db.session.query(Dish).filter(Dish.id == dishId,Dish.delFlag == 0).one_or_none()
     except Exception as e:
         return dish
     finally:
@@ -50,7 +50,13 @@ def findDishByIncubatorId(params):
 
 def findImagePathByProcedureId(procedureId):
     try :
-        sql = text('''select tpd.image_path from t_procedure_dish tpd where tpd.procedure_id = :procedureId limit 0,1''')
+        sql = text('''
+            select tpd.image_path from t_procedure_dish tpd 
+            LEFT JOIN t_procedure tp ON tpd.procedure_id = tp.id 
+            where tpd.procedure_id = :procedureId 
+            AND tp.del_flag = 0 
+            limit 0,1
+        ''')
         print(sql)
         
         params = {'procedureId':procedureId}
@@ -73,7 +79,10 @@ def findLatestImagePath(incubatorId):
         sql = text('''SELECT tpd.image_path
             FROM sys_dish sd
             left join t_procedure_dish tpd on sd.id = tpd.dish_id
-            WHERE sd.incubator_id = :incubatorId AND sd.del_flag = 0
+            LEFT JOIN t_procedure tp ON tpd.procedure_id = tp.id
+            WHERE sd.incubator_id = :incubatorId 
+            AND sd.del_flag = 0 
+            AND tp.del_flag = 0
             order BY tpd.image_path desc limit 0,1''')
         print(sql)
         
@@ -96,10 +105,15 @@ def findLatestImagePath(incubatorId):
 def queryWellIdAndImagePath(procedureId,dishCode):
     try :
         sql = text('''select sc.cell_code wellCode,tps.image_path imagePath from t_procedure_dish tps 
-        left join sys_dish sd on tps.dish_id = sd.id and sd.dish_code = :dishCode
-        left join sys_cell sc on tps.dish_id = sc.dish_id and sc.del_flag = 0
+        left join sys_dish sd on tps.dish_id = sd.id 
+        left join sys_cell sc on tps.dish_id = sc.dish_id 
+        left join t_procedure tp on tps.procedure_id = tp.id 
         left join t_embryo te on te.procedure_id = tps.procedure_id and te.cell_id = sc.id 
         where tps.procedure_id = :procedureId
+        and sd.dish_code = :dishCode
+        and sd.del_flag = 0  
+        and sc.del_flag = 0 
+        and tp.del_flag = 0
         limit 0,1''')
         print(sql)
         
@@ -232,10 +246,11 @@ def queryTop3Dish() :
             SELECT si.id incubatorId,si.incubator_code incubatorCode, sd.id dishId,sd.dish_code dishCode,tpd.image_path imagePath
             FROM sys_dish sd
             LEFT JOIN t_procedure_dish tpd ON sd.id = tpd.dish_id
+            left join t_procedure tp on tpd.procedure_id = tp.id
             LEFT JOIN sys_incubator si ON sd.incubator_id = si.id
-            WHERE sd.del_flag = 0 
-            order by tpd.image_path desc
-            limit 0,3
+            WHERE sd.del_flag = 0 and tp.del_flag = 0
+            ORDER BY tpd.image_path DESC
+            LIMIT 0,3
         ''')
         print(sql)
         result = db.session.execute(sql)
