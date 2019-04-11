@@ -163,8 +163,9 @@ def markDistinct(agrs):
             with open(dishJsonPath) as fn:
                 jstr = json.load(fn)
                 dishConf = DishConfig(jstr)
+        
         imagePath = path + timeSeries + os.path.sep + imageName
-        if imagePath & os.path.exists(imagePath) & dishConf :
+        if os.path.exists(imagePath) and dishConf is not None :
             serieInfo = dishConf.wells[wellId].series[timeSeries]
             logger().info(nested_dict(serieInfo))
             img = read_img_grayscale(imagePath)
@@ -205,7 +206,8 @@ def markDistinct(agrs):
             restResult = RestResult(200, "标记最清晰图片成功", 0, imageName)
         else :
             restResult = RestResult(400, "标记最清晰图片失败，请联系管理员或稍后再试", 0, imageName)
-    except:
+    except Exception as e :
+        traceback.print_exc()
         restResult = RestResult(404, "标记最清晰图片错误", 0, imageName)
     return jsonify(restResult.__dict__)
 

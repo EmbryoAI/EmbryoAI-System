@@ -710,7 +710,7 @@ function loadingZIndex(procedureId,dishId,wellId,timeSeries){
             
         }
     });
-    
+    $('#zIndexDiv').unbind("mousewheel");
     $('#zIndexDiv').bind('mousewheel', function(event, delta) {
         var zIndex = $(".time-vertical .active").attr('zindex');
         var length = $(".time-vertical li").length;
