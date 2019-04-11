@@ -29,8 +29,10 @@ def querySeriesList(agrs):
         well_id = agrs['well_id']
         print("well_id:", well_id)
         seris = agrs['seris']
+        last_embryo_serie = seris
         if seris == 'null':
-            return 500, '无法定位到胚胎'
+            last_embryo_serie = ''
+            seris = '0000000'
         #先查询病例对应的采集目录路径
         dish = dish_mapper.queryById(dish_id)
         if not dish : 
@@ -63,14 +65,13 @@ def querySeriesList(agrs):
         nginxImageUrl = getdefault(conf, 'STATIC_NGINX_IMAGE_URL', "http://localhost:80")
         list=[]
         for i in ts[begin_index:end_index]:
-            print('i:',i)
             try:
-                series_json = well_json['series'][i]['focus']
+                image_path = nginxImageUrl + os.path.sep + pd.imagePath + os.path.sep + f'DISH{dishCode}' + \
+                os.path.sep + well_json['series'][i]['focus']
             except:
                 #如果读取json中某个序列异常则默认显示定位不到胚胎图片
-                series_json = '/static/front/img/loc-emb.png'
-            image_path = nginxImageUrl + os.path.sep + pd.imagePath + os.path.sep + f'DISH{dishCode}' + \
-                os.path.sep + series_json
+                image_path = '/static/front/img/loc-emb.png'
+            
             hour, minute = serie_to_time(i)
             series = Series(i, f'{hour:02d}H{minute:02d}M', image_path)
             list.append(series.__dict__)
@@ -93,7 +94,7 @@ def querySeriesList(agrs):
             obj={}
             obj['embryoId'] = embryo.id
             m_list.append(obj)
-        seriesResult = SeriesResult(200, 'OK', list, seris, dishJson['lastSerie'], m_list)
+        seriesResult = SeriesResult(200, 'OK', list, seris, dishJson['lastSerie'], m_list, last_embryo_serie)
         return 200, jsonify(seriesResult.__dict__)
     except:
         return 500, '获取序列列表异常'
@@ -177,7 +178,7 @@ def queryScrollbarSeriesList(agrs):
             obj['embryoId'] = embryo.id
             m_list.append(obj)
 
-        seriesResult = SeriesResult(200, 'OK', list, current_seris, dishJson['lastSerie'], m_list)
+        seriesResult = SeriesResult(200, 'OK', list, current_seris, dishJson['lastSerie'], m_list, current_seris)
         return 200, jsonify(seriesResult.__dict__)
     except:
         return 500, '左右滚动查询序列列表异常'

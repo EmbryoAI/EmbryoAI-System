@@ -891,6 +891,11 @@ function querySeriesList(wellid, serisCode, type, cellId){
             $("#" + serisCode + "_div").attr("class", "swiper-slide active");
             embryoId = milestoneList[0].embryoId;
             $("#embryoId").val(embryoId);
+
+            if(data.last_embryo_serie == ''){
+                parent.layer.alert('定位不到胚胎');
+                return;
+            }
             
             if(type==0) {
                 loadingImage(procedureId,dishId,wellId,currentSeris,'');
