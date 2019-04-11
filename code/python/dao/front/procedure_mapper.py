@@ -218,7 +218,7 @@ def queryProcedureViewList(medicalRecordNo):
         ON m.milestone_id = dict1.dict_key AND dict1.dict_class='milestone' 
         LEFT JOIN sys_dict dict2
         ON e.embryo_fate_id = dict2.dict_key AND dict2.dict_class='embryo_fate_type' 
-            WHERE  t.id = (SELECT id FROM t_procedure WHERE medical_record_no=:medicalRecordNo ORDER BY  id  LIMIT 1 )  
+            WHERE  t.del_flag=0 and t.id = (SELECT id FROM t_procedure WHERE medical_record_no=:medicalRecordNo and del_flag=0 ORDER BY  id  LIMIT 1 )  
             GROUP BY e.id       
         """)
         return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo}).fetchall()
@@ -243,7 +243,7 @@ def getPatientByMedicalRecordNo(medicalRecordNo):
                 ON t.patient_id = p.id
               LEFT JOIN  t_embryo e
                ON e.procedure_id = t.id
-            WHERE  t.medical_record_no = :medicalRecordNo 
+            WHERE  t.medical_record_no = :medicalRecordNo and t.del_flag=0
             GROUP BY t.id ORDER BY  t.id  LIMIT 1
         """)
         return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo}).fetchone()
@@ -264,7 +264,7 @@ def getEmbryoFateCount(medicalRecordNo,embryoFateId):
             ON t.patient_id=pa.id 
               LEFT JOIN t_embryo e
                 ON e.procedure_id = t.id
-            WHERE  t.medical_record_no = :medicalRecordNo  AND e.embryo_fate_id=:embryoFateId
+            WHERE  t.medical_record_no = :medicalRecordNo  AND e.embryo_fate_id=:embryoFateId and t.del_flag=0
         """)
         return db.session.execute(sql, {'medicalRecordNo':medicalRecordNo,'embryoFateId':embryoFateId}).fetchone()[0]
     except Exception as e:
@@ -363,7 +363,7 @@ def queryCollectList():
             FROM t_procedure t
             LEFT JOIN t_procedure_dish td
             ON t.id = td.procedure_id
-            WHERE t.cap_end_time IS NULL 
+            WHERE t.cap_end_time IS NULL and t.del_flag=0
         """)
         return db.session.execute(sql).fetchall()
     except Exception as e:

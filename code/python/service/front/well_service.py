@@ -47,10 +47,16 @@ def queryWellList(procedureId, dishId, cellCode):
         for key in dishJson['wells']:
             last_embryo_seris = dishJson['wells'][key]['lastEmbryoSerie']
             if not last_embryo_seris:
-                image_path = '/static/front/img/loc-emb.png'
+                last_embryo_seris = dishJson['lastSerie']
+            if last_embryo_seris:
+                focusName = dishJson['wells'][key]['series'][last_embryo_seris]['focus']
+                if focusName is None or focusName == "cv/embryo_not_found.jpg" : 
+                    image_path = '/static/front/img/loc-emb.png'
+                else : 
+                    image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + \
+                    os.path.sep + focusName
             else:
-                image_path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + \
-                    os.path.sep + dishJson['wells'][key]['series'][last_embryo_seris]['focus']
+                image_path = '/static/front/img/loc-emb.png'
 
             cell_id = ""
             #再跟JSON里面的序列匹配孔ID
