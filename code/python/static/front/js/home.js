@@ -109,6 +109,7 @@ function loadNewestDish(){
             alert(request.responseText);
         },
         success : function(res) {
+            //console.info(res.data);
             var divData = "";
             var dataCount = 0;
 			if(res.code === 200 && res.data !== null && res.count !== null && res.count > 0){

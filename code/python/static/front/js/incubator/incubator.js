@@ -90,13 +90,17 @@ function loadDishData(incubatorId,procedureId){
 					for (let i = 0; i < data.data.length; i++) {
 						const obj = data.data[i];
 						divHtml = divHtml + '<div class="layui-col-md4">' +
-							'<div class="in-dish">' + 
-								'<div class="dish-num"><span>' + obj.dishCode + '</span><a href="/front/dish?procedureId=' + obj.procedureId + '&dishId=' + obj.dishId + '&dishCode=' + obj.dishCode + '" target="_blank">查看皿</a></div>' +
-								'<ul class="dish-info">' +
-									'<li>Dish # <span>' + obj.dishCode + '</span></li>' + 
-									'<li>本皿胚胎数<span>' + obj.embryoCount + '</span></li>' +
-									'<li>胚胎总数<span>' + obj.embryoSum + '</span></li>' +
-								'</ul>' ;
+							'<div class="in-dish">';
+						if(obj.embryoCount > 0 && obj.procedureId !== null && obj.procedureId !== ""){
+							divHtml = divHtml + '<div class="dish-num"><span>' + obj.dishCode + '</span><a href="/front/dish?procedureId=' + obj.procedureId + '&dishId=' + obj.dishId + '&dishCode=' + obj.dishCode + '" target="_blank">查看皿</a></div>';
+						} else {
+							divHtml = divHtml + '<div class="dish-num"><span>' + obj.dishCode + '</span><a>查看皿</a></div>';
+						}
+						divHtml = divHtml + '<ul class="dish-info">' +
+							'<li>Dish # <span>' + obj.dishCode + '</span></li>' + 
+							'<li>本皿胚胎数<span>' + obj.embryoCount + '</span></li>' +
+							'<li>胚胎总数<span>' + obj.embryoSum + '</span></li>' +
+						'</ul>' ;
 						if(obj.embryoCount > 0){
 							// divHtml = divHtml + '<div class="patient-info" index=' + i + ' onclick="lookCase('+ obj.procedureId +')">' + 
 							divHtml = divHtml + '<div class="patient-info" index=' + i + ' >' + 

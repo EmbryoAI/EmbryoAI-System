@@ -8,6 +8,7 @@ from flask import request, jsonify
 from common import uuid,logger
 from app import conf
 import json,os
+import traceback
 from task.TimeSeries import TimeSeries,serie_to_time
 
 def getImageByCondition(agrs):
@@ -214,8 +215,6 @@ def markDistinct(agrs):
 """
 def getImageFouce(procedureId,dishCode):
     logger().info("procedureId:[%s],dishCode:[%s]"%(procedureId,dishCode))
-    # procedureId = agrs['procedureId']
-    # dishCode = agrs['dishCode']
     try:
         wellCode,imagePath = dish_mapper.queryWellIdAndImagePath(procedureId,dishCode)
         if wellCode is not None and imagePath is not None:
@@ -229,12 +228,17 @@ def getImageFouce(procedureId,dishCode):
                     oneWell = wells[f'{wellCode}']
                     timeSeries = oneWell['lastEmbryoSerie']
                     series = oneWell['series']
+                    if timeSeries is None :
+                        timeSeries = dishJson["lastSerie"]
                     if timeSeries :
                         oneSeries = series[f'{timeSeries}']
                         jpgName = oneSeries['focus']
-                        jpgPath = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + jpgName
+                        if jpgName == "cv/embryo_not_found.jpg" :
+                            jpgPath = "/static/front/img/loc-emb.png"
+                        else :
+                            jpgPath = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + jpgName
                     else :
-                        logger().info("dish_state.json文件中未获取到定位到胚胎的最后时间序列")
+                        logger().info("dish_state.json文件中 lastEmbryoSerie 与 lastSerie 都为空")
                         jpgPath = ""
                 else :
                     logger().info("采集目录:[%s]未处理完成或皿状态是无效的"%(imagePath))
@@ -264,11 +268,10 @@ def findNewestImageUrl():
         data = []
         for dishMap in dishList : 
             imagePath = dishMap["imagePath"]
-            path = conf['EMBRYOAI_IMAGE_ROOT'] + imagePath + os.path.sep 
-            jsonPath = path + f'DISH{dishMap["dishCode"]}' + os.path.sep + conf['DISH_STATE_FILENAME'] 
+            jsonPath = conf['EMBRYOAI_IMAGE_ROOT'] + imagePath + os.path.sep + f'DISH{dishMap["dishCode"]}' + os.path.sep + conf['DISH_STATE_FILENAME'] 
             infoMap = dishMap
             infoMap["imagePathShow"] = imagePath[0:4] + "-" + imagePath[4:6] + "-" + imagePath[6:8] + " " + imagePath[8:10] + ":" + imagePath[10:12] + ":" + imagePath[12:14]
-            
+            print(jsonPath)
             if not os.path.exists(jsonPath) :
                 logger().info("[%s]文件不存在"%(jsonPath))
                 infoMap["wellUrls"] = ""
@@ -285,11 +288,16 @@ def findNewestImageUrl():
                         imageObj['wellId'] = key
                         oneWell = wells[f'{key}']
                         series = oneWell['series']
-                        if oneWell['lastEmbryoSerie'] :
-                            oneSeries = series[oneWell['lastEmbryoSerie']]
+                        timeSeries = oneWell['lastEmbryoSerie']
+                        if timeSeries is None :
+                            timeSeries = dishJson["lastSerie"]
+                        if timeSeries :
+                            oneSeries = series[timeSeries]
                             jpgName = oneSeries['focus']
-                            imageUrl = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + imagePath + os.path.sep + f'DISH{dishMap["dishCode"]}' + os.path.sep + jpgName
-                            imageObj['url'] = imageUrl
+                            if jpgName == "cv/embryo_not_found.jpg" :
+                                imageObj['url'] = "/static/front/img/loc-emb.png"
+                            else :
+                                imageObj['url'] = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + imagePath + os.path.sep + f'DISH{dishMap["dishCode"]}' + os.path.sep + jpgName
                         else :
                             logger().info("最后一个找到胚胎的时间序列为空")
                             imageObj['url'] = ""
@@ -305,7 +313,8 @@ def findNewestImageUrl():
         else: 
             dataList["dishInfo"] = data
         return RestResult(200, "查询最新采集目录下的皿信息成功", 1, dataList)
-    except:
+    except Exception as e:
+        print(traceback.print_exc())
         return RestResult(400, "查询最新采集目录下的皿信息失败", 0, "")
 
 

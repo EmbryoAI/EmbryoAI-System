@@ -16,7 +16,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'],
     laydate.render({
         elem: '#embryoOutcomeDate',
         range: '~',
-        format: 'yyyy/MM/dd ',
+        format: 'yyyy/MM/dd',
         max: 0,
 		extrabtns: [{
 				id: 'thismonth',
@@ -36,7 +36,7 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer'],
     laydate.render({
         elem: '#pregnancyRateDate',
         range: '~',
-        format: 'yyyy/MM/dd ',
+        format: 'yyyy/MM/dd',
         max: 0,
 		extrabtns: [{
 				id: 'thismonth',
