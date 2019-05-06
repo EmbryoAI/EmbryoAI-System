@@ -7,7 +7,7 @@ from flask_login import LoginManager,login_user, logout_user, login_required,cur
 from yaml import load
 from traceback import print_exc
 from common import getdefault
-from logging import Formatter, DEBUG
+from logging import Formatter
 import logging
 import os
 from keras.models import load_model
@@ -100,9 +100,14 @@ def init_logger(logname):
     handler = RotatingFileHandler(logname, maxBytes=1024*1024*200, backupCount=5)
     fmt = Formatter('%(asctime)s [%(filename)s (%(funcName)s) '
         ': Line %(lineno)d] %(levelname)s: %(message)s')
+    ch = logging.StreamHandler()#输出控制台Handler liuyz add 20190506
+    ch.setFormatter(fmt)
     handler.setFormatter(fmt)
+    logger.addHandler(ch)
     logger.addHandler(handler)
-    logger.setLevel(DEBUG)
+    
+    level = getdefault(conf, 'LOGGER_LEVEL', 'DEBUG')
+    logger.setLevel(level)
     
     #LOGSTASH日志采集 add liuyz 20190505
     LOGSTASH_HOST = getdefault(conf, 'LOGSTASH_HOST', '39.104.173.18')
