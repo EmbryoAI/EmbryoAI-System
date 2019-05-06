@@ -6,7 +6,7 @@ import service.admin.user_service as user_service
 from entity.User import User
 import time
 import hashlib
-from common import logger
+import logUtils
 from app import login_manager,login_user, logout_user, login_required,current_user
 
 login_controller = Blueprint('login_controller', __name__)
@@ -14,7 +14,7 @@ url_prefix = '/login'
 
 @login_controller.route('/', methods=['GET'])
 def index():
-    logger().info('进入login页面')
+    logUtils.info('进入login页面')
     return render_template('login.html')
 
 @login_controller.route('/logout', methods=['GET', 'POST'])

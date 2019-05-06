@@ -35,6 +35,9 @@ dev:
   KERAS_MODEL_NAME: "embryo_model.h5"
   EMBRYO_PREDICT_SIZE: 200
 
+  LOGSTASH_HOST: 39.104.173.18
+  LOGSTASH_PORT: 5066
+  ORG_ID: testtest1
   STATIC_NGINX_IMAGE_URL: http://39.104.173.18:8085
   PATIENT_INFO_INSERT_URL: "http://localhost:8086/api/v1.0/savePatientInfo"
   PATIENT_INFO_UPDATE_URL: "http://localhost:8086/api/v1.0/updatePatientInfo"

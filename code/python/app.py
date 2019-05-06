@@ -13,6 +13,7 @@ import os
 from keras.models import load_model
 from flask_apscheduler import APScheduler
 import sys
+import logstash #LOGSTASH日志采集 add liuyz 20190505
 
 # from minio import Minio
 # from minio.error import (ResponseError, BucketAlreadyOwnedByYou,
@@ -102,6 +103,11 @@ def init_logger(logname):
     handler.setFormatter(fmt)
     logger.addHandler(handler)
     logger.setLevel(DEBUG)
+    
+    #LOGSTASH日志采集 add liuyz 20190505
+    LOGSTASH_HOST = getdefault(conf, 'LOGSTASH_HOST', '39.104.173.18')
+    LOGSTASH_PORT = getdefault(conf, 'LOGSTASH_PORT', '5066')
+    logger.addHandler(logstash.TCPLogstashHandler(LOGSTASH_HOST, LOGSTASH_PORT, version=1))
 
 def add_all_controller():
     ''' 在此方法中将所有controller蓝图注册到app中。
