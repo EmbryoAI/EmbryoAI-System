@@ -3,7 +3,7 @@ from entity.Procedure import Procedure
 from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
 from traceback import print_exc
-
+import logUtils
 
 def queryProcedureList(page,limit,sqlCondition,filters):
 #     pagination = Procedure.query.filter_by(**filters).order_by(Procedure.insemiTime.desc()).paginate(page,per_page=limit,error_out=False)
@@ -32,7 +32,7 @@ def queryProcedureList(page,limit,sqlCondition,filters):
             ORDER BY pr.insemi_time DESC
             limit :index,:limit
             """)
-        print(sql)
+        logUtils.info(sql)
         index = 0
         if page > 1 :
             index = (page - 1) * limit
@@ -71,7 +71,7 @@ def queryProcedureCount(sqlCondition,filters):
             ON pr.state=d2.dict_key AND d2.dict_class='state'
             """+sqlCondition+"""
             """)
-        print(count_sql)
+        logUtils.info(count_sql)
         # 计算总条数
         count_result = db.session.execute(count_sql,filters)
         total_size = count_result.fetchone()[0]
@@ -120,7 +120,7 @@ def getProcedureById(procedureID):
 def update(id, memo):
     try:
         sql = text("UPDATE `t_procedure` SET memo = :memo WHERE id = :id")
-        print(sql)
+        logUtils.info(sql)
         db.session.execute(sql,{'id':id, 'memo':memo})
         db.session.commit()
     except Exception as e:
@@ -135,8 +135,7 @@ def queryMedicalRecordNoList(sqlCondition,filters):
         sql = text("""
            SELECT medical_record_no AS 'value',medical_record_no AS label FROM  t_procedure
         """+sqlCondition)
-        print(sql)
-    
+        logUtils.info(sql)
         # 执行sql得出结果
         result = db.session.execute(sql,filters) 
         sql_result = result.fetchall()
@@ -157,8 +156,7 @@ def queryMedicalRecordNoAndNameList(sqlCondition,filters):
              SELECT patient_name AS 'value',patient_name AS label FROM  t_patient
             ) a
         """+sqlCondition)
-        print(sql)
-    
+        logUtils.info(sql)
         # 执行sql得出结果
         result = db.session.execute(sql,filters) 
         sql_result = result.fetchall()
@@ -174,7 +172,7 @@ def deleteProcedure(params):
     try :
         sql = text('update t_procedure set del_flag=:delFlag '
             'where id=:id')
-        print(sql)
+        logUtils.info(sql)
         db.session.execute(sql, params)
         db.session.commit()
     except Exception as e:
@@ -327,7 +325,7 @@ def save(procedure, patient, incubatorCode, dishCode, catalog, procedureId):
             dishes = [f'Dish{code}Info']
             wells = [f'Well{i}Avail' for i in range(1, 13)]
             embryos = [index for d in dishes for index,w in enumerate(wells) if config[d][w]=='1']
-            print('embryos:',embryos)
+            logUtils.info('embryos:',embryos)
             #孔表新增记录
             for i in embryos:
                 cellCode = i+1

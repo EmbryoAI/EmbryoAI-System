@@ -3,6 +3,7 @@ from entity.Dish import Dish
 from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
 from traceback import print_exc
+import logUtils
 
 def queryById(dishId):
     try:
@@ -35,8 +36,7 @@ def findDishByIncubatorId(params):
             GROUP BY t1.procedure_id) a ON tpd.procedure_id = a.procedure_id
             WHERE sd.incubator_id = :incubatorId AND sd.del_flag = 0
             GROUP BY sc.dish_id""")
-        print(sql)
-        
+        logUtils.info(sql)
         # 执行sql得出结果
         result = db.session.execute(sql,params)
         sql_result = result.fetchall()
@@ -57,8 +57,7 @@ def findImagePathByProcedureId(procedureId):
             AND tp.del_flag = 0 
             limit 0,1
         ''')
-        print(sql)
-        
+        logUtils.info(sql)
         params = {'procedureId':procedureId}
         # 执行sql得出结果
         result = db.session.execute(sql,params)
@@ -84,8 +83,7 @@ def findLatestImagePath(incubatorId):
             AND sd.del_flag = 0 
             AND tp.del_flag = 0
             order BY tpd.image_path desc limit 0,1''')
-        print(sql)
-        
+        logUtils.info(sql)
         params = {'incubatorId':incubatorId}
         # 执行sql得出结果
         result = db.session.execute(sql,params)
@@ -115,8 +113,7 @@ def queryWellIdAndImagePath(procedureId,dishCode):
         and sc.del_flag = 0 
         and tp.del_flag = 0
         limit 0,1''')
-        print(sql)
-        
+        logUtils.info(sql)
         params = {"dishCode":dishCode,"procedureId":procedureId}
         result = db.session.execute(sql,params)
         data = result.fetchone()
@@ -160,8 +157,7 @@ def queryDishByImagePath(imagePath) :
             WHERE tpd.image_path = :imagePath  and  sd.del_flag = 0 
             limit 0,3
         ''')
-        print(sql)
-        
+        logUtils.info(sql)
         params = {"imagePath":imagePath}
         print(params)
         result = db.session.execute(sql,params)
@@ -185,7 +181,7 @@ def emGrade(dishId):
                 ON e.cell_id = c.id
             WHERE c.dish_id =:dishId
         ''')
-        print(sql)
+        logUtils.info(sql)
         params = {"dishId":dishId}
         result = db.session.execute(sql,params)
         data = result.fetchall()
@@ -220,7 +216,7 @@ def emAll(dishId):
                 WHERE td.dish_id =:dishId
                 GROUP BY e.id
         ''')
-        print(sql)
+        logUtils.info(sql)
         params = {"dishId":dishId}
         result = db.session.execute(sql,params)
         data = result.fetchall()
@@ -252,7 +248,7 @@ def queryTop3Dish() :
             ORDER BY tpd.image_path DESC
             LIMIT 0,3
         ''')
-        print(sql)
+        logUtils.info(sql)
         result = db.session.execute(sql)
         data = result.fetchall()
         return data

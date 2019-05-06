@@ -3,6 +3,7 @@ from entity.ProcedureDish import ProcedureDish
 from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
 from traceback import print_exc
+import logUtils
 
 def queryByProcedureIdAndDishId(procedureId,dishId):
     procedureDish = None
@@ -35,7 +36,7 @@ def queryNewestImagesInfo():
             ORDER BY tpd.image_path DESC
             LIMIT 0,1
         """)
-        print(count_sql)
+        logUtils.info(count_sql)
         # 计算总条数
         count_result = db.session.execute(count_sql)
         data = count_result.fetchone()
@@ -83,7 +84,7 @@ def queryEmbryoId(imagePath,dishId,cellCode):
             LEFT JOIN t_procedure tp ON tpd.procedure_id = tp.id 
             WHERE tpd.image_path = :imagePath AND sc.dish_id = :dishId AND sc.cell_code = :cellCode AND tp.del_flag = 0
         """)
-        print(sql)
+        logUtils.info(sql)
         data = db.session.execute(sql,{'imagePath':imagePath,'dishId':dishId,'cellCode':cellCode}).fetchone()
         print(data)
         if data is not None:
@@ -105,7 +106,7 @@ def queryAllCatalog():
             ON tpd.procedure_id = tp.id
             WHERE tp.`del_flag` = 0 
         """)
-        print(sql)
+        logUtils.info(sql)
         data = db.session.execute(sql).fetchall()
         return data
     except Exception as e:

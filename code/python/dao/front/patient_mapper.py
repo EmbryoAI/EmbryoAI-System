@@ -4,12 +4,13 @@ from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
 from traceback import print_exc
 from entity.Patient import Patient
+import logUtils
 
 
 def update(id, mobile, email):
     try:
         sql = text("UPDATE `t_patient` SET mobile = :mobile, email = :email WHERE id = :id")
-        print(sql)
+        logUtils.info(sql)
         db.session.execute(sql,{'id':id, 'mobile':mobile, 'email':email})
         db.session.commit()
     except Exception as e:
