@@ -5,11 +5,12 @@ from entity.User import User
 from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
 from traceback import print_exc
+import logUtils
 
 def updatePassword(params):
     try :
         sql = text('update sys_user set password = :password where username = :username')
-        print(sql)
+        logUtils.info(sql)
         db.session.execute(sql, params)
         db.session.commit()
     except Exception as e:
@@ -22,7 +23,7 @@ def updatePassword(params):
 def updateUser(params):
     try :
         sql = text('update sys_user set birthday = :birthday, email = :email, is_admin = :is_admin, mobile = :mobile, sex = :sex, title = :title, truename = :truename, update_time = :update_time WHERE id = :id')
-        print(sql)
+        logUtils.info(sql)
         db.session.execute(sql, params)
         db.session.commit()
     except Exception as e:
@@ -73,7 +74,7 @@ def count(username):
 def deleteUser(params):
     try:
         sql = text('update sys_user set del_flag = 1 where id = :id')
-        print(sql)
+        logUtils.info(sql)
         db.session.execute(sql, params)
         db.session.commit()
     except Exception as e:
@@ -105,8 +106,8 @@ def findUserByNameAndPwd(username,password):
 def updateUserLoginTime(params):
     try:
         sql = text("update sys_user set last_login_time = :lastLoginTime where id = :id")
-        print(sql)
-        print(params['lastLoginTime'])
+        logUtils.info(sql)
+        logUtils.info(params['lastLoginTime'])
         db.session.execute(sql,params)
         db.session.commit()
     except Exception as e:

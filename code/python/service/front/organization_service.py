@@ -2,6 +2,7 @@
 from common import uuid,logger,request_post
 from app import conf,app_root
 import json
+import logUtils
 
 def registerOrganization(args):
     try:
@@ -16,7 +17,7 @@ def registerOrganization(args):
         code = "500"
         msg = "机构注册到云端失败，请稍后再试"
         data = {"acloudId":args["acloudId"],"acloudKey":args["acloudKey"],"s3Username":args["minioUser"],"s3Password":args["minioPass"]}
-        print(conf["ORGAN_REGISTER_URL"])
+        logUtils.info(conf["ORGAN_REGISTER_URL"])
         res = request_post(conf["ORGAN_REGISTER_URL"],str(data))
         if res is not None :
             result = json.loads(res)

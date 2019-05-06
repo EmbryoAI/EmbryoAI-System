@@ -9,10 +9,11 @@ from common import uuid,logger
 from app import conf
 import json,os
 import traceback
+import logUtils
 from task.TimeSeries import TimeSeries,serie_to_time
 
 def getImageByCondition(agrs):
-    logger().info(agrs)
+    logUtils.info(agrs)
     procedureId = agrs['procedureId']
     dishId = agrs['dishId']
     wellId = agrs['wellId']
@@ -42,10 +43,10 @@ def getImageByCondition(agrs):
                 logger().info("图片不存在")
                 image = None
         else :
-            logger().info("文件未处理完成或皿状态是无效的")
+            logUtils.info("文件未处理完成或皿状态是无效的")
             image = None
     except:
-        logger().info("获取图片文件出现异常")
+        logUtils.info("获取图片文件出现异常")
         image = None
     return image
 
@@ -77,7 +78,7 @@ def getAllZIndex(agrs):
         logger().info(zData)
         restResult = RestResult(200, "获取所有z轴节点成功", 1, dict(zData))
     except:
-        logger().info("获取所有z轴节点失败")
+        logUtils.info("获取所有z轴节点失败")
         restResult = RestResult(404, "获取该时间序列下的所有z轴节点失败", 0, None)
     return jsonify(restResult.__dict__)
 
@@ -91,7 +92,7 @@ def readDishState(procedureId,dishId):
         pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedureId,dishId)
         path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
         if not os.path.isdir(path) :
-            logger().info("培养皿路径不存在")
+            logUtils.info("培养皿路径不存在")
             return None,None,None
         # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
         jsonPath = path + conf['DISH_STATE_FILENAME']
@@ -102,14 +103,14 @@ def readDishState(procedureId,dishId):
             if dishJson['finished'] & dishJson['avail'] == 1 :
                 return pd.imagePath,path, dishJson
             else :
-                logger().info("读取dishState.json文件,此皿为无效状态")
+                logUtils.info("读取dishState.json文件,此皿为无效状态")
                 return pd.imagePath,path,None
         else :
-            logger().info("dishState.json文件不存在")
+            logUtils.info("dishState.json文件不存在")
             return pd.imagePath,path,None
         
     except : 
-        logger().info("读取dishState.json文件出现异常")
+        logUtils.info("读取dishState.json文件出现异常")
         return None,None,None
 
 """获取相对路径"""
@@ -132,15 +133,15 @@ def getImagePath(procedureId,dishId):
             with open(f'{jsonPath}', 'r') as fn :
                 dishJson = json.loads(fn.read())
         else :
-            logger().info("s%文件不存在",jsonPath)
+            logUtils.info("s%文件不存在",jsonPath)
             return newPath,None
         if dishJson['finished'] & dishJson['avail'] == 1 :
             return newPath, dishJson
         else :
-            logger().info(f"DISH{dishCode}未处理完成或无效")
+            logUtils.info(f"DISH{dishCode}未处理完成或无效")
             return newPath,None
     except : 
-        logger().info("读取dishState.json文件出现异常")
+        logUtils.info("读取dishState.json文件出现异常")
         return None,None
 
 
@@ -176,7 +177,7 @@ def markDistinct(agrs):
             # if not os.path.exists(focusPath):
             #     os.makedirs(focusPath)
             focusFile = serieInfo.focus  
-            print(path + focusFile)
+            logUtils.info(path + focusFile)
             # if os.path.exists(focusPath + focusFile):
             #     os.remove(focusPath + focusFile)
             # 保存缩略图
@@ -240,19 +241,19 @@ def getImageFouce(procedureId,dishCode):
                         else :
                             jpgPath = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep + jpgName
                     else :
-                        logger().info("dish_state.json文件中 lastEmbryoSerie 与 lastSerie 都为空")
+                        logUtils.info("dish_state.json文件中 lastEmbryoSerie 与 lastSerie 都为空")
                         jpgPath = ""
                 else :
-                    logger().info("采集目录:[%s]未处理完成或皿状态是无效的"%(imagePath))
+                    logUtils.info("采集目录:[%s]未处理完成或皿状态是无效的"%(imagePath))
                     jpgPath = ""
             else :
-                logger().info(" [%s]文件不存在"%(jsonPath))
+                logUtils.info(" [%s]文件不存在"%(jsonPath))
                 jpgPath = "" 
         else :
-            logger().info("根据周期ID[%s],皿编号[%s]未查询到对应的数据"%(procedureId,dishCode))
+            logUtils.info("根据周期ID[%s],皿编号[%s]未查询到对应的数据"%(procedureId,dishCode))
             jpgPath = "" 
     except:
-        logger().info("获取图片文件出现异常")
+        logUtils.info("获取图片文件出现异常")
         jpgPath = ""
     return jpgPath
 
@@ -273,9 +274,9 @@ def findNewestImageUrl():
             jsonPath = conf['EMBRYOAI_IMAGE_ROOT'] + imagePath + os.path.sep + f'DISH{dishMap["dishCode"]}' + os.path.sep + conf['DISH_STATE_FILENAME'] 
             infoMap = dishMap
             infoMap["imagePathShow"] = imagePath[0:4] + "-" + imagePath[4:6] + "-" + imagePath[6:8] + " " + imagePath[8:10] + ":" + imagePath[10:12] + ":" + imagePath[12:14]
-            print(jsonPath)
+            logUtils.info(jsonPath)
             if not os.path.exists(jsonPath) :
-                logger().info("[%s]文件不存在"%(jsonPath))
+                logUtils.info("[%s]文件不存在"%(jsonPath))
                 infoMap["wellUrls"] = ""
             else :
                 imageUrlList = []
@@ -301,13 +302,13 @@ def findNewestImageUrl():
                             else :
                                 imageObj['url'] = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + imagePath + os.path.sep + f'DISH{dishMap["dishCode"]}' + os.path.sep + jpgName
                         else :
-                            logger().info("最后一个找到胚胎的时间序列为空")
+                            logUtils.info("最后一个找到胚胎的时间序列为空")
                             imageObj['url'] = ""
                         imageUrlList.append(imageObj)
                         
                     infoMap["wellUrls"] = imageUrlList
                 else :
-                    logger().info("采集目录:[%s]未处理完成或皿无效"%(imagePath))
+                    logUtils.info("采集目录:[%s]未处理完成或皿无效"%(imagePath))
                     infoMap["wellUrls"] = ""
             data.append(infoMap)
         if not data:
@@ -316,7 +317,7 @@ def findNewestImageUrl():
             dataList["dishInfo"] = data
         return RestResult(200, "查询最新采集目录下的皿信息成功", 1, dataList)
     except Exception as e:
-        print(traceback.print_exc())
+        logUtils.info(traceback.print_exc())
         return RestResult(400, "查询最新采集目录下的皿信息失败", 0, "")
 
 
@@ -345,14 +346,14 @@ def getBigImagePath(agrs):
                 zIndexFiles = oneWell['zIndexFiles']
                 jpgName = zIndexFiles[f'{zIndex}']
             url = conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep + url + timeSeries + os.path.sep + jpgName
-            logger().info(url)
+            logUtils.info(url)
             # image = cv2.imread(r'e:\EmbryoAI\EmbryoAI-System\code\python\..\captures\20180422152100\DISH8\7000000\00006.jpg')
             # image = open(jpgPath,'rb').read()
             return RestResult(200, "获取图片路径成功", 1, url)
         else :
-            logger().info("采集目录[%s]未处理完成或皿状态是无效的"%(imagePath))
+            logUtils.info("采集目录[%s]未处理完成或皿状态是无效的"%(imagePath))
             return RestResult(400, "采集目录未处理完成或皿状态是无效的", 0, "")
     except:
-        logger().info("获取图片路径出现异常")
+        logUtils.info("获取图片路径出现异常")
         return RestResult(400, "获取图片路径失败", 0, "")
     

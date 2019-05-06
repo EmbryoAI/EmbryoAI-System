@@ -11,6 +11,7 @@ import time
 import datetime
 from app import current_user
 import json
+import logUtils
 
 """
     新增和修改标准
@@ -143,7 +144,7 @@ def deleteRuleJson(ruleId,jsonKey,index):
                 objList.remove(obj)
         data[jsonKey] = objList;
         dataJson = json.dumps(data, ensure_ascii=False)
-        print(dataJson)
+        logUtils.info(dataJson)
         updateTime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time()))
         rule.updateTime = updateTime
         rule.dataJson = dataJson
