@@ -8,7 +8,7 @@ import os
 from app import app, conf
 from common import nested_dict
 
-logger = app.logger # 日志
+import logUtils as logger # 日志
 
 '''
 ### 处理某个采集目录的模块

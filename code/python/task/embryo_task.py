@@ -4,7 +4,7 @@ from app import conf
 from task.process_cycle_dir import process_cycle
 import json
 import os
-from app import app
+import logUtils as logger
 
 '''
 ### 定时任务模块，flask-scheduler通过调用run方法监控图像采集任务。
@@ -15,7 +15,6 @@ from app import app
 - 然后进入到每个采集目录，交给process_cycle_dir模块进行处理（已完成）
 '''
 
-logger = app.logger
 finished_json = conf['FINISHED_JSON_FILENAME'] # 已完成的采集目录列表JSON文件名称
 
 def run():
@@ -25,7 +24,7 @@ def run():
     cap_dir = conf['EMBRYOAI_IMAGE_ROOT']
     if not cap_dir.endswith(os.path.sep):
         cap_dir += os.path.sep # 如结束符号不是/，加上/
-    logger.debug(f'进入定时图像处理任务,采集图像目录为: {cap_dir}')
+    log.debug(f'进入定时图像处理任务,采集图像目录为: {cap_dir}')
 
     # 获取未完成采集的目录列表
     active_dirs, finished_dirs = find_active_dirs(cap_dir)
