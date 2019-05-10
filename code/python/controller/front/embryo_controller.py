@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify,render_template
-from common import logger
+import logUtils
 from app import login_required 
 from entity.Embryo import Embryo
 from flask_restful import reqparse
@@ -13,8 +13,7 @@ url_prefix = '/front/embryo'
 @embryo_controller.route('/', methods=['GET'])
 @login_required
 def main():
-    logger().info('embryo_controller.embryo胚胎视图页面')
-
+    logUtils.info('embryo_controller.main-跳转到胚胎视图页面')
     parser = reqparse.RequestParser()
     parser.add_argument('procedureId', type=str)
     parser.add_argument('dishId', type=str)
@@ -34,8 +33,7 @@ def main():
 @embryo_controller.route('/toEmbryo', methods=['GET'])
 @login_required
 def toEmbryo():
-    logger().info('embryo_controller.toEmbryo胚胎视图页面')
-
+    logUtils.info('embryo_controller.toEmbryo-跳转到胚胎视图页面')
     parser = reqparse.RequestParser()
     parser.add_argument('imagePath', type=str)
     parser.add_argument('dishId', type=str)

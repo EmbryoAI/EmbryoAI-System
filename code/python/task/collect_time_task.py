@@ -3,7 +3,7 @@ import dao.front.procedure_mapper as procedure_mapper
 import json,datetime
 import os
 import service.front.image_service as image_service
-from common import logger
+import logUtils
 '''
 ### 定时任务模块，flask-scheduler通过调用run方法采集任务。
 #### 定时任务需要完成的工作包括：
@@ -11,8 +11,6 @@ from common import logger
 - 判断采集目录是否已经采集完成（finished_cycles.json），如果采集完成则把完成时间写回数据库
  
 '''
-
-logger = app.logger
 finished_json = conf['FINISHED_JSON_FILENAME'] # 已完成的采集目录列表JSON文件名称
 path = conf['EMBRYOAI_IMAGE_ROOT'] #采集目录
 def run():
@@ -58,7 +56,7 @@ def run():
                
                #把计算好的采集开始时间 和 结束时间入库
                procedure_mapper.updateCollect(collect["procedureId"],capStartTime,capEndtime)
-               logger.info('定时任务【同步采集时间】结束')
+               logUtils.info('定时任务【同步采集时间】结束')
         else:
-            logger.info('定时任务【同步采集时间】结束，listnew值为空')
+            logUtils.info('定时任务【同步采集时间】结束，listnew值为空')
   

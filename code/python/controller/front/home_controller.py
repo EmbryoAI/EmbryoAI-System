@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify,render_template
-from common import logger
+import logUtils
 from app import login_required 
 
 
@@ -10,5 +10,5 @@ url_prefix = '/front/home'
 @home_controller.route('/', methods=['GET'])
 @login_required
 def main():
-    logger().info('进入home_controller.main主页面')
+    logUtils.info('home_controller.main-跳转到主界面')
     return render_template('front/home.html')

@@ -5,7 +5,7 @@ import dao.front.dish_mapper as dish_mapper
 import entity.ProcedureDish as ProcedureDish
 import entity.Dish as Dish
 from flask import request, jsonify
-from common import uuid,logger
+from common import uuid
 from app import conf
 import json,os
 import traceback
@@ -35,12 +35,12 @@ def getImageByCondition(agrs):
                 zIndexFiles = oneWell['zIndexFiles']
                 jpgName = zIndexFiles[f'{zIndex}']
             jpgPath = path + timeSeries + os.path.sep + jpgName
-            logger().info(jpgPath)
+            logUtils.info(jpgPath)
             # image = cv2.imread(r'e:\EmbryoAI\EmbryoAI-System\code\python\..\captures\20180422152100\DISH8\7000000\00006.jpg')
             if os.path.exists(jpgPath) :
                 image = open(jpgPath,'rb').read()
             else :
-                logger().info("图片不存在")
+                logUtils.info("图片不存在")
                 image = None
         else :
             logUtils.info("文件未处理完成或皿状态是无效的")
@@ -75,7 +75,7 @@ def getAllZIndex(agrs):
             series = oneWell['series']
             oneSeries = series[f'{timeSeries}']
             zData['sharp'] = oneSeries['sharp']
-        logger().info(zData)
+        logUtils.info(zData)
         restResult = RestResult(200, "获取所有z轴节点成功", 1, dict(zData))
     except:
         logUtils.info("获取所有z轴节点失败")
@@ -127,7 +127,7 @@ def getImagePath(procedureId,dishId):
             return None,None
         # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
         jsonPath = path + conf['DISH_STATE_FILENAME']
-        logger().info(jsonPath)
+        logUtils.info(jsonPath)
 
         if os.path.exists(jsonPath) : 
             with open(f'{jsonPath}', 'r') as fn :
@@ -152,7 +152,7 @@ def markDistinct(agrs):
     from cv.embryo_common import outer_edge,cell_edge
     from task.dish_config import DishConfig,SerieInfo
     from common import nested_dict
-    logger().info(agrs)
+    logUtils.info(agrs)
     wellId = agrs['wellId']
     path = agrs['path']
     imageName = agrs['imageName']
@@ -168,7 +168,7 @@ def markDistinct(agrs):
         imagePath = path + timeSeries + os.path.sep + imageName
         if os.path.exists(imagePath) and dishConf is not None :
             serieInfo = dishConf.wells[wellId].series[timeSeries]
-            logger().info(nested_dict(serieInfo))
+            logUtils.info(nested_dict(serieInfo))
             img = read_img_grayscale(imagePath)
             # 定位胚胎位置
             left, top, right, bottom = find_embryo(img)
@@ -201,7 +201,7 @@ def markDistinct(agrs):
             serieInfo.sharp = imageName
             dishConf.wells[wellId].series[timeSeries] = serieInfo
 
-            logger().info(nested_dict(dishConf.wells[wellId].series[timeSeries]))
+            logUtils.info(nested_dict(dishConf.wells[wellId].series[timeSeries]))
             with open(dishJsonPath, 'w') as fn:
                 fn.write(json.dumps(nested_dict(dishConf)))
             restResult = RestResult(200, "标记最清晰图片成功", 0, imageName)
@@ -217,7 +217,7 @@ def markDistinct(agrs):
 根据周期ID和皿编号查询病历最新缩略图路径
 """
 def getImageFouce(procedureId,dishCode):
-    logger().info("procedureId:[%s],dishCode:[%s]"%(procedureId,dishCode))
+    logUtils.info("procedureId:[%s],dishCode:[%s]"%(procedureId,dishCode))
     try:
         wellCode,imagePath = dish_mapper.queryWellIdAndImagePath(procedureId,dishCode)
         if wellCode is not None and imagePath is not None:
@@ -322,7 +322,7 @@ def findNewestImageUrl():
 
 
 def getBigImagePath(agrs):
-    logger().info(agrs)
+    logUtils.info(agrs)
     procedureId = agrs['procedureId']
     dishId = agrs['dishId']
     wellId = agrs['wellId']

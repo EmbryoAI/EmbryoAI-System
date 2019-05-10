@@ -24,7 +24,7 @@ def run():
     cap_dir = conf['EMBRYOAI_IMAGE_ROOT']
     if not cap_dir.endswith(os.path.sep):
         cap_dir += os.path.sep # 如结束符号不是/，加上/
-    log.debug(f'进入定时图像处理任务,采集图像目录为: {cap_dir}')
+    logger.debug(f'进入定时图像处理任务,采集图像目录为: {cap_dir}')
 
     # 获取未完成采集的目录列表
     active_dirs, finished_dirs = find_active_dirs(cap_dir)

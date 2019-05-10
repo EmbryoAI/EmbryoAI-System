@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify,render_template
-from common import logger
+import logUtils
 from app import login_required 
 
 ''' 统计模块 '''
@@ -10,5 +10,5 @@ url_prefix = '/front/statistics'
 @statistics_controller.route('/', methods=['GET'])
 @login_required
 def main():
-    logger().info('进入statistics_controller.statistics统计页面')
+    logUtils.info('statistics_controller.main-跳转到统计页面')
     return render_template('front/statistics/statistics.html',htmlType="statistics")
