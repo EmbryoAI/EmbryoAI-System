@@ -11,10 +11,11 @@ from logging import Formatter
 import logging
 import os
 from keras.models import load_model
-from flask_apscheduler import APScheduler
+# from flask_apscheduler import APScheduler   屏蔽该行，已经在common中初始化  liuyz---为了解决定时任务无法获取上下文
 import sys
 import logstash #LOGSTASH日志采集 add liuyz 20190505
-
+from common import scheduler# 使用在common中初始化的scheduler  liuyz---为了解决定时任务无法获取上下文
+import logUtils
 # from minio import Minio
 # from minio.error import (ResponseError, BucketAlreadyOwnedByYou,
 #                          BucketAlreadyExists)
@@ -133,8 +134,7 @@ def add_all_controller():
             prefix_variable = getattr(controller_module, 'url_prefix', '/')
             # setattr(controller_variable, 'template_folder', 'templates')
             app.register_blueprint(controller_variable, url_prefix=prefix_variable)
-            logger.info('控制器 %s 蓝图注册成功，绑定地址前缀 %s' %(
-                controller_variable.name, prefix_variable))
+            logger.info('控制器 %s 蓝图注册成功，绑定地址前缀 %s' %(controller_variable.name, prefix_variable),extra=logUtils.extra())
 
 
 model_file = getdefault(conf, 'KERAS_MODEL_NAME', 'embryo_model.h5')
@@ -147,8 +147,8 @@ if __name__=='__main__':
     debug = getdefault(conf, 'DEBUG', False) # 是否开启debug模式
     threaded = getdefault(conf, 'THREADED', True) # 是否开启多线程模式
     add_all_controller()
-    scheduler = APScheduler()
-    scheduler.init_app(app)
+#     scheduler = APScheduler()
+    scheduler.init_app(app)#使用common中初始化好的scheduler---为了定时任务获取到上下文
     scheduler.start()
-    logger.info('服务器启动成功，侦听端口：%d' %port)
+    logger.info('服务器启动成功，侦听端口：%d' %port,extra=logUtils.extra())
     app.run(port=port, debug=debug, threaded=threaded, use_reloader=False, host="0.0.0.0") #启动app

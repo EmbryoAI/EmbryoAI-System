@@ -4,8 +4,8 @@ from app import conf
 from task.process_cycle_dir import process_cycle
 import json
 import os
+from common import scheduler    # 很关键的一步，导入初始化过的sheduler对象
 import logUtils as logger
-
 '''
 ### 定时任务模块，flask-scheduler通过调用run方法监控图像采集任务。
 #### 定时任务需要完成的工作包括：
@@ -21,32 +21,34 @@ def run():
     ''' 定时任务入口方法 '''
     # 读取配置的EMBRYOAI_IMAGE_ROOT，此为采集图像的根目录，开发测试阶段在app中设置为../captures。
     # 避免开发人员的操作系统的不一致造成配置的无法使用
-    cap_dir = conf['EMBRYOAI_IMAGE_ROOT']
-    if not cap_dir.endswith(os.path.sep):
-        cap_dir += os.path.sep # 如结束符号不是/，加上/
-    logger.debug(f'进入定时图像处理任务,采集图像目录为: {cap_dir}')
-
-    # 获取未完成采集的目录列表
-    active_dirs, finished_dirs = find_active_dirs(cap_dir)
-    logger.debug(f'需要处理的目录: {active_dirs}')
-
-
-    for adir in active_dirs:
-        cycle_dir = cap_dir + adir + os.path.sep # 未完成采集目录的全路径
-        # 交给process_cycle_dir模块进行处理采集目录，返回True或False，代表该采集目录采集结束标志
-        state = process_cycle(cycle_dir)  
-        # 如果state为True，而且原本的目录就为False存在json中，更新相应的值，而不是append
-        if state and {adir: False} in finished_dirs:
-            findex = finished_dirs.index({adir: False})
-            finished_dirs[findex][adir] = True
-        # 否则如果目录及状态不存在在json列表中，append
-        elif {adir: state} not in finished_dirs:
-            finished_dirs.append({adir: state}) # 采集结束则将该目录添加到结束目录列表中
-    # 保存JSON文件
-    with open(cap_dir + finished_json, 'w') as fn:
-        json.dump(finished_dirs, fn)
+    with scheduler.app.app_context():    # 这个sheduler是带有app及其上下文的
+        
+        cap_dir = conf['EMBRYOAI_IMAGE_ROOT']
+        if not cap_dir.endswith(os.path.sep):
+            cap_dir += os.path.sep # 如结束符号不是/，加上/
+        logger.debug(f'进入定时图像处理任务,采集图像目录为: {cap_dir}')
     
-    logger.debug('结束定时任务')
+        # 获取未完成采集的目录列表
+        active_dirs, finished_dirs = find_active_dirs(cap_dir)
+        logger.debug(f'需要处理的目录: {active_dirs}')
+    
+    
+        for adir in active_dirs:
+            cycle_dir = cap_dir + adir + os.path.sep # 未完成采集目录的全路径
+            # 交给process_cycle_dir模块进行处理采集目录，返回True或False，代表该采集目录采集结束标志
+            state = process_cycle(cycle_dir)  
+            # 如果state为True，而且原本的目录就为False存在json中，更新相应的值，而不是append
+            if state and {adir: False} in finished_dirs:
+                findex = finished_dirs.index({adir: False})
+                finished_dirs[findex][adir] = True
+            # 否则如果目录及状态不存在在json列表中，append
+            elif {adir: state} not in finished_dirs:
+                finished_dirs.append({adir: state}) # 采集结束则将该目录添加到结束目录列表中
+        # 保存JSON文件
+        with open(cap_dir + finished_json, 'w') as fn:
+            json.dump(finished_dirs, fn)
+        
+        logger.debug('结束定时任务')
 
 def find_active_dirs(path):
     '''
