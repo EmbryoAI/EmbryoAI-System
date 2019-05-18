@@ -282,7 +282,7 @@ def getMilestone(agrs):
     milestone_list = milestone_mapper.getMilestone(embryo.id)
     list = []
     for milestone in milestone_list:
-        logUtils.info('milestone:',milestone)
+        logUtils.info(f'milestone:{milestone}')
         obj={}
         obj['milestoneType'] = milestone.milestone_type
         obj['embryoId'] = milestone.embryo_id

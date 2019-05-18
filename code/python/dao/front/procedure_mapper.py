@@ -325,11 +325,10 @@ def save(procedure, patient, incubatorCode, dishCode, catalog, procedureId):
             dishes = [f'Dish{code}Info']
             wells = [f'Well{i}Avail' for i in range(1, 13)]
             embryos = [index for d in dishes for index,w in enumerate(wells) if config[d][w]=='1']
-            logUtils.info('embryos:',embryos)
+            logUtils.info(f'embryos:{embryos}')
             #孔表新增记录
             for i in embryos:
                 cellCode = i+1
-                print('cellCode:',cellCode)
                 cell = db.session.query(Cell).filter(Cell.dishId == dishId,Cell.cellCode == cellCode).one_or_none()
                 if not cell:
                     cellId = uuid()

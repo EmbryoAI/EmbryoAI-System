@@ -18,6 +18,7 @@ from entity.Series import Series
 from entity.SeriesResult import SeriesResult
 import dao.front.dish_mapper as dish_mapper
 import dao.front.cell_mapper as cell_mapper
+import logUtils
 
 def querySeriesList(agrs):
     try:

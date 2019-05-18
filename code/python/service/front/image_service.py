@@ -133,7 +133,7 @@ def getImagePath(procedureId,dishId):
             with open(f'{jsonPath}', 'r') as fn :
                 dishJson = json.loads(fn.read())
         else :
-            logUtils.info("s%文件不存在",jsonPath)
+            logUtils.info(f'文件不存在:{jsonPath}')
             return newPath,None
         if dishJson['finished'] & dishJson['avail'] == 1 :
             return newPath, dishJson
