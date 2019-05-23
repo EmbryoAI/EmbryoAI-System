@@ -3829,7 +3829,7 @@ CREATE TABLE `t_rule` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `del_flag` varchar(1) DEFAULT '0' COMMENT '逻辑删除标志（非0代表已删除）',
   `is_default` varchar(1) DEFAULT '0' COMMENT '0不默认   1默认',
-  `data_json` varchar(2048) DEFAULT NULL COMMENT '规则的json串',
+  `data_json` text DEFAULT NULL COMMENT '规则的json串',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='胚胎评分规则表';
 
