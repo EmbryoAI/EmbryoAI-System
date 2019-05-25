@@ -5,6 +5,7 @@ from entity.Incubator import Incubator
 from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
 from traceback import print_exc
+import logUtils
 
 def insertIncubator(incubator):
     try :
@@ -52,7 +53,7 @@ def updateIncubator(params):
         ', incubator_description=:incubatorDescription '
         ', update_time=:updateTime '
             'where id=:id')
-        print(sql)
+        logUtils.info(sql)
         db.session.execute(sql, params)
         db.session.commit()
     except Exception as e:
@@ -66,7 +67,7 @@ def deleteIncubator(params):
     try :
         sql = text('update sys_incubator set del_flag=:delFlag '
             'where id=:id')
-        print(sql)
+        logUtils.info(sql)
         db.session.execute(sql, params)
         db.session.commit()
     except Exception as e:

@@ -886,6 +886,9 @@ function querySeriesList(wellid, serisCode, type, cellId){
                     currentSerisName = series[i].series_name;
                 }
             }
+
+            firstSeris = series[0].series_code;
+
             $("#myscrollboxul").html(seris);
             $("#xltext").html(currentSerisName);
             $("#" + serisCode + "_div").attr("class", "swiper-slide active");

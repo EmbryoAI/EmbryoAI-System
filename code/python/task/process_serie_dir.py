@@ -11,7 +11,7 @@ from cv.embryo_common import outer_edge, cell_edge
 from skimage.transform import resize
 from common import getdefault
 
-logger = app.logger # 日志
+import logUtils as logger # 日志
 
 '''
 ### 时间序列目录处理模块，时间序列目录中，图像以5位数字字符串为名称存储，每个孔会占用Z轴层数个文件进行采集
@@ -62,7 +62,7 @@ def process_serie(path, serie, dish_info):
             # img_predict = resize(img_focus, (img_size, img_size))
             img_predict = img_out[np.newaxis, ..., np.newaxis]
             prediction = model.predict_classes(img_predict)
-            print(prediction, stage_labels[prediction[0]])
+            logger.debug(f'{prediction}, {stage_labels[prediction[0]]}')
             # img_class = prediction[0].argmax()
             serie_info.stage = stage_labels[prediction[0]]
             # print(prediction, stage_labels[prediction])

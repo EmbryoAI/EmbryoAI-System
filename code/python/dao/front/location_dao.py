@@ -23,8 +23,7 @@ def getAllCitiesInProvince(provinceId):
 
 def getAllDistrictsInCity(cityId):
     try:
-        return db.session.query(Location).filter(Location.parentId == cityId
-        ).filter(Location.locationLevel == 2).all()
+        return db.session.query(Location).filter(Location.parentId == cityId).filter(Location.locationLevel == 2).all()
     except Exception as e:
         raise DatabaseError("getAllDistrictsInCity方法异常",e.message,e)
         return None

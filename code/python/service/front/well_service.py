@@ -13,6 +13,7 @@ import dao.front.procedure_mapper as procedure_mapper
 
 from common import logger
 from task.TimeSeries import TimeSeries
+import logUtils
 
 
 def queryWellList(procedureId, dishId, cellCode):
@@ -148,7 +149,7 @@ def getWellVideo(agrs):
             os.makedirs(video_path)
 
         video_name = video_path + os.path.sep + pd.imagePath + f'_DISH{dishCode}_{well_id}.webm'
-        print(video_name)
+        logUtils.info(video_name)
 
         font_name = ImageFont.truetype('NotoSansCJK-Black.ttc', 30)
         font_time = ImageFont.truetype('NotoSansCJK-Black.ttc', 20)
@@ -286,7 +287,7 @@ def queryIncubator():
                             dish = dish_mapper.getByIncubatorIdDishCode(incubator.id, dish_code)
                             if not dish:
                                 list.append(incubator_name)
-                        print(incubator_name) 
+                        logUtils.info(incubator_name) 
         result_list = []
         for i in list:
             if i not in result_list:

@@ -142,7 +142,7 @@ def memo(request):
 
 def queryMedicalRecordNoList(request):
         #动态组装查询条件
-       sqlCondition = " where 1=1 " #动态sql
+       sqlCondition = " where del_flag=0 " #动态sql
        filters = {}#动态参数
        limit = request.args.get('limit')#查询多少条
        query = request.args.get('query')#当前输入值
@@ -157,7 +157,7 @@ def queryMedicalRecordNoList(request):
    
 def queryMedicalRecordNoAndNameList(request):
      #动态组装查询条件
-    sqlCondition = " where 1=1 " #动态sql
+    sqlCondition = " where del_flag=0 " #动态sql
     filters = {}#动态参数
     limit = request.args.get('limit')#查询多少条
     query = request.args.get('query')#当前输入值

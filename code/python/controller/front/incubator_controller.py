@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify,render_template
-from common import logger
+import logUtils
 from app import login_required 
 from entity.Embryo import Embryo
 from flask_restful import reqparse
@@ -11,8 +11,7 @@ url_prefix = '/front/incubator'
 @incubator_controller.route('/', methods=['GET'])
 @login_required
 def incubator():
-    logger().info('incubator_controller.培养箱视图页面')
-
+    logUtils.info('incubator_controller.incubator-跳转到培养箱视图页面')
     parser = reqparse.RequestParser()
     parser.add_argument('incubatorId', type=str)
     parser.add_argument('procedureId', type=str)

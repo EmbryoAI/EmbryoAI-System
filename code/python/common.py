@@ -1,7 +1,9 @@
 # -*- coding: utf8 -*-
 import numpy as np
 import cv2
+from flask_apscheduler import APScheduler # as _BaseAPScheduler
 
+scheduler = APScheduler()#在common中初始化scheduler  liuyz---为了解决定时任务无法获取上下文
 
 def cross_domain(func):
     '''实现跨域访问装饰器，在每个需要实现跨域访问的controller方法前加标签 @cross_domain 即可

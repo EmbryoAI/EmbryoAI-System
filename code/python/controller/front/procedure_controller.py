@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify,render_template
-from common import logger
+import logUtils
 from app import login_required 
 from flask_restful import reqparse
 
@@ -11,41 +11,40 @@ url_prefix = '/front/procedure'
 @procedure_controller.route('/', methods=['GET'])
 @login_required
 def main():
+    logUtils.info('procedure_controller.main-跳转到病历页面')
     parser = reqparse.RequestParser()
     parser.add_argument('name', type=str)
     agrs = parser.parse_args()
     name = agrs['name']
     if name is None :
         name = ""
-
-    logger().info('进入procedure_controller.procedure病历页面')
     return render_template('front/procedure/procedure.html',htmlType="incubator",name=name)
 
 @procedure_controller.route('/view', methods=['GET'])
 @login_required
 def view():
+    logUtils.info('procedure_controller.view-跳转到胚胎周期视图页面')
     parser = reqparse.RequestParser()
     parser.add_argument('medicalRecordNo', type=str)
-
     agrs = parser.parse_args()
     medicalRecordNo = agrs['medicalRecordNo']
-    
-    logger().info('进入procedure_controller.procedureView胚胎周期视图页面')
     return render_template('front/procedure/procedureView.html',htmlType="incubator",medicalRecordNo=medicalRecordNo)
 
 @procedure_controller.route('/<string:id>', methods=['GET'])
 @login_required
 def detail(id):
-    logger().info('进入procedure_controller.procedure病历详情页面')
+    logUtils.info('procedure_controller.detail-跳转到病历详情页面')
     return render_template('front/procedure/detail.html', id=id)
 
 @procedure_controller.route('/return_visit/<string:id>', methods=['GET'])
 @login_required
 def return_visit(id):
+    logUtils.info('procedure_controller.return_visit-跳转到病历回访页面')
     return render_template('front/procedure/return_visit.html', id=id)
 
 #去新建病理页面
 @procedure_controller.route('/add', methods=['GET'])
 @login_required
 def add():
+    logUtils.info('procedure_controller.add-跳转到新建病理页面')
     return render_template('front/procedure/createCase.html')

@@ -35,6 +35,11 @@ dev:
   KERAS_MODEL_NAME: "embryo_model.h5"
   EMBRYO_PREDICT_SIZE: 200
 
+  LOGSTASH_HOST: 39.104.173.18
+  LOGSTASH_PORT: 5066
+  ORG_ID: testtest1
+  LOGGER_LEVEL: DEBUG
+  
   STATIC_NGINX_IMAGE_URL: http://39.104.173.18:8085
   PATIENT_INFO_INSERT_URL: "http://localhost:8086/api/v1.0/savePatientInfo"
   PATIENT_INFO_UPDATE_URL: "http://localhost:8086/api/v1.0/updatePatientInfo"
@@ -43,7 +48,7 @@ dev:
   ORGAN_REGISTER_URL: "http://localhost:8086/api/v1.0/organization/register"  #机构注册到云端接口
   ORGAN_JSON_FILENAME: "organization.json"
 
-  CLOUD_CODE_SWITCH: false #上传云端代码块开关
+  CLOUD_CODE_SWITCH: true #上传云端代码块开关
 stage:
   SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@39.104.173.18:3306/embryoai_system_db?charset=utf8"
   SQLALCHEMY_POOL_RECYCLE: 3
@@ -81,11 +86,15 @@ stage:
   KERAS_MODEL_NAME: "embryo_model.h5"
   EMBRYO_PREDICT_SIZE: 200
 
-  STATIC_NGINX_IMAGE_URL: http://39.104.173.18:8085
+  LOGSTASH_HOST: 39.104.173.18
+  LOGSTASH_PORT: 5066
+  ORG_ID: cloudstage
+  LOGGER_LEVEL: INFO
 
+  STATIC_NGINX_IMAGE_URL: http://39.104.173.18:8085
   PATIENT_INFO_INSERT_URL: "http://39.104.173.18:8086/api/v1.0/savePatientInfo"
   PATIENT_INFO_UPDATE_URL: "http://39.104.173.18:8086/api/v1.0/updatePatientInfo"
-
+  MILESTONE_INFO_UP_URL: "http://39.104.173.18:8086/api/v1.0/milestone"
   ORGAN_REGISTER_URL: "http://39.104.173.18:8086/api/v1.0/organization/register"  #机构注册到云端接口
   ORGAN_JSON_FILENAME: "organization.json"
 
@@ -126,7 +135,12 @@ prod:
 
   KERAS_MODEL_NAME: "embryo_model.h5"
   EMBRYO_PREDICT_SIZE: 200
-
+  
+  LOGSTASH_HOST: 39.104.173.18
+  LOGSTASH_PORT: 5066
+  ORG_ID: testtest1
+  LOGGER_LEVEL: WARNING
+  
   STATIC_NGINX_IMAGE_URL: "http://192.168.40.100:8085" # 实际生产环境的nginx地址
 
   PATIENT_INFO_INSERT_URL: #生产环境实际的接口地址

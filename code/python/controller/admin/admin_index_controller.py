@@ -1,17 +1,17 @@
 from flask import Blueprint, jsonify,render_template
-from common import logger
+import logUtils
 
 admin_index_controller = Blueprint('admin_index_controller', __name__)
 url_prefix = '/admin/index'
 
 @admin_index_controller.route('/', methods=['GET'])
-def test():
-    logger().info('进入test1_controller.test函数')
+def index():
+    logUtils.info('admin_index_controller.index-跳转到后台管理首页')
     return render_template('admin/main.html')
 
 @admin_index_controller.route('/login', methods=['GET'])
-def index():
-    logger().info('进入login页面')
+def toLogin():
+    logUtils.info('admin_index_controller.index-进入后台管理login页面')
     return render_template('login.html')
 
 

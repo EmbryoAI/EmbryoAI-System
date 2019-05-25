@@ -7,13 +7,15 @@ from flask_login import LoginManager,login_user, logout_user, login_required,cur
 from yaml import load
 from traceback import print_exc
 from common import getdefault
-from logging import Formatter, DEBUG
+from logging import Formatter
 import logging
 import os
 from keras.models import load_model
-from flask_apscheduler import APScheduler
+# from flask_apscheduler import APScheduler   屏蔽该行，已经在common中初始化  liuyz---为了解决定时任务无法获取上下文
 import sys
-
+import logstash #LOGSTASH日志采集 add liuyz 20190505
+from common import scheduler# 使用在common中初始化的scheduler  liuyz---为了解决定时任务无法获取上下文
+import logUtils
 # from minio import Minio
 # from minio.error import (ResponseError, BucketAlreadyOwnedByYou,
 #                          BucketAlreadyExists)
@@ -99,9 +101,19 @@ def init_logger(logname):
     handler = RotatingFileHandler(logname, maxBytes=1024*1024*200, backupCount=5)
     fmt = Formatter('%(asctime)s [%(filename)s (%(funcName)s) '
         ': Line %(lineno)d] %(levelname)s: %(message)s')
+    ch = logging.StreamHandler()#输出控制台Handler liuyz add 20190506
+    ch.setFormatter(fmt)
     handler.setFormatter(fmt)
+    logger.addHandler(ch)
     logger.addHandler(handler)
-    logger.setLevel(DEBUG)
+    
+    level = getdefault(conf, 'LOGGER_LEVEL', 'DEBUG')
+    logger.setLevel(level)
+    
+    #LOGSTASH日志采集 add liuyz 20190505
+    LOGSTASH_HOST = getdefault(conf, 'LOGSTASH_HOST', '39.104.173.18')
+    LOGSTASH_PORT = getdefault(conf, 'LOGSTASH_PORT', '5066')
+    logger.addHandler(logstash.TCPLogstashHandler(LOGSTASH_HOST, LOGSTASH_PORT, version=1))
 
 def add_all_controller():
     ''' 在此方法中将所有controller蓝图注册到app中。
@@ -122,8 +134,7 @@ def add_all_controller():
             prefix_variable = getattr(controller_module, 'url_prefix', '/')
             # setattr(controller_variable, 'template_folder', 'templates')
             app.register_blueprint(controller_variable, url_prefix=prefix_variable)
-            logger.info('控制器 %s 蓝图注册成功，绑定地址前缀 %s' %(
-                controller_variable.name, prefix_variable))
+            logger.info('控制器 %s 蓝图注册成功，绑定地址前缀 %s' %(controller_variable.name, prefix_variable),extra=logUtils.extra())
 
 
 model_file = getdefault(conf, 'KERAS_MODEL_NAME', 'embryo_model.h5')
@@ -136,8 +147,8 @@ if __name__=='__main__':
     debug = getdefault(conf, 'DEBUG', False) # 是否开启debug模式
     threaded = getdefault(conf, 'THREADED', True) # 是否开启多线程模式
     add_all_controller()
-    scheduler = APScheduler()
-    scheduler.init_app(app)
+#     scheduler = APScheduler()
+    scheduler.init_app(app)#使用common中初始化好的scheduler---为了定时任务获取到上下文
     scheduler.start()
-    logger.info('服务器启动成功，侦听端口：%d' %port)
+    logger.info('服务器启动成功，侦听端口：%d' %port,extra=logUtils.extra())
     app.run(port=port, debug=debug, threaded=threaded, use_reloader=False, host="0.0.0.0") #启动app

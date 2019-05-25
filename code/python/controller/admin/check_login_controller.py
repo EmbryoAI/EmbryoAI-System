@@ -6,7 +6,6 @@ import service.admin.user_service as user_service
 from entity.User import User
 import time
 import hashlib
-from common import logger
 from app import login_manager,login_user, logout_user, login_required,current_user
 
 check_login_controller = Blueprint('check_login_controller', __name__)

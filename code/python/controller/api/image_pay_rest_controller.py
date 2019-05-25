@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify,request, make_response,Response
 from flask_restful import reqparse
 import service.front.image_pay_service as image_pay_service
-from common import logger
+import logUtils
 
 image_pay_rest_controller = Blueprint('image_pay_rest_controller', __name__)
 url_prefix = '/api/v1/image/pay'
@@ -13,6 +13,7 @@ url_prefix = '/api/v1/image/pay'
 '''
 @image_pay_rest_controller.route('/queryClearImageUrl', methods=['POST','GET'])
 def queryClearImageUrl():
+    logUtils.info('feedback_rest_controller.queryClearImageUrl-根据周期id、皿ID、孔ID、获取孔的时间序列对应最清晰的URL')
     parser = reqparse.RequestParser()
     parser.add_argument('procedureId', type=str)
     parser.add_argument('dishId', type=str)
@@ -28,6 +29,7 @@ def queryClearImageUrl():
 '''
 @image_pay_rest_controller.route('/queryThumbnailImageUrl', methods=['POST','GET'])
 def queryThumbnailImageUrl():
+    logUtils.info('image_pay_rest_controller.queryThumbnailImageUrl-根据周期id、皿ID、孔ID、获取孔的时间序列对应缩略图的URL')
     parser = reqparse.RequestParser()
     parser.add_argument('procedureId', type=str)
     parser.add_argument('dishId', type=str)

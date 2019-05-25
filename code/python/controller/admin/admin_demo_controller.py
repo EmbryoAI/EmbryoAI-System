@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify,render_template
-from common import logger
+import logUtils
 
 ''' 后台增删查改demo '''
 
@@ -8,7 +8,7 @@ url_prefix = '/admin/demo'
 
 @admin_demo_controller.route('/', methods=['GET'])
 def maim():
-    logger().info('进入test1_controller.test函数')
+    logUtils.info('admin_demo_controller.maim-跳转到DEMO页面')
     return render_template('admin/demo/demo.html')
 
 '''分页查询数据'''
@@ -24,5 +24,5 @@ def toAdd():
 ''' 跳转到添加页面 '''
 @admin_demo_controller.route('/save/', methods=['POST'])
 def save():
-    logger().info('进入了保存方法哦!!!!!!')
+    logUtils.info('进入了保存方法哦!!!!!!')
     return jsonify("ok")

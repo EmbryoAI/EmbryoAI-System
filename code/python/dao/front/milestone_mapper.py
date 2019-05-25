@@ -15,6 +15,7 @@ import dao.front.rule_dao as rule_dao
 import dao.front.embryo_mapper as embryo_mapper
 import knowledge.embryo_score as embryo_score
 from common import get_serie_time_hours
+import logUtils
 
 def insertMilestone(milestone,milestoneData,procedure,cap_start_time):
     try :
@@ -116,7 +117,7 @@ def countMilestoneScore(milestone,milestoneData,procedure,cap_start_time):
          if stageDict.dictValue=="8C":
             engine.declare(Fact(stage=stageDict.dictValue,condition=gradeDict.dictClass, value=gradeDict.dictValue))
     engine.run()
-    print(engine.score)
+    logUtils.info(engine.score)
     milestoneData.milestoneScore=engine.score
 #     embryo_mapper.updateEmbryoScore(embryoId,sumScore)
 
@@ -129,7 +130,7 @@ def updateEmbryoScore(embryoId):
                         ON a.id = b.milestone_id
                         WHERE  a.embryo_id=:embryoId
     """)
-    print(count_sql)
+    logUtils.info(count_sql)
     # 计算总条数
     count_result = db.session.execute(count_sql,{"embryoId":embryoId})
     totalSize = count_result.fetchone()[0]
@@ -162,7 +163,7 @@ def getMilestoneByEmbryoId(sqlCondition,filters):
                     AND b.dict_class = 'milestone'
                      """+sqlCondition+"""
             """)
-        print(sql)
+        logUtils.info(sql)
         # 计算总条数
         count_result = db.session.execute(sql,filters)
         reslt = count_result.fetchone()
@@ -194,7 +195,7 @@ def getMilestone(embryoId):
                 WHERE sd.`dict_class` = 'milestone'  
                 AND tm.`embryo_id` = '""" + embryoId + """' 
             """)
-        print(sql)
+        logUtils.info(sql)
         return db.session.execute(sql).fetchall()
     except Exception as e:
         raise DatabaseError("根据胚胎ID查询里程碑信息异常",e.message,e)
@@ -228,7 +229,7 @@ def queryEmbryoForm(embryoId):
             ON b.grade_id=d4.dict_key AND d4.dict_class='grade'
             WHERE  a.embryo_id  = :embryoId
             """)
-        print(sql)
+        logUtils.info(sql)
         return db.session.execute(sql, {'embryoId':embryoId}).fetchall()
     except Exception as e:
         raise DatabaseError("根据胚胎ID获取所有里程碑节点的胚胎形态异常",e.message,e)

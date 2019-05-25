@@ -15,6 +15,7 @@ import datetime
 from traceback import print_exc
 from app import current_user,conf
 import service.front.image_service as image_service
+import logUtils
 
 def insertMilestone(request):
     id = uuid()
@@ -189,7 +190,7 @@ def insertMilestone(request):
             thread = threading.Thread(target=nsync, args=(milestone,milestoneData))
             thread.start()
         except:
-            print("同步里程碑到云端异常")
+            logUtils.info("同步里程碑到云端异常")
             
     return 200, result
 
@@ -259,7 +260,7 @@ def getMilepostNode(embryoId,milestoneTime,upOrdown):
         
         milestone = None
         for obj in milestoneList:
-            print(obj.milestoneTime)
+            logUtils.info(obj.milestoneTime)
             if "up" == upOrdown: #如果是上一里程碑
                 if obj.milestoneTime < milestoneTime:
                     milestone = obj.to_dict()
@@ -281,7 +282,7 @@ def getMilestone(agrs):
     milestone_list = milestone_mapper.getMilestone(embryo.id)
     list = []
     for milestone in milestone_list:
-        print('milestone:',milestone)
+        logUtils.info(f'milestone:{milestone}')
         obj={}
         obj['milestoneType'] = milestone.milestone_type
         obj['embryoId'] = milestone.embryo_id

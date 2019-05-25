@@ -18,16 +18,14 @@ from entity.Series import Series
 from entity.SeriesResult import SeriesResult
 import dao.front.dish_mapper as dish_mapper
 import dao.front.cell_mapper as cell_mapper
+import logUtils
 
 def querySeriesList(agrs):
     try:
         from common import getdefault
         procedure_id = agrs['procedure_id']
-        print('procedure_id:',procedure_id)
         dish_id = agrs['dish_id']
-        print('dish_id:',dish_id)
         well_id = agrs['well_id']
-        print("well_id:", well_id)
         seris = agrs['seris']
         last_embryo_serie = seris
         if seris == 'null':
@@ -48,7 +46,6 @@ def querySeriesList(agrs):
 
         #开始计算要返回的11张序列
         ts = TimeSeries()
-        print('seris:',seris)
         end_index = len(ts.range(seris)) + 6
         begin_index = len(ts.range(seris)) - 5
 
@@ -120,7 +117,7 @@ def queryScrollbarSeriesList(agrs):
             
         # E:\EmbryoAI\EmbryoAI-System\code\captures\20180422152100\DISH8\dish_state.json
         jsonPath = path + conf['DISH_STATE_FILENAME']
-        logger().info(jsonPath)
+        logUtils.info(jsonPath)
         with open(f'{jsonPath}', 'r') as fn :
             dishJson = json.loads(fn.read())
 
@@ -196,7 +193,7 @@ def loadDishByIncubatorId(agrs):
         restResult = RestResult(200, "OK", len(dishList), dishList)
         return jsonify(restResult.__dict__)
     except :
-        logger().info("根据培养箱id查询皿信息失败")
+        logUtils.info("根据培养箱id查询皿信息失败")
         return 400, '根据培养箱id查询皿信息失败!'
     
 '''
@@ -230,7 +227,7 @@ def getSeriesList(agrs):
                 list.append(obj)
         return 200, jsonify(list)
     except : 
-        logger().info("读取dishState.json文件出现异常")
+        logUtils.info("读取dishState.json文件出现异常")
         return 500, '查询序列列表异常'
 
 """根据皿ID获取胚胎评分表"""

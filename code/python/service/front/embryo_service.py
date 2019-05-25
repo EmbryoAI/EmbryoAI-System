@@ -52,7 +52,6 @@ def queryEmbryoNumber(agrs):
 
         dishCode = agrs['dishCode']
 
-        list=[]
         dishCodeList = dishCode.split('|')
         for dishCodeStr in dishCodeList:
             catalog = dishCodeStr.split(',')[1]
