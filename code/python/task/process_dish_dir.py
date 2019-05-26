@@ -3,6 +3,7 @@
 from task.TimeSeries import TimeSeries, serie_to_minute
 import os
 import json
+import re
 from app import app, conf
 from task.process_serie_dir import process_serie
 
@@ -38,7 +39,8 @@ def process_dish(path, dish_info):
     logger.debug(f'已经处理的时间序列: {processed}')
     # 以下两行代码使用偏函数从当前目录中得到所有合法且未处理的时间序列子目录
     f = partial(dir_filter, processed=processed, base=dish_path)
-    todo = list(sorted(filter(f, os.listdir(dish_path))))
+    pattern = re.compile(r'^[0-9]{7}$')
+    todo = list(sorted(filter(lambda x: pattern.match(x) != None, os.listdir(dish_path))))
 
     logger.debug(f'未处理的时间序列: {todo}')
 
