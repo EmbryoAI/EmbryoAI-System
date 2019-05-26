@@ -1,20 +1,22 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, g
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager,login_user, logout_user, login_required,current_user
-from yaml import load
 from traceback import print_exc
-from common import getdefault
 from logging import Formatter
 import logging
 import os
-from keras.models import load_model
-# from flask_apscheduler import APScheduler   屏蔽该行，已经在common中初始化  liuyz---为了解决定时任务无法获取上下文
 import sys
+
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+from yaml import load
+from keras.models import load_model
 import logstash #LOGSTASH日志采集 add liuyz 20190505
-from common import scheduler# 使用在common中初始化的scheduler  liuyz---为了解决定时任务无法获取上下文
+
+# 使用在common中初始化的scheduler  liuyz---为了解决定时任务无法获取上下文
+from common import getdefault, scheduler
+# from flask_apscheduler import APScheduler   屏蔽该行，已经在common中初始化  liuyz---为了解决定时任务无法获取上下文
 import logUtils
 # from minio import Minio
 # from minio.error import (ResponseError, BucketAlreadyOwnedByYou,
@@ -22,7 +24,7 @@ import logUtils
 
 app_root = os.path.dirname(__file__) + os.path.sep
 
-def read_yml_config( filename=app_root + 'configuration.yml', env='dev'):
+def read_yml_config(filename=app_root + 'configuration.yml', env='dev'):
     '''从yaml文件中读取配置'''
     with open(filename, 'rb') as fn:
         return load(fn.read())[env]
@@ -31,7 +33,7 @@ def init_config(conf):
     '''初始化app的基本配置'''
     from datetime import timedelta
     # 数据库连接字符串
-    app.config['SQLALCHEMY_DATABASE_URI'] = getdefault(conf, 'SQLALCHEMY_DATABASE_URI', 
+    app.config['SQLALCHEMY_DATABASE_URI'] = getdefault(conf, 'SQLALCHEMY_DATABASE_URI',
         'mysql+pymysql://root:123456@localhost/embryoai_system?charset=utf8')
     app.config['SQLALCHEMY_POOL_RECYCLE'] = getdefault(conf, 'SQLALCHEMY_POOL_RECYCLE', 3)
     app.config['SQLALCHEMY_POOL_SIZE'] = getdefault(conf, 'SQLALCHEMY_POOL_SIZE', 10)
@@ -40,9 +42,10 @@ def init_config(conf):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SCHEDULER_API_ENABLED'] = getdefault(conf, 'SCHEDULER_API_ENABLED', True)
     app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(
-        seconds = getdefault(conf, 'SEND_FILE_MAX_AGE_DEFAULT', 60))
+        seconds=getdefault(conf, 'SEND_FILE_MAX_AGE_DEFAULT', 60))
     app.config['JOBS'] = getdefault(conf, 'JOBS')
-    app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = getdefault(conf, 'SQLALCHEMY_COMMIT_ON_TEARDOWN', True)
+    app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = getdefault(conf, 
+        'SQLALCHEMY_COMMIT_ON_TEARDOWN', True)
     # 返回的JSON数据保持原编码方式
     app.config['JSON_AS_ASCII'] = False
     app.config['SECRET_KEY'] = getdefault(conf, 'SECRET_KEY', '123456')
@@ -141,7 +144,7 @@ model_file = getdefault(conf, 'KERAS_MODEL_NAME', 'embryo_model.h5')
 model = load_model(app_root + 'cv' + os.path.sep + model_file)
 model._make_predict_function()
 
-if __name__=='__main__':
+if __name__ == '__main__':
     init_logger(getdefault(conf, 'LOGGER_FILE', 'embryoai.log'))
     port = getdefault(conf, 'PORT', 5001) # app启动侦听的端口号
     debug = getdefault(conf, 'DEBUG', False) # 是否开启debug模式

@@ -1,9 +1,10 @@
 # -*- coding: utf8 -*-
 
-from app import conf
-from task.process_cycle_dir import process_cycle
 import json
 import os
+
+from app import conf
+from task.process_cycle_dir import process_cycle
 from common import scheduler    # 很关键的一步，导入初始化过的sheduler对象
 import logUtils as logger
 '''

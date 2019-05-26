@@ -11,7 +11,6 @@ class TimeSeries(object):
     def __init__(self):
         '''创建一个TimeSeries对象'''
         self.nf = self.next_frame_time()
-        pass
 
     def __getitem__(self, slicing):
         '''
@@ -55,7 +54,7 @@ class TimeSeries(object):
             begin = kargs[0]
             end = kargs[1]
             step = kargs[2]
-        if len(begin)!=7 or len(end)!=7 or step%15!=0:
+        if len(begin) != 7 or len(end) != 7 or step%15 != 0:
             raise ValueError('Wrong begin, end or step param. Begin, end should '
                 'be 7 digits string. Step should be multiple of 15 integer')
         tominute = lambda x: int(x[0])*24*60 + int(x[1:3])*60 + int(x[3:5])

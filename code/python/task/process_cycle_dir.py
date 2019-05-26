@@ -1,11 +1,12 @@
 # -*- coding: utf8 -*-
 
+import json
+import os
+
 from task.ini_parser import EmbryoIniParser
 from task.dish_config import DishConfig
 from task.process_dish_dir import process_dish
-import json
-import os
-from app import app, conf
+from app import conf
 from common import nested_dict
 
 import logUtils as logger # 日志
@@ -46,7 +47,7 @@ def process_cycle(path):
         logger.debug(f'未结束的采集任务，皿号: {dish_index}')
         # 如果皿目录未结束，先读取皿目录下面的dish_state.json文件，如果文件不存在，则生成一个空的state JSON
         dish_path = path + f'DISH{dish_index}' + os.path.sep
-        try :
+        try:
             with open(dish_path+conf['DISH_STATE_FILENAME']) as fn:
                 jstr = json.load(fn)
                 dish_conf = DishConfig(jstr)
@@ -63,7 +64,7 @@ def process_cycle(path):
         #     is_upload = upload_dish(path, dish_conf)
 
         # 设置皿目录是否结束采集标志，该标志checkpoint由process_dish方法返回
-        cycle_json[dish_index] = checkpoint 
+        cycle_json[dish_index] = checkpoint
         finished = finished and checkpoint # 所有皿目录处理完成标志
 
         # 将处理完成的皿目录下的图像上传到minio

@@ -1,12 +1,11 @@
 # -*- coding: utf8 -*-
 
-from task.TimeSeries import TimeSeries, serie_to_minute
 import os
-import json
 import re
-from app import app, conf
-from task.process_serie_dir import process_serie
 
+from app import conf
+from task.process_serie_dir import process_serie
+from task.TimeSeries import TimeSeries, serie_to_minute
 import logUtils as logger
 
 '''
@@ -31,7 +30,6 @@ def process_dish(path, dish_info):
     if not dish_info.lastSerie:
         last_op = '0' * 7
     else:
-        
         last_op = TimeSeries()[serie_to_minute(dish_info.lastSerie)//15+1]
     logger.debug(f'最后处理的时间序列: {last_op}')
     # 已经处理过的时间序列列表
