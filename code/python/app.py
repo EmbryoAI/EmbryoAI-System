@@ -9,7 +9,7 @@ import sys
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from yaml import load
 from keras.models import load_model
 import logstash #LOGSTASH日志采集 add liuyz 20190505

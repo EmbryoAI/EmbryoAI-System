@@ -1,7 +1,7 @@
-from flask import Blueprint, jsonify,render_template
+from flask import Blueprint, render_template
 import logUtils
 import service.admin.incubator_service as incubator_service
-from app import login_required 
+from app import login_required
 
 ''' 后台增删查改demo '''
 
