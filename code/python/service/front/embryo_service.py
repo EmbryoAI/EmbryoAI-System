@@ -1,8 +1,8 @@
 # -*- coding: utf8 -*-
 
+from flask import jsonify
 from entity.RestResult import RestResult
 import dao.front.embryo_mapper as embryo_mapper
-from flask import request, jsonify
 import dao.front.procedure_dish_mapper as procedure_dish_mapper
 
 
@@ -15,9 +15,9 @@ def queryEmbryoList(id):
     except:
         return 500, '查询胚胎列表异常!'
 
-def signEmbryo(id,embryoFateId):
+def signEmbryo(id, embryoFateId):
     try:
-        embryo_mapper.signEmbryo(id,embryoFateId)
+        embryo_mapper.signEmbryo(id, embryoFateId)
     except:
         return 500, '标记胚胎结局时发生错误!'
     return 200, '标记胚胎结局成功!'
@@ -74,7 +74,7 @@ def findEmbroyoInfo(args) :
     dishId = args["dishId"]
     wellCode = args["wellCode"]
 
-    procedureId,embryoId = procedure_dish_mapper.queryEmbryoId(imagePath,dishId,wellCode)
+    procedureId, embryoId = procedure_dish_mapper.queryEmbryoId(imagePath,dishId,wellCode)
 
-    return procedureId,dishId,embryoId 
+    return procedureId, dishId, embryoId 
 

@@ -1,14 +1,15 @@
-from app import db
-from entity.Dict import Dict
+
 from sqlalchemy.exc import DatabaseError
-from sqlalchemy import text
 from traceback import print_exc
+from app import db
+import logUtils as logger
+from entity.Dict import Dict
 
 def queryDictListByClass(dictClass):
     try:
         return db.session.query(Dict).filter(Dict.dictClass == dictClass).all()
     except Exception as e:
-        raise DatabaseError("根据字典类别获取对应的字典列表发生错误!",e.message,e)
+        logger.error("根据字典类别获取对应的字典列表发生错误: {e}")
         return None
     finally:
         db.session.remove()

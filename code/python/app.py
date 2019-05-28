@@ -66,10 +66,6 @@ logger = app.logger
 
 # minioClient = Minio(conf["MINIO_IP_PORT"],access_key=conf["MINIO_ACCESS_KEY"],secret_key=conf["MINIO_SECRET_KEY"],secure=False)
 
-# 指定开发测试用的数据目录，发布版本应该屏蔽下面这句代码
-
-
-
 @app.teardown_request
 def shutdown_session(exc=None):
     if app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN']:

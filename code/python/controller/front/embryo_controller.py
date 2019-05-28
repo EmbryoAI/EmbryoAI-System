@@ -1,8 +1,7 @@
-from flask import Blueprint, jsonify,render_template
-import logUtils
-from app import login_required 
-from entity.Embryo import Embryo
+from flask import Blueprint, render_template
 from flask_restful import reqparse
+import logUtils
+from app import login_required
 import service.front.embryo_service as embryo_service
 
 ''' 胚胎视图 '''
@@ -44,5 +43,6 @@ def toEmbryo():
     wellCode = agrs['wellCode']
     dishCode = agrs['dishCode']
     
-    procedureId,dishId,embryoId = embryo_service.findEmbroyoInfo(agrs)
-    return render_template('front/embryo/embryo.html', procedure_id=procedureId, dish_id=dishId, embryo_id=embryoId,cell_code=wellCode,dishCode=dishCode)
+    procedureId, dishId, embryoId = embryo_service.findEmbroyoInfo(agrs)
+    return render_template('front/embryo/embryo.html', procedure_id=procedureId, 
+        dish_id=dishId, embryo_id=embryoId, cell_code=wellCode, dishCode=dishCode)
