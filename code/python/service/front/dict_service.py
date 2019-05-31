@@ -1,9 +1,8 @@
 # -*- coding: utf8 -*-
+
+from flask import jsonify
 from entity.RestResult import RestResult
 import dao.front.dict_dao as dict_dao
-from flask import request, jsonify
-from common import uuid
-import json
 
 def queryDictListByClass(dictClass):
     try:

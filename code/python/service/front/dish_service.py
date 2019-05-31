@@ -1,9 +1,10 @@
 # -*- coding: utf8 -*-
 
+import json
+import os
 from entity.RestResult import RestResult
 import dao.front.embryo_mapper as embryo_mapper
 from flask import request, jsonify
-import json,os
 from app import conf
 import service.front.image_service as image_service
 import base64
@@ -11,12 +12,11 @@ import dao.front.dish_mapper as dish_mapper
 import dao.front.procedure_dish_mapper as procedure_dish_mapper
 import dao.front.milestone_mapper as milestone_mapper
 from common import logger
-from task.TimeSeries import TimeSeries,serie_to_time
+from task.TimeSeries import TimeSeries, serie_to_time
 from collections import OrderedDict
 import dao.front.dict_dao as dict_dao
 from entity.Series import Series
 from entity.SeriesResult import SeriesResult
-import dao.front.dish_mapper as dish_mapper
 import dao.front.cell_mapper as cell_mapper
 import logUtils
 
@@ -36,12 +36,12 @@ def querySeriesList(agrs):
         if not dish : 
             return 500, f'查无对应的皿信息{dish_id}'
         dishCode = dish.dishCode
-        pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id,dish_id)
+        pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id, dish_id)
         path = conf['EMBRYOAI_IMAGE_ROOT'] + pd.imagePath + os.path.sep + f'DISH{dishCode}' + os.path.sep  
         if not os.path.isdir(path) :
             return 500, f'查无对应的采集目录{path}'
         #再拼接对应目录下面的JSON文件路径
-        path,dishJson = image_service.getImagePath(procedure_id,dish_id)
+        path, dishJson = image_service.getImagePath(procedure_id, dish_id)
         well_json = dishJson['wells'][well_id]
 
         #开始计算要返回的11张序列
