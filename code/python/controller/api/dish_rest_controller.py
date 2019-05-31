@@ -10,10 +10,11 @@ import service.front.dish_service as dish_service
 dish_rest_controller = Blueprint('dish_rest_controller', __name__)
 url_prefix = '/api/v1/dish'
 
-#根据procedureId,皿ID查询皿下面的时间序列
+
 @dish_rest_controller.route('/list', methods=['GET'])
 @login_required
 def querySeriesList():
+    '''根据procedureId,皿ID查询皿下面的时间序列'''
     logUtils.info('dish_controller.querySeriesList-皿ID查询皿下面的时间序列')
     parser = reqparse.RequestParser()
     parser.add_argument('procedure_id', type=str)

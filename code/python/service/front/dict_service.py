@@ -3,6 +3,7 @@
 from flask import jsonify
 from entity.RestResult import RestResult
 import dao.front.dict_dao as dict_dao
+import logUtils as logger
 
 def queryDictListByClass(dictClass):
     try:
