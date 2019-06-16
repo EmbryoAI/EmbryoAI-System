@@ -6,6 +6,7 @@ import os
 from task.ini_parser import EmbryoIniParser
 from task.dish_config import DishConfig
 from task.process_dish_dir import process_dish
+from task.upload_minio import upload_dish
 from app import conf
 from common import nested_dict
 
@@ -20,7 +21,7 @@ import logUtils as logger # 日志
 - 将进入某个有效（avail为1）的皿进行的处理交给process_dish_dir模块（已完成）
 '''
 
-def process_cycle(path):
+def process_cycle(path,air):
     """
     处理图像采集目录方法
         @param path: 图像采集目录，按照采集设备的设定，该目录为一个14位数字的日期字符串，格式如YYYYMMDDHHmmss
@@ -60,15 +61,17 @@ def process_cycle(path):
         with open(dish_path+conf['DISH_STATE_FILENAME'], 'w') as fn:
             fn.write(json.dumps(nested_dict(dish_conf)))
 
-        # if checkpoint :
-        #     is_upload = upload_dish(path, dish_conf)
+        # 将处理完成的皿目录下的图像上传到minio
+        switch = conf["CLOUD_CODE_SWITCH"]
+        if switch and checkpoint :
+            is_upload = upload_dish(path, dish_conf,air)
+            checkpoint = checkpoint and is_upload
 
         # 设置皿目录是否结束采集标志，该标志checkpoint由process_dish方法返回
         cycle_json[dish_index] = checkpoint
         finished = finished and checkpoint # 所有皿目录处理完成标志
-
-        # 将处理完成的皿目录下的图像上传到minio
-
+     
+        
 
     # 写入JSON文件
     with open(path + conf['CYCLE_PROCESS_FILENAME'], 'w') as fn:

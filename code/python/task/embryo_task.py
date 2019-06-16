@@ -37,7 +37,7 @@ def run():
         for adir in active_dirs:
             cycle_dir = cap_dir + adir + os.path.sep # 未完成采集目录的全路径
             # 交给process_cycle_dir模块进行处理采集目录，返回True或False，代表该采集目录采集结束标志
-            state = process_cycle(cycle_dir)  
+            state = process_cycle(cycle_dir,adir)  
             # 如果state为True，而且原本的目录就为False存在json中，更新相应的值，而不是append
             if state and {adir: False} in finished_dirs:
                 findex = finished_dirs.index({adir: False})

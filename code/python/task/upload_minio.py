@@ -1,70 +1,111 @@
 # -*- coding: utf8 -*-
 
 from task.TimeSeries import TimeSeries, serie_to_minute
+from task.process_dish_dir import dir_filter
+from task.dish_config import SerieInfo
 import os
 import json
-from app import conf,minioClient
+from app import app,conf,minioClient,organizationId
+from common import getdefault
+from service.front.organization_service import getOrganConfig
+from minio import Minio
+from minio.error import ResponseError
+import logUtils as logger # 日志
 
-def upload_dish(path, dish_info):
+def upload_dish(path, dish_info,air):
     '''
     处理一个皿目录方法
         @param path: 采集目录完整路径
         @param dish_info: DishConfig配置信息对象
         @returns state: 皿结束采集标志 True - 已结束采集；False - 未结束采集
     '''
+    init_minio()
+    if minioClient is None or organizationId is None:
+        logger.error("上传图像失败，机构ID为空")
+        return False
     from functools import partial
     dish_path = path + f'DISH{dish_info.index}' + os.path.sep # 皿目录完整路径
-    if not dish_info.lastSerie:
-        last_op = '0' * 7
-    else:
-        
-        last_op = TimeSeries()[serie_to_minute(dish_info.lastSerie)//15+1]
-    # 已经处理过的时间序列列表
+    last_op = '0' * 7
     processed = TimeSeries().range(last_op)
     # 以下两行代码使用偏函数从当前目录中得到所有合法且未处理的时间序列子目录
     f = partial(dir_filter, processed=processed, base=dish_path)
     todo = list(sorted(filter(f, os.listdir(dish_path))))
+    logger.debug(f"需要上传图片的目录：{todo}")
 
-
+    isConplete = True
     for serie in todo:
         # 交给process_serie_dir模块对时间序列目录进行处理
-        last_op = process_serie(dish_path, serie, dish_info)
+        flag = upload_serie(dish_path,air, serie, dish_info)
         # 每次处理完成都将最新处理的时间序列目录回写到state对象中
-        dish_info.lastSerie = last_op
+        isConplete = isConplete & flag
     # 返回皿目录是否已经结束采集的标志
-    return check_finish_state(path, last_op)
+    return isConplete
 
-def check_finish_state(path, last_serie):
+def upload_serie(dish_path, air, serie, dish_info):
     '''
-    检查皿目录状态是否已经结束采集，判断标准为当前系统时间是否已经超过最后一次采集的时间序列一个小时
-        @param path: 采集目录的完整路径，为了读取DishInfo.ini文件
-        @param last_serie: 最后处理完成的时间序列目录名称
+    上传某一时间序列下所有孔最清晰的图
+        @param dish_path: 采集目录的完整路径，为了读取DishInfo.ini文件
+        @param air : 采集目录
+        @param serie: 最后处理完成的时间序列目录名称
+        @param dish_info: DishConfig配置信息对象
         @returns state: True - 结束采集；False - 未结束采集
     '''
-    import datetime as dt
-    from task.ini_parser import EmbryoIniParser
-    ini_conf = EmbryoIniParser(path+'DishInfo.ini')
-    start_ = ini_conf['Timelapse']['StartTime'] 
-    start_time = dt.datetime.strptime(start_, '%Y%m%d%H%M%S') # 采集开始时间
-    end_time = start_time + dt.timedelta(minutes=serie_to_minute(last_serie)) # 结束采集时间
-    now = dt.datetime.now() # 当前系统时间
-    interval = now - end_time
-    if interval.days > 0 or interval.seconds > conf['ACTIVE_TIMEOUT']:
-        return True # 大于设定时间，返回True
-    return False
+    serie_path = dish_path + serie + os.path.sep # 时间序列目录完整路径
+    wells = dish_info.wells # 皿中所有的孔信息
+    flag = True
+    for c in wells:
+        logger.debug(f'上传 序列 {serie} 孔 {wells[c].index} 中最清晰的图' )
+        serie_info = SerieInfo()
+        serie_info.serieSetup(wells[c], serie)
+        sharpestJpgName = serie_info.sharp
+        objNmae = air + "/" + str(dish_info.index) + "/" + str(wells[c].index) + "/" + serie + "/" + sharpestJpgName
+        # conf['STATIC_NGINX_IMAGE_URL'] + os.path.sep 
+        url =  serie_path + sharpestJpgName
+        flag = flag & upload_image(objNmae,url)
+    return flag
 
+def upload_image(name,url):
+    try:
+        if os.path.exists(url) :
+            etag = minioClient.fput_object(organizationId, name, url,content_type='application/x-jpg')
+            if etag is None :
+                logger.error("上传图像失败，机构id："+organizationId+",路径："+url)
+                return False
+            else :
+                logger.debug("上传图像成功，机构id："+organizationId+"路径："+url)
+                return True
+        else :
+            logger.debug(f"{url}文件不存在，不做上传")
+            return True
+    except ResponseError as err:
+        logger.error("上传图像失败，机构id："+organizationId+",路径："+url)
+        logger.error(err)
+        return False
 
-def dir_filter(path, processed, base):
-    '''
-    过滤器方法，滤掉非子目录、已经处理过的目录以及focus缩略图目录
-        @param path: 子目录名称
-        @param processed: 已经处理过的目录列表
-        @param base: 皿目录完整路径
-    '''
-    if not os.path.isdir(base + path):
-        return False
-    if path in processed:
-        return False
-    if path == 'focus':
-        return False
-    return True
+def init_minio():
+    global minioClient,organizationId
+    try :
+        if minioClient is None or organizationId is None : 
+            org = getOrganConfig()
+            if org is None :
+                logger.error("机构未注册到云端，未获取到机构ID及minio用户账号，不上传图像。")
+            else :
+                logger.info("获取到机构ID及minio用户账号，初始化minio客户端。")
+                organizationId = org["orgId"]
+                # 使用endpoint、access key和secret key来初始化minioClient对象。
+                minioClient = Minio(conf["MINIO_IP_PORT"],
+                            access_key=org["s3Username"],
+                            secret_key=org["s3Password"],
+                            secure=False)
+
+                # minioClient = Minio(conf["MINIO_IP_PORT"],
+                #             access_key='UV1NSZLV9V9IKT5KAPJX',
+                #             secret_key='DuiZ4PTm5L+3LHt+aRyxblWk7fW6Hv2nsKtIJNal',
+                #             secure=False)
+                if minioClient.bucket_exists(organizationId) is False :
+                    minioClient.make_bucket(organizationId)
+    except ResponseError as err :
+        logger.error(f"初始化monio客户端失败：{err}")
+
+    
+    

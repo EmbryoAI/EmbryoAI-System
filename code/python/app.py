@@ -23,6 +23,8 @@ import logUtils
 #                          BucketAlreadyExists)
 
 app_root = os.path.dirname(__file__) + os.path.sep
+minioClient = None
+organizationId = None
 
 def read_yml_config(filename=app_root + 'configuration.yml', env='dev'):
     '''从yaml文件中读取配置'''
@@ -63,8 +65,6 @@ login_manager.init_app(app)
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'login_controller.index'
 logger = app.logger
-
-# minioClient = Minio(conf["MINIO_IP_PORT"],access_key=conf["MINIO_ACCESS_KEY"],secret_key=conf["MINIO_SECRET_KEY"],secure=False)
 
 @app.teardown_request
 def shutdown_session(exc=None):
