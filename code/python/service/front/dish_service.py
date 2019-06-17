@@ -33,7 +33,7 @@ def querySeriesList(agrs):
             seris = '0000000'
         #先查询病例对应的采集目录路径
         dish = dish_mapper.queryById(dish_id)
-        if not dish : 
+        if not dish:
             return 500, f'查无对应的皿信息{dish_id}'
         dishCode = dish.dishCode
         pd = procedure_dish_mapper.queryByProcedureIdAndDishId(procedure_id, dish_id)

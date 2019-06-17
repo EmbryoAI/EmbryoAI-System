@@ -14,6 +14,8 @@ def registerOrganization(args):
             return 500,"医疗机构的minio用户名不能为空"
         if args["minioPass"] is None or args["minioPass"] == '' : 
             return 500,"医疗机构的minio密钥不能为空·"
+        if len(args["minioPass"]) < 8 :
+            return 500,"医疗机构的minio密钥长度不能小于8·"
         code = "500"
         msg = "机构注册到云端失败，请稍后再试"
         data = {"acloudId":args["acloudId"],"acloudKey":args["acloudKey"],"s3Username":args["minioUser"],"s3Password":args["minioPass"]}
