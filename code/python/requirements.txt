@@ -20,3 +20,4 @@ Keras>2.2.0
 scikit-image>=0.13.0
 pyknow>=1.7.0
 python-logstash>=0.4.6
+minio>=4.0.0
