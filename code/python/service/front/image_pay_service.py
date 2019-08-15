@@ -19,7 +19,7 @@ def queryClearImageUrl(agrs):
         path,dishJson = image_service.getImagePath(procedureId,dishId)
         clearImageUrlList=[]
         
-        if dishJson['finished'] & dishJson['avail'] == 1 : 
+        if dishJson['avail'] == 1 : 
             wells = dishJson['wells']
             oneWell = wells[f'{wellId}']
             series = oneWell['series']
@@ -54,7 +54,7 @@ def queryThumbnailImageUrl(agrs):
         thumbnailUrlList=[]
         result = {}
         embryoId = None
-        if dishJson['finished'] & dishJson['avail'] == 1 : 
+        if dishJson['avail'] == 1 : 
             wells = dishJson['wells']
             oneWell = wells[f'{wellId}']
             series = oneWell['series']
