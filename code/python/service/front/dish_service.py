@@ -42,6 +42,8 @@ def querySeriesList(agrs):
             return 500, f'查无对应的采集目录{path}'
         #再拼接对应目录下面的JSON文件路径
         path, dishJson = image_service.getImagePath(procedure_id, dish_id)
+        if not dishJson :
+            return 500, f'查无JSON文件!procedure_id:{procedure_id},dish_id:{dish_id}'
         well_json = dishJson['wells'][well_id]
 
         #开始计算要返回的11张序列

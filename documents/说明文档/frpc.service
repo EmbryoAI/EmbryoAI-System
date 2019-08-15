@@ -1,0 +1,6 @@
+[Unit]
+Description=frpc service
+
+[Service]
+# ExecStart 设定服务启动的命令
+ExecStart=/usr/local/bin/frpc -c /etc/frpc/frpc.ini

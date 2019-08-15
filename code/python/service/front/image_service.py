@@ -21,7 +21,7 @@ def getImageByCondition(agrs):
     zIndex = agrs['zIndex']
     try:
         imagePath,path,dishJson = readDishState(procedureId,dishId)
-        if dishJson['finished'] & dishJson['avail'] == 1 : 
+        if dishJson['avail'] == 1 : 
             if not timeSeries.strip() :
             # if not timeSeries:
                 timeSeries = dishJson['lastSerie']
@@ -58,7 +58,7 @@ def getAllZIndex(agrs):
     zData = {}
     try:
         imagePath,path,dishJson = readDishState(procedureId,dishId)
-        if dishJson['finished'] & dishJson['avail'] == 1 : 
+        if dishJson['avail'] == 1 : 
             wells = dishJson['wells']
             oneWell = wells[f'{wellId}']
             if oneWell['avail']:
@@ -100,7 +100,7 @@ def readDishState(procedureId,dishId):
         if os.path.exists(f'{jsonPath}') :
             with open(f'{jsonPath}', 'r') as fn :
                 dishJson = json.loads(fn.read())
-            if dishJson['finished'] & dishJson['avail'] == 1 :
+            if dishJson['avail'] == 1 :
                 return pd.imagePath,path, dishJson
             else :
                 logUtils.info("读取dishState.json文件,此皿为无效状态")
@@ -135,7 +135,7 @@ def getImagePath(procedureId,dishId):
         else :
             logUtils.info(f'文件不存在:{jsonPath}')
             return newPath,None
-        if dishJson['finished'] & dishJson['avail'] == 1 :
+        if dishJson['avail'] == 1 :
             return newPath, dishJson
         else :
             logUtils.info(f"DISH{dishCode}未处理完成或无效")
@@ -226,7 +226,7 @@ def getImageFouce(procedureId,dishCode):
             if os.path.exists(jsonPath) :
                 with open(f'{jsonPath}', 'r') as fn :
                     dishJson = json.loads(fn.read())
-                if dishJson['finished'] & dishJson['avail'] == 1 : 
+                if dishJson['avail'] == 1 : 
                     wells = dishJson['wells']
                     oneWell = wells[f'{wellCode}']
                     timeSeries = oneWell['lastEmbryoSerie']
@@ -282,7 +282,7 @@ def findNewestImageUrl():
                 imageUrlList = []
                 with open(f'{jsonPath}', 'r') as fn :
                     dishJson = json.loads(fn.read())
-                if dishJson['finished'] & dishJson['avail'] == 1 : 
+                if dishJson['avail'] == 1 : 
                     hour, minute = serie_to_time(dishJson['lastSerie'])
                     infoMap["times"] = f'{hour:02d}H{minute:02d}M'
                     wells = dishJson['wells']
@@ -332,7 +332,7 @@ def getBigImagePath(agrs):
         dish = dish_mapper.queryById(dishId)
         imagePath,path,dishJson = readDishState(procedureId,dishId)
         url = imagePath + os.path.sep + f'DISH{dish.dishCode}' + os.path.sep 
-        if dishJson['finished'] & dishJson['avail'] == 1 : 
+        if dishJson['avail'] == 1 : 
             if not timeSeries.strip() :
             # if not timeSeries:
                 timeSeries = dishJson['lastSerie']
