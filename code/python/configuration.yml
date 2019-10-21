@@ -103,7 +103,7 @@ stage:
   CLOUD_CODE_SWITCH: false #上传云端代码块开关
   MINIO_IP_PORT: 39.104.173.18:9000 #云端minio地址
 prod:
-  SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@192.168.8.101:3306/embryoai_system_db?charset=utf8"
+  SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@192.168.40.100:3306/embryoai_system_db?charset=utf8"
   SQLALCHEMY_POOL_RECYCLE: 3
   SQLALCHEMY_POOL_SIZE: 100
   SQLALCHEMY_POOL_TIMEOUT: 3

@@ -18,8 +18,11 @@ def run():
     with scheduler.app.app_context():    #这个sheduler是带有app及其上下文的 ---为了定时任务获取到上下文
         ''' 定时任务【同步采集时间】入口方法 '''
         json_file = path + finished_json # 存储结束采集目录列表的JSON文件
-        with open(json_file) as fn:
-            finished = json.load(fn) # 文件存在则读取文件的内容
+        try:
+            with open(json_file) as fn:
+                finished = json.load(fn) # 文件存在则读取文件的内容
+        except:
+            return
         
         collectList = procedure_mapper.queryCollectList()
         if len(collectList):

@@ -73,7 +73,7 @@ def find_active_dirs(path):
     # else:
 
     # 过滤掉所有非子目录的内容
-    all_subs = list(filter(lambda x: os.path.isdir(path + x) and x.endswith('00'), os.listdir(path)))
+    all_subs = list(filter(lambda x: os.path.isdir(path + x), os.listdir(path)))
     # 返回一个包括未完成采集及已完成采集目录列表的元组
     return list(filter(lambda x: {x: True} not in finished, all_subs)), finished
 
