@@ -1,7 +1,7 @@
-from flask import Blueprint, jsonify,render_template
-import logUtils
-from app import login_required 
+from flask import Blueprint, render_template
 from flask_restful import reqparse
+import logUtils
+from app import login_required
 
 ''' 病历列表 '''
 
@@ -14,11 +14,12 @@ def main():
     logUtils.info('procedure_controller.main-跳转到病历页面')
     parser = reqparse.RequestParser()
     parser.add_argument('name', type=str)
-    agrs = parser.parse_args()
-    name = agrs['name']
-    if name is None :
-        name = ""
-    return render_template('front/procedure/procedure.html',htmlType="incubator",name=name)
+    args = parser.parse_args()
+    name = args['name'] if args['name'] else ''
+    # if name is None :
+    #     name = ""
+    return render_template('front/procedure/procedure.html',
+        htmlType="incubator", name=name)
 
 @procedure_controller.route('/view', methods=['GET'])
 @login_required
@@ -26,9 +27,10 @@ def view():
     logUtils.info('procedure_controller.view-跳转到胚胎周期视图页面')
     parser = reqparse.RequestParser()
     parser.add_argument('medicalRecordNo', type=str)
-    agrs = parser.parse_args()
-    medicalRecordNo = agrs['medicalRecordNo']
-    return render_template('front/procedure/procedureView.html',htmlType="incubator",medicalRecordNo=medicalRecordNo)
+    args = parser.parse_args()
+    medicalRecordNo = args['medicalRecordNo']
+    return render_template('front/procedure/procedureView.html',
+        htmlType="incubator", medicalRecordNo=medicalRecordNo)
 
 @procedure_controller.route('/<string:id>', methods=['GET'])
 @login_required

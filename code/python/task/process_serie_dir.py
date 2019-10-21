@@ -1,14 +1,14 @@
 # -*- coding: utf8 -*-
 
-import os, json
+import os
 import cv2
+
 import numpy as np
+
+from task.dish_config import SerieInfo
 from cv.ImageSharpnessTool import ImageSharpnessTool
 from cv.embryo_detector import find_embryo
-from app import app
-from task.dish_config import SerieInfo
 from cv.embryo_common import outer_edge, cell_edge
-from skimage.transform import resize
 from common import getdefault
 
 import logUtils as logger # 日志

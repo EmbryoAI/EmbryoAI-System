@@ -156,7 +156,7 @@ def deleteRuleJson(ruleId,jsonKey,index):
 def queryRuleList():
     userId = current_user.id
     result = rule_dao.queryRuleListByUserId(userId)
-    ruleList = list(map(lambda x: x.to_dict(),result))
+    ruleList = list(map(lambda x: x.to_dict(), result))
     return ruleList
 
 """
@@ -165,23 +165,26 @@ def queryRuleList():
 def getRuleById(ruleId):
     try:
         userId = current_user.id
-        result = rule_dao.getRuleById(ruleId,userId)
+        result = rule_dao.getRuleById(ruleId, userId)
         rule = result.to_dict()
-        return 200,rule
+        return 200, rule
     except:
-        return 400,"根据ID获取规则失败"
+        return 400, "根据ID获取规则失败"
     
 """
     根据规则ID和jsonKey和index获取指定规则JSON
 """
-def getRuleJson(ruleId,jsonKey,index):
+def getRuleJson(ruleId, jsonKey, index):
     userId = current_user.id
-    rule = rule_dao.getRuleById(ruleId,userId)
-    data = json.loads(rule.dataJson)#把JSON字符串转为对象
-    objList = data[jsonKey]
-    for obj in objList:
-        if obj["index"]==index:
-           return obj
+    rule = rule_dao.getRuleById(ruleId, userId)
+    if rule:
+        data = json.loads(rule.dataJson) # 把JSON字符串转为对象
+        objList = data[jsonKey]
+        # for obj in objList:
+        #     if obj["index"]==index:
+        #         return obj
+        return next(filter(lambda x: x['index'] == index, objList), None)
+    return None
 
 ''' 设置当前规则为默认
     @param ruleId: 规则id

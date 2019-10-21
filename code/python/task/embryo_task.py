@@ -1,9 +1,10 @@
 # -*- coding: utf8 -*-
 
-from app import conf
-from task.process_cycle_dir import process_cycle
 import json
 import os
+
+from app import conf
+from task.process_cycle_dir import process_cycle
 from common import scheduler    # 很关键的一步，导入初始化过的sheduler对象
 import logUtils as logger
 '''
@@ -36,7 +37,7 @@ def run():
         for adir in active_dirs:
             cycle_dir = cap_dir + adir + os.path.sep # 未完成采集目录的全路径
             # 交给process_cycle_dir模块进行处理采集目录，返回True或False，代表该采集目录采集结束标志
-            state = process_cycle(cycle_dir)  
+            state = process_cycle(cycle_dir,adir)  
             # 如果state为True，而且原本的目录就为False存在json中，更新相应的值，而不是append
             if state and {adir: False} in finished_dirs:
                 findex = finished_dirs.index({adir: False})
@@ -72,7 +73,7 @@ def find_active_dirs(path):
     # else:
 
     # 过滤掉所有非子目录的内容
-    all_subs = list(filter(lambda x: os.path.isdir(path + x) and x.endswith('00'), os.listdir(path)))
+    all_subs = list(filter(lambda x: os.path.isdir(path + x), os.listdir(path)))
     # 返回一个包括未完成采集及已完成采集目录列表的元组
     return list(filter(lambda x: {x: True} not in finished, all_subs)), finished
 

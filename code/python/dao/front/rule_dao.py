@@ -1,8 +1,9 @@
-from app import db
-from entity.Rule import Rule
+
 from sqlalchemy.exc import DatabaseError
 from sqlalchemy import text
-from traceback import print_exc
+from app import db
+import logUtils as logger
+from entity.Rule import Rule
 
 
 def insertRule(rule):
@@ -11,7 +12,6 @@ def insertRule(rule):
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        print_exc()
         raise DatabaseError('设置里程碑时发生错误!', e.message, e)
     finally:
         db.session.remove()
@@ -36,7 +36,6 @@ def updateRule(rule):
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        print_exc()
         raise DatabaseError('保存标准成功!', e.message, e)
     finally:
         db.session.remove()
@@ -49,7 +48,7 @@ def queryRuleListByUserId(userId):
     try:
         return db.session.query(Rule).filter(Rule.userId == userId).all()
     except Exception as e:
-        raise DatabaseError("根据用户ID查询规则列表失败!",e.message,e)
+        logger.error(f"根据用户ID查询规则列表失败: {e}")
         return None
     finally:
         db.session.remove()
@@ -60,9 +59,9 @@ def queryRuleListByUserId(userId):
 """
 def getRuleById(ruleId,userId):
     try:
-        return db.session.query(Rule).filter(Rule.userId == userId,Rule.id == ruleId).one_or_none()
+        return db.session.query(Rule).filter(Rule.userId == userId, Rule.id == ruleId).one_or_none()
     except Exception as e:
-        raise DatabaseError("根据用户ID查询规则列表失败!",e.message,e)
+        logger.error(f"根据用户ID查询规则列表失败: {e}")
         return None
     finally:
         db.session.remove()
@@ -86,7 +85,6 @@ def setDefault(ruleId,userId):
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        print_exc()
         raise DatabaseError('保存标准成功!', e.message, e)
     finally:
         db.session.remove()

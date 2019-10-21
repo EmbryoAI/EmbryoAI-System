@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify,render_template
+from flask import Blueprint, render_template
 import logUtils
 
 admin_index_controller = Blueprint('admin_index_controller', __name__)

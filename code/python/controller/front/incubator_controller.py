@@ -1,8 +1,7 @@
-from flask import Blueprint, jsonify,render_template
-import logUtils
-from app import login_required 
-from entity.Embryo import Embryo
+from flask import Blueprint, render_template
 from flask_restful import reqparse
+import logUtils
+from app import login_required
 
 ''' 培养箱视图 '''
 incubator_controller = Blueprint('incubator_controller', __name__)
@@ -25,4 +24,5 @@ def incubator():
     if procedureId is None:
         procedureId = ''
 
-    return render_template('front/incubator/incubator.html', incubatorId=incubatorId,procedureId=procedureId)
+    return render_template('front/incubator/incubator.html', 
+        incubatorId=incubatorId, procedureId=procedureId)

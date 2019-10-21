@@ -7,9 +7,10 @@ import logUtils
 
 def queryById(dishId):
     try:
-        dish =  db.session.query(Dish).filter(Dish.id == dishId,Dish.delFlag == 0).one_or_none()
+        dish = db.session.query(Dish).filter(Dish.id == dishId, Dish.delFlag == 0).one_or_none()
     except Exception as e:
-        return dish
+        logUtils.error(f'使用皿ID查询皿信息时发生错误: {e}')
+        return None
     finally:
         db.session.remove()
     return dish

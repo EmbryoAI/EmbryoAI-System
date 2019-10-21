@@ -1,12 +1,13 @@
 # -*- coding: utf8 -*-
 
-from task.TimeSeries import TimeSeries, serie_to_minute
 import os
-import json
-from app import app, conf
-from task.process_serie_dir import process_serie
+import re
 
+from app import conf
+from task.process_serie_dir import process_serie
+from task.TimeSeries import TimeSeries, serie_to_minute
 import logUtils as logger
+
 
 '''
 ### 皿目录处理模块，皿目录命名规则：天小时分钟秒数 即 DHHmmss，后两位都为0，参见TimeSeries辅助类
@@ -30,7 +31,6 @@ def process_dish(path, dish_info):
     if not dish_info.lastSerie:
         last_op = '0' * 7
     else:
-        
         last_op = TimeSeries()[serie_to_minute(dish_info.lastSerie)//15+1]
     logger.debug(f'最后处理的时间序列: {last_op}')
     # 已经处理过的时间序列列表
@@ -88,6 +88,7 @@ def dir_filter(path, processed, base):
         return False
     if path in processed:
         return False
-    if path == 'focus':
+    pattern = re.compile(r'^[0-9]{7}$')
+    if not re.match(pattern, path):
         return False
     return True

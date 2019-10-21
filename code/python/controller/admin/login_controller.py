@@ -1,13 +1,8 @@
 # -*- coding: utf8 -*-
 
-from flask import Blueprint, jsonify,render_template,request, make_response, abort,session
-from flask_restful import reqparse
-import service.admin.user_service as user_service
-from entity.User import User
-import time
-import hashlib
+from flask import Blueprint, render_template
 import logUtils
-from app import login_manager,login_user, logout_user, login_required,current_user
+from app import logout_user, login_required
 
 login_controller = Blueprint('login_controller', __name__)
 url_prefix = '/login'
@@ -22,7 +17,7 @@ def index():
 def logout():
     logout_user()
     logUtils.info('login_controller.logout-退出并跳转到前台管理的login页面')
-    return render_template('login.html',msg="You have been logged out.")
+    return render_template('login.html', msg="You have been logged out.")
     ###重定向到首页
 
 @login_controller.route('/main', methods=['GET', 'POST'])

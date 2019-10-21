@@ -1,6 +1,6 @@
-from flask import Blueprint, jsonify,render_template
+from flask import Blueprint, render_template
 import logUtils
-from app import login_required 
+from app import login_required
 import service.front.feedback_service as feedback_service
 from entity.Feedback import Feedback
 

@@ -1,6 +1,6 @@
-from flask import Blueprint, jsonify,render_template
+from flask import Blueprint, render_template
+from app import login_required
 import logUtils
-from app import login_required 
 
 ''' 统计模块 '''
 
