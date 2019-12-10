@@ -337,6 +337,7 @@ def queryDish(agrs):
 
 #查询采集目录
 def queryCollectionCatalog():
+    from task.ini_parser import EmbryoIniParser as parser
     try:
         json_path = conf['EMBRYOAI_IMAGE_ROOT'] + conf['FINISHED_CYCLES']
         with open(f'{json_path}', 'r') as fn :
@@ -354,7 +355,19 @@ def queryCollectionCatalog():
         #将两个set做difference操作得到未关联的采集目录返回前端
         no_relation_catalog = all_relation_catalog_set.difference(relation_catalog_set)
 
-        return 200, jsonify(list(no_relation_catalog))
+        list = []
+        for catalog_name in sorted(no_relation_catalog, reverse=True):
+            #拼接ini文件路径
+            ini_path = conf['EMBRYOAI_IMAGE_ROOT'] + os.path.sep + catalog_name + os.path.sep + 'DishInfo.ini'
+            #解析ini文件
+            config = parser(ini_path)
+            #获取培养皿信息
+            dishes = [f'Dish{i}Info' for i in range(1, 10) if f'Dish{i}Info' in config]
+            #获取患者姓名
+            patient_name = config[dishes[0]]['PatientName']
+            list.append(catalog_name + " " + patient_name)
+
+        return 200, jsonify(list)
     except:
         return 500, '查询采集目录异常'
 

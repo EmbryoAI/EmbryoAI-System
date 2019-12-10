@@ -25,10 +25,10 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 
 	//监听采集目录下拉框选中事件
 	form.on('select(catalogSelect)', function(data){
-
+		var catalog = data.value.split(" ")[0];
 		$.ajax({
 			type : "get",
-			url : "/api/v1/well/catalog/info?catalogName=" + data.value,
+			url : "/api/v1/well/catalog/info?catalogName=" + catalog,
 			datatype : "json",
 			success : function(catalogData) {
 				if(catalogData.code == 200){
