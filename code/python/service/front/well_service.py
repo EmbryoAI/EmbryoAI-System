@@ -355,7 +355,7 @@ def queryCollectionCatalog():
         #将两个set做difference操作得到未关联的采集目录返回前端
         no_relation_catalog = all_relation_catalog_set.difference(relation_catalog_set)
 
-        list = []
+        cap_list = []
         for catalog_name in sorted(no_relation_catalog, reverse=True):
             #拼接ini文件路径
             ini_path = conf['EMBRYOAI_IMAGE_ROOT'] + os.path.sep + catalog_name + os.path.sep + 'DishInfo.ini'
@@ -365,9 +365,9 @@ def queryCollectionCatalog():
             dishes = [f'Dish{i}Info' for i in range(1, 10) if f'Dish{i}Info' in config]
             #获取患者姓名
             patient_name = config[dishes[0]]['PatientName']
-            list.append(catalog_name + " " + patient_name)
+            cap_list.append(catalog_name + " " + patient_name)
 
-        return 200, jsonify(list)
+        return 200, jsonify(cap_list)
     except:
         return 500, '查询采集目录异常'
 
