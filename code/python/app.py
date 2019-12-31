@@ -7,7 +7,10 @@ import logging
 import os
 import sys
 
-from flask import Flask
+# from flask import Flask
+import sentry_sdk   # sentry.io SDK 导入
+from sentry_sdk.integrations.flask import Flask, FlaskIntegration   # sentry.io Flask 集成
+from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration # sentry.io SQLAlchemy 集成
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from yaml import load
@@ -58,6 +61,13 @@ if len(sys.argv) < 2 or sys.argv[-1] == 'dev' or sys.argv[-1] not in ('stage', '
     conf['EMBRYOAI_IMAGE_ROOT'] = app_root + '..' + os.path.sep + 'captures' + os.path.sep
 else:
     conf = read_yml_config(env=sys.argv[-1])
+
+# sentry.io SDK 初始化，将所有错误异常保存到sentry.io
+sentry_sdk.init(
+    dsn=conf['SENTRY_DSN'],
+    integrations=[FlaskIntegration(), SqlalchemyIntegration()]
+)
+
 init_config(conf)
 db = SQLAlchemy(app) # 此APP要用到的数据库连接，由ORM框架SQLAlchemy管理
 login_manager = LoginManager()

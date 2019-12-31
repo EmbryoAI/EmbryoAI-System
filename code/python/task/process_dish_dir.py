@@ -88,6 +88,8 @@ def dir_filter(path, processed, base):
         return False
     if path in processed:
         return False
+    if path.startswith('focus') or path.startswith('video'):
+        return False
     pattern = re.compile(r'^[0-9]{7}$')
     if not re.match(pattern, path):
         return False
