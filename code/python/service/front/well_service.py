@@ -365,7 +365,7 @@ def queryCollectionCatalog():
             dishes = [f'Dish{i}Info' for i in range(1, 10) if f'Dish{i}Info' in config]
             #获取患者姓名
             patient_name = config[dishes[0]]['PatientName']
-            cap_list.append(catalog_name + " " + patient_name)
+            cap_list.append(catalog_name + " — " + patient_name)
 
         return 200, jsonify(cap_list)
     except:
