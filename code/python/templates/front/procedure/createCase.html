@@ -44,8 +44,8 @@
                     <div class="layui-inline">
                         <label class="layui-form-label"><i>*</i>采集目录选择：</label>
                         <div class="layui-input-inline">
-                                <select name="catalogSelect" id="catalogSelect" lay-filter="catalogSelect">
-                                    <option value="0">--请选择采集目录--</option>
+                                <select name="catalogSelect" id="catalogSelect" lay-filter="catalogSelect" lay-search>
+                                    <option value="0"></option>
                                 </select>
                             </div> 
                         </div>
@@ -67,7 +67,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><i>*</i>姓名</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="patientName" class="layui-input">
+                        <input type="text" name="patientName" id="patient_name" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -131,7 +131,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label"><i>*</i>病历号</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="medical_record_no" class="layui-input">
+                        <input type="text" name="medical_record_no" id="medical_record_no" class="layui-input">
                     </div>
                 </div>
 				<div class="layui-inline">
@@ -191,6 +191,14 @@
 								
 							</select>
 						</div> 
+					</div>
+                </div>
+                <div class="layui-inline">
+					<label class="layui-form-label">备注</label>
+					<div class="layui-input-inline">
+						<div class="field">
+							<textarea id="memo" name="memo" style="width:700px;height:100px;"></textarea>
+						</div>
 					</div>
 				</div>
                 </form>

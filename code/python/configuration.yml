@@ -50,6 +50,8 @@ dev:
 
   CLOUD_CODE_SWITCH: true #上传云端代码块开关
   MINIO_IP_PORT: 39.104.173.18:9000 #云端minio地址
+
+  SENTRY_DSN: "https://3576062218914677b959abc6b799bf7f@sentry.io/1850407"
   
 stage:
   SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@39.104.173.18:3306/embryoai_system_db?charset=utf8"
@@ -102,6 +104,9 @@ stage:
 
   CLOUD_CODE_SWITCH: false #上传云端代码块开关
   MINIO_IP_PORT: 39.104.173.18:9000 #云端minio地址
+
+  SENTRY_DSN: "https://3576062218914677b959abc6b799bf7f@sentry.io/1850407"
+
 prod:
   SQLALCHEMY_DATABASE_URI: "mysql+pymysql://root:123456@192.168.40.100:3306/embryoai_system_db?charset=utf8"
   SQLALCHEMY_POOL_RECYCLE: 3
@@ -154,3 +159,5 @@ prod:
 
   CLOUD_CODE_SWITCH: false #上传云端代码块开关
   MINIO_IP_PORT: 39.104.173.18:9000 #云端minio地址
+
+  SENTRY_DSN: "https://d9c50a39babf46729bd0e2707bf6ed84@sentry.io/1850397"

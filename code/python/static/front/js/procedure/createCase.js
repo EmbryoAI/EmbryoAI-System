@@ -25,10 +25,10 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 
 	//监听采集目录下拉框选中事件
 	form.on('select(catalogSelect)', function(data){
-
+		var catalog = data.value.split(" ")[0];
 		$.ajax({
 			type : "get",
-			url : "/api/v1/well/catalog/info?catalogName=" + data.value,
+			url : "/api/v1/well/catalog/info?catalogName=" + catalog,
 			datatype : "json",
 			success : function(catalogData) {
 				if(catalogData.code == 200){
@@ -40,6 +40,11 @@ layui.use(['form', 'jquery', 'laydate', 'table', 'layer', 'element','address'], 
 					$('#embryo_number').val(catalogInfo.embryo_number);
 					$('#dish').val(catalogInfo.dish_list);
 					$('#incubator').val(catalogInfo.incubator);
+					$('#patient_name').val(catalogInfo.patient_name);
+					$('#medical_record_no').val(catalogInfo.procedure_number);
+					if(catalogInfo.memo != 'nothing'){
+						$('#memo').val(catalogInfo.memo);
+					}
 				}else{
 					layer.alert(catalogData.msg)
 				}
