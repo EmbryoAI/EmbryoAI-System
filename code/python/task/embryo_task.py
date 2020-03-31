@@ -56,7 +56,7 @@ def find_active_dirs(path):
     获取path目录下所有未完成的采集目录列表
         @param path 目标目录完整路径
     '''
-
+    import re
     json_file = path + finished_json # 存储结束采集目录列表的JSON文件
     try:
         with open(json_file) as fn:
@@ -74,6 +74,8 @@ def find_active_dirs(path):
 
     # 过滤掉所有非子目录的内容
     all_subs = list(filter(lambda x: os.path.isdir(path + x), os.listdir(path)))
+    # 过滤所有非日期格式子目录
+    all_subs = list(filter(lambda x: re.match(r'^[0-9]{14}$', x), all_subs))
     # 返回一个包括未完成采集及已完成采集目录列表的元组
     return list(filter(lambda x: {x: True} not in finished, all_subs)), finished
 

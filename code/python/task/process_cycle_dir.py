@@ -27,9 +27,16 @@ def process_cycle(path,air):
         @param path: 图像采集目录，按照采集设备的设定，该目录为一个14位数字的日期字符串，格式如YYYYMMDDHHmmss
         @returns finished: True - 全部皿处理完成；False - 该采集目录未完成
     """
-    dish_ini = EmbryoIniParser(path + 'DishInfo.ini') # 采集设备生成的INI配置文件
-    dish_count = int(dish_ini['Timelapse']['DishCount'])
-    well_count = int(dish_ini['Timelapse']['WellCount'])
+    try:
+        dish_ini = EmbryoIniParser(path + 'DishInfo.ini') # 采集设备生成的INI配置文件
+        dish_count = int(dish_ini['Timelapse']['DishCount'])
+        well_count = int(dish_ini['Timelapse']['WellCount'])
+    except ValueError as e:
+        logger.warning(f'采集目录 {path} 文件错误：{e}')
+        return False
+    except TypeError as e:
+        logger.warning(f'采集目录 {path} ini文件格式错误：{e}')
+        return False
     logger.debug(f'正在处理活动采集图像文件夹 {path}')
     try:
         with open(path + conf['CYCLE_PROCESS_FILENAME']) as fn:

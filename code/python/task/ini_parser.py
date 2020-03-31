@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+import os
 
 '''
 读取INI配置文件帮助类
@@ -11,6 +12,8 @@ class EmbryoIniParser(object):
         @param path INI文件的完整路径
         @param encoding INI文件编码方式，默认为日文Shift_JIS
         '''
+        if not (os.path.exists(path) and os.path.isfile(path)):
+            raise ValueError("ini文件不存在")
         self.config = ConfigParser()
         self.config.read(path, encoding=encoding)
     def __getitem__(self, key):
