@@ -1,3 +1,3 @@
 # -*- coding: utf8 -*-
 
-''' Module: EmbryoAI computer vision module'''
+""" Module: EmbryoAI computer vision module"""

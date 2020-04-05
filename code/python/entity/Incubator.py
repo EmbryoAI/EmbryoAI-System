@@ -12,7 +12,6 @@ class Incubator(db.Model, mixin):
     incubatorDescription = db.Column("incubator_description", db.String(200))
     createTime = db.Column("create_time", db.DateTime)
     updateTime = db.Column("update_time", db.DateTime)
-    incubatorBrand = db.Column("incubator_brand", db.String(100), default='ASTEC')
-    incubatorType = db.Column("incubator_type", db.String(100), default='iBIS')
+    incubatorBrand = db.Column("incubator_brand", db.String(100), default="ASTEC")
+    incubatorType = db.Column("incubator_type", db.String(100), default="iBIS")
     delFlag = db.Column("del_flag", db.Integer, default=0)
-

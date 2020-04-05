@@ -13,4 +13,3 @@ class Embryo(db.Model, mixin):
     cellId = db.Column("cell_id", db.String(32))
     embryoScore = db.Column("embryo_score", db.Float)
     embryoFateId = db.Column("embryo_fate_id", db.String(32))
-

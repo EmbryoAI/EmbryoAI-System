@@ -3,9 +3,11 @@ from sqlalchemy import text
 from entity.Embryo import Embryo
 import logUtils
 
+
 def queryEmbryoList(procedureID):
     try:
-        sql = text("""
+        sql = text(
+            """
             SELECT t.`id`, t.`embryo_index`, sc.`cell_code`, sd.`dish_code`, si.`incubator_code`, sc.`dish_id` 
             FROM `t_embryo` t 
             LEFT JOIN `sys_cell` sc 
@@ -15,40 +17,47 @@ def queryEmbryoList(procedureID):
             LEFT JOIN `sys_incubator` si 
             ON sd.`incubator_id` = si.`id` 
             WHERE t.`procedure_id` = :procedureID
-            """)
+            """
+        )
         logUtils.info(sql)
-        return db.session.execute(sql, {'procedureID':procedureID}).fetchall()
+        return db.session.execute(sql, {"procedureID": procedureID}).fetchall()
     except Exception as e:
-        raise DatabaseError("根据周期ID获取下面的胚胎列表异常",e.message,e)
+        raise DatabaseError("根据周期ID获取下面的胚胎列表异常", e.message, e)
         return None
     finally:
         db.session.remove()
 
+
 def signEmbryo(id, embryoFateId):
     try:
-        sql = text("UPDATE `t_embryo` SET embryo_fate_id = :embryoFateId WHERE id = :id")
+        sql = text(
+            "UPDATE `t_embryo` SET embryo_fate_id = :embryoFateId WHERE id = :id"
+        )
         logUtils.info(sql)
-        db.session.execute(sql,{'id':id, 'embryoFateId':embryoFateId})
+        db.session.execute(sql, {"id": id, "embryoFateId": embryoFateId})
         db.session.commit()
     except Exception as e:
         db.session.rollback()
         print_exc()
-        raise DatabaseError("标记胚胎结局时发生错误",e.message,e)
+        raise DatabaseError("标记胚胎结局时发生错误", e.message, e)
     finally:
         db.session.remove()
-        
+
+
 def getEmbryoById(id):
     try:
         return db.session.query(Embryo).filter(Embryo.id == id).one_or_none()
     except Exception as e:
-        raise DatabaseError("根据主键ID获取胚胎异常",e.message,e)
+        raise DatabaseError("根据主键ID获取胚胎异常", e.message, e)
         return None
     finally:
         db.session.remove()
- 
+
+
 def getEmbryoById(id):
     try:
-        sql = text("""
+        sql = text(
+            """
             SELECT
               a.id           AS id,
               embryo_index   AS embryoIndex,
@@ -62,19 +71,24 @@ def getEmbryoById(id):
                 ON a.embryo_fate_id = d.dict_key
                   AND d.dict_class = 'embryo_fate_type'
             where a.id=:id
-            """)
+            """
+        )
         logUtils.info(sql)
-        return db.session.execute(sql,{'id':id}).fetchone()
+        return db.session.execute(sql, {"id": id}).fetchone()
     except Exception as e:
-        raise DatabaseError("根据主键ID获取胚胎异常ID异常",e.message,e)
+        raise DatabaseError("根据主键ID获取胚胎异常ID异常", e.message, e)
         return None
     finally:
         db.session.remove()
 
+
 """根据胚胎ID 获取患者姓名  年龄等数据"""
+
+
 def getPatientByEmbryoId(id):
-     try:
-         sql = text("""
+    try:
+        sql = text(
+            """
                  SELECT
                    e.embryo_index AS embryo_index,
                    pa.patient_name   AS patient_name,
@@ -87,23 +101,28 @@ def getPatientByEmbryoId(id):
                      ON pr.patient_id = pa.id
                  where e.id=:id
                  GROUP BY pr.id
-             """)
-         logUtils.info(sql)
-         return db.session.execute(sql,{'id':id}).fetchone()
-     except Exception as e:
-         raise DatabaseError("根据主键ID获取胚胎异常ID异常",e.message,e)
-         return None
-     finally:
-         db.session.remove()
+             """
+        )
+        logUtils.info(sql)
+        return db.session.execute(sql, {"id": id}).fetchone()
+    except Exception as e:
+        raise DatabaseError("根据主键ID获取胚胎异常ID异常", e.message, e)
+        return None
+    finally:
+        db.session.remove()
+
 
 """
     根据动态条件获取胚胎ID、孔ID、胚胎结局、里程碑等相关信息 
     @param sqlCondition
     @param filters
 """
-def getEmbryoByCondition(sqlCondition,filters):
-    try :
-        sql = text("""
+
+
+def getEmbryoByCondition(sqlCondition, filters):
+    try:
+        sql = text(
+            """
             SELECT
               t.id           AS id,
               t.cell_id         cellId,
@@ -119,47 +138,56 @@ def getEmbryoByCondition(sqlCondition,filters):
               LEFT JOIN sys_dict d1
                 ON m.milestone_id = d1.dict_key AND d1.dict_class = 'milestone'
                 WHERE
-                """+sqlCondition+"""
+                """
+            + sqlCondition
+            + """
                   GROUP BY t.id
-            """)
+            """
+        )
         logUtils.info(sql)
-        return db.session.execute(sql,filters).fetchone()
+        return db.session.execute(sql, filters).fetchone()
     except Exception as e:
-        raise DatabaseError("根据皿ID和孔序号获取孔ID  ，再根据周期ID和孔ID 获取 胚胎ID异常",e.message,e)
+        raise DatabaseError("根据皿ID和孔序号获取孔ID  ，再根据周期ID和孔ID 获取 胚胎ID异常", e.message, e)
         return None
     finally:
         db.session.remove()
 
+
 def save(embryo):
-    try :
+    try:
         db.session.add(embryo)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
         print_exc()
-        raise DatabaseError('新增胚胎数据时发生错误', e.message, e)
+        raise DatabaseError("新增胚胎数据时发生错误", e.message, e)
     finally:
         db.session.remove()
 
 
-def queryByProcedureIdAndCellId(procedureId,cellId):
+def queryByProcedureIdAndCellId(procedureId, cellId):
     try:
-        embryo = db.session.query(Embryo).filter(Embryo.procedureId == procedureId,Embryo.cellId == cellId).one_or_none()
+        embryo = (
+            db.session.query(Embryo)
+            .filter(Embryo.procedureId == procedureId, Embryo.cellId == cellId)
+            .one_or_none()
+        )
     except Exception as e:
         return embryo
     finally:
         db.session.remove()
     return embryo
 
+
 def updateEmbryoScore(id, embryoScore):
     try:
         sql = text("UPDATE `t_embryo` SET embryo_score = :embryoScore WHERE id = :id")
         logUtils.info(sql)
-        db.session.execute(sql,{'id':id, 'embryoScore':embryoScore})
+        db.session.execute(sql, {"id": id, "embryoScore": embryoScore})
         db.session.commit()
     except Exception as e:
         db.session.rollback()
         print_exc()
-        raise DatabaseError("标记胚胎结局时发生错误",e.message,e)
+        raise DatabaseError("标记胚胎结局时发生错误", e.message, e)
     finally:
         db.session.remove()

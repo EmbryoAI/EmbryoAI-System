@@ -12,4 +12,3 @@ class Location(db.Model, mixin):
     soleName = db.Column("sole_name", db.String(255))
     parentId = db.Column("parent_id", db.String(6))
     locationLevel = db.Column("location_level", db.Integer)
-

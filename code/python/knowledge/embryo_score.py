@@ -3,9 +3,10 @@
 
 from pyknow import *
 from functools import partial
+
 # from app import logger
 
-rule_json = '''{
+rule_json = """{
 	"PN": [{
 		"index": "675d9ba0df1211e8b8950242ac120002",
 		"condition": "pn",
@@ -294,81 +295,102 @@ rule_json = '''{
 		"score": "20",
 		"weight": "1.0"
 	}]
-}'''
+}"""
+
 
 class EmbryoScore(KnowledgeEngine):
-	''' 胚胎自动评分知识引擎类 '''
-	score = 0
-	@classmethod
-	def removeAllRules(cls):
-		''' 移除类中所有的规则，规则方法以rule开头 '''
-		for m in [attr for attr in cls.__dict__ if attr.startswith('rule')]:
-			delattr(cls, m)
+    """ 胚胎自动评分知识引擎类 """
+
+    score = 0
+
+    @classmethod
+    def removeAllRules(cls):
+        """ 移除类中所有的规则，规则方法以rule开头 """
+        for m in [attr for attr in cls.__dict__ if attr.startswith("rule")]:
+            delattr(cls, m)
+
 
 def parse_json_rules(rule_json):
-	''' 将json字符串内容加载到知识引擎中 
+    """ 将json字符串内容加载到知识引擎中 
 		@param rule_json: 从数据库中读取到的评分规则json字符串
-	'''
-	import json
-	rules = json.loads(rule_json)
-	sal = 100 # 规则优先级
-	index = 0	# 规则属性序号
-	for stage in rules: # 循环读取胚胎阶段
-		for rule_item in rules[stage]: # 循环读取每个阶段中的每个规则
-			# 需要进行判断的条件包括：胚胎阶段 stage，判断内容 condition，真实的值 value
-			rule = {'condition': rule_item['condition']}
-			rule['stage'] = stage
-			# 目前支持的条件判断符号
-			if rule_item['symbol'] not in ('=', '<', '<=', '>', '>='):
-				continue
-			# 5种不同的判断
-			def _cond(value, symbol):
-				if symbol == '=': return EQ(value)
-				if symbol == '<': return LT(value)
-				if symbol == '<=': return LE(value)
-				if symbol == '>': return GT(value)
-				if symbol == '>=': return GE(value)
+	"""
+    import json
 
-			# 计算分值的闭包方法
-			def _add_partial(score, weight):
-				def _add(self, **kwargs):
-					s, w = int(score), float(weight)
-					self.score += s * w
-				return _add
-			# 构建Rule处理方法，并将其添加到EmbryoScore类中
-			R = Rule(AND(Fact(**rule, value=MATCH.value & 
-					_cond(rule_item['value'], rule_item['symbol']))),
-					salience=sal)(_add_partial(score=rule_item['score'], 
-					weight=rule_item['weight']))
-			setattr(EmbryoScore, f'rule{index}', R)
+    rules = json.loads(rule_json)
+    sal = 100  # 规则优先级
+    index = 0  # 规则属性序号
+    for stage in rules:  # 循环读取胚胎阶段
+        for rule_item in rules[stage]:  # 循环读取每个阶段中的每个规则
+            # 需要进行判断的条件包括：胚胎阶段 stage，判断内容 condition，真实的值 value
+            rule = {"condition": rule_item["condition"]}
+            rule["stage"] = stage
+            # 目前支持的条件判断符号
+            if rule_item["symbol"] not in ("=", "<", "<=", ">", ">="):
+                continue
+            # 5种不同的判断
+            def _cond(value, symbol):
+                if symbol == "=":
+                    return EQ(value)
+                if symbol == "<":
+                    return LT(value)
+                if symbol == "<=":
+                    return LE(value)
+                if symbol == ">":
+                    return GT(value)
+                if symbol == ">=":
+                    return GE(value)
 
-			index += 1	# Rule序号递增
-			sal -= 1 # 优先级递减
+            # 计算分值的闭包方法
+            def _add_partial(score, weight):
+                def _add(self, **kwargs):
+                    s, w = int(score), float(weight)
+                    self.score += s * w
+
+                return _add
+
+            # 构建Rule处理方法，并将其添加到EmbryoScore类中
+            R = Rule(
+                AND(
+                    Fact(
+                        **rule,
+                        value=MATCH.value
+                        & _cond(rule_item["value"], rule_item["symbol"]),
+                    )
+                ),
+                salience=sal,
+            )(_add_partial(score=rule_item["score"], weight=rule_item["weight"]))
+            setattr(EmbryoScore, f"rule{index}", R)
+
+            index += 1  # Rule序号递增
+            sal -= 1  # 优先级递减
+
 
 def init_engine(rule_json):
-	''' 初始化规则引擎
+    """ 初始化规则引擎
 		@param rule_json: 从数据库读取出来的规则json字符串
-	'''
-	EmbryoScore.removeAllRules()
-	parse_json_rules(rule_json)
-	engine = EmbryoScore()
-	engine.reset()
-	return engine
+	"""
+    EmbryoScore.removeAllRules()
+    parse_json_rules(rule_json)
+    engine = EmbryoScore()
+    engine.reset()
+    return engine
+
 
 import unittest
 
+
 class ScoreTest(unittest.TestCase):
-	def test(self):
-		engine = init_engine(rule_json)
-		engine.declare(Fact(condition='pn', stage='PN', value='2PN'))
-		engine.declare(Fact(stage='4C', condition='cell', value='4C'))
-		engine.declare(Fact(stage='4C', condition='fragment', value='10%-20%'))
-		engine.declare(Fact(stage='8C', condition='time', value='32'))
-		engine.declare(Fact(stage='8C', condition='grade', value='III'))
-		engine.run()
-		print(engine.score)
-		self.assertEqual(engine.score, 70)
+    def test(self):
+        engine = init_engine(rule_json)
+        engine.declare(Fact(condition="pn", stage="PN", value="2PN"))
+        engine.declare(Fact(stage="4C", condition="cell", value="4C"))
+        engine.declare(Fact(stage="4C", condition="fragment", value="10%-20%"))
+        engine.declare(Fact(stage="8C", condition="time", value="32"))
+        engine.declare(Fact(stage="8C", condition="grade", value="III"))
+        engine.run()
+        print(engine.score)
+        self.assertEqual(engine.score, 70)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

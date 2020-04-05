@@ -1,11 +1,11 @@
 # -*- coding: utf8 -*-
 
 from sqlalchemy_serializer import SerializerMixin as mixin
-from app import db,login_manager
+from app import db, login_manager
 from flask_login import UserMixin
 
 
-class User(UserMixin,db.Model,mixin):
+class User(UserMixin, db.Model, mixin):
     __tablename__ = "sys_user"
 
     id = db.Column("id", db.String(32), primary_key=True, nullable=False)
@@ -23,4 +23,3 @@ class User(UserMixin,db.Model,mixin):
     updateTime = db.Column("update_time", db.DateTime)
     lastLoginTime = db.Column("last_login_time", db.DateTime)
     delFlag = db.Column("del_flag", db.Integer, default=0)
-

@@ -11,4 +11,3 @@ class ProcedureDish(db.Model, mixin):
     procedureId = db.Column("procedure_id", db.String(32))
     dishId = db.Column("dish_id", db.String(32))
     imagePath = db.Column("image_path", db.String(500))
-

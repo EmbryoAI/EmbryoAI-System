@@ -13,4 +13,3 @@ class Cell(db.Model, mixin):
     createTime = db.Column("create_time", db.DateTime)
     updateTime = db.Column("update_time", db.DateTime)
     delFlag = db.Column("del_flag", db.Integer, default=0)
-

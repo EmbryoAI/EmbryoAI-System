@@ -1,8 +1,25 @@
 # -*- coding: utf8 -*-
 
-class PatientBaseInfo():
-    
-    def __init__(self, id, idcardNo, idcardTypeId, patientName, birthdate, country, locationId, address, email, mobile, createTime, updateTime, delFlag, isDrinking, isSmoking):
+
+class PatientBaseInfo:
+    def __init__(
+        self,
+        id,
+        idcardNo,
+        idcardTypeId,
+        patientName,
+        birthdate,
+        country,
+        locationId,
+        address,
+        email,
+        mobile,
+        createTime,
+        updateTime,
+        delFlag,
+        isDrinking,
+        isSmoking,
+    ):
         self.id = id
         self.idcardNo = idcardNo
         self.idcardTypeId = idcardTypeId
@@ -18,5 +35,3 @@ class PatientBaseInfo():
         self.delFlag = delFlag
         self.isDrinking = isDrinking
         self.isSmoking = isSmoking
-
-    
