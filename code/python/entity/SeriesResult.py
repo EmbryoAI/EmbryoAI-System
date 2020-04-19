@@ -1,10 +1,18 @@
 #!/usr/bin/env python
-#coding:utf8
+# coding:utf8
 
 
-class SeriesResult():
-
-     def __init__(self, code, msg, series, current_series, last_series, milestone_list, last_embryo_serie):
+class SeriesResult:
+    def __init__(
+        self,
+        code,
+        msg,
+        series,
+        current_series,
+        last_series,
+        milestone_list,
+        last_embryo_serie,
+    ):
         self.code = code
         self.msg = msg
         self.series = series

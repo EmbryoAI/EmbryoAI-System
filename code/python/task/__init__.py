@@ -1,3 +1,3 @@
 # -*- coding: utf8 -*-
 
-''' Module: EmbryoAI task module'''
+""" Module: EmbryoAI task module"""

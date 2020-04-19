@@ -22,4 +22,3 @@ class Patient(db.Model, mixin):
     delFlag = db.Column("del_flag", db.Integer, default=0)
     isDrinking = db.Column("is_drinking", db.Integer, default=0)
     isSmoking = db.Column("is_smoking", db.Integer, default=0)
-

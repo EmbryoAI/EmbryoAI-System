@@ -1,3 +1,3 @@
 # -*- coding: utf8 -*-
 
-''' Module: EmbryoAI entity module'''
+""" Module: EmbryoAI entity module"""

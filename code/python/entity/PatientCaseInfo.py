@@ -1,8 +1,26 @@
 # -*- coding: utf8 -*-
 
-class PatientCaseInfo():
-    
-    def __init__(self, id, orgId, patientId, userId, patientAge, patientHeight, patientWeight, ecTime, ecCount, insemiTime, insemiTypeId, state, delFlag, medicalRecordNo, embryoScoreId, memo):
+
+class PatientCaseInfo:
+    def __init__(
+        self,
+        id,
+        orgId,
+        patientId,
+        userId,
+        patientAge,
+        patientHeight,
+        patientWeight,
+        ecTime,
+        ecCount,
+        insemiTime,
+        insemiTypeId,
+        state,
+        delFlag,
+        medicalRecordNo,
+        embryoScoreId,
+        memo,
+    ):
         self.id = id
         self.orgId = orgId
         self.patientId = patientId
@@ -19,5 +37,3 @@ class PatientCaseInfo():
         self.medicalRecordNo = medicalRecordNo
         self.embryoScoreId = embryoScoreId
         self.memo = memo
-
-    

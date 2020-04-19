@@ -7,7 +7,9 @@ from app import db
 class MilestoneData(db.Model, mixin):
     __tablename__ = "t_milestone_data"
 
-    milestoneId = db.Column("milestone_id", db.String(32), primary_key=True, nullable=False)
+    milestoneId = db.Column(
+        "milestone_id", db.String(32), primary_key=True, nullable=False
+    )
     milestoneStage = db.Column("milestone_stage", db.Integer)
     pnId = db.Column("pn_id", db.String(32))
     cellCount = db.Column("cell_count", db.Integer)
@@ -23,4 +25,3 @@ class MilestoneData(db.Model, mixin):
     milestoneScore = db.Column("milestone_score", db.Float)
     userId = db.Column("user_id", db.String(32))
     memo = db.Column("memo", db.String(500))
-

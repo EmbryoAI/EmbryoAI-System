@@ -14,4 +14,3 @@ class Log(db.Model, mixin):
     sqlCommand = db.Column("sql_command", db.String(500))
     opTime = db.Column("op_time", db.DateTime)
     logMessage = db.Column("log_message", db.String(255))
-

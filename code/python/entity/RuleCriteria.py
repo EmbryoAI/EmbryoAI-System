@@ -17,4 +17,3 @@ class RuleCriteria(db.Model, mixin):
     criteriaOrder = db.Column("criteria_order", db.Integer)
     criteriaScore = db.Column("criteria_score", db.Integer)
     criteriaWeight = db.Column("criteria_weight", db.Float, default=1)
-

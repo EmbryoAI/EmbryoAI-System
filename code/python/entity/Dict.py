@@ -13,5 +13,3 @@ class Dict(db.Model, mixin):
     dictValue = db.Column("dict_value", db.String(200))
     dictSpare = db.Column("dict_spare", db.String(50))
     dictParentId = db.Column("dict_parent_id", db.String(32))
-    
-
