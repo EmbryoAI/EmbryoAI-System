@@ -306,8 +306,9 @@ def addProcedure(request):
         return 400, "采集目录不能为空!"
     catalog = request.form.get("catalogSelect")
     if not catalog:
-        return 400, "采集目录不能为空!"
-    patientAge = request.form.get("patient_age")
+        return 400, '采集目录不能为空!'
+    catalog = catalog.split()[0]
+    patientAge = request.form.get('patient_age')
     if not patientAge:
         return 400, "年龄不能为空!"
     medicalRecordNo = request.form.get("medical_record_no")
